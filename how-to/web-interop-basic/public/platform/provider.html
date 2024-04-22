@@ -8,7 +8,7 @@
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../common/style/app.css" />
-		<script src="../js/index.bundle.js"></script>
+		<script defer="defer" src="../js/provider.bundle.js"></script>
 	</head>
 	<body class="col fill gap20">
 		<header class="row spread middle">
@@ -21,19 +21,11 @@
 			</div>
 		</header>
 		<main class="col fill gap20">
-			<div class="column gap10">
-				<button id="register">Register A Platform With Home</button>
-				<button id="deregister">Deregister A Platform From Home</button>
-				<button id="show">Show Home</button>
-				<button id="hide">Hide Home</button>
+			<div class="row fill gap10">
+				<iframe src="../views/interop-view.html" class="fill"></iframe>
 			</div>
-			<p>You can set the value in the Home query box manually, enter the test below.</p>
-			<div class="column">
-				<fieldset class="row">
-					<label for="query">Query</label>
-					<input type="text" id="query" />
-					<button type="button" id="go">Go</button>
-				</fieldset>
+			<div class="row fill">
+				<iframe src="../views/fdc3-view.html" class="fill"></iframe>
 			</div>
 		</main>
 	</body>

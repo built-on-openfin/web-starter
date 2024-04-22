@@ -20106,6 +20106,58 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
+/***/ "./client/src/platform/api.ts":
+/*!************************************!*\
+  !*** ./client/src/platform/api.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _openfin_web_interop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/web-interop */ "../../node_modules/@openfin/web-interop/out/api-client.js");
+/* harmony import */ var _util_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/buffer */ "./client/src/util/buffer.ts");
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
+
+
+
+/**
+ * Initializes the OpenFin Web Broker connection.
+ */
+async function init() {
+    // Set window.fin to the `fin` object.
+    if (window.fin === undefined) {
+        const settings = await (0,_settings__WEBPACK_IMPORTED_MODULE_2__.getSettings)();
+        // Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
+        window.fin = await (0,_openfin_web_interop__WEBPACK_IMPORTED_MODULE_0__.connect)({
+            options: {
+                brokerUrl: settings.platform.brokerUrl,
+                interopConfig: {
+                    providerId: settings.platform.providerId,
+                    currentContextGroup: settings.platform.defaultContextGroup
+                }
+            }
+        });
+        // Create and dispatch the finReady event
+        const event = new CustomEvent("finReady");
+        window.dispatchEvent(event);
+    }
+    if (window.fdc3 === undefined && window?.fin?.me.interop?.getFDC3Sync !== undefined) {
+        window.fdc3 = fin.me.interop.getFDC3Sync("2.0");
+        // Create and dispatch the FDC3Ready event
+        const event = new CustomEvent("fdc3Ready");
+        window.dispatchEvent(event);
+    }
+}
+init()
+    .then(() => {
+    console.log("Connected to the OpenFin Web Broker.");
+    return true;
+})
+    .catch((err) => console.error(err));
+
+
+/***/ }),
+
 /***/ "./client/src/platform/settings.ts":
 /*!*****************************************!*\
   !*** ./client/src/platform/settings.ts ***!
@@ -21095,35 +21147,86 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!********************************!*\
-  !*** ./client/src/provider.ts ***!
-  \********************************/
+/*!*****************************************!*\
+  !*** ./client/src/content/fdc3-view.ts ***!
+  \*****************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _openfin_web_interop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @openfin/web-interop */ "../../node_modules/@openfin/web-interop/out/api-client.js");
-/* harmony import */ var _util_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/buffer */ "./client/src/util/buffer.ts");
-/* harmony import */ var _platform_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
+/* harmony import */ var _platform_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../platform/api */ "./client/src/platform/api.ts");
 
-
-
+window.addEventListener("DOMContentLoaded", async () => {
+    await initializeDOM();
+});
 /**
- * Initializes the OpenFin Web Broker connection.
+ * Broadcasts a context using FDC3.
  */
-async function init() {
-    const settings = await (0,_platform_settings__WEBPACK_IMPORTED_MODULE_2__.getSettings)();
-    // Connect to the OpenFin Web Broker.
-    const fin = await (0,_openfin_web_interop__WEBPACK_IMPORTED_MODULE_0__.connect)({ options: { brokerUrl: settings.platform.brokerUrl } });
-    // You may now use the `fin` object.
-    await fin.Interop.init(settings.platform.providerId);
+async function broadcastContext() {
+    const contextType = "fdc3.instrument";
+    const contextName = "Apple";
+    const idData = {
+        ticker: "AAPL"
+    };
+    const context = {
+        type: contextType,
+        name: contextName,
+        id: idData
+    };
+    if (window.fdc3) {
+        await window.fdc3.broadcast(context);
+        console.log(`Broadcasted context: ${contextType} - ${contextName}`);
+    }
+    else {
+        window.addEventListener("fdc3Ready", async () => {
+            await window.fdc3.broadcast(context);
+            console.log(`Broadcasted context: ${contextType} - ${contextName}`);
+        });
+    }
 }
-init()
-    .then(() => {
-    console.log("Connected to the OpenFin Web Broker.");
-    return true;
-})
-    .catch((err) => console.error(err));
+/**
+ * Updates the DOM elements with the provided context.
+ * @param context The context to update the DOM elements with.
+ */
+function updateDOMElements(context) {
+    const contextTypeSpan = document.querySelector("#contextType");
+    const contextNameSpan = document.querySelector("#contextName");
+    const contextBodyPre = document.querySelector("#contextBody");
+    if (contextTypeSpan !== null && contextNameSpan !== null && contextBodyPre !== null) {
+        contextTypeSpan.textContent = context.type;
+        contextNameSpan.textContent = context.name ?? "No name provided.";
+        contextBodyPre.textContent = JSON.stringify(context, null, 2);
+    }
+}
+/**
+ * Adds an FDC3 context listener to the window.
+ */
+async function addFDC3Listener() {
+    if (window.fdc3) {
+        await window.fdc3.addContextListener(null, (context) => {
+            updateDOMElements(context);
+        });
+    }
+    else {
+        window.addEventListener("fdc3Ready", async () => {
+            await window.fdc3.addContextListener(null, (context) => {
+                updateDOMElements(context);
+            });
+        });
+    }
+}
+/**
+ * Initialize the DOM elements.
+ */
+async function initializeDOM() {
+    const broadcastButton = document.querySelector("#broadcast");
+    if (broadcastButton !== null) {
+        broadcastButton.addEventListener("click", async () => {
+            await broadcastContext();
+        });
+    }
+    await addFDC3Listener();
+}
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=provider.bundle.js.map
+//# sourceMappingURL=fdc3-view.bundle.js.map

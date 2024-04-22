@@ -1,15 +1,14 @@
 {
-	"name": "openfin-workspace--register-with-home-basic",
+	"name": "openfin-web--web-interop-basic",
 	"version": "17.2.0",
-	"description": "OpenFin Workspace -- Register with Home - Basic",
-	"main": "index.js",
+	"description": "OpenFin Web Starter -- Web Interop - Basic",
+	"main": "public/platform/provider.bundle.js",
 	"scripts": {
-		"dos": "node ./scripts/dos.mjs && node ./scripts/kill.mjs",
-		"kill": "node ./scripts/kill.mjs",
 		"client": "node ./scripts/launch.mjs",
-		"build-client": "webpack build --config ./client/webpack.config.js --mode=development",
+		"copy-shared-worker": "node ./scripts/copy-shared-worker.js",
+		"build-client": "npm run copy-shared-worker && webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
-		"start": "npx --yes http-server ./public -p 8080 -c-1",
+		"start": "npx --yes http-server ./public -p 6060 -c-1",
 		"setup": "npm install && npm run build",
 		"prettier": "prettier --config .prettierrc --write .",
 		"prettier-check": "prettier --config .prettierrc --check .",
@@ -20,12 +19,14 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@openfin/workspace": "17.2.14",
-		"@openfin/workspace-platform": "17.2.14"
+		"@finos/fdc3": "^2.1.0-beta.8",
+		"@openfin/web-interop": "^0.37.17",
+		"buffer": "^6.0.3"
 	},
 	"devDependencies": {
-		"@openfin/core": "34.78.80",
+		"@openfin/core": "37.81.17",
 		"@openfin/node-adapter": "34.78.80",
+		"copy-webpack-plugin": "^12.0.2",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
