@@ -6,7 +6,7 @@
 		<title>FDC3 View</title>
 		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 		<link rel="stylesheet" href="../common/style/app.css" />
-		<script defer="defer" src="../js/fdc3-view.js"></script>
+		<script defer="defer" src="../js/fdc3-view.bundle.js"></script>
 	</head>
 
 	<body class="col fill gap20">
@@ -26,16 +26,16 @@
 			</fieldset>
 			<fieldset>
 				<label for="contextName">Context Name</label>
-				<span id="contextName"></span>
+				<span id="contextName" class="nowrap"></span>
 			</fieldset>
 			<hr />
-			<fieldset>
+			<fieldset class="fill">
 				<label for="contextBody">Context</label>
-				<pre id="appLogDirectory"></pre>
+				<pre id="contextBody" class="fill"></pre>
 			</fieldset>
 			<hr />
 			<fieldset>
-				<button>Broadcast</button>
+				<button id="broadcast">Broadcast AAPL</button>
 			</fieldset>
 		</main>
 	</body>

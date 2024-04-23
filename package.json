@@ -37,6 +37,5 @@
 		"replace-in-file": "7.1.0",
 		"yargs": "17.7.2"
 	},
-	"overrides": {
-	}
+	"overrides": {}
 }

@@ -1,47 +1,30 @@
-![OpenFin Workspace Example Application -- Adding your application to Storefront](../../assets/OpenFin-Workspace-Starter.png)
+![OpenFin Web Interop Basic Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin Workspace:_** [OpenFin Workspace](https://www.openfin.co/workspace/) is a commercial product and this repo is for evaluation purposes (See [LICENSE.MD](LICENSE.MD)). Use of the OpenFin Container and OpenFin Workspace components is only granted pursuant to a license from OpenFin (see [manifest](public/manifest.fin.json)). Please [**contact us**](https://www.openfin.co/workspace/poc/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# Register With Home - Basic
+# OpenFin Web Interop Basic
 
-OpenFin Workspace empowers you to feed content and apps to OpenFin Home via our API. This gives you the choice of fetching your list of applications from a _Content Discovery Service_ or somewhere else.
+This is a very basic example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker using the [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) library.
 
-This application you are about to install is a simple example of plugging in your own content or app. This example assumes you have already [set up your development environment](https://developers.openfin.co/of-docs/docs/set-up-your-dev-environment)
+This page has a very simple layout which is made up of two iframes:
 
-This example has a hard-coded list of apps that is returned from [apps.ts](client/src/apps.ts) and it configures Home through [home.ts](client/src/home.ts). The entry point is [provider.ts](client/src/provider.ts).
+- An FDC3 View - This uses the FDC3 API to add a context listener and to broadcast a hardcoded context object.
+- An Interop View - This uses the OpenFin Interop API to add a context listener and to set context using a hardcoded context object.
 
-The registration of a provider against Home looks like the following:
-
-```javascript
-const homeProvider: HomeProvider = {
-  title: 'title',
-  id: 'id',
-  icon: 'http://pathto/icon',
-  onUserInput: onUserInput,
-  onResultDispatch: onSelection
-};
-
-await Home.register(homeProvider);
-```
-
-The example is a basic workspace platform that shows a UI allowing you to register against Home, show/hide Home and unregister the provider. No Storefront provider is registered or launched in this example (unless it is already running and has been registered by another application).
+![OpenFin Web Interop Basic Example](./docs/web-interop-basic.png)
 
 ## Getting Started
 
 1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
 
 ```shell
-npm run setup
+npm install
 ```
 
-2. Optional (if you wish to pin the version of OpenFin Workspace to version 17.2.0 and you are on Windows) - Set Windows registry key for [Desktop Owner Settings](https://developers.openfin.co/docs/desktop-owner-settings).
-   This example runs a utility [dos.mjs](./scripts/dos.mjs) that adds the Windows registry key for you, pointing to a local desktop owner
-   settings file so you can test these settings. If you already have a desktop owner settings file, this script prompts to overwrite the location. Be sure to capture the existing location so you can update the key when you are done using this example.
-
-   (**WARNING**: This script kills all open OpenFin processes. **This is not something you should do in production to close apps as force killing processes could kill an application while it's trying to save state/perform an action**).
+2. Build the example.
 
 ```shell
-npm run dos
+npm run build
 ```
 
 3. Start the test server in a new window.
@@ -50,23 +33,129 @@ npm run dos
 npm run start
 ```
 
-4. Start Your Workspace Platform (this starts Workspace if it isn't already running).
+4. Launch the sample in your default desktop browser (or copy <http://localhost:6060/platform/provider.html> into your Desktop Browser).
 
 ```shell
 npm run client
 ```
 
-5. Type any character into the search box to show the default list of Applications.
-   You can now use the custom commands e.g. `/price MSFT.
+## Setup Notes
 
-6. If you modify the project and wish to rebuild you can run setup again or the build command below:
+There are a few things to note before trying to use @openfin/web-interop:
 
-```shell
-npm run build-client
+- This current release requires Buffer support and this is added through the [buffer](https://www.npmjs.com/package/buffer) npm package. We have added this to the npm package and we have made it available through a [buffer util TypeScript file](./client/src/util/buffer.ts). _This is a requirement that will be removed in the future_.
+- If your [tsconfig](./client/tsconfig.json) file is using **node** for moduleResolution it will need to use **Node16** instead as export/imports are defined in the package.json of the @openfin/web-interop npm package. This is required for when you try to import @openfin/web-interop/iframe-broker.
+- You will need to copy the shared-worker.js file from the [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) npm package to your public folder. We have created a [copy-shared-worker.js](./scripts/copy-shared-worker.js) script to do this and it is referenced in the build-client npm command.
+
+## How things are structured
+
+### Host
+
+The host is the entry point and it is the page that gets loaded into the Chrome/Edge/Safari/Firefox tab.
+
+It has a responsibility to create a connection providing a broker url and then initializing the broker providing an id (**this id will be needed by your content when it wishes to connect**).
+
+In the sample we use a [settings](./client/src/platform/settings.ts) file but this has been removed from the snippet to simplify the code snippet.
+
+```javascript
+import { connect } from "@openfin/web-interop";
+import "./util/buffer";
+
+/**
+ * Initializes the OpenFin Web Broker connection.
+ */
+async function init(): Promise<void> {
+ const settings = await getSettings();
+ // Connect to the OpenFin Web Broker.
+ const fin = await connect({ options: { brokerUrl: "http://localhost:6060/platform/iframe-broker.html" } });
+
+ // You may now use the `fin` object. This step is important as it initializes the interop broker.
+ await fin.Interop.init("web-interop-basic");
+}
 ```
 
-![Register With Home Basic](openfin-register-with-home-basic.gif)
+The host html page [provider.html](./public/platform/provider.html) then:
 
----
+- imports this code and initializes it.
+- brings in required content through an iframe.
 
-### Read more about [working with Workspace](https://developers.openfin.co/of-docs/docs/overview-of-workspace)
+### IFrame Broker
+
+This is the iframe that is referenced by the Host and Content Providers and it is how they communicate with each other. The iframe broker html page and the shared-webworker.js file have to reside on the same domain as the **host**.
+
+The [iframe broker html page](./public/platform/iframe-broker.html) uses the shared-webworker.js file that comes as part of the [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) npm package.
+
+The iframe broker needs some initialization logic as well.
+
+```javascript
+import { init as initBrokerConnection } from "@openfin/web-interop/iframe-broker";
+
+/**
+ * Initializes the OpenFin Web Broker connection.
+ * @returns A promise that resolves when the connection is established.
+ */
+async function init(): Promise<void> {
+ // The shared worker is copied and renamed to the public/js directory from the @openfin/web-interop package
+ // using the scripts/copy-shared-worker.js file that is called when npm run build is called.
+ return initBrokerConnection({
+  sharedWorkerUrl: "http://localhost:6060/js/shared-worker.bundle.js"
+ });
+}
+```
+
+### Content
+
+Content refers to content that is framed within an iframe on the **host** html page. It establishes a connection to the **host** through the **iframe broker** via some initialization code.
+
+Some things to note about the content provider setup:
+
+- Content imports an init function from the [api.ts](./client/src/platform/api.ts) that creates the connection and assigns the window.fin and window.fdc3 APIs if they do not exist.
+- You do not need to assign fdc3 or fin to the window object but we have done so for consistency with our workspace and container starter examples.
+- The snippet below is the init function from the [api.ts](./client/src/platform/api.ts) file (although the settings function has been replaced with hard coded values for simplicity) that is imported and called.
+- Content initializes the API and then runs code normally like it would inside of a workspace platform or container platform.
+- the **finReady** event shown below is an example and doesn't exist in the OpenFin container as the API is injected into the document. We added **finReady** to have similar behavior to the **fdc3Ready** event that we also raise.
+
+```javascript
+import { connect } from "@openfin/web-interop";
+import "../util/buffer";
+
+/**
+ * Initializes the OpenFin Web Broker connection.
+ */
+export async function init(): Promise<void> {
+ // Set window.fin to the `fin` object if needed.
+ if (window.fin === undefined) {
+   const settings = await getSettings();
+   // Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
+   window.fin = await connect({
+      options: {
+      brokerUrl: "http://localhost:6060/platform/iframe-broker.html",
+      interopConfig: {
+      providerId: "web-interop-basic",
+      currentContextGroup: "green"
+      }
+      }
+   });
+   console.log("Finished initializing the fin API.");
+   // Create and dispatch the finReady event
+   const event = new CustomEvent("finReady");
+   window.dispatchEvent(event);
+ }
+
+ if (window.fdc3 === undefined && window?.fin?.me.interop?.getFDC3Sync !== undefined) {
+   window.fdc3 = fin.me.interop.getFDC3Sync("2.0");
+   console.log("Finished initializing the fdc3 API.");
+   // Create and dispatch the FDC3Ready event
+   const event = new CustomEvent("fdc3Ready");
+   window.dispatchEvent(event);
+ }
+}
+```
+
+## A visual representation
+
+We've covered the key pieces. We have a host, one or more pieces of content and a common iframe broker html page that is used to tie them altogether.
+
+This diagram is here to provide a rough visual guide to support the content above and the example:
+
+![OpenFin Web Interop Basic Rough Visual Guide](./docs/web-interop-basic-visualization.png)
