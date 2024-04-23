@@ -1,3 +1,3 @@
-![OpenFin Web Interop Example](../../assets/openfin-web-starter.png)
+![OpenFin Web Interop Basic Example](../../assets/openfin-web-starter.png)
 
 ---

@@ -8,10 +8,7 @@ import { getSettings } from "./settings";
 async function init(): Promise<void> {
 	const settings = await getSettings();
 	return initBrokerConnection({
-		sharedWorkerUrl: settings.platform.sharedWorkerUrl,
-		experimental: {
-			crossTab: "same-site"
-		}
+		sharedWorkerUrl: settings.platform.sharedWorkerUrl
 	});
 }
 

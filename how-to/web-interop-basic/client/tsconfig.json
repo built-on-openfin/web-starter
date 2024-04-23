@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es2021",
-		"module": "ES2020",
+		"module": "Node16",
 		"sourceMap": true,
 		"rootDir": "./src",
 		"outDir": "build",
@@ -9,7 +9,7 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
-		"moduleResolution": "bundler",
+		"moduleResolution": "Node16",
 		"types": ["./types/fin"]
 	},
 	"include": ["./src/**/*.ts"]
