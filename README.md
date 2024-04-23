@@ -22,11 +22,11 @@ We recommend:
 - Cloning this repo using: **git clone https://github.com/built-on-openfin/web-starter.git --depth=1** -As you only need the main branch to get started (it will always reflect the latest stable release).
 - Opening the root web-starter folder in Visual Studio Code (instead of opening a how-to subfolder directly in Visual Studio Code) - this will give you access to all the samples.
 - Running **npm install** from the root folder
-- Running **npm run build** from the root folder - this will ensure every sample has all of it's dependencies and builds correctly (you can then open a terminal window or two at e.g. how-to/web-interop to build that specific sample or run sample specific commands)
+- Running **npm run build** from the root folder - this will ensure every sample has all of it's dependencies and builds correctly (you can then open a terminal window or two at e.g. how-to/web-interop-basic to build that specific sample or run sample specific commands)
 
 ## What you can do with this repository
 
-This repository contains examples showing how to use or web npm packages and their related APIs.
+This repository contains examples showing you how to use our web npm packages and their related APIs.
 
 ### Web Interop
 
@@ -35,10 +35,10 @@ Want to learn how to use our Channel API, Interop API or FDC3 API inside of a de
 | Web Interop                                                            | Description                                                                                                                                                                                                     | Live Launch                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Web Interop Basic](./how-to/web-interop-basic) | This basic how-to provides a way of configuring a a webpage with a number of framed applications that share contextual information.                                                                |                                                                                                                                                                                                                                                                                       |
+
 ## General
 
 | Documentation                                                                      | Description                                                                                                                                                                    | Live Launch |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| [Hints And Tips](./how-to/hints-and-tips)                                          | This is more a collection of hints and tips than an example. We will be building up this section over time as we come across points of interest while working on our examples. |             |
+| [Hints And Tips](./how-to/hints-and-tips)                                          | This is a collection of hints and tips. We will be building up this section over time as we come across points of interest while working on our examples. |             |
 
-### Read more about these settings in [Workspace documentation](https://developers.openfin.co/of-docs/docs/workspace-override-options)
