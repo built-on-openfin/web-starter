@@ -1,7 +1,8 @@
 import type { Context } from "@finos/fdc3";
-import "../platform/api";
+import { init } from "../platform/api";
 
 window.addEventListener("DOMContentLoaded", async () => {
+	await init();
 	await initializeDOM();
 });
 
@@ -31,6 +32,23 @@ async function setContext(): Promise<void> {
 }
 
 /**
+ * Adds an interop context listener to the window.
+ */
+async function addContextListener(): Promise<void> {
+	if (window.fin) {
+		window.fin.me.interop.addContextHandler((context: Context) => {
+			updateDOMElements(context);
+		});
+	} else {
+		window.addEventListener("finReady", async () => {
+			window.fin.me.interop.addContextHandler((context: Context) => {
+				updateDOMElements(context);
+			});
+		});
+	}
+}
+
+/**
  * Updates the DOM elements with the provided context.
  * @param context The context to update the DOM elements with.
  */
@@ -47,22 +65,6 @@ function updateDOMElements(context: Context): void {
 }
 
 /**
- * Adds an interop context listener to the window.
- */
-async function addContextListener(): Promise<void> {
-	if (window.fin) {
-		window.fin.me.interop.addContextHandler((context: Context) => {
-			updateDOMElements(context);
-		});
-	} else {
-		window.addEventListener("finReady", async () => {
-			window.fin.me.interop.addContextHandler((context: Context) => {
-				updateDOMElements(context);
-			});
-		});
-	}
-}
-/**
  * Initialize the DOM elements.
  */
 async function initializeDOM(): Promise<void> {
@@ -73,5 +75,6 @@ async function initializeDOM(): Promise<void> {
 			await setContext();
 		});
 	}
+
 	await addContextListener();
 }

@@ -5,7 +5,7 @@ import { getSettings } from "./settings";
 /**
  * Initializes the OpenFin Web Broker connection.
  */
-async function init(): Promise<void> {
+export async function init(): Promise<void> {
 	// Set window.fin to the `fin` object.
 	if (window.fin === undefined) {
 		const settings = await getSettings();
@@ -19,21 +19,17 @@ async function init(): Promise<void> {
 				}
 			}
 		});
+		console.log("Finished initializing the fin API.");
 		// Create and dispatch the finReady event
 		const event = new CustomEvent("finReady");
 		window.dispatchEvent(event);
 	}
+
 	if (window.fdc3 === undefined && window?.fin?.me.interop?.getFDC3Sync !== undefined) {
 		window.fdc3 = fin.me.interop.getFDC3Sync("2.0");
+		console.log("Finished initializing the fdc3 API.");
 		// Create and dispatch the FDC3Ready event
 		const event = new CustomEvent("fdc3Ready");
 		window.dispatchEvent(event);
 	}
 }
-
-init()
-	.then(() => {
-		console.log("Connected to the OpenFin Web Broker.");
-		return true;
-	})
-	.catch((err) => console.error(err));

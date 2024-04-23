@@ -1,7 +1,8 @@
 import type { Context } from "@finos/fdc3";
-import "../platform/api";
+import { init } from "../platform/api";
 
 window.addEventListener("DOMContentLoaded", async () => {
+	await init();
 	await initializeDOM();
 });
 
@@ -31,6 +32,23 @@ async function broadcastContext(): Promise<void> {
 }
 
 /**
+ * Adds an FDC3 context listener to the window.
+ */
+async function addFDC3Listener(): Promise<void> {
+	if (window.fdc3) {
+		await window.fdc3.addContextListener(null, (context) => {
+			updateDOMElements(context);
+		});
+	} else {
+		window.addEventListener("fdc3Ready", async () => {
+			await window.fdc3.addContextListener(null, (context) => {
+				updateDOMElements(context);
+			});
+		});
+	}
+}
+
+/**
  * Updates the DOM elements with the provided context.
  * @param context The context to update the DOM elements with.
  */
@@ -47,22 +65,6 @@ function updateDOMElements(context: Context): void {
 }
 
 /**
- * Adds an FDC3 context listener to the window.
- */
-async function addFDC3Listener(): Promise<void> {
-	if (window.fdc3) {
-		await window.fdc3.addContextListener(null, (context) => {
-			updateDOMElements(context);
-		});
-	} else {
-		window.addEventListener("fdc3Ready", async () => {
-			await window.fdc3.addContextListener(null, (context) => {
-				updateDOMElements(context);
-			});
-		});
-	}
-}
-/**
  * Initialize the DOM elements.
  */
 async function initializeDOM(): Promise<void> {
@@ -73,5 +75,6 @@ async function initializeDOM(): Promise<void> {
 			await broadcastContext();
 		});
 	}
+
 	await addFDC3Listener();
 }
