@@ -1,6 +1,6 @@
 {
-	"name": "Web Interop Basic",
-	"short_name": "WebInteropBasic",
+	"name": "OpenFin Web Interop Basic",
+	"short_name": "OpenFinWebInteropBasic",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
