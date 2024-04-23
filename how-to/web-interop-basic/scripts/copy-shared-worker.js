@@ -3,11 +3,21 @@ const path = require('path');
 
 const sharedWorkerPath = `${path.dirname(require.resolve('@openfin/web-interop'))}/shared-worker.js`;
 
-const targetSharedWorkerPath = path.resolve(__dirname, '..', 'public', 'js', 'shared-worker.bundle.js');
+const targetJSdirectory = path.resolve(__dirname, '..', 'public', 'js');
+const targetSharedWorkerPath = path.join(targetJSdirectory, 'shared-worker.bundle.js');
 
-fs.copyFile(sharedWorkerPath, targetSharedWorkerPath, (err) => {
-	if (err) {
-		throw err;
+fs.mkdir(targetJSdirectory, { recursive: true }, (createdDirectoryError) => {
+	if (createdDirectoryError) {
+		console.error(`Error creating target directory: ${targetJSdirectory}`);
+		throw createdDirectoryError;
 	}
-	console.log('shared-worker.js was copied to target directory');
+	console.log(
+		`${targetJSdirectory} directory was created or already existed. Copying source shared-worker.js to target directory.`
+	);
+	fs.copyFile(sharedWorkerPath, targetSharedWorkerPath, (copyFileError) => {
+		if (copyFileError) {
+			throw copyFileError;
+		}
+		console.log(`shared-worker.js was copied to target directory: ${targetSharedWorkerPath}`);
+	});
 });
