@@ -23,7 +23,8 @@
 		"how-to/*"
 	],
 	"packageExclude": [
-		"how-to/hints-and-tips"
+		"how-to/hints-and-tips",
+		"how-to/cloud-interop-basic"
 	],
 	"packageCustomFolder": "",
 	"contributors": [
