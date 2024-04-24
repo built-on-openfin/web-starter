@@ -65,7 +65,6 @@ import "./util/buffer";
  * Initializes the OpenFin Web Broker connection.
  */
 async function init(): Promise<void> {
- const settings = await getSettings();
  // Connect to the OpenFin Web Broker.
  const fin = await connect({ options: { brokerUrl: "http://localhost:6060/platform/iframe-broker.html" } });
 
@@ -125,15 +124,14 @@ import "../util/buffer";
 export async function init(): Promise<void> {
  // Set window.fin to the `fin` object if needed.
  if (window.fin === undefined) {
-   const settings = await getSettings();
    // Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
    window.fin = await connect({
       options: {
-      brokerUrl: "http://localhost:6060/platform/iframe-broker.html",
-      interopConfig: {
-      providerId: "web-interop-basic",
-      currentContextGroup: "green"
-      }
+        brokerUrl: "http://localhost:6060/platform/iframe-broker.html",
+        interopConfig: {
+        providerId: "web-interop-basic",
+        currentContextGroup: "green"
+        }
       }
    });
    console.log("Finished initializing the fin API.");
