@@ -1,5 +1,6 @@
 import { cloudInteropOverride } from "@openfin/cloud-interop";
-import { connect } from "@openfin/web-interop";
+import type OpenFin from "@openfin/core";
+import { connect } from "@openfin/core-web";
 import "./util/buffer";
 import { getSettings } from "./platform/settings";
 
@@ -24,7 +25,9 @@ async function init(): Promise<void> {
 		await fin.Interop.init(settings.platform.providerId);
 	} else {
 		// You may now use the `fin` object and initialize the Broker with support for cloud interop.
-		const cloudOverride = await cloudInteropOverride(settings.cloud?.connectParams);
+		const cloudOverride = (await cloudInteropOverride(
+			settings.cloud?.connectParams
+		)) as unknown as OpenFin.ConstructorOverride<OpenFin.InteropBroker>;
 		await fin.Interop.init(settings.platform.providerId, [cloudOverride]);
 	}
 }

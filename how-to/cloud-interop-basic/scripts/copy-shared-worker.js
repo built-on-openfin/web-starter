@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const sharedWorkerPath = `${path.dirname(require.resolve('@openfin/web-interop'))}/shared-worker.js`;
+const sharedWorkerPath = `${path.dirname(require.resolve('@openfin/core-web'))}/shared-worker.js`;
 
 const targetJSdirectory = path.resolve(__dirname, '..', 'public', 'js');
 const targetSharedWorkerPath = path.join(targetJSdirectory, 'shared-worker.bundle.js');
