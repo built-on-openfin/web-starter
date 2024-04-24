@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Interop View</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/interop-view.bundle.js"></script>
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>OpenFin Interop View</h1>
+				<h1 class="tag">An example of a view that uses the web interop library</h1>
+			</div>
+			<div class="row middle gap10">
+				<image src="../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="fill col scroll-vertical gap10">
+			<fieldset>
+				<label for="contextType">Context Type</label>
+				<span id="contextType"></span>
+			</fieldset>
+			<fieldset>
+				<label for="contextName">Context Name</label>
+				<span id="contextName" class="nowrap"></span>
+			</fieldset>
+			<hr />
+			<fieldset class="fill">
+				<label for="contextBody">Context</label>
+				<pre id="contextBody" class="fill"></pre>
+			</fieldset>
+			<hr />
+			<fieldset>
+				<button id="setContext">Set Context TSLA</button>
+			</fieldset>
+		</main>
+	</body>
+</html>
