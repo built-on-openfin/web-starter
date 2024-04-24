@@ -4,7 +4,7 @@
 
 # OpenFin Web Interop Basic
 
-This is a very basic example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker using the [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) library.
+This is a very basic example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
 
 This page has a very simple layout which is made up of two iframes:
 
@@ -41,11 +41,11 @@ npm run client
 
 ## Setup Notes
 
-There are a few things to note before trying to use @openfin/web-interop:
+There are a few things to note before trying to use @openfin/core-web:
 
 - This current release requires Buffer support and this is added through the [buffer](https://www.npmjs.com/package/buffer) npm package. We have added this to the npm package and we have made it available through a [buffer util TypeScript file](./client/src/util/buffer.ts). _This is a requirement that will be removed in the future_.
-- If your [tsconfig](./client/tsconfig.json) file is using **node** for moduleResolution it will need to use **Node16** instead as export/imports are defined in the package.json of the @openfin/web-interop npm package. This is required for when you try to import @openfin/web-interop/iframe-broker.
-- You will need to copy the shared-worker.js file from the [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) npm package to your public folder. We have created a [copy-shared-worker.js](./scripts/copy-shared-worker.js) script to do this and it is referenced in the build-client npm command.
+- If your [tsconfig](./client/tsconfig.json) file is using **node** for moduleResolution it will need to use **Node16** instead as export/imports are defined in the package.json of the @openfin/core-web npm package. This is required for when you try to import @openfin/core-web/iframe-broker.
+- You will need to copy the shared-worker.js file from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-shared-worker.js](./scripts/copy-shared-worker.js) script to do this and it is referenced in the build-client npm command.
 
 ## How things are structured
 
@@ -58,7 +58,7 @@ It has a responsibility to create a connection providing a broker url and then i
 In the sample we use a [settings](./client/src/platform/settings.ts) file but this has been removed from the snippet to simplify the code snippet.
 
 ```javascript
-import { connect } from "@openfin/web-interop";
+import { connect } from "@openfin/core-web";
 import "./util/buffer";
 
 /**
@@ -83,19 +83,19 @@ The host html page [provider.html](./public/platform/provider.html) then:
 
 This is the iframe that is referenced by the Host and Content Providers and it is how they communicate with each other. The iframe broker html page and the shared-webworker.js file have to reside on the same domain as the **host**.
 
-The [iframe broker html page](./public/platform/iframe-broker.html) uses the shared-webworker.js file that comes as part of the [@openfin/web-interop](https://www.npmjs.com/package/@openfin/web-interop) npm package.
+The [iframe broker html page](./public/platform/iframe-broker.html) uses the shared-webworker.js file that comes as part of the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package.
 
 The iframe broker needs some initialization logic as well.
 
 ```javascript
-import { init as initBrokerConnection } from "@openfin/web-interop/iframe-broker";
+import { init as initBrokerConnection } from "@openfin/core-web/iframe-broker";
 
 /**
  * Initializes the OpenFin Web Broker connection.
  * @returns A promise that resolves when the connection is established.
  */
 async function init(): Promise<void> {
- // The shared worker is copied and renamed to the public/js directory from the @openfin/web-interop package
+ // The shared worker is copied and renamed to the public/js directory from the @openfin/core-web package
  // using the scripts/copy-shared-worker.js file that is called when npm run build is called.
  return initBrokerConnection({
   sharedWorkerUrl: "http://localhost:6060/js/shared-worker.bundle.js"
@@ -116,7 +116,7 @@ Some things to note about the content provider setup:
 - the **finReady** event shown below is an example and doesn't exist in the OpenFin container as the API is injected into the document. We added **finReady** to have similar behavior to the **fdc3Ready** event that we also raise.
 
 ```javascript
-import { connect } from "@openfin/web-interop";
+import { connect } from "@openfin/core-web";
 import "../util/buffer";
 
 /**

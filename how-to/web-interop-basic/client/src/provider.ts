@@ -1,4 +1,4 @@
-import { connect } from "@openfin/web-interop";
+import { connect } from "@openfin/core-web";
 import "./util/buffer";
 import { getSettings } from "./platform/settings";
 
