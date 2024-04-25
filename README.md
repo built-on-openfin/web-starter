@@ -6,7 +6,7 @@
 
 The OpenFin collection of web targetted npm packages are there to help you have an OpenFin experience across the desktop (container, workspace, native through our adapters or desktop browser) or tablets (through tablet browsers such as Safari).
 
-[Learn more about openfin.co/](https://www.openfin.co/)
+[Learn more about openfin.co](https://www.openfin.co/) and read our [developer docs](https://developers.openfin.co/of-docs/docs/web-interop).
 
 ## What version does this branch cover?
 
