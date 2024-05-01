@@ -1,54 +1,32 @@
-/* eslint-disable func-style */
-import type OpenFin from "@openfin/core";
-import { connect, type WebLayoutSnapshot } from "@openfin/core-web";
+import { connect } from "@openfin/core-web";
 import "./util/buffer";
-import { getSettings } from "./platform/settings";
+import { getDefaultLayout, getSettings } from "./platform/settings";
 
 /**
  * Initializes the OpenFin Web Broker connection.
  */
 async function init(): Promise<void> {
 	const settings = await getSettings();
-	const layoutSnapshot: WebLayoutSnapshot = settings.layout.defaultLayout;
-	const layoutContainer = document.querySelector<HTMLElement>(`#${settings.layout.layoutContainerId}`);
-	if(layoutContainer === null) {
-		// error
-	} else {
-		// Connect to the OpenFin Web Broker.
-		const fin = await connect({ options: { brokerUrl: settings.platform.brokerUrl },
-			platform: { layoutSnapshot } });
-
-		// You may now use the `fin` object.
-		await fin.Interop.init(settings.platform.providerId);
-
-		function createLayout({ layoutName, layout }, i) {
-			const layoutIdentity = { layoutName };
-			const layoutDiv = document.createElement('div');
-			layoutDiv.id = `layout-${i}`;
-			layoutDiv.innerText = layoutName;
-			layoutContainer.appendChild(layoutDiv);
-			return layoutIdentity;
-		};
-
-		const layoutManagerOverride = (Base) =>
-            class E2ELayoutManager extends Base {
-                async applyLayoutSnapshot({ layouts }) {
-                    await Promise.all(
-                        Object.entries(layouts).map(async ([layoutName, layout], i) =>
-                            createLayout({ layoutName, layout }, i)
-                        )
-                    );
-                }
-                async removeLayout(layoutIdentity) {
-                    console.log(`[platform-window] manager: removeLayout called for ${layoutIdentity.layoutName}`);
-                }
-            };
-
-		// You may now use the `fin` object. In this case, we want to initialize and create layouts
-		await fin.Platform.Layout.init({
-			container: layoutContainer
-		});
+	const layoutSnapshot = await getDefaultLayout();
+	if(settings === undefined || layoutSnapshot === undefined) {
+		console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
+		return;
 	}
+	const layoutContainer = document.querySelector<HTMLElement>(`#${settings.platform.layout.layoutContainerId}`);
+	if(layoutContainer === null) {
+		console.error(`Please ensure the document has an element with the following id #${settings.platform.layout.layoutContainerId} so that the web-layout can be applied.`);
+		return;
+	}
+	// Connect to the OpenFin Web Broker.
+	const fin = await connect({ options: { brokerUrl: settings.platform.interop.brokerUrl },
+		platform: { layoutSnapshot } });
+
+	// You may now use the `fin` object.
+	await fin.Interop.init(settings.platform.interop.providerId);
+	// initialize the layout and pass it the dom element to bind to
+	await fin.Platform.Layout.init({
+		container: layoutContainer
+	});
 }
 
 init()

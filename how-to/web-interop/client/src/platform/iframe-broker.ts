@@ -7,8 +7,12 @@ import { getSettings } from "./settings";
  */
 async function init(): Promise<void> {
 	const settings = await getSettings();
+	if(settings === undefined) {
+		console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
+		return;
+	}
 	return initBrokerConnection({
-		sharedWorkerUrl: settings.platform.sharedWorkerUrl
+		sharedWorkerUrl: settings.platform.interop.sharedWorkerUrl
 	});
 }
 

@@ -1,10 +1,10 @@
 {
-	"name": "OpenFin Web Interop Basic",
-	"short_name": "OpenFinWebInteropBasic",
+	"name": "OpenFin Web Interop",
+	"short_name": "OpenFinWebInterop",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing a basic implementation of the OpenFin Web Interop Library.",
+	"description": "An example showing a implementation of the OpenFin Web Interop Library.",
 	"icons": [
 		{
 			"src": "common/images/icon-blue.png",
@@ -12,5 +12,19 @@
 			"type": "image/png"
 		}
 	],
-	"related_applications": []
+	"related_applications": [],
+	"custom_settings": {
+			"platform": {
+				"interop": {
+					"sharedWorkerUrl": "http://localhost:6060/js/shared-worker.bundle.js",
+					"brokerUrl": "http://localhost:6060/platform/iframe-broker.html",
+					"providerId": "web-interop-basic",
+					"defaultContextGroup": "green"
+				},
+				"layout": {
+					"layoutContainerId": "layout_container",
+					"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json" 
+				}
+			}
+	}
 }

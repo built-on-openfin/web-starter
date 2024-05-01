@@ -9,13 +9,17 @@ export async function init(): Promise<void> {
 	// Set window.fin to the `fin` object.
 	if (window.fin === undefined) {
 		const settings = await getSettings();
+		if(settings === undefined) {
+			console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
+			return;
+		}
 		// Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
 		window.fin = await connect({
 			options: {
-				brokerUrl: settings.platform.brokerUrl,
+				brokerUrl: settings.platform.interop.brokerUrl,
 				interopConfig: {
-					providerId: settings.platform.providerId,
-					currentContextGroup: settings.platform.defaultContextGroup
+					providerId: settings.platform.interop.providerId,
+					currentContextGroup: settings.platform.interop.defaultContextGroup
 				}
 			}
 		});

@@ -5,8 +5,8 @@
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
 		"client": "node ./scripts/launch.mjs",
-		"copy-shared-worker": "node ./scripts/copy-shared-worker.js",
-		"build-client": "npm run copy-shared-worker && webpack build --config ./client/webpack.config.js --mode=development",
+		"copy-core-web": "node ./scripts/copy-core-web.js",
+		"build-client": "npm run copy-core-web && webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 6060 -c-1",
 		"setup": "npm install && npm run build",

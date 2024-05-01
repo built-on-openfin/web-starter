@@ -8,17 +8,15 @@ export interface Settings {
 	 * Platform settings
 	 */
 	platform: {
-		sharedWorkerUrl: string;
-		brokerUrl: string;
-		providerId: string;
-		defaultContextGroup?: string;
-	};
-
-	/**
-	 * Layout settings
-	 */
-	layout: {
-		layoutContainerId: string;
-		defaultLayout: WebLayoutSnapshot;
+		interop: {
+			sharedWorkerUrl: string;
+			brokerUrl: string;
+			providerId: string;
+			defaultContextGroup?: string;
+		};
+		layout: {
+			layoutContainerId: string;
+			defaultLayout: WebLayoutSnapshot | string;
+		};
 	};
 }
