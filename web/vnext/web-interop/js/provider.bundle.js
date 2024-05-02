@@ -29921,22 +29921,50 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
+exports.getDefaultLayout = exports.getSettings = void 0;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
  */
 async function getSettings() {
-    return {
-        platform: {
-            sharedWorkerUrl: "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-basic/js/shared-worker.bundle.js",
-            brokerUrl: "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-basic/platform/iframe-broker.html",
-            providerId: "web-interop-basic",
-            defaultContextGroup: "green"
-        }
-    };
+    const settings = await getManifestSettings();
+    if (settings === undefined) {
+        console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+    }
+    return settings;
 }
 exports.getSettings = getSettings;
+/**
+ * Returns a default layout from the settings if provided.
+ * @returns The default layout from the settings.
+ */
+async function getDefaultLayout() {
+    const settings = await getSettings();
+    if (settings?.platform?.layout?.defaultLayout === undefined) {
+        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
+        return;
+    }
+    if (typeof settings.platform.layout.defaultLayout === "string") {
+        const layoutResponse = await fetch(settings.platform.layout.defaultLayout);
+        const layoutJson = (await layoutResponse.json());
+        return layoutJson;
+    }
+    return settings.platform.layout.defaultLayout;
+}
+exports.getDefaultLayout = getDefaultLayout;
+/**
+ * Returns the settings from the manifest file.
+ * @returns customSettings for this example
+ */
+async function getManifestSettings() {
+    // Get the manifest link
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link !== null) {
+        const manifestResponse = await fetch(link.href);
+        const manifestJson = (await manifestResponse.json());
+        return manifestJson.custom_settings;
+    }
+}
 
 
 /***/ }),
@@ -30934,25 +30962,67 @@ const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modu
 __webpack_require__(/*! ./util/buffer */ "./client/src/util/buffer.ts");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
 /**
+ * Sets up panels if supported.
+ * @param settings The settings to use.
+ */
+function setupPanels(settings) {
+    if (settings?.platform?.layout?.panels?.left) {
+        const leftPanel = settings.platform.layout.panels.left;
+        const leftPanelFrame = document.querySelector(`#${leftPanel.frameId}`);
+        if (leftPanelFrame === null) {
+            console.error(`Please ensure the document has an element with the following id #${leftPanel.frameContainerId} so that the web-layout can be applied.`);
+            return;
+        }
+        leftPanelFrame.src = leftPanel.url;
+        console.log(`Panel ${leftPanel.frameId} has been setup with the url ${leftPanel.url}`);
+    }
+    else {
+        console.log("No panels require setup.");
+    }
+}
+/**
  * Initializes the OpenFin Web Broker connection.
  */
 async function init() {
+    // Get the required settings
     const settings = await (0, settings_1.getSettings)();
-    // Connect to the OpenFin Web Broker.
+    // Get the default layout
+    const layoutSnapshot = await (0, settings_1.getDefaultLayout)();
+    if (settings === undefined || layoutSnapshot === undefined) {
+        console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
+        return;
+    }
+    // Get the dom element that should host the layout
+    const layoutContainer = document.querySelector(`#${settings.platform.layout.layoutContainerId}`);
+    if (layoutContainer === null) {
+        console.error(`Please ensure the document has an element with the following id #${settings.platform.layout.layoutContainerId} so that the web-layout can be applied.`);
+        return;
+    }
+    // Connect to the OpenFin Web Broker and pass the default layout.
     // It is good practice to specify providerId even if content is explicitly specifying it for cases where
-    // this provider may use our layout system and allow content to inherit these settings and currentContextGroup
-    // which will default any client that uses inheritance through our layout system.
+    // this provider uses our layout system and content uses inheritance. currentContextGroup
+    // is useful for defaulting any client that uses inheritance through our layout system.
     const fin = await (0, core_web_1.connect)({
         options: {
-            brokerUrl: settings.platform.brokerUrl,
+            brokerUrl: settings.platform.interop.brokerUrl,
             interopConfig: {
-                providerId: settings.platform.providerId,
-                currentContextGroup: settings.platform.defaultContextGroup
+                providerId: settings.platform.interop.providerId,
+                currentContextGroup: settings.platform.interop.defaultContextGroup
             }
-        }
+        },
+        connectionInheritance: "enabled",
+        // @ts-expect-error connection inheritance is being set to true and that doesn't expect a platform config
+        platform: { layoutSnapshot }
     });
-    // You may now use the `fin` object.
-    await fin.Interop.init(settings.platform.providerId);
+    // You may now use the `fin` object to initialize the broker and the layout.
+    await fin.Interop.init(settings.platform.interop.providerId);
+    // Show the main container and hide the loading container
+    // initialize the layout and pass it the dom element to bind to
+    await fin.Platform.Layout.init({
+        container: layoutContainer
+    });
+    // setup panels not that everything has been initialized
+    setupPanels(settings);
 }
 init()
     .then(() => {
