@@ -223,3 +223,5 @@ To make it easier to update settings we store them in the web [manifest.json](./
   }
 }
 ```
+
+![OpenFin Web Interop Rough Visual Guide](./docs/web-interop-visualization.png)
