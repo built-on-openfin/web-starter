@@ -1,4 +1,4 @@
-import type { ConnectParams } from "@openfin/cloud-interop/dist/interfaces";
+import type { CloudInteropOverrideParams } from "@openfin/cloud-interop";
 /**
  * Settings for the client
  */
@@ -20,6 +20,6 @@ export interface Settings {
 		/**
 		 * These settings may be subject to change as we get feedback from use cases. Please contact OpenFin for this information.
 		 */
-		connectParams: ConnectParams;
+		connectParams: CloudInteropOverrideParams;
 	};
 }

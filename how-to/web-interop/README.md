@@ -2,16 +2,20 @@
 
 > **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin Web Interop Basic
+# OpenFin Web Interop
 
-This is a very basic example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
+This is a simple example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker and a layout using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
 
-This page has a very simple layout which is made up of two iframes:
+This page has a very simple layout which is made up of four iframes that inherit the interop settings they should use to connect to the web broker:
 
-- An FDC3 View - This uses the FDC3 API to add a context listener and to broadcast a hardcoded context object.
-- An Interop View - This uses the OpenFin Interop API to add a context listener and to set context using a hardcoded context object.
+- Local - An FDC3 View - This uses the FDC3 API to add a context listener and to broadcast a hardcoded context object.
+- Local - An Interop View - This uses the OpenFin Interop API to add a context listener and to set context using a hardcoded context object.
+- External - An FDC3 Tool used in our workspace platform starters that lets you experiment with context sharing using the FDC3 APIs.
+- External - An Interop Tool used in our workspace platform starters that lets you experiment with context sharing using the OpenFin Interop API.
 
-![OpenFin Web Interop Basic Example](./docs/web-interop-basic.png)
+It also has a left panel which is outside of the OpenFin Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
+
+![OpenFin Web Interop Example](./docs/web-interop.png)
 
 ## Getting Started
 
@@ -55,7 +59,7 @@ The host is the entry point and it is the page that gets loaded into the Chrome/
 
 It has a responsibility to create a connection providing a broker url and then initializing the broker providing an id (**this id will be needed by your content when it wishes to connect**).
 
-In the sample we use a [settings](./client/src/platform/settings.ts) file but this has been removed from the snippet to simplify the code snippet.
+In the sample we use a [settings](./client/src/platform/settings.ts) file that reads settings from the [web manifest file](./public/manifest.json) but this has been removed from the snippet to simplify the code snippet.
 
 ```javascript
 import { connect } from "@openfin/core-web";
@@ -65,33 +69,49 @@ import "./util/buffer";
  * Initializes the OpenFin Web Broker connection.
  */
 async function init(): Promise<void> {
+ // Get the dom element that should host the layout
+ const layoutContainer = document.querySelector<HTMLElement>("#layout_container");
 
- // Connect to the OpenFin Web Broker.
+ // Get the default layout
+ const layoutSnapshot = {...};
+
+ // Connect to the OpenFin Web Broker and pass the default layout.
  // It is good practice to specify providerId even if content is explicitly specifying it for cases where
- // this provider may use our layout system and allow content to inherit these settings and currentContextGroup
- // which will default any client that uses inheritance through our layout system.
- const fin = await connect({ options: { brokerUrl: "http://localhost:6060/platform/iframe-broker.html",
+ // this provider uses our layout system and content uses inheritance. currentContextGroup
+ // is useful for defaulting any client that uses inheritance through our layout system.
+ const fin = await connect({ options: {
+  brokerUrl: "http://localhost:6060/platform/iframe-broker.html",
   interopConfig: {
-   providerId: "web-interop-basic",
+   providerId: "web-interop",
    currentContextGroup: "green"
-  } } });
+  }
+ },
+  connectionInheritance: "enabled",
+   // @ts-expect-error connection inheritance is being set to true and that doesn't expect a platform config in the current release
+  platform: { layoutSnapshot } });
 
-
- // You may now use the `fin` object. This step is important as it initializes the interop broker.
- await fin.Interop.init("web-interop-basic");
+ // You may now use the `fin` object to initialize the broker and the layout.
+ await fin.Interop.init("web-interop");
+ // initialize the layout and pass it the dom element to bind to
+ await fin.Platform.Layout.init({
+  container: layoutContainer
+ });
 }
 ```
 
 The host html page [provider.html](./public/platform/provider.html) then:
 
 - imports this code and initializes it.
-- brings in required content through an iframe.
+- brings in required content through the @openfin/core-web layout system.
+- brings in the required css for the @openfin/core-web layout system.
+
+The host page initializes the OpenFin layout system and brings in a required css file that styles the layout system. This styles.css is brought in from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package. This style is copied to the public/style folder as core-web-styles.css using our [scripts/copy-core-web.js](./scripts/copy-core-web.js) script. It runs as part of the build process.
 
 ### IFrame Broker
 
 This is the iframe that is referenced by the Host and Content Providers and it is how they communicate with each other. The iframe broker html page and the shared-webworker.js file have to reside on the same domain as the **host**.
 
-The [iframe broker html page](./public/platform/iframe-broker.html) uses the shared-webworker.js file that comes as part of the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package.
+The [iframe broker html page](./public/platform/iframe-broker.html) uses the shared-webworker.js file that comes as part of the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package. This script is copied to the public/js folder as shared-worker.bundle.js using our [scripts/copy-core-web.js](./scripts/copy-core-web.js) script. It runs as part of the build process.
 
 The iframe broker needs some initialization logic as well.
 
@@ -138,7 +158,7 @@ export async function init(): Promise<void> {
       options: {
         brokerUrl: "http://localhost:6060/platform/iframe-broker.html",
         interopConfig: {
-        providerId: "web-interop-basic",
+        providerId: "web-interop",
         currentContextGroup: "green"
         }
       }
@@ -159,10 +179,45 @@ export async function init(): Promise<void> {
 }
 ```
 
-## A visual representation
+## Settings
 
-We've covered the key pieces. We have a host, one or more pieces of content and a common iframe broker html page that is used to tie them altogether.
+To make it easier to update settings we store them in the web [manifest.json](./public/manifest.json) inside of _custom_settings_.
 
-This diagram is here to provide a rough visual guide to support the content above and the example:
-
-![OpenFin Web Interop Basic Rough Visual Guide](./docs/web-interop-basic-visualization.png)
+```json
+{
+  "name": "OpenFin Web Interop",
+  "short_name": "OpenFinWebInterop",
+  "start_url": "./platform/provider.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "An example showing a implementation of the OpenFin Web Interop Library.",
+  "icons": [
+    {
+      "src": "common/images/icon-blue.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    }
+  ],
+  "related_applications": [],
+  "custom_settings": {
+    "platform": {
+      "interop": {
+        "sharedWorkerUrl": "http://localhost:6060/js/shared-worker.bundle.js",
+        "brokerUrl": "http://localhost:6060/platform/iframe-broker.html",
+        "providerId": "web-interop",
+        "defaultContextGroup": "green"
+      },
+      "layout": {
+        "panels": {
+          "left": {
+            "url": "http://localhost:6060/views/fdc3-panel.html",
+            "frameId": "left-panel"
+          }
+        },
+        "layoutContainerId": "layout_container",
+        "defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
+      }
+    }
+  }
+}
+```
