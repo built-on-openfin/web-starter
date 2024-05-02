@@ -29927,21 +29927,37 @@ __webpack_require__(/*! ../util/buffer */ "./client/src/util/buffer.ts");
 const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
 /**
  * Initializes the OpenFin Web Broker connection.
+ * @param inherit Should we inherit settings from the host (available in the OpenFin layout system) or use settings? Default is true.
  */
-async function init() {
+async function init(inherit = true) {
     // Set window.fin to the `fin` object.
+    let options;
     if (window.fin === undefined) {
-        const settings = await (0, settings_1.getSettings)();
-        // Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
-        window.fin = await (0, core_web_1.connect)({
-            options: {
-                brokerUrl: settings.platform.brokerUrl,
-                interopConfig: {
-                    providerId: settings.platform.providerId,
-                    currentContextGroup: settings.platform.defaultContextGroup
-                }
+        if (!inherit) {
+            const settings = await (0, settings_1.getSettings)();
+            if (settings === undefined) {
+                console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
+                return;
             }
-        });
+            options = {
+                brokerUrl: settings.platform.interop.brokerUrl,
+                interopConfig: {
+                    providerId: settings.platform.interop.providerId,
+                    currentContextGroup: settings.platform.interop.defaultContextGroup
+                }
+            };
+        }
+        // Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
+        if (options) {
+            window.fin = await (0, core_web_1.connect)({
+                options
+            });
+        }
+        else {
+            window.fin = await (0, core_web_1.connect)({
+                connectionInheritance: "enabled"
+            });
+        }
         console.log("Finished initializing the fin API.");
         // Create and dispatch the finReady event
         const event = new CustomEvent("finReady");
@@ -29969,22 +29985,50 @@ exports.init = init;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
+exports.getDefaultLayout = exports.getSettings = void 0;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
  */
 async function getSettings() {
-    return {
-        platform: {
-            sharedWorkerUrl: "https://built-on-openfin.github.io/web-starter/dev/joe/layout-examples/web-interop-basic/js/shared-worker.bundle.js",
-            brokerUrl: "https://built-on-openfin.github.io/web-starter/dev/joe/layout-examples/web-interop-basic/platform/iframe-broker.html",
-            providerId: "web-interop-basic",
-            defaultContextGroup: "green"
-        }
-    };
+    const settings = await getManifestSettings();
+    if (settings === undefined) {
+        console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+    }
+    return settings;
 }
 exports.getSettings = getSettings;
+/**
+ * Returns a default layout from the settings if provided.
+ * @returns The default layout from the settings.
+ */
+async function getDefaultLayout() {
+    const settings = await getSettings();
+    if (settings?.platform?.layout?.defaultLayout === undefined) {
+        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
+        return;
+    }
+    if (typeof settings.platform.layout.defaultLayout === "string") {
+        const layoutResponse = await fetch(settings.platform.layout.defaultLayout);
+        const layoutJson = (await layoutResponse.json());
+        return layoutJson;
+    }
+    return settings.platform.layout.defaultLayout;
+}
+exports.getDefaultLayout = getDefaultLayout;
+/**
+ * Returns the settings from the manifest file.
+ * @returns customSettings for this example
+ */
+async function getManifestSettings() {
+    // Get the manifest link
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link !== null) {
+        const manifestResponse = await fetch(link.href);
+        const manifestJson = (await manifestResponse.json());
+        return manifestJson.custom_settings;
+    }
+}
 
 
 /***/ }),
@@ -30973,41 +31017,18 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!*****************************************!*\
-  !*** ./client/src/content/fdc3-view.ts ***!
-  \*****************************************/
+/*!******************************************!*\
+  !*** ./client/src/content/fdc3-panel.ts ***!
+  \******************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const api_1 = __webpack_require__(/*! ../platform/api */ "./client/src/platform/api.ts");
 window.addEventListener("DOMContentLoaded", async () => {
-    await (0, api_1.init)();
+    // setTimeout(async () => {
+    await (0, api_1.init)(false);
     await initializeDOM();
+    // }, 1000);
 });
-/**
- * Broadcasts a context using FDC3.
- */
-async function broadcastContext() {
-    const contextType = "fdc3.instrument";
-    const contextName = "Apple";
-    const idData = {
-        ticker: "AAPL"
-    };
-    const context = {
-        type: contextType,
-        name: contextName,
-        id: idData
-    };
-    if (window.fdc3) {
-        await window.fdc3.broadcast(context);
-        console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-    }
-    else {
-        window.addEventListener("fdc3Ready", async () => {
-            await window.fdc3.broadcast(context);
-            console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-        });
-    }
-}
 /**
  * Adds an FDC3 context listener to the window.
  */
@@ -31043,12 +31064,6 @@ function updateDOMElements(context) {
  * Initialize the DOM elements.
  */
 async function initializeDOM() {
-    const broadcastButton = document.querySelector("#broadcast");
-    if (broadcastButton !== null) {
-        broadcastButton.addEventListener("click", async () => {
-            await broadcastContext();
-        });
-    }
     await addFDC3Listener();
 }
 
@@ -31056,4 +31071,4 @@ async function initializeDOM() {
 
 /******/ })()
 ;
-//# sourceMappingURL=fdc3-view.bundle.js.map
+//# sourceMappingURL=fdc3-panel.bundle.js.map
