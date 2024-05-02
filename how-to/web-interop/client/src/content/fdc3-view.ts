@@ -2,52 +2,48 @@ import type { Context } from "@finos/fdc3";
 import { init } from "../platform/api";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	await init();
+	await init(true);
 	await initializeDOM();
 });
 
 /**
  * Broadcasts a context using FDC3.
  */
-async function setContext(): Promise<void> {
+async function broadcastContext(): Promise<void> {
 	const contextType = "fdc3.instrument";
-	const contextName = "Tesla Inc.";
+	const contextName = "Apple";
 	const idData = {
-		ticker: "TSLA"
+		ticker: "AAPL"
 	};
 	const context = {
 		type: contextType,
 		name: contextName,
 		id: idData
 	};
-	if (window.fin) {
-		await window.fin.me.interop.setContext(context);
-		console.log(`Set context: ${contextType} - ${contextName}`);
+	if (window.fdc3) {
+		await window.fdc3.broadcast(context);
+		console.log(`Broadcasted context: ${contextType} - ${contextName}`);
 	} else {
-		window.addEventListener("finReady", async () => {
-			if (window.fin) {
-				await window.fin.me.interop.setContext(context);
-				console.log(`Set context: ${contextType} - ${contextName}`);
-			}
+		window.addEventListener("fdc3Ready", async () => {
+			await window.fdc3.broadcast(context);
+			console.log(`Broadcasted context: ${contextType} - ${contextName}`);
 		});
 	}
 }
 
 /**
- * Adds an interop context listener to the window.
+ * Adds an FDC3 context listener to the window.
  */
-async function addContextListener(): Promise<void> {
-	if (window.fin) {
-		await window.fin.me.interop.addContextHandler((context: Context) => {
+async function addFDC3Listener(): Promise<void> {
+	if (window.fdc3) {
+		await window.fdc3.addContextListener(null, (context) => {
 			updateDOMElements(context);
 		});
 	} else {
-		window.addEventListener("finReady", async () => {
-			if (window.fin) {
-				await window.fin.me.interop.addContextHandler((context: Context) => {
-					updateDOMElements(context);
-				});
-			}
+		window.addEventListener("fdc3Ready", async () => {
+			await window.fdc3.addContextListener(null, (context) => {
+				updateDOMElements(context);
+			});
 		});
 	}
 }
@@ -72,13 +68,13 @@ function updateDOMElements(context: Context): void {
  * Initialize the DOM elements.
  */
 async function initializeDOM(): Promise<void> {
-	const setContextButton = document.querySelector<HTMLButtonElement>("#setContext");
+	const broadcastButton = document.querySelector<HTMLButtonElement>("#broadcast");
 
-	if (setContextButton !== null) {
-		setContextButton.addEventListener("click", async () => {
-			await setContext();
+	if (broadcastButton !== null) {
+		broadcastButton.addEventListener("click", async () => {
+			await broadcastContext();
 		});
 	}
 
-	await addContextListener();
+	await addFDC3Listener();
 }
