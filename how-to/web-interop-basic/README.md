@@ -11,6 +11,8 @@ This page has a very simple layout which is made up of two iframes:
 - An FDC3 View - This uses the FDC3 API to add a context listener and to broadcast a hardcoded context object.
 - An Interop View - This uses the OpenFin Interop API to add a context listener and to set context using a hardcoded context object.
 
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-basic/platform/provider.html)
+
 ![OpenFin Web Interop Basic Example](./docs/web-interop-basic.png)
 
 ## Getting Started
