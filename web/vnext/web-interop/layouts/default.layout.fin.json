@@ -58,7 +58,7 @@
 												"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop/views/interop-view.html",
 												"name": "internal-generated-view-64a8efd7-3d92-42ae-8fae-dffcc0fdac96"
 											},
-                                            "title": "Interop Same Domain"
+											"title": "Interop Same Domain"
 										}
 									]
 								},
@@ -73,7 +73,7 @@
 												"url": "http://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "internal-generated-view-2d9a3624-fd0e-4e0a-b681-a79a9616b871"
 											},
-                                            "title": "Interop External Domain"
+											"title": "Interop External Domain"
 										}
 									]
 								}
