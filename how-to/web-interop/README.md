@@ -224,4 +224,9 @@ To make it easier to update settings we store them in the web [manifest.json](./
 }
 ```
 
+## A visual representation
+
+We've covered the key pieces. We have a host, one or more pieces of content and a common iframe broker html page that is used to tie them altogether. We also use the OpenFin Layout system to render a layout that is compatible with the OpenFin container. This layout means that content doesn't need to know specific details about the host and it can inherit them. We also demonstrate content outside of the layout system by having a left panel example. This left panel specifies connection details.
+
+This diagram is here to provide a rough visual guide to support the content above and the example:
 ![OpenFin Web Interop Rough Visual Guide](./docs/web-interop-visualization.png)
