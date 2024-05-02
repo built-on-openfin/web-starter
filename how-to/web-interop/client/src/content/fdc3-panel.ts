@@ -2,34 +2,11 @@ import type { Context } from "@finos/fdc3";
 import { init } from "../platform/api";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	await init(true);
+	// setTimeout(async () => {
+	await init(false);
 	await initializeDOM();
+	// }, 1000);
 });
-
-/**
- * Broadcasts a context using FDC3.
- */
-async function broadcastContext(): Promise<void> {
-	const contextType = "fdc3.instrument";
-	const contextName = "Apple";
-	const idData = {
-		ticker: "AAPL"
-	};
-	const context = {
-		type: contextType,
-		name: contextName,
-		id: idData
-	};
-	if (window.fdc3) {
-		await window.fdc3.broadcast(context);
-		console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-	} else {
-		window.addEventListener("fdc3Ready", async () => {
-			await window.fdc3.broadcast(context);
-			console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-		});
-	}
-}
 
 /**
  * Adds an FDC3 context listener to the window.
@@ -68,13 +45,5 @@ function updateDOMElements(context: Context): void {
  * Initialize the DOM elements.
  */
 async function initializeDOM(): Promise<void> {
-	const broadcastButton = document.querySelector<HTMLButtonElement>("#broadcast");
-
-	if (broadcastButton !== null) {
-		broadcastButton.addEventListener("click", async () => {
-			await broadcastContext();
-		});
-	}
-
 	await addFDC3Listener();
 }

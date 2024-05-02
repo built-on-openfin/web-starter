@@ -65,8 +65,17 @@ import "./util/buffer";
  * Initializes the OpenFin Web Broker connection.
  */
 async function init(): Promise<void> {
+
  // Connect to the OpenFin Web Broker.
- const fin = await connect({ options: { brokerUrl: "http://localhost:6060/platform/iframe-broker.html" } });
+ // It is good practice to specify providerId even if content is explicitly specifying it for cases where
+ // this provider may use our layout system and allow content to inherit these settings and currentContextGroup
+ // which will default any client that uses inheritance through our layout system.
+ const fin = await connect({ options: { brokerUrl: "http://localhost:6060/platform/iframe-broker.html",
+  interopConfig: {
+   providerId: "web-interop-basic",
+   currentContextGroup: "green"
+  } } });
+
 
  // You may now use the `fin` object. This step is important as it initializes the interop broker.
  await fin.Interop.init("web-interop-basic");

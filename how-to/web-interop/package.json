@@ -19,12 +19,12 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@finos/fdc3": "^2.1.0-beta.8",
-		"@openfin/core-web": "^0.38.30",
+		"@finos/fdc3": "2.0.3",
+		"@openfin/core-web": "^0.38.42",
 		"buffer": "^6.0.3"
 	},
 	"devDependencies": {
-		"@openfin/core": "38.81.34",
+		"@openfin/core": "38.81.42",
 		"@openfin/node-adapter": "34.78.80",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",

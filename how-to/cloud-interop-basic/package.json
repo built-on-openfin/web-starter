@@ -19,13 +19,13 @@
 	"author": "john.mandia@openfin.co",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@finos/fdc3": "^2.1.0-beta.8",
-		"@openfin/cloud-interop": "^0.4.0",
-		"@openfin/core-web": "^0.38.41",
+		"@finos/fdc3": "2.0.3",
+		"@openfin/cloud-interop": "0.38.42",
+		"@openfin/core-web": "^0.38.42",
 		"buffer": "^6.0.3"
 	},
 	"devDependencies": {
-		"@openfin/core": "38.81.41",
+		"@openfin/core": "38.81.42",
 		"@openfin/node-adapter": "34.78.80",
 		"copy-webpack-plugin": "^12.0.2",
 		"eslint": "8.57.0",
