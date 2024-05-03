@@ -34506,7 +34506,6 @@ async function init() {
         const cloudOverride = (await (0, cloud_interop_1.cloudInteropOverride)(settings.cloud?.connectParams));
         await fin.Interop.init(settings.platform.interop.providerId, [cloudOverride]);
     }
-    // Show the main container and hide the loading container
     // initialize the layout and pass it the dom element to bind to
     await fin.Platform.Layout.init({
         container: layoutContainer

@@ -31015,7 +31015,6 @@ async function init() {
     });
     // You may now use the `fin` object to initialize the broker and the layout.
     await fin.Interop.init(settings.platform.interop.providerId);
-    // Show the main container and hide the loading container
     // initialize the layout and pass it the dom element to bind to
     await fin.Platform.Layout.init({
         container: layoutContainer
