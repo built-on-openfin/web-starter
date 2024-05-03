@@ -1,0 +1,47 @@
+{
+	"name": "openfin-web--web-layout-basic",
+	"version": "18.0.0",
+	"description": "OpenFin Web Starter -- Web Layout Basic",
+	"main": "public/platform/provider.bundle.js",
+	"scripts": {
+		"client": "node ./scripts/launch.mjs",
+		"copy-core-web": "node ./scripts/copy-core-web.js",
+		"build-client": "npm run copy-core-web && webpack build --config ./client/webpack.config.js --mode=development",
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 6060 -c-1",
+		"setup": "npm install && npm run build",
+		"prettier": "prettier --config .prettierrc --write .",
+		"prettier-check": "prettier --config .prettierrc --check .",
+		"eslint": "eslint . --ext .js,.mjs,.ts",
+		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
+		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
+	},
+	"author": "john.mandia@openfin.co",
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@finos/fdc3": "2.0.3",
+		"@openfin/core-web": "0.38.44",
+		"buffer": "^6.0.3"
+	},
+	"devDependencies": {
+		"@openfin/core": "38.81.44",
+		"@openfin/node-adapter": "34.78.80",
+		"eslint": "8.57.0",
+		"eslint-config-airbnb": "19.0.4",
+		"eslint-config-airbnb-typescript": "18.0.0",
+		"eslint-config-prettier": "9.1.0",
+		"eslint-plugin-import": "2.26.0",
+		"eslint-plugin-jsdoc": "48.2.1",
+		"eslint-plugin-prettier": "5.1.3",
+		"eslint-plugin-promise": "6.1.1",
+		"eslint-plugin-simple-import-sort": "12.0.0",
+		"eslint-plugin-unicorn": "51.0.1",
+		"eslint-plugin-unused-imports": "3.1.0",
+		"markdownlint-cli": "0.39.0",
+		"prettier": "3.2.5",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.4.2",
+		"webpack": "^5.90.3",
+		"webpack-cli": "^5.1.4"
+	}
+}
