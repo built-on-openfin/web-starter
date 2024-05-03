@@ -88,7 +88,6 @@ async function init(): Promise<void> {
 		await fin.Interop.init(settings.platform.interop.providerId, [cloudOverride]);
 	}
 
-	// Show the main container and hide the loading container
 	// initialize the layout and pass it the dom element to bind to
 	await fin.Platform.Layout.init({
 		container: layoutContainer
