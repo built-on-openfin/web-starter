@@ -86,7 +86,7 @@ async function init(): Promise<void> {
  };
 
 // You may now use the `fin` object and initialize the Broker with support for cloud interop.
- await fin.Interop.init(settings.platform.providerId, [await cloudInteropOverride(cloudConfig)]);
+ await fin.Interop.init("cloud-interop-basic", [await cloudInteropOverride(cloudConfig)]);
 }
 ```
 

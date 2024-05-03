@@ -1,3 +1,5 @@
+import { cloudInteropOverride } from "@openfin/cloud-interop";
+import type OpenFin from "@openfin/core";
 import { connect } from "@openfin/core-web";
 import "./util/buffer";
 import { getDefaultLayout, getSettings } from "./platform/settings";
@@ -25,9 +27,11 @@ function setupPanels(settings: Settings): void {
 }
 
 /**
- * Initializes the OpenFin Web Broker connection.
+ * Initializes the OpenFin Web Broker and Cloud connection.
  */
 async function init(): Promise<void> {
+	// Get the element for displaying error messages
+	const error = document.querySelector<HTMLElement>("#error");
 	// Get the required settings
 	const settings = await getSettings();
 	// Get the default layout
@@ -65,8 +69,25 @@ async function init(): Promise<void> {
 		platform: { layoutSnapshot }
 	});
 
-	// You may now use the `fin` object to initialize the broker and the layout.
-	await fin.Interop.init(settings.platform.interop.providerId);
+	// assign the fin api to the window object to make it globally available for consistency with container/workspace code.
+	window.fin = fin;
+	if (!settings.cloud?.connectParams?.url?.startsWith("http")) {
+		const errorMessage =
+			"Required cloud connect parameters are missing or invalid. Please check the settings. You will need configuration provided by OpenFin to connect to the cloud. Running in local only mode.";
+		console.error(errorMessage);
+		if (error !== null) {
+			error.textContent = errorMessage;
+		}
+		// You may now use the `fin` object and initialize the Broker.
+		await fin.Interop.init(settings.platform.interop.providerId);
+	} else {
+		// You may now use the `fin` object and initialize the Broker with support for cloud interop.
+		const cloudOverride = (await cloudInteropOverride(
+			settings.cloud?.connectParams
+		)) as unknown as OpenFin.ConstructorOverride<OpenFin.InteropBroker>;
+		await fin.Interop.init(settings.platform.interop.providerId, [cloudOverride]);
+	}
+
 	// Show the main container and hide the loading container
 	// initialize the layout and pass it the dom element to bind to
 	await fin.Platform.Layout.init({

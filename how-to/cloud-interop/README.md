@@ -2,9 +2,11 @@
 
 > **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin Web Interop
+# OpenFin Cloud Interop
 
-This is a simple example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker and a layout using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
+This is our Web Interop example with Cloud Interop added.
+
+This is a simple example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker and a layout using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library and connects the web broker to the cloud using our [@openfin/cloud-interop](https://www.npmjs.com/package/@openfin/cloud-interop) npm package.
 
 This page has a very simple layout which is made up of four iframes that inherit the interop settings they should use to connect to the web broker:
 
@@ -14,8 +16,6 @@ This page has a very simple layout which is made up of four iframes that inherit
 - External - An Interop Tool used in our workspace platform starters that lets you experiment with context sharing using the OpenFin Interop API.
 
 It also has a left panel which is outside of the OpenFin Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
-
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/vnext/web-interop/platform/provider.html)
 
 ![OpenFin Web Interop Example](./docs/web-interop.png)
 
@@ -62,7 +62,7 @@ The host is the entry point and it is the page that gets loaded into the Chrome/
 
 It has a responsibility to create a connection providing a broker url and then initializing the broker providing an id (**this id will be needed by your content when it wishes to connect**).
 
-In the sample we use a [settings](./client/src/platform/settings.ts) file that reads settings from the [web manifest file](./public/manifest.json) but this has been removed from the snippet to simplify the code snippet.
+In the sample we use a [settings](./client/src/platform/settings.ts) file that reads settings from the [web manifest file](./public/manifest.json) but this has been removed from the snippet to simplify the code snippet. We also have some checks for the cloud configuration but this has also been removed from this snippet.
 
 ```javascript
 import { connect } from "@openfin/core-web";
@@ -90,10 +90,25 @@ async function init(): Promise<void> {
   }
  },
   connectionInheritance: "enabled",
-   platform: { layoutSnapshot } });
+  platform: { layoutSnapshot } });
 
- // You may now use the `fin` object to initialize the broker and the layout.
- await fin.Interop.init("web-interop");
+// assign the fin api to the window object to make it globally available for consistency with container/workspace code. It also makes the
+ // api available to libraries such as cloud interop.
+ window.fin = fin;
+
+ // These settings may be subject to change as we get feedback from use cases. Please contact OpenFin for this information.
+ const cloudConfig =  {
+    userId: "",
+    password: "",
+    platformId: "",
+    url: "",
+    sourceId: "",
+    sourceDisplayName: ""
+ };
+
+// You may now use the `fin` object and initialize the Broker with support for cloud interop.
+ await fin.Interop.init("cloud-interop-basic", [await cloudInteropOverride(cloudConfig)]);
+
  // initialize the layout and pass it the dom element to bind to
  await fin.Platform.Layout.init({
   container: layoutContainer
@@ -181,6 +196,10 @@ export async function init(): Promise<void> {
 }
 ```
 
+### Cloud
+
+Once the extended interop broker initialized then a connection will be made to OpenFin's servers. Information shared across user channels (e.g. green) can then be made available to a second instance of this web platform (in another tab, on another browser or on another device) or a Workspace or Container based Platform (on the same machine or a different machine).
+
 ## Settings
 
 To make it easier to update settings we store them in the web [manifest.json](./public/manifest.json) inside of _custom_settings_.
@@ -219,6 +238,16 @@ To make it easier to update settings we store them in the web [manifest.json](./
         "layoutContainerId": "layout_container",
         "defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
       }
+    },
+    "cloud": {
+      "connectParams": {
+        "userId": "testuser3",
+        "password": "BpqOesmBshwFktV",
+        "platformId": "shared-cloud-id",
+        "url": "https://cloud-interop-test.os.openfin.co/api/v1",
+        "sourceId": "cloud-interop",
+        "sourceDisplayName": "Cloud Interop Example"
+      }
     }
   }
 }
@@ -226,7 +255,7 @@ To make it easier to update settings we store them in the web [manifest.json](./
 
 ## A visual representation
 
-We've covered the key pieces. We have a host, one or more pieces of content and a common iframe broker html page that is used to tie them altogether. We also use the OpenFin Layout system to render a layout that is compatible with the OpenFin container. This layout means that content doesn't need to know specific details about the host and it can inherit them. We also demonstrate content outside of the layout system by having a left panel example. This left panel specifies connection details.
+We've covered the key pieces. We have a host, one or more pieces of content and a common iframe broker html page that is used to tie them altogether. We also use the OpenFin Layout system to render a layout that is compatible with the OpenFin container. This layout means that content doesn't need to know specific details about the host and it can inherit them. We also demonstrate content outside of the layout system by having a left panel example. This left panel specifies connection details. When initializing the broker we also use the our cloud interop support to tie this site with other sites using our cloud interop npm package.
 
 This diagram is here to provide a rough visual guide to support the content above and the example:
-![OpenFin Web Interop Rough Visual Guide](./docs/web-interop-visualization.png)
+![OpenFin Web Cloud Interop Rough Visual Guide](./docs/web-cloud-interop-visualization.png)
