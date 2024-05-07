@@ -78,6 +78,8 @@ export async function init<FDC3 = typeof OpenFin.FDC3.v2_0>(
 	options: ClientOptions<FDC3>
 ): Promise<{ fin?: _Fin; fdc3?: FDC3 }> {
 	const response: { fin?: _Fin; fdc3?: FDC3 } = {};
+	let finInitialized = false;
+	let fdc3Initialized = false;
 
 	if (options.api === undefined) {
 		options.api = DEFAULT_OPTIONS;
@@ -101,6 +103,7 @@ export async function init<FDC3 = typeof OpenFin.FDC3.v2_0>(
 				);
 				const newFin = (await connect(options.connectOptions)) as unknown as _Fin;
 				response.fin = newFin;
+				finInitialized = true;
 			} catch (err) {
 				options.logger.error(
 					`Error creating Fin API instance through @openfin/core-web connect using the following options: ${JSON.stringify(options.connectOptions)}.`,
@@ -123,6 +126,7 @@ export async function init<FDC3 = typeof OpenFin.FDC3.v2_0>(
 					`Creating fdc3 API through the @openfin/core-web getFDC3 function specifying version ${fdc3Version}.`
 				);
 				response.fdc3 = (await response.fin.me.interop.getFDC3(fdc3Version)) as FDC3;
+				fdc3Initialized = true;
 			} catch (err) {
 				options.logger.error(
 					`Error creating fdc3 API through the @openfin/core-web getFDC3 function specifying version ${fdc3Version}.`,
@@ -137,11 +141,23 @@ export async function init<FDC3 = typeof OpenFin.FDC3.v2_0>(
 	}
 
 	if (options.target !== undefined) {
+		const targetIsWindow = options.target as unknown === window;
 		if (response.fin !== undefined) {
 			options.target.fin = response.fin;
+
+			if(targetIsWindow && finInitialized) {
+				// Create and dispatch the finReady event
+				const event = new CustomEvent("finReady");
+				window.dispatchEvent(event);
+			}
 		}
 		if (response.fdc3 !== undefined) {
 			options.target.fdc3 = response.fdc3;
+			if(targetIsWindow && fdc3Initialized) {
+				// Create and dispatch the FDC3Ready event
+				const event = new CustomEvent("fdc3Ready");
+				window.dispatchEvent(event);
+			}
 		}
 	}
 

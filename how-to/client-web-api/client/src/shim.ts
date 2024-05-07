@@ -1,6 +1,4 @@
-/* eslint-disable wrap-iife */
-// eslint-disable-next-line no-void, @typescript-eslint/no-floating-promises
-(async function ensureFin(): Promise<void> {
+window.addEventListener("DOMContentLoaded", async () => {
 	if (window.fin === undefined) {
 		try {
             const url = "https://built-on-openfin.github.io/web-starter/web/vnext/client-web-api/js/client.web.api.bundle.js";
@@ -13,4 +11,4 @@
 			);
 		}
 	}
-})();
+});
