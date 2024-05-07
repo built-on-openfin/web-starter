@@ -56,6 +56,7 @@ A number of our examples will use the OpenFin Layout System but the examples bel
 
 ## General
 
-| Documentation                                                                      | Description                                                                                                                                                                    | Live Launch |
+| General                                                                      | Description                                                                                                                                                                    | Live Launch |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| [Web Client API](./how-to/web-client-api)                                          | This provides an example of how a platform could provide a script for content providers to make it easier for them to run their content in the OpenFin Container or outside of it e.g. Edge with little to no changes. |             |
 | [Hints And Tips](./how-to/hints-and-tips)                                          | This is a collection of hints and tips. We will be building up this section over time as we come across points of interest while working on our examples. |             |

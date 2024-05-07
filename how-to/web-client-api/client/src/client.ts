@@ -141,11 +141,11 @@ export async function init<FDC3 = typeof OpenFin.FDC3.v2_0>(
 	}
 
 	if (options.target !== undefined) {
-		const targetIsWindow = options.target as unknown === window;
+		const targetIsWindow = (options.target as unknown) === window;
 		if (response.fin !== undefined) {
 			options.target.fin = response.fin;
 
-			if(targetIsWindow && finInitialized) {
+			if (targetIsWindow && finInitialized) {
 				// Create and dispatch the finReady event
 				const event = new CustomEvent("finReady");
 				window.dispatchEvent(event);
@@ -153,7 +153,7 @@ export async function init<FDC3 = typeof OpenFin.FDC3.v2_0>(
 		}
 		if (response.fdc3 !== undefined) {
 			options.target.fdc3 = response.fdc3;
-			if(targetIsWindow && fdc3Initialized) {
+			if (targetIsWindow && fdc3Initialized) {
 				// Create and dispatch the FDC3Ready event
 				const event = new CustomEvent("fdc3Ready");
 				window.dispatchEvent(event);

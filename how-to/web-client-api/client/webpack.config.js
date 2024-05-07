@@ -20,7 +20,7 @@ module.exports = [
 		},
 		externals: { fin: 'fin' },
 		output: {
-			filename: 'client.web.api.bundle.js',
+			filename: 'web.client.api.bundle.js',
 			library: {
 				type: 'module'
 			},
