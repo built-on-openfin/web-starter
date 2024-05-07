@@ -3,7 +3,7 @@
 (async function ensureFin(): Promise<void> {
 	if (window.fin === undefined) {
 		try {
-            const url = "http://localhost:6060/js/client.web.api.bundle.js";
+            const url = "https://built-on-openfin.github.io/web-starter/web/vnext/client-web-api/js/client.web.api.bundle.js";
 			const module = await import(/* webpackIgnore: true */url);
 			await module.init({ target: window });
 		} catch (error) {
