@@ -74,7 +74,7 @@ const DEFAULT_OPTIONS: APIOptions = {
  * @param options - The options to use when initializing the API objects.
  * @returns A promise that resolves with the fin and fdc3 API objects.
  */
-export async function init<FDC3 = typeof OpenFin.FDC3.v2_0>(
+export async function getAPI<FDC3 = typeof OpenFin.FDC3.v2_0>(
 	options: ClientOptions<FDC3>
 ): Promise<{ fin?: _Fin; fdc3?: FDC3 }> {
 	const response: { fin?: _Fin; fdc3?: FDC3 } = {};

@@ -31,6 +31,10 @@ This is an FDC3 view similar to the one shown in web-interop and web-interop-bas
 
 The content will not run directly as it is not running inside of a layout and the code required to setup a platform and initialize a layout has not been added in order to reduce the amount of code in this example. You can reference the hosted fdc3 example <https://built-on-openfin.github.io/web-starter/web/v18.0.0/client-web-api/views/fdc3-view.html> or start the web server and reference the localhost version <http://localhost:6060/views/fdc3-view.html>.
 
+# Alternatives
+
+This is just an example showing one approach. Content providers could reference the @openfin/core-web libraries directly, check for fin/fdc3 and then use [Webpack lazy loading](https://webpack.js.org/guides/lazy-loading/) to only fetch the module on demand if the required api was not available. Or they could import a module created by the platform that includes @openfin/core-web (like the [client](./client/src/client.ts) example) lazily.
+
 ## Getting Started
 
 1. Install dependencies and do the initial build. Note that these examples assume you are in the sub-directory for the example.
