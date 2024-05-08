@@ -44,7 +44,7 @@ console.log();
 console.log(`Platform: ${process.platform}`);
 
 const launchArgs = process.argv.slice(2);
-const url = launchArgs.length > 0 ? launchArgs[0] : 'http://localhost:6060/platform/provider.html';
+const url = launchArgs.length > 0 ? launchArgs[0] : 'http://localhost:6060/views/fdc3-view.html';
 console.log(`Url: ${url}`);
 
 run(url).catch((err) => console.error(err));
