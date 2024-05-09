@@ -21,8 +21,7 @@
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
 		"@openfin/core-web": "0.38.48",
-		"@openfin/cloud-interop": "0.38.48",
-		"buffer": "^6.0.3"
+		"@openfin/cloud-interop": "0.38.48"
 	},
 	"devDependencies": {
 		"@openfin/core": "38.81.48",

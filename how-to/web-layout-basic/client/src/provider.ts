@@ -1,5 +1,4 @@
 import { type WebLayoutSnapshot, connect } from "@openfin/core-web";
-import "./util/buffer";
 
 /**
  * Gets the default layout for this app.

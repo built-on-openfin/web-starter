@@ -1,5 +1,4 @@
 import { connect } from "@openfin/core-web";
-import "./util/buffer";
 import { getDefaultLayout, getSettings } from "./platform/settings";
 import type { Settings } from "./shapes/setting-shapes";
 

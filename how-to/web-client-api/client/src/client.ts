@@ -1,6 +1,5 @@
 import type OpenFin from "@openfin/core";
 import { connect, type ConnectConfig } from "@openfin/core-web";
-import "./util/buffer";
 
 /**
  * A fin api object that is a union of the different fin api objects

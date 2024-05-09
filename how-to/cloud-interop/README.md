@@ -49,7 +49,6 @@ npm run client
 
 There are a few things to note before trying to use @openfin/core-web:
 
-- This current release requires Buffer support and this is added through the [buffer](https://www.npmjs.com/package/buffer) npm package. We have added this to the npm package and we have made it available through a [buffer util TypeScript file](./client/src/util/buffer.ts). _This is a requirement that will be removed in the future_.
 - If your [tsconfig](./client/tsconfig.json) file is using **node** for moduleResolution it will need to use **Node16** instead as export/imports are defined in the package.json of the @openfin/core-web npm package. This is required for when you try to import @openfin/core-web/iframe-broker.
 - You will need to copy the shared-worker.js file from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-core-web.js](./scripts/copy-core-web.js) script to do this and it is referenced in the build-client npm command.
 - You will need to copy the styles.css file for styling the layout from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-core-web.js](./scripts/copy-core-web.js) script to do this and it is referenced in the build-client npm command.
@@ -66,7 +65,6 @@ In the sample we use a [settings](./client/src/platform/settings.ts) file that r
 
 ```javascript
 import { connect } from "@openfin/core-web";
-import "./util/buffer";
 
 /**
  * Initializes the OpenFin Web Broker connection.
@@ -162,7 +160,6 @@ Some things to note about the content provider setup:
 
 ```javascript
 import { connect } from "@openfin/core-web";
-import "../util/buffer";
 
 /**
  * Initializes the OpenFin Web Broker connection.
@@ -241,10 +238,10 @@ To make it easier to update settings we store them in the web [manifest.json](./
     },
     "cloud": {
       "connectParams": {
-        "userId": "testuser3",
-        "password": "BpqOesmBshwFktV",
-        "platformId": "shared-cloud-id",
-        "url": "https://cloud-interop-test.os.openfin.co/api/v1",
+        "userId": "<PLEASE ASK OPENFIN FOR A USER ID>",
+        "password": "<PLEASE ASK OPENFIN FOR A PASSWORD>",
+        "platformId": "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
+        "url": "<PLEASE ASK OPENFIN FOR A URL>",
         "sourceId": "cloud-interop",
         "sourceDisplayName": "Cloud Interop Example"
       }
