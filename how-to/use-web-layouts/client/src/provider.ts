@@ -8,7 +8,7 @@ import type { LayoutManager, LayoutManagerConstructor, LayoutManagerItem } from 
 
 
 let PARENT_CONTAINER: HTMLElement | null;
-const divMap = new Map();
+
 /**
  * Sets up panels if supported.
  * @param settings The settings to use.
@@ -36,7 +36,6 @@ function setupPanels(settings: Settings): void {
 async function attachListeners(): Promise<void> {
 	const swapButton = document.querySelector<HTMLButtonElement>("#swap-layouts");
 	swapButton?.addEventListener("click", async () => {
-		console.log("Swapped Layout.");
 		await swapLayout();
 	});
 }
@@ -44,96 +43,101 @@ async function attachListeners(): Promise<void> {
 
 /**
  * A Create function for layouts.
+ * @param fin the fin object.
  * @param layoutName A string for the layout name.
  * @param layout LayoutOptions
- * @param multiInstanceViewBehavior Default.
- * @param display which position to display in
+ * @param order which position to display in
  */
-async function createLayout(layoutName: string,
+async function createLayout(fin: OpenFin.Fin<OpenFin.EntityType>, layoutName: string,
 	layout: OpenFin.LayoutOptions,
-	multiInstanceViewBehavior: OpenFin.MultiInstanceViewBehavior,
-	display = 1): Promise<void> {
+	order: number): Promise<void> {
+	// Create a new div container for the layout.
 	const container = document.createElement("div");
 	container.id = layoutName;
-	container.style.width = "100%";
-	container.style.height = "100%";
-	container.style.padding = "2px";
-	container.style.display = display === 0 ? "block" : "none";
-
+	container.className = "col fill";
+	container.style.display = order === 0 ? "block" : "none";
 	PARENT_CONTAINER?.append(container);
-	divMap.set(layoutName, container);
-	console.log(`[platform-window] calling Layout.create() for layout ${layoutName}`);
-	await window.fin?.Platform.Layout.create({ layoutName, layout, container, multiInstanceViewBehavior });
+
+	// Normally you can use state here, but just tracking the order of layouts in localStorage.
+	const currentOrder = window.localStorage.getItem("order");
+	if (!currentOrder) {
+		window.localStorage.setItem("order", "");
+	}
+	let newOrder = "";
+	if (order === 0) {
+		newOrder = layoutName;
+	} else {
+		newOrder = currentOrder ? currentOrder.concat(",", layoutName) : "";
+	}
+	window.localStorage.setItem("order", newOrder);
+	// Finally, call the Layout.create() function to apply the snapshot layout to the div we just created.
+	await fin.Platform.Layout.create({ layoutName, layout, container });
 }
 
+
 /**
- * Function that returns a class for the Layout.init to invoke.
- * @param Base base constructor
- * @returns LayoutManager child class
+ * MakeOverride assists in loading the Fin object before the applyLayoutSnapshot Manager call.
+ * @param fin the fin object.
+ * @returns a function call.
  */
-function layoutManagerOverride(Base: LayoutManagerConstructor): LayoutManagerConstructor {
-	/**
-	 * @class LayoutManagerBasic
-	 * This implementation is the fundamental
-	 */
-	return class LayoutManagerBasic extends Base implements LayoutManager {
-		public layoutMapArray: LayoutManagerItem[] = [];
+function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>) {
+	return function layoutManagerOverride(Base: LayoutManagerConstructor):
+	LayoutManagerConstructor {
+		 /**
+			 * @class LayoutManagerBasic
+			 * This implementation is the fundamental override for Multiple Layouts in Web.
+			 */
+	   return class LayoutManagerBasic extends Base implements LayoutManager {
+		   public layoutMapArray: LayoutManagerItem[] = [];
 
-		public layoutContainer: HTMLElement = document.querySelector("#layout_container") as HTMLElement;
+		   public layoutContainer: HTMLElement = document.querySelector("#layout_container") as HTMLElement;
 
-		public secondContainer: HTMLElement = document.querySelector("#layout_two") as HTMLElement;
+		   /**
+					 * Override for applying multiple snapshots.
+					 * @param snapshot The layouts object containing the fixed set of available layouts.
+					 */
+		   public async applyLayoutSnapshot(snapshot: WebLayoutSnapshot): Promise<void> {
+			   console.log(`DOes this exist? ${Boolean(this.layoutContainer)}`);
+			   if (this.layoutContainer !== undefined) {
+					   setTimeout(() => Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) =>
+						   createLayout(fin, layoutName, layout, i)
+					   ), 1000);
+				// 	await Promise.all(Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) =>
+				// 		createLayout(fin, layoutName, layout, i))
+				//    );
 
-		// /**
-		//  * @function applyLayoutSnapshot create a layout once per layout in a snapshot.
-		//  * @param snapshot layout snapshot
-		//  * @returns nothing
-		//  */
+				   console.log("Layouts loaded");
+			   }
+		   }
 
-		// public applyLayoutSnapshot = async ({ layouts }: WebLayoutSnapshot): Promise<void> => {
-		// 	console.log("Applying Layout Snapshot", JSON.stringify(layouts, null, 4));
-		// 	const secondLayout = await getSecondLayout();
-
-		// 	console.log(`Here's the Second Layout ${JSON.stringify(secondLayout?.layouts)}`);
-		// 	await window.fin?.Platform.Layout.create({
-		// 		container: this.secondContainer,
-		// 		layout: secondLayout?.layouts as WebLayoutOptions,
-		// 		layoutName: "layout_two"
-		// 	});
-		// };
-
-		/**
-		 * Override for applying multiple snapshots.
-		 * @param layouts something
-		 */
-		public async applyLayoutSnapshot(layouts: WebLayoutSnapshot): Promise<void> {
-			await Promise.all(
-				Object.entries(layouts).map(async ([layoutName, layout], i) =>
-					createLayout(layoutName, layout, "default", i)
-				)
-			);
-
-			console.log("Layouts loaded");
-		}
-
-		// public async removeLayout(layoutIdentity): Promise<void> {
-		// 	console.log(`[platform-window] manager: removeLayout called for ${layoutIdentity.layoutName}`);
-		// 	return destroy(layoutIdentity);
-		// }
-};
+		   // public async removeLayout(layoutIdentity): Promise<void> {
+		   // 	console.log(`[platform-window] manager: removeLayout called for ${layoutIdentity.layoutName}`);
+		   // 	return destroy(layoutIdentity);
+		   // }
+   		};
+   };
 }
 
 /**
  * Returns a layout from the settings with a provided name.
  * @returns The default layout from the settings.
  */
-export async function swapLayout():
- Promise<void> {
-	const newLayout = await fetch("../layouts/secondary.layout.fin.json");
-	const layoutJson = (await newLayout.json());
-	console.log(`Layout options JSON: ${JSON.stringify(layoutJson)}`);
-	const currentLayout = await window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
-
-	await currentLayout?.applyLayoutSnapshot(layoutJson.layouts.default.content);
+export async function swapLayout(): Promise<void> {
+	// Get that order of created div ids from storage, or state, or wherever you want to save them.
+	const currentOrder = window.localStorage.getItem("order");
+	const layouts = currentOrder?.split(",");
+	// This is a simple swap between two, but you can do this anyway you like.
+	const firstLayout = document.querySelector<HTMLElement>(`#${layouts ? layouts[0] : null}`);
+	const secondLayout = document.querySelector<HTMLElement>(`#${layouts ? layouts[1] : null}`);
+	if (firstLayout && secondLayout) {
+		if (secondLayout.style.display === "block") {
+			firstLayout.style.display = "block";
+			secondLayout.style.display = "none";
+		} else {
+			firstLayout.style.display = "none";
+			secondLayout.style.display = "block";
+		}
+	}
 }
 
 /**
@@ -152,12 +156,10 @@ async function init(): Promise<void> {
 		return;
 	}
 
-	// Get the dom element that should host the layout
+	// Get the dom element that should host the layout - This will be the top element holding the children iframes.
 	PARENT_CONTAINER = document.querySelector<HTMLElement>(
 		`#${settings.platform.layout.layoutContainerId}`
 	);
-
-	console.log(`----PARENT CONTAINER IS: ${PARENT_CONTAINER}----`);
 
 	if (PARENT_CONTAINER === null) {
 		console.error(
@@ -183,14 +185,17 @@ async function init(): Promise<void> {
 		platform: { layoutSnapshot }
 	});
 
-	// You may now use the `fin` object to initialize the broker and the layout.
-	await fin.Interop.init(settings.platform.interop.providerId);
-	// Show the main container and hide the loading container
-	// initialize the layout and pass it the dom element to bind to
-	await fin.Platform.Layout.init({ layoutManagerOverride, container: PARENT_CONTAINER });
-	// setup panels not that everything has been initialized
-	await attachListeners();
-	setupPanels(settings);
+	const layoutManagerOverride = makeOverride(fin);
+	if (fin) {
+		// You may now use the `fin` object to initialize the broker and the layout.
+		await fin.Interop.init(settings.platform.interop.providerId);
+		// Show the main container and hide the loading container
+		// initialize the layout and pass it the dom element to bind to
+		await fin.Platform.Layout.init({ layoutManagerOverride, container: PARENT_CONTAINER });
+		// setup panels not that everything has been initialized
+		await attachListeners();
+		setupPanels(settings);
+	}
 }
 
 init()
