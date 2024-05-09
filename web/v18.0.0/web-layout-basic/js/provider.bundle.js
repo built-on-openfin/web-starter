@@ -29912,47 +29912,6 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ "./client/src/util/buffer.ts":
-/*!***********************************!*\
-  !*** ./client/src/util/buffer.ts ***!
-  \***********************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const BufferSupport = __importStar(__webpack_require__(/*! buffer/ */ "../../node_modules/buffer/index.js"));
-if (window.Buffer === undefined) {
-    console.log("Buffer global does not exist. Creating a global Buffer object.");
-    window.Buffer = BufferSupport.Buffer;
-}
-
-
-/***/ }),
-
 /***/ "../../node_modules/uuid/dist/esm-browser/index.js":
 /*!*********************************************************!*\
   !*** ../../node_modules/uuid/dist/esm-browser/index.js ***!
@@ -30902,7 +30861,6 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
-__webpack_require__(/*! ./util/buffer */ "./client/src/util/buffer.ts");
 /**
  * Gets the default layout for this app.
  * @returns The default layout for this app.
