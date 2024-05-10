@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Web Cloud Interop Example</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../style/core-web-styles.css" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/provider.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Web Interop Example</h1>
+				<h1 class="tag">Demonstrate web interop usage with a layout</h1>
+				<h2 class="error" id="error"></h2>
+			</div>
+			<div class="row middle gap20">
+				<image src="../common/images/icon-blue.png" alt="OpenFin" height="40px"></image>
+			</div>
+		</header>
+		<main class="row fill gap10">
+			<div class="row fill hidden" id="main-page">
+				<div class="col"><iframe id="left-panel" class="fill"></iframe></div>
+				<div id="layout_container" class="col fill"></div>
+			</div>
+			<div class="col fill" id="cloud-details">
+				<div class="row fill gap20">
+					<form class="col gap10 scroll-vertical">
+						<div class="form-section col gap10">
+							<h2>Please provide your Cloud Interop Settings</h2>
+							<fieldset>
+								<label for="userId" title="User Id for the cloud connection.">User Id</label>
+								<input id="userId" type="text" required />
+							</fieldset>
+							<fieldset>
+								<label for="password" title="The password for your cloud connection.">Password</label>
+								<input id="password" type="password" required />
+							</fieldset>
+							<fieldset>
+								<label for="url" title="Url for the cloud interop connection.">Url</label>
+								<input id="url" type="url" required />
+							</fieldset>
+							<fieldset>
+								<label
+									for="platformId"
+									title="The common platform Id shared between connected interop brokers."
+								>
+									Platform Id
+								</label>
+								<input id="platformId" type="text" required />
+							</fieldset>
+							<fieldset>
+								<label for="sourceId" title="An Id representing the source e.g. a platform UUID.">
+									Source Id
+								</label>
+								<input id="sourceId" type="text" value="cloud-interop" />
+							</fieldset>
+							<fieldset>
+								<label for="sourceDisplayName" title="A display name for the source.">
+									Source Display Name
+								</label>
+								<input id="sourceDisplayName" type="text" value="Cloud Interop Example" />
+							</fieldset>
+						</div>
+					</form>
+					<div class="col fill gap10 pad20">
+						<h3 class="center">OpenFin Cloud Interop</h3>
+						<p>
+							OpenFin allows OpenFin applications to share Interop & FDC3 Context across the desktop using our
+							Interop Broker pattern and OpenFin's desktop message bus. OpenFin's Cloud Interop solution (
+							<a href="https://www.npmjs.com/package/@openfin/cloud-interop" target="_blank">
+								@openfin/cloud-interop
+							</a>
+							) provides an interop broker override that can be added to OpenFin desktop platforms as well as
+							OpenFin web platforms (
+							<a href="https://www.npmjs.com/package/@openfin/core-web" target="_blank">@openfin/core-web</a>
+							). Once the cloud interop override is initialized with settings provided by OpenFin it will
+							connect the platforms together through our cloud offering so that they can share contextual
+							information. Please contact OpenFin if you would wish to do a PoC to evaluate our cloud offering
+							so that you can get the required settings.
+						</p>
+					</div>
+				</div>
+				<div class="row gap10">
+					<button id="btnSubmit">Submit Settings and Connect To Cloud</button>
+					<button id="btnContinue">Continue without Cloud</button>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>
