@@ -19,7 +19,7 @@
 											"componentName": "view",
 											"componentState": {
 												"url": "https://built-on-openfin.github.io/web-starter/dev/joe/layout-examples/web-layout/views/fdc3-view.html",
-												"name": "internal-generated-view-e7fe7df3-6f64-4235-899f-4e91af2cb32d"
+												"name": "internal-generated-view-primary-1"
 											},
 											"title": "FDC3 Same Domain"
 										}
@@ -34,7 +34,7 @@
 											"componentName": "view",
 											"componentState": {
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
-												"name": "internal-generated-view-54a8ef85-a885-4234-be46-9d52e88fcb74"
+												"name": "internal-generated-view-primary-2"
 											},
 											"title": "FDC3 Different Domain"
 										}
@@ -56,7 +56,7 @@
 											"componentName": "view",
 											"componentState": {
 												"url": "https://built-on-openfin.github.io/web-starter/dev/joe/layout-examples/web-layout/views/interop-view.html",
-												"name": "internal-generated-view-64a8efd7-3d92-42ae-8fae-dffcc0fdac96"
+												"name": "internal-generated-view-primary-3"
 											},
 											"title": "Interop Same Domain"
 										}
@@ -71,7 +71,7 @@
 											"componentName": "view",
 											"componentState": {
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/context/interop-broadcast-view.html",
-												"name": "internal-generated-view-2d9a3624-fd0e-4e0a-b681-a79a9616b871"
+												"name": "internal-generated-view-primary-4"
 											},
 											"title": "Interop External Domain"
 										}
@@ -102,7 +102,7 @@
 											"componentName": "view",
 											"componentState": {
 												"url": "https://built-on-openfin.github.io/web-starter/dev/joe/layout-examples/web-layout/views/interop-view.html",
-												"name": "internal-generated-view-64a8efd7-3d92-42ae-8fae-dffcc0fdac96"
+												"name": "internal-generated-view-primary-6"
 											},
 											"title": "Interop Same Domain"
 										}
@@ -117,7 +117,7 @@
 											"componentName": "view",
 											"componentState": {
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/context/interop-broadcast-view.html",
-												"name": "internal-generated-view-2d9a3624-fd0e-4e0a-b681-a79a9616b871"
+												"name": "internal-generated-view-primary-7"
 											},
 											"title": "Interop External Domain"
 										}
