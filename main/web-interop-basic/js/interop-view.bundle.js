@@ -1,14 +1,38 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../../node_modules/@openfin/web-interop/out/api-client.js":
+/***/ "../../node_modules/@openfin/core-web/out/api-client.js":
+/*!**************************************************************!*\
+  !*** ../../node_modules/@openfin/core-web/out/api-client.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+var e=__webpack_require__(/*! ./main-48131439.js */ "../../node_modules/@openfin/core-web/out/main-48131439.js");__webpack_require__(/*! buffer/ */ "../../node_modules/buffer/index.js"),__webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/index.js"),__webpack_require__(/*! events */ "../../node_modules/events/events.js"),__webpack_require__(/*! lodash */ "../../node_modules/lodash/lodash.js"),exports.connect=e.connect;
+
+
+/***/ }),
+
+/***/ "../../node_modules/@openfin/core-web/out/main-48131439.js":
 /*!*****************************************************************!*\
-  !*** ../../node_modules/@openfin/web-interop/out/api-client.js ***!
+  !*** ../../node_modules/@openfin/core-web/out/main-48131439.js ***!
   \*****************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-var e=__webpack_require__(/*! buffer */ "../../node_modules/buffer/index.js"),t=__webpack_require__(/*! events */ "../../node_modules/events/events.js"),n=__webpack_require__(/*! lodash */ "../../node_modules/lodash/lodash.js"),i=__webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/index.js");var r="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof __webpack_require__.g?__webpack_require__.g:"undefined"!=typeof self?self:{},o={},s={},a={},c={};async function d(e){const t=[];for(const n of e){const e=await n();t.push(e)}return t}Object.defineProperty(c,"__esModule",{value:!0}),c.promiseMapSerial=c.serial=c.promiseMap=c.promisify=void 0,c.promisify=function(e){return(...t)=>new Promise(((n,i)=>{e(...t,((e,t)=>e?i(e):n(t)))}))},c.promiseMap=async function(e,t){return Promise.all(e.map(t))},c.serial=d,c.promiseMapSerial=async function(e,t){return d(e.map(((e,n,i)=>()=>t(e,n,i))))};var h,l=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},u=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(a,"__esModule",{value:!0}),a.Reply=a.EmitterBase=a.Base=void 0;const p=c;class w{constructor(e){this.isNodeEnvironment=()=>"node"===this.wire.environment.type,this.isOpenFinEnvironment=()=>"openfin"===this.wire.environment.type,this.isBrowserEnvironment=()=>"other"===this.wire.environment.type,this.wire=e}get fin(){return this.wire.getFin()}get me(){return this.wire.me}}a.Base=w;a.EmitterBase=class extends w{constructor(e,t,...n){super(e),this.topic=t,h.set(this,void 0),this.eventNames=()=>this.hasEmitter()?this.getOrCreateEmitter().eventNames():[],this.emit=(e,t,...n)=>!!this.hasEmitter()&&this.getOrCreateEmitter().emit(e,t,...n),this.hasEmitter=()=>this.wire.eventAggregator.has(u(this,h,"f")),this.getOrCreateEmitter=()=>this.wire.eventAggregator.getOrCreate(u(this,h,"f")),this.listeners=e=>this.hasEmitter()?this.getOrCreateEmitter().listeners(e):[],this.listenerCount=e=>this.hasEmitter()?this.getOrCreateEmitter().listenerCount(e):0,this.registerEventListener=async(e,t={},n,i)=>{const r={...this.identity,timestamp:t.timestamp||Date.now(),topic:this.topic,type:e},o=this.getOrCreateEmitter();n(o);try{await this.wire.sendAction("subscribe-to-desktop-event",r)}catch(e){throw i(o),this.deleteEmitterIfNothingRegistered(o),e}},this.deregisterEventListener=async(e,t={})=>{if(this.hasEmitter()){const n={...this.identity,timestamp:t.timestamp||Date.now(),topic:this.topic,type:e};await this.wire.sendAction("unsubscribe-to-desktop-event",n).catch((()=>null));return this.getOrCreateEmitter()}return Promise.resolve()},l(this,h,[t,...n],"f"),this.listeners=e=>this.hasEmitter()?this.getOrCreateEmitter().listeners(e):[]}async on(e,t,n){return await this.registerEventListener(e,n,(n=>{n.on(e,t)}),(n=>{n.removeListener(e,t)})),this}async addListener(e,t,n){return this.on(e,t,n)}async once(e,t,n){const i=()=>this.deregisterEventListener(e);return await this.registerEventListener(e,n,(n=>{n.once(e,i),n.once(e,t)}),(n=>{n.removeListener(e,i),n.removeListener(e,t)})),this}async prependListener(e,t,n){return await this.registerEventListener(e,n,(n=>{n.prependListener(e,t)}),(n=>{n.removeListener(e,t)})),this}async prependOnceListener(e,t,n){const i=()=>this.deregisterEventListener(e);return await this.registerEventListener(e,n,(n=>{n.prependOnceListener(e,t),n.once(e,i)}),(n=>{n.removeListener(e,t),n.removeListener(e,i)})),this}async removeListener(e,t,n){const i=await this.deregisterEventListener(e,n);return i&&(i.removeListener(e,t),this.deleteEmitterIfNothingRegistered(i)),this}async deregisterAllListeners(e){const t={...this.identity,type:e,topic:this.topic};if(this.hasEmitter()){const e=this.getOrCreateEmitter(),n=e.listenerCount(t.type),i=[];for(let e=0;e<n;e++)i.push(this.wire.sendAction("unsubscribe-to-desktop-event",t).catch((()=>null)));return await Promise.all(i),e}}async removeAllListeners(e){const t=async e=>{const t=await this.deregisterAllListeners(e);t&&(t.removeAllListeners(e),this.deleteEmitterIfNothingRegistered(t))};if(e)await t(e);else if(this.hasEmitter()){const e=this.getOrCreateEmitter().eventNames();await(0,p.promiseMap)(e,t)}return this}deleteEmitterIfNothingRegistered(e){0===e.eventNames().length&&this.wire.eventAggregator.delete(u(this,h,"f"))}},h=new WeakMap;a.Reply=class{};var y={};Object.defineProperty(y,"__esModule",{value:!0});var f=y.RuntimeError=y.NotSupportedError=y.NotImplementedError=y.NoAckError=y.DuplicateCorrelationError=y.UnexpectedActionError=y.DisconnectedError=void 0;class g extends Error{constructor(e){super(`Expected websocket state OPEN but found ${e}`),this.readyState=e}}y.DisconnectedError=g;class m extends Error{}y.UnexpectedActionError=m;class v extends Error{}y.DuplicateCorrelationError=v;class C extends Error{}y.NoAckError=C;class b extends Error{}y.NotImplementedError=b;class I extends Error{}y.NotSupportedError=I;class E extends Error{constructor(e){const{message:t,name:n,stack:i,...r}=e;super(t),this.name=n||"Error",this.stack=i??this.toString(),Object.keys(r).forEach((e=>{this[e]=r[e]}))}}class x extends Error{static getCallSite(e=0){const t=Error.stackTraceLimit,n=e+1;Error.stackTraceLimit=t+n;const i=Error.prepareStackTrace;Error.prepareStackTrace=(e,t)=>t;const r=(new Error).stack?.slice(n)??[];return Error.prepareStackTrace=i,Error.stackTraceLimit=t,r}static prepareStackTrace(e,t){if("function"==typeof Error.prepareStackTrace)return Error.prepareStackTrace(e,t);let n="";n+=e.name||"Error",n+=`: ${e.message||""}`;for(const e of t)n+=`\n    at ${e.toString()}`;return n}constructor(e,t){const{reason:n,error:i}=e;super(n),this.name="RuntimeError",i?.stack&&(this.cause=new E(i)),t&&(this.stack=x.prepareStackTrace(this,t))}}f=y.RuntimeError=x;var A={},P={},M={};Object.defineProperty(M,"__esModule",{value:!0}),M.validateIdentity=void 0,M.validateIdentity=function(e){let t;return"object"==typeof e&&"string"==typeof e.uuid||(t="Not a valid identity object"),t};var O={},_={},R={},S={},F={},j={},k={};Object.defineProperty(k,"__esModule",{value:!0}),k.handleDeprecatedWarnings=void 0;var T;k.handleDeprecatedWarnings=e=>{(e.contentNavigation?.whitelist||e.contentNavigation?.blacklist||e.contentRedirect?.whitelist||e.contentRedirect?.blacklist)&&console.warn("The properties 'whitelist' and 'blacklist' have been marked as deprecated and will be removed in a future version. Please use 'allowlist' and 'denylist'.")};var L={},$={};Object.defineProperty($,"__esModule",{value:!0}),$.AsyncRetryableLazy=$.Lazy=void 0;$.Lazy=class{constructor(e){this.producerFn=e}getValue(){return this.value||(this.value=this.producerFn()),this.value}};$.AsyncRetryableLazy=class{constructor(e){this.producerFn=e}async getValue(){return this.promise||(this.promise=this.producerFn().catch((e=>{throw delete this.promise,e}))),this.promise}};var B={},G={},W={};Object.defineProperty(W,"__esModule",{value:!0}),W.ApiConsumer=void 0;W.ApiConsumer=class{constructor(e){this.strategy=e,this.consume=async e=>(await this.strategy.getExposedFunctions(e)).reduce(((t,n)=>({...t,[n.key]:this.strategy.createFunction(n,e)})),{})}};var H={},N={};Object.defineProperty(N,"__esModule",{value:!0}),N.expose=N.getExposedProperties=void 0;const D=Symbol("exposedProperties");N.getExposedProperties=e=>e[D]||e.prototype[D]||[];N.expose=e=>(t,n,i)=>{t[D]=t[D]||[],t[D].push({key:n,descriptor:i,options:e})},Object.defineProperty(H,"__esModule",{value:!0}),H.ApiExposer=void 0;const U=N;H.ApiExposer=class{constructor(e){this.strategy=e,this.exposeInstance=async(e,t)=>{const n=(0,U.getExposedProperties)(e),i=await Promise.all(n.map((async({key:n,options:i})=>({key:n,options:await this.strategy.exposeFunction(e[n].bind(e),{key:n,options:i,meta:t})}))));await this.strategy.exposeMeta(t,i)}}};var V={},z={},K={};Object.defineProperty(K,"__esModule",{value:!0}),K.ChannelsConsumer=void 0;K.ChannelsConsumer=class{constructor(e){this.channel=e,this.getExposedFunctions=async e=>{const{id:t}=e,{props:n}=await this.channel.dispatch(`api-meta:${t}`);return n},this.createFunction=e=>(...t)=>{const{action:n}=e.options;return this.channel.dispatch(n,{args:t})}}};var q={};Object.defineProperty(q,"__esModule",{value:!0}),q.ChannelsExposer=void 0;q.ChannelsExposer=class{constructor(e){this.channelProviderOrClient=e,this.exposeFunction=async(e,t)=>{const{key:n,options:i,meta:r}=t,{id:o}=r,s=`${o}.${i?.action||n}`;return await this.channelProviderOrClient.register(s,(async({args:t})=>e(...t))),{action:s}},this.exposeMeta=async({id:e},t)=>{const n=`api-meta:${e}`;await this.channelProviderOrClient.register(n,(()=>({props:t})))}}},function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(K,e),n(q,e)}(z),function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(z,e)}(V),function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(W,e),n(H,e),n(V,e),n(N,e)}(G);var Y={};Object.defineProperty(Y,"__esModule",{value:!0}),Y.createRelayedDispatch=Y.relayChannelClientApi=void 0;const J=["no longer connected","RTCDataChannel closed unexpectedly","The client you are trying to dispatch from is disconnected from the target provider"];Y.relayChannelClientApi=async(e,t)=>{e.register(`relay:${t}`,(({action:t,target:n,payload:i})=>e.dispatch(n,t,i))),await Promise.resolve()};Y.createRelayedDispatch=(e,t,n,i)=>async(r,o)=>{try{return await e.dispatch(`relay:${n}`,{action:r,payload:o,target:t})}catch(e){if(s=e.message,J.some((e=>s.includes(e)))&&i)throw new Error(i);throw e}var s};var Z,Q,X,ee=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},te=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(B,"__esModule",{value:!0}),B.ColumnOrRow=B.TabStack=B.LayoutNode=void 0;const ne=G,ie=Y;class re{constructor(e,t){Z.set(this,void 0),this.isRoot=()=>te(this,Z,"f").isRoot(this.entityId),this.exists=()=>te(this,Z,"f").exists(this.entityId),this.getParent=async()=>{const e=await te(this,Z,"f").getParent(this.entityId);if(e)return re.getEntity(e,te(this,Z,"f"))},this.createAdjacentStack=async(e,t)=>{const n=await te(this,Z,"f").createAdjacentStack(this.entityId,e,t);return re.getEntity({entityId:n,type:"stack"},te(this,Z,"f"))},this.getAdjacentStacks=async e=>(await te(this,Z,"f").getAdjacentStacks({targetId:this.entityId,edge:e})).map((e=>re.getEntity({type:"stack",entityId:e.entityId},te(this,Z,"f")))),ee(this,Z,e,"f"),this.entityId=t}}B.LayoutNode=re,Z=new WeakMap,re.newLayoutEntitiesClient=async(e,t,n)=>{const i=(0,ie.createRelayedDispatch)(e,n,"layout-relay","You are trying to interact with a layout component on a window that does not exist or has been destroyed.");return new ne.ApiConsumer(new ne.ChannelsConsumer({dispatch:i})).consume({id:t})},re.getEntity=(e,t)=>{const{entityId:n,type:i}=e;switch(i){case"column":case"row":return new se(t,n,i);case"stack":return new oe(t,n);default:throw new Error(`Unrecognised Layout Entity encountered ('${JSON.stringify(e)})`)}};class oe extends re{constructor(e,t){super(e,t),Q.set(this,void 0),this.type="stack",this.getViews=()=>te(this,Q,"f").getStackViews(this.entityId),this.addView=async(e,t={index:0})=>te(this,Q,"f").addViewToStack(this.entityId,e,t),this.removeView=async e=>{await te(this,Q,"f").removeViewFromStack(this.entityId,e)},this.setActiveView=async e=>{await te(this,Q,"f").setStackActiveView(this.entityId,e)},ee(this,Q,e,"f")}}B.TabStack=oe,Q=new WeakMap;class se extends re{constructor(e,t,n){super(e,t),X.set(this,void 0),this.getContent=async()=>(await te(this,X,"f").getContent(this.entityId)).map((e=>re.getEntity(e,te(this,X,"f")))),ee(this,X,e,"f"),this.type=n}}B.ColumnOrRow=se,X=new WeakMap;var ae={};Object.defineProperty(ae,"__esModule",{value:!0}),ae.DEFAULT_LAYOUT_KEY=ae.LAYOUT_CONTROLLER_ID=void 0,ae.LAYOUT_CONTROLLER_ID="layout-entities",ae.DEFAULT_LAYOUT_KEY="__default__";var ce={};Object.defineProperty(ce,"__esModule",{value:!0}),ce.WebContents=void 0;const de=a;class he extends de.EmitterBase{constructor(e,t,n){super(e,n,t.uuid,t.name),this.identity=t,this.entityType=n}capturePage(e){return this.wire.sendAction("capture-page",{options:e,...this.identity}).then((({payload:e})=>e.data))}executeJavaScript(e){return this.wire.sendAction("execute-javascript-in-window",{...this.identity,code:e}).then((({payload:e})=>e.data))}getZoomLevel(){return this.wire.sendAction("get-zoom-level",this.identity).then((({payload:e})=>e.data))}setZoomLevel(e){return this.wire.sendAction("set-zoom-level",{...this.identity,level:e}).then((()=>{}))}navigate(e){return this.wire.sendAction("navigate-window",{...this.identity,url:e}).then((()=>{}))}navigateBack(){return this.wire.sendAction("navigate-window-back",{...this.identity}).then((()=>{}))}async navigateForward(){await this.wire.sendAction("navigate-window-forward",{...this.identity})}stopNavigation(){return this.wire.sendAction("stop-window-navigation",{...this.identity}).then((()=>{}))}reload(e=!1){return this.wire.sendAction("reload-window",{ignoreCache:e,...this.identity}).then((()=>{}))}print(e={}){return this.wire.sendAction("print",{...this.identity,options:e}).then((()=>{}))}findInPage(e,t){return this.wire.sendAction("find-in-page",{...this.identity,searchTerm:e,options:t}).then((({payload:e})=>e.data))}stopFindInPage(e){return this.wire.sendAction("stop-find-in-page",{...this.identity,action:e}).then((()=>{}))}getPrinters(){return this.wire.sendAction("get-printers",{...this.identity}).then((({payload:e})=>e.data))}async focus({emitSynthFocused:e}={emitSynthFocused:!0}){await this.wire.sendAction("focus-window",{emitSynthFocused:e,...this.identity})}async showDeveloperTools(){await this.wire.sendAction("show-developer-tools",this.identity)}async getProcessInfo(){const{payload:{data:e}}=await this.wire.sendAction("get-process-info",this.identity);return e}async getSharedWorkers(){return this.wire.sendAction("get-shared-workers",this.identity).then((({payload:e})=>e.data))}async inspectSharedWorker(){await this.wire.sendAction("inspect-shared-worker",{...this.identity})}async inspectSharedWorkerById(e){await this.wire.sendAction("inspect-shared-worker-by-id",{...this.identity,workerId:e})}async inspectServiceWorker(){await this.wire.sendAction("inspect-service-worker",{...this.identity})}async showPopupWindow(e){if(this.wire.sendAction(`${this.entityType}-show-popup-window`,this.identity).catch((()=>{})),e?.onPopupReady){const t=async({popupName:t})=>{try{const n=this.fin.Window.wrapSync({uuid:this.fin.me.uuid,name:t});await e.onPopupReady(n)}catch(e){throw new Error(`Something went wrong during onPopupReady execution: ${e}`)}};await this.once("popup-ready",t)}const{payload:t}=await this.wire.sendAction("try-create-popup-window",{options:{...e,hasResultCallback:!!e?.onPopupResult,hasReadyCallback:!!e?.onPopupReady},...this.identity}),{data:{willOpen:n,options:i}}=t;n&&await this.fin.Window.create(i.initialOptions);if(e?.onPopupResult){const t=async t=>{await e.onPopupResult((e=>{const{name:t,uuid:n,result:i,data:r}=e,o={identity:{name:t,uuid:n},result:i};return r&&(o.data=r),o})(t))},n=async()=>{await this.removeListener("popup-result",t)};await this.on("popup-result",t),await this.once("popup-teardown",n)}const{payload:r}=await this.wire.sendAction("show-popup-window",{options:i,...this.identity});return r.data}}var le,ue,pe,we,ye;function fe(){return ue||(ue=1,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(function(){if(T)return j;T=1,Object.defineProperty(j,"__esModule",{value:!0}),j.ViewModule=void 0;const e=a,t=M,n=fe(),i=k;class r extends e.Base{async create(e){const{uuid:t}=this.wire.me;if(!e.name||"string"!=typeof e.name)throw new Error("Please provide a name property as a string in order to create a View.");return(0,i.handleDeprecatedWarnings)(e),this.wire.environment.childViews?await this.wire.environment.createChildContent({entityType:"view",options:{...e,uuid:t}}):await this.wire.sendAction("create-view",{...e,uuid:t}),this.wrapSync({uuid:t,name:e.name})}async wrap(e){this.wire.sendAction("view-wrap");const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.View(this.wire,e)}wrapSync(e){this.wire.sendAction("view-wrap-sync").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.View(this.wire,e)}getCurrent(){if(this.wire.sendAction("view-get-current").catch((e=>{})),!this.wire.me.isView)throw new Error("You are not in a View context");const{uuid:e,name:t}=this.wire.me;return this.wrap({uuid:e,name:t})}getCurrentSync(){if(this.wire.sendAction("view-get-current-sync").catch((e=>{})),!this.wire.me.isView)throw new Error("You are not in a View context");const{uuid:e,name:t}=this.wire.me;return this.wrapSync({uuid:e,name:t})}}return j.ViewModule=r,j}(),e),n(function(){if(le)return L;le=1;var e,t=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(L,"__esModule",{value:!0}),L.View=void 0;const n=y,i=$,o=B,s=ae,a=ce,c=xe();class d extends a.WebContents{constructor(r,a){super(r,a,"view"),this.identity=a,e.set(this,new i.Lazy((()=>this.fin.Platform.wrapSync(this.identity).getClient()))),this.attach=async e=>{await this.wire.sendAction("attach-view",{target:e,...this.identity})},this.destroy=async()=>{await this.wire.sendAction("destroy-view",{...this.identity})},this.show=async()=>{await this.wire.sendAction("show-view",{...this.identity})},this.showAt=async e=>{await this.wire.sendAction("show-view-at",{bounds:e,...this.identity})},this.hide=async()=>{await this.wire.sendAction("hide-view",{...this.identity})},this.setBounds=async e=>{await this.wire.sendAction("set-view-bounds",{bounds:e,...this.identity})},this.getBounds=async()=>(await this.wire.sendAction("get-view-bounds",{...this.identity})).payload.data,this.getInfo=async()=>(await this.wire.sendAction("get-view-info",{...this.identity})).payload.data,this.getParentLayout=async()=>{this.wire.sendAction("view-get-parent-layout",{...this.identity}).catch((()=>{}));const n=await this.getCurrentWindow();try{const i=await t(this,e,"f").getValue(),r=await o.LayoutNode.newLayoutEntitiesClient(i,s.LAYOUT_CONTROLLER_ID,n.identity),a=await r.getLayoutIdentityForViewOrThrow(this.identity);return this.fin.Platform.Layout.wrap(a)}catch(e){if(!["No action registered at target for","getLayoutIdentityForViewOrThrow is not a function"].some((t=>e.message.includes(t))))throw e;return this.fin.Platform.Layout.wrap(n.identity)}},this.getOptions=async()=>this.wire.sendAction("get-view-options",{...this.identity}).then((({payload:e})=>e.data)),this.updateOptions=async e=>this.wire.sendAction("update-view-options",{options:e,...this.identity}).then((()=>{})),this.getCurrentWindow=async()=>{const{payload:{data:e}}=await this.wire.sendAction("get-view-window",{...this.identity});return new c._Window(this.wire,e)},this.getCurrentStack=async()=>{this.wire.sendAction("view-get-current-stack").catch((()=>{}));try{const n=await this.getCurrentWindow(),i=await t(this,e,"f").getValue(),r=await o.LayoutNode.newLayoutEntitiesClient(i,s.LAYOUT_CONTROLLER_ID,n.identity),a=await r.getStackByView(this.identity);return o.LayoutNode.getEntity(a,r)}catch(e){throw new n.RuntimeError({reason:"This view does not belong to a stack.",error:e})}},this.triggerBeforeUnload=async()=>(await this.wire.sendAction("trigger-before-unload",{...this.identity})).payload.data,this.bindToElement=async e=>{if(!e)throw new Error("Element not found.");return this.wire.environment.observeBounds(e,(async e=>this.setBounds(e)))}}async focus({emitSynthFocused:e}={emitSynthFocused:!0}){const t=await this.getCurrentWindow();await t.focusedWebViewWasChanged(),await super.focus({emitSynthFocused:e})}}return L.View=d,e=new WeakMap,L}(),e)}(F)),F}function ge(){if(pe)return S;pe=1,Object.defineProperty(S,"__esModule",{value:!0}),S.Application=void 0;const e=a,t=xe(),n=fe();class i extends e.EmitterBase{constructor(e,n){super(e,"application",n.uuid),this.identity=n,this.window=new t._Window(this.wire,{uuid:this.identity.uuid,name:this.identity.uuid})}windowListFromIdentityList(e){const n=[];return e.forEach((e=>{n.push(new t._Window(this.wire,{uuid:e.uuid,name:e.name}))})),n}isRunning(){return this.wire.sendAction("is-application-running",this.identity).then((({payload:e})=>e.data))}async quit(e=!1){try{await this._close(e),await this.wire.sendAction("destroy-application",{force:e,...this.identity})}catch(e){if(!["Remote connection has closed","Could not locate the requested application"].some((t=>e.message.includes(t))))throw e}}async _close(e=!1){try{await this.wire.sendAction("close-application",{force:e,...this.identity})}catch(e){if(!e.message.includes("Remote connection has closed"))throw e}}close(e=!1){return console.warn("Deprecation Warning: Application.close is deprecated Please use Application.quit"),this.wire.sendAction("application-close",this.identity).catch((e=>{})),this._close(e)}getChildWindows(){return this.wire.sendAction("get-child-windows",this.identity).then((({payload:e})=>{const t=[];return e.data.forEach((e=>{t.push({uuid:this.identity.uuid,name:e})})),this.windowListFromIdentityList(t)}))}getManifest(){return this.wire.sendAction("get-application-manifest",this.identity).then((({payload:e})=>e.data))}getParentUuid(){return this.wire.sendAction("get-parent-application",this.identity).then((({payload:e})=>e.data))}getShortcuts(){return this.wire.sendAction("get-shortcuts",this.identity).then((({payload:e})=>e.data))}async getViews(){const{payload:e}=await this.wire.sendAction("application-get-views",this.identity);return e.data.map((e=>new n.View(this.wire,e)))}getZoomLevel(){return this.wire.sendAction("get-application-zoom-level",this.identity).then((({payload:e})=>e.data))}getWindow(){return this.wire.sendAction("application-get-window",this.identity).catch((e=>{})),Promise.resolve(this.window)}registerUser(e,t){return this.wire.sendAction("register-user",{userName:e,appName:t,...this.identity}).then((()=>{}))}removeTrayIcon(){return this.wire.sendAction("remove-tray-icon",this.identity).then((()=>{}))}restart(){return this.wire.sendAction("restart-application",this.identity).then((()=>{}))}run(){return console.warn("Deprecation Warning: Application.run is deprecated Please use fin.Application.start"),this.wire.sendAction("application-run",this.identity).catch((e=>{})),this._run()}_run(e={}){return this.wire.sendAction("run-application",{manifestUrl:this._manifestUrl,opts:e,...this.identity}).then((()=>{}))}scheduleRestart(){return this.wire.sendAction("relaunch-on-close",this.identity).then((()=>{}))}async sendApplicationLog(){const{payload:e}=await this.wire.sendAction("send-application-log",this.identity);return e.data}async setJumpList(e){await this.wire.sendAction("set-jump-list",{config:e,...this.identity})}setTrayIcon(e){return this.wire.sendAction("set-tray-icon",{enabledIcon:e,...this.identity}).then((()=>{}))}setShortcuts(e){return this.wire.sendAction("set-shortcuts",{data:e,...this.identity}).then((()=>{}))}async setShortcutQueryParams(e){await this.wire.sendAction("set-shortcut-query-args",{data:e,...this.identity})}setZoomLevel(e){return this.wire.sendAction("set-application-zoom-level",{level:e,...this.identity}).then((()=>{}))}async setAppLogUsername(e){await this.wire.sendAction("set-app-log-username",{data:e,...this.identity})}getTrayIconInfo(){return this.wire.sendAction("get-tray-icon-info",this.identity).then((({payload:e})=>e.data))}hasTrayIcon(){return this.wire.sendAction("has-tray-icon",this.identity).then((({payload:e})=>e.data))}terminate(){return this.wire.sendAction("terminate-application",this.identity).then((()=>{}))}wait(){return this.wire.sendAction("wait-for-hung-application",this.identity).then((()=>{}))}getInfo(){return this.wire.sendAction("get-info",this.identity).then((({payload:e})=>e.data))}async getProcessInfo(){const{payload:{data:e}}=await this.wire.sendAction("application-get-process-info",this.identity);return e}async setFileDownloadLocation(e){const{name:t}=this.wire.me,n={uuid:this.identity.uuid,name:t};await this.wire.sendAction("set-file-download-location",{...n,downloadLocation:e})}async getFileDownloadLocation(){const{payload:{data:e}}=await this.wire.sendAction("get-file-download-location",this.identity);return e}async showTrayIconPopupMenu(e){const{name:t}=this.wire.me,n={uuid:this.identity.uuid,name:t},{payload:i}=await this.wire.sendAction("show-tray-icon-popup-menu",{...n,options:e});return i.data}async closeTrayIconPopupMenu(){const{name:e}=this.wire.me,t={uuid:this.identity.uuid,name:e};await this.wire.sendAction("close-tray-icon-popup-menu",{...t})}}return S.Application=i,S}function me(){return ye||(ye=1,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(function(){if(we)return R;we=1,Object.defineProperty(R,"__esModule",{value:!0}),R.ApplicationModule=void 0;const e=a,t=M,n=ge();class i extends e.Base{async wrap(e){this.wire.sendAction("wrap-application").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.Application(this.wire,e)}wrapSync(e){this.wire.sendAction("wrap-application-sync").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.Application(this.wire,e)}async _create(e){return void 0===e.waitForPageLoad&&(e.waitForPageLoad=!1),void 0===e.autoShow&&void 0===e.isPlatformController&&(e.autoShow=!0),await this.wire.sendAction("create-application",e),this.wrap({uuid:e.uuid})}create(e){return console.warn("Deprecation Warning: fin.Application.create is deprecated. Please use fin.Application.start"),this.wire.sendAction("application-create").catch((e=>{})),this._create(e)}async start(e){this.wire.sendAction("start-application").catch((e=>{}));const t=await this._create(e);return await this.wire.sendAction("run-application",{uuid:e.uuid}),t}async startManyManifests(e,t){return this.wire.sendAction("run-applications",{applications:e,opts:t}).then((()=>{}))}getCurrent(){return this.wire.sendAction("get-current-application").catch((e=>{})),this.wrap({uuid:this.wire.me.uuid})}getCurrentSync(){return this.wire.sendAction("get-current-application-sync").catch((e=>{})),this.wrapSync({uuid:this.wire.me.uuid})}async startFromManifest(e,t){this.wire.sendAction("application-start-from-manifest").catch((e=>{}));const n=await this._createFromManifest(e);return await n._run(t),n}createFromManifest(e){return console.warn("Deprecation Warning: fin.Application.createFromManifest is deprecated. Please use fin.Application.startFromManifest"),this.wire.sendAction("application-create-from-manifest").catch((e=>{})),this._createFromManifest(e)}_createFromManifest(e){return this.wire.sendAction("get-application-manifest",{manifestUrl:e}).then((({payload:e})=>{const t=e.data.platform?e.data.platform.uuid:e.data.startup_app.uuid;return this.wrap({uuid:t})})).then((t=>(t._manifestUrl=e,t)))}}return R.ApplicationModule=i,R}(),e),n(ge(),e)}(_)),_}ce.WebContents=he;var ve={};Object.defineProperty(ve,"__esModule",{value:!0}),ve.promisifySubscription=void 0;var Ce,be,Ie;function Ee(){if(Ce)return O;Ce=1,Object.defineProperty(O,"__esModule",{value:!0}),O._Window=void 0;const e=me(),t=ce,n=fe(),i=k,r=ve;class o extends t.WebContents{constructor(e,t){super(e,t,"window")}async createWindow(e){this.wire.sendAction("window-create-window",this.identity).catch((e=>{}));const t=await(0,r.promisifySubscription)(this,"fire-constructor-callback");void 0===e.waitForPageLoad&&(e.waitForPageLoad=!1),void 0===e.autoShow&&(e.autoShow=!0),(0,i.handleDeprecatedWarnings)(e);const n=this.wire.environment.createChildContent({entityType:"window",options:e}),[o]=await Promise.all([t.getValue(),n]);let s;const{success:a}=o,c=o.data,{message:d}=c;s=a?{httpResponseCode:c.httpResponseCode,apiInjected:c.apiInjected}:{message:c.message,networkErrorCode:c.networkErrorCode,stack:c.stack};const h={message:d,cbPayload:s,success:a};try{this.getWebWindow().fin.__internal_.openerSuccessCBCalled()}catch(e){}return h.success?this:Promise.reject(h)}getAllFrames(){return this.wire.sendAction("get-all-frames",this.identity).then((({payload:e})=>e.data))}getBounds(){return this.wire.sendAction("get-window-bounds",this.identity).then((({payload:e})=>e.data))}center(){return this.wire.sendAction("center-window",this.identity).then((()=>{}))}blur(){return this.wire.sendAction("blur-window",this.identity).then((()=>{}))}bringToFront(){return this.wire.sendAction("bring-window-to-front",this.identity).then((()=>{}))}animate(e,t){return this.wire.sendAction("animate-window",{transitions:e,options:t,...this.identity}).then((()=>{}))}hide(){return this.wire.sendAction("hide-window",this.identity).then((()=>{}))}close(e=!1){return this.wire.sendAction("close-window",{force:e,...this.identity}).then((()=>{Object.setPrototypeOf(this,null)}))}focusedWebViewWasChanged(){return this.wire.sendAction("focused-webview-changed",this.identity).then((()=>{}))}getNativeId(){return this.wire.sendAction("get-window-native-id",this.identity).then((({payload:e})=>e.data))}async getCurrentViews(){const{payload:e}=await this.wire.sendAction("window-get-views",this.identity);return e.data.map((e=>new n.View(this.wire,e)))}disableFrame(){return console.warn("Function is deprecated; use disableUserMovement instead."),this.wire.sendAction("disable-window-frame",this.identity).then((()=>{}))}disableUserMovement(){return this.wire.sendAction("disable-window-frame",this.identity).then((()=>{}))}enableFrame(){return console.warn("Function is deprecated; use enableUserMovement instead."),this.wire.sendAction("enable-window-frame",this.identity).then((()=>{}))}enableUserMovement(){return this.wire.sendAction("enable-window-frame",this.identity).then((()=>{}))}flash(){return this.wire.sendAction("flash-window",this.identity).then((()=>{}))}stopFlashing(){return this.wire.sendAction("stop-flash-window",this.identity).then((()=>{}))}getInfo(){return this.wire.sendAction("get-window-info",this.identity).then((({payload:e})=>e.data))}async getLayout(e){this.wire.sendAction("window-get-layout",this.identity).catch((e=>{}));const t=await this.getOptions();if(!t.layout||!t.layoutSnapshot)throw new Error("Window does not have a Layout");return this.fin.Platform.Layout.wrap(e??this.identity)}getOptions(){return this.wire.sendAction("get-window-options",this.identity).then((({payload:e})=>e.data))}getParentApplication(){return this.wire.sendAction("window-get-parent-application",this.identity).catch((e=>{})),Promise.resolve(new e.Application(this.wire,this.identity))}getParentWindow(){return this.wire.sendAction("window-get-parent-window",this.identity).catch((e=>{})),Promise.resolve(new e.Application(this.wire,this.identity)).then((e=>e.getWindow()))}async getSnapshot(e){const t={area:e,...this.identity};console.warn("Window.getSnapshot has been deprecated, please use Window.capturePage");return(await this.wire.sendAction("get-window-snapshot",t)).payload.data}getState(){return this.wire.sendAction("get-window-state",this.identity).then((({payload:e})=>e.data))}getWebWindow(){return this.wire.sendAction("window-get-web-window",this.identity).catch((e=>{})),this.wire.environment.getWebWindow(this.identity)}isMainWindow(){return this.wire.sendAction("window-is-main-window",this.identity).catch((e=>{})),this.me.uuid===this.me.name}isShowing(){return this.wire.sendAction("is-window-showing",this.identity).then((({payload:e})=>e.data))}maximize(){return this.wire.sendAction("maximize-window",this.identity).then((()=>{}))}minimize(){return this.wire.sendAction("minimize-window",this.identity).then((()=>{}))}moveBy(e,t,n){return this.wire.sendAction("move-window-by",{deltaLeft:e,deltaTop:t,positioningOptions:n,...this.identity}).then((()=>{}))}moveTo(e,t,n){return this.wire.sendAction("move-window",{left:e,top:t,positioningOptions:n,...this.identity}).then((()=>{}))}resizeBy(e,t,n,i){return this.wire.sendAction("resize-window-by",{deltaWidth:Math.floor(e),deltaHeight:Math.floor(t),anchor:n,positioningOptions:i,...this.identity}).then((()=>{}))}resizeTo(e,t,n,i){return this.wire.sendAction("resize-window",{width:Math.floor(e),height:Math.floor(t),anchor:n,positioningOptions:i,...this.identity}).then((()=>{}))}restore(){return this.wire.sendAction("restore-window",this.identity).then((()=>{}))}setAsForeground(){return this.wire.sendAction("set-foreground-window",this.identity).then((()=>{}))}setBounds(e,t){return this.wire.sendAction("set-window-bounds",{...e,...this.identity,positioningOptions:t}).then((()=>{}))}show(e=!1){return this.wire.sendAction("show-window",{force:e,...this.identity}).then((()=>{}))}showAt(e,t,n=!1){return this.wire.sendAction("show-at-window",{force:n,left:Math.floor(e),top:Math.floor(t),...this.identity}).then((()=>{}))}updateOptions(e){return this.wire.sendAction("update-window-options",{options:e,...this.identity}).then((()=>{}))}authenticate(e,t){return this.wire.sendAction("window-authenticate",{userName:e,password:t,...this.identity}).then((()=>{}))}async showPopupMenu(e){const{payload:t}=await this.wire.sendAction("show-popup-menu",{options:e,...this.identity});return t.data}async closePopupMenu(){return this.wire.sendAction("close-popup-menu",{...this.identity}).then((()=>{}))}async dispatchPopupResult(e){this.wire.sendAction("window-dispatch-popup-result",this.identity).catch((e=>{})),await this.wire.sendAction("dispatch-popup-result",{data:e,...this.identity})}async print(e={content:"self"}){switch(e.content){case void 0:case"self":return super.print(e);case"screenshot":return this.wire.sendAction("print-screenshot",this.identity).then((()=>{}));case"views":return this.wire.sendAction("print-views",{...this.identity,options:e}).then((()=>{}));default:return}}}return O._Window=o,O}function xe(){return Ie||(Ie=1,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(function(){if(be)return P;be=1,Object.defineProperty(P,"__esModule",{value:!0}),P._WindowModule=void 0;const e=a,t=M,n=Ee();class i extends e.Base{async wrap(e){this.wire.sendAction("window-wrap").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n._Window(this.wire,e)}wrapSync(e){this.wire.sendAction("window-wrap-sync").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n._Window(this.wire,e)}create(e){return this.wire.sendAction("create-window").catch((e=>{})),new n._Window(this.wire,{uuid:this.me.uuid,name:e.name}).createWindow(e)}getCurrent(){if(this.wire.sendAction("get-current-window").catch((e=>{})),!this.wire.me.isWindow)throw new Error("You are not in a Window context");const{uuid:e,name:t}=this.wire.me;return this.wrap({uuid:e,name:t})}getCurrentSync(){if(this.wire.sendAction("get-current-window-sync").catch((e=>{})),!this.wire.me.isWindow)throw new Error("You are not in a Window context");const{uuid:e,name:t}=this.wire.me;return this.wrapSync({uuid:e,name:t})}}return P._WindowModule=i,P}(),e),n(Ee(),e)}(A)),A}ve.promisifySubscription=async(e,t,n=(()=>!0),i)=>{let r,o,s;const a=new Promise(((e,t)=>{r=e,o=t})),c=e=>{n(e)&&(clearTimeout(s),r(e))};return await e.on(t,c),i&&(s=setTimeout((()=>o(new Error("event timed out"))),i)),a.finally((()=>{e.removeListener(t,c).catch((()=>null))})),{getValue:()=>a}},Object.defineProperty(s,"__esModule",{value:!0}),s.System=void 0;const Ae=a,Pe=y,Me=xe(),Oe=t;class _e extends Ae.EmitterBase{constructor(e){super(e,"system")}sendExternalProcessRequest(e,t){return new Promise(((n,i)=>{const r="external-process-exited";let o,s,a,c;"function"==typeof t.listener&&(a=e=>{const n=e||{};s={topic:"exited",uuid:n.processUuid||"",exitCode:n.exitCode||0},o===e.processUuid&&(t.listener(s),c.removeListener(r,a))},this.wire.me.name||(this.wire.me.name=this.wire.me.uuid),c=new Me._Window(this.wire,this.wire.me),c.on(r,a)),this.wire.sendAction(e,t).then((({payload:e})=>{o=e.data.uuid,n(e.data),s&&o===s.uuid&&(t.listener(s),c.removeListener(r,a))})).catch((e=>{c&&c.removeListener(r,a),i(e)}))}))}getVersion(){return this.wire.sendAction("get-version").then((({payload:e})=>e.data))}clearCache(e){return this.wire.sendAction("clear-cache",e).then((()=>{}))}deleteCacheOnExit(){return this.wire.sendAction("delete-cache-request").then((()=>{}))}exit(){return this.wire.sendAction("exit-desktop").then((()=>{}))}async fetchManifest(e){const{payload:{data:t}}=await this.wire.sendAction("fetch-manifest",{manifestUrl:e});return t}flushCookieStore(){return this.wire.sendAction("flush-cookie-store").then((()=>{}))}getAllWindows(){return this.wire.sendAction("get-all-windows").then((({payload:e})=>e.data))}getAllApplications(){return this.wire.sendAction("get-all-applications").then((({payload:e})=>e.data))}getCommandLineArguments(){return this.wire.sendAction("get-command-line-arguments").then((({payload:e})=>e.data))}async getCrashReporterState(){const{payload:{data:{diagnosticMode:e,isRunning:t}}}=await this.wire.sendAction("get-crash-reporter-state");return console.warn("diagnosticMode property is deprecated. It will be removed in a future version"),{diagnosticMode:e,diagnosticsMode:e,isRunning:t}}async startCrashReporter(e){const t=e,n={...t,diagnosticMode:t.diagnosticsMode||t.diagnosticMode},{payload:{data:{diagnosticMode:i,isRunning:r}}}=await this.wire.sendAction("start-crash-reporter",n);return{diagnosticMode:i,diagnosticsMode:i,isRunning:r}}getUniqueUserId(){return this.wire.sendAction("get-unique-user-id").then((({payload:e})=>e.data))}getEntityInfo(e,t){return this.wire.sendAction("get-entity-info",{uuid:e,name:t}).then((({payload:e})=>e.data))}getEnvironmentVariable(e){return this.wire.sendAction("get-environment-variable",{environmentVariables:e}).then((({payload:e})=>e.data))}getFocusedWindow(){return this.wire.sendAction("get-focused-window").then((({payload:e})=>e.data))}async isAppCertified(e){const{payload:{data:{certifiedInfo:t}}}=await this.wire.sendAction("is-app-certified",{manifestUrl:e});return t}getInstalledRuntimes(){return this.wire.sendAction("get-installed-runtimes").then((({payload:e})=>e.data.runtimes))}async getInstalledApps(){const{payload:{data:{installedApps:e}}}=await this.wire.sendAction("get-installed-apps");return e}getLog(e){return this.wire.sendAction("view-log",e).then((({payload:e})=>e.data))}getMachineId(){return this.wire.sendAction("get-machine-id").then((({payload:e})=>e.data))}getMinLogLevel(){return this.wire.sendAction("get-min-log-level").then((({payload:e})=>e.data))}getLogList(){return this.wire.sendAction("list-logs").then((({payload:e})=>e.data))}getMonitorInfo(){return this.wire.sendAction("get-monitor-info").then((({payload:e})=>e.data))}getMousePosition(){return this.wire.sendAction("get-mouse-position").then((({payload:e})=>e.data))}getProcessList(){return console.warn("System.getProcessList has been deprecated. Please consider using our new process APIs: Window.getProcessInfo, View.getProcessInfo, Application.getProcessInfo, System.getAllProcessInfo"),this.wire.sendAction("process-snapshot").then((({payload:e})=>e.data))}async getAllProcessInfo(){const{payload:{data:e}}=await this.wire.sendAction("get-all-process-info",this.identity);return e}getProxySettings(){return this.wire.sendAction("get-proxy-settings").then((({payload:e})=>e.data))}getRuntimeInfo(){return this.wire.sendAction("get-runtime-info").then((({payload:e})=>e.data))}getRvmInfo(){return this.wire.sendAction("get-rvm-info").then((({payload:e})=>e.data))}getHostSpecs(){return this.wire.sendAction("get-host-specs").then((({payload:e})=>e.data))}launchExternalProcess(e){return this.sendExternalProcessRequest("launch-external-process",e)}monitorExternalProcess(e){return this.sendExternalProcessRequest("monitor-external-process",e)}log(e,t){return this.wire.sendAction("write-to-log",{level:e,message:t}).then((()=>{}))}openUrlWithBrowser(e){return this.wire.sendAction("open-url-with-browser",{url:e}).then((()=>{}))}async registerCustomProtocol(e){if("object"!=typeof e)throw new Error("Must provide an object with a `protocolName` property having a string value.");await this.wire.sendAction("register-custom-protocol",e)}async unregisterCustomProtocol(e){await this.wire.sendAction("unregister-custom-protocol",{protocolName:e})}async getCustomProtocolState(e){return this.wire.sendAction("get-custom-protocol-state",{protocolName:e}).then((({payload:e})=>e.data))}releaseExternalProcess(e){return this.wire.sendAction("release-external-process",{uuid:e}).then((()=>{}))}showDeveloperTools(e){return this.wire.sendAction("show-developer-tools",e).then((()=>{}))}terminateExternalProcess(e){return this.wire.sendAction("terminate-external-process",e).then((()=>{}))}updateProxySettings(e){return this.wire.sendAction("update-proxy",e).then((()=>{}))}async downloadAsset(e,t){const n=()=>{};let i=n,r=n;const o=new Promise(((e,t)=>{i=e,r=t}));if("openfin"!==this.wire.environment.type)throw new Pe.NotSupportedError("downloadAsset only supported in an OpenFin Render process");const s=Pe.RuntimeError.getCallSite(),a=this.wire.environment.getNextMessageId().toString(),c=`asset-download-progress-${a}`,d=`asset-download-error-${a}`,h=`asset-download-complete-${a}`,l=e=>{const n={downloadedBytes:e.downloadedBytes,totalBytes:e.totalBytes};t(n)},u=()=>{this.removeListener(c,l)};await Promise.all([this.on(c,l),this.once(d,(e=>{u();const{reason:t,err:n}=e;r(new Pe.RuntimeError({reason:t,error:n},s))})),this.once(h,(()=>{u(),i()}))]);const p=Object.assign(e,{downloadId:a});return await this.wire.sendAction("download-asset",p).catch((e=>{throw u(),e})),o}downloadRuntime(e,t){const n=Pe.RuntimeError.getCallSite();return new Promise(((i,r)=>{if("openfin"!==this.wire.environment.type)return void r(new Pe.NotSupportedError("downloadRuntime only supported in an OpenFin Render process"));const o=this.wire.environment.getNextMessageId().toString(),s=`runtime-download-progress-${o}`,a=`runtime-download-error-${o}`,c=`runtime-download-complete-${o}`,d=e=>{const n={downloadedBytes:e.downloadedBytes,totalBytes:e.totalBytes};t(n)},h=()=>{this.removeListener(s,d)};this.on(s,d),this.once(a,(e=>{h();const{reason:t,err:i}=e;r(new Pe.RuntimeError({reason:t,error:i},n))})),this.once(c,(()=>{h(),i()}));const l=Object.assign(e,{downloadId:o});this.wire.sendAction("download-runtime",l).catch((e=>{h(),r(e)}))}))}downloadPreloadScripts(e){return this.wire.sendAction("download-preload-scripts",{scripts:e}).then((({payload:e})=>e.data))}getAllExternalApplications(){return this.wire.sendAction("get-all-external-applications").then((({payload:e})=>e.data))}getAppAssetInfo(e){return this.wire.sendAction("get-app-asset-info",e).then((({payload:e})=>e.data))}getCookies(e){const t=this.wire.environment.getUrl(),n=Object.assign(e,{url:t});return this.wire.sendAction("get-cookies",n).then((({payload:e})=>e.data))}setMinLogLevel(e){return this.wire.sendAction("set-min-log-level",{level:e}).then((()=>{}))}resolveUuid(e){return this.wire.sendAction("resolve-uuid",{entityKey:e}).then((({payload:e})=>e.data))}executeOnRemote(e,t){return t.requestingIdentity=e,this.wire.ferryAction(t)}readRegistryValue(e,t,n){return this.wire.sendAction("read-registry-value",{rootKey:e,subkey:t,value:n}).then((({payload:e})=>e.data))}registerExternalConnection(e){return this.wire.sendAction("register-external-connection",{uuid:e}).then((({payload:e})=>e.data))}async getServiceConfiguration(e){if("string"!=typeof e.name)throw new Error("Must provide an object with a `name` property having a string value");const{name:t}=e;return this.wire.sendAction("get-service-configuration",{name:t}).then((({payload:e})=>e.data))}async getSystemAppConfig(e){if("string"!=typeof e)throw new Error("Must provide a string value for name of system app");return this.wire.sendAction("get-system-app-configuration",{name:e}).then((({payload:e})=>e.data))}async registerShutdownHandler(e){this.wire.sendAction("system-register-shutdown-handler").catch((e=>{}));const{uuid:t,name:n}=this.wire.me;this.on("system-shutdown",(i=>{e({proceed:()=>{this.wire.environment.raiseEvent("application/system-shutdown-handled",{uuid:t,name:n,topic:"application"})}})}))}runRvmHealthCheck(){return this.wire.sendAction("run-rvm-health-check").then((({payload:e})=>e.data))}async launchManifest(e,t={}){const{subscribe:n,...i}=t,r=i;if(n){const e=new Oe.EventEmitter;n(e);const t="app-version-progress",i="runtime-status",o="app-version-complete",s="app-version-error",a=this.wire.environment.getNextMessageId().toString();r.appVersionId=a;const c=[o,t,i,s],d=e=>{const{appVersionId:t,topic:n,type:i,...r}=e;return{...r,type:c.find((e=>i.includes(e)))}},h=t=>{const n=d(t);e.emit(n.type,n)},l=()=>{this.removeListener(`${t}.${a}`,h),this.removeListener(`${i}.${a}`,h),this.removeListener(`${o}.${a}`,h),this.removeListener(`${s}.${a}`,h),this.removeListener(`${o}.${a}`,l),this.removeListener(`${s}.${a}`,l)};await Promise.all([this.on(`${t}.${a}`,h),this.on(`${i}.${a}`,h),this.once(`${o}.${a}`,h),this.once(`${s}.${a}`,h),this.once(`${o}.${a}`,l),this.once(`${s}.${a}`,l)])}return(await this.wire.sendAction("launch-manifest",{manifestUrl:e,opts:r})).payload.data.manifest}async queryPermissionForCurrentContext(e){const t={uuid:this.wire.me.uuid,name:this.wire.me.name};return(await this.wire.sendAction("query-permission-for-current-context",{apiName:e,identity:t})).payload.data}async enableNativeWindowIntegrationProvider(e){const{payload:t}=await this.wire.sendAction("enable-native-window-integration-provider",{permissions:e});return t.data}async registerUsage({data:e,type:t}){await this.wire.sendAction("register-usage",{data:e,type:t})}async getPrinters(){const{payload:e}=await this.wire.sendAction("system-get-printers");return e.data}async updateProcessLoggingOptions(e){await this.wire.sendAction("system-update-process-logging-options",{options:e})}async getDomainSettings(){const{payload:{data:e}}=await this.wire.sendAction("get-domain-settings",this.identity);return e}async setDomainSettings(e){await this.wire.sendAction("set-domain-settings",{domainSettings:e,...this.identity})}}s.System=_e;var Re={},Se={};Object.defineProperty(Se,"__esModule",{value:!0}),Se.RefCounter=void 0;Se.RefCounter=class{constructor(){this.topicRefMap=new Map}incRefCount(e){const t=this.topicRefMap.get(e);let n;if(t){const i=t+1;n=i,this.topicRefMap.set(e,i)}else this.topicRefMap.set(e,1),n=1;return n}decRefCount(e){const t=this.topicRefMap.get(e);let n;if(t){const i=t-1;this.topicRefMap.set(e,i),n=i}else n=-1;return n}actOnFirst(e,t,n){return 1===this.incRefCount(e)?t():n()}actOnLast(e,t,n){return 0===this.decRefCount(e)?t():n()}};var Fe={},je={},ke={};Object.defineProperty(ke,"__esModule",{value:!0}),ke.ChannelBase=ke.ProtectedItems=void 0;const Te=e=>async(t,n,i)=>{const r=await e(t,n,i);return void 0===r?n:r};ke.ProtectedItems=class{constructor(e,t){this.providerIdentity=e,this.close=t}};class Le{static defaultAction(e){throw new Error(`No action registered at target for ${e}`)}constructor(){this.subscriptions=new Map}async processAction(e,t,n){try{const i=this.subscriptions.has(e)?this.subscriptions.get(e):(t,n)=>(this.defaultAction??Le.defaultAction)(e,t,n),r=this.preAction?await this.preAction(e,t,n):t,o=await i(r,n);return this.postAction?await this.postAction(e,o,n):o}catch(t){if(this.errorMiddleware)return this.errorMiddleware(e,t,n);throw t}}beforeAction(e){if(this.preAction)throw new Error("Already registered beforeAction middleware");this.preAction=Te(e)}onError(e){if(this.errorMiddleware)throw new Error("Already registered error middleware");this.errorMiddleware=e}afterAction(e){if(this.postAction)throw new Error("Already registered afterAction middleware");this.postAction=Te(e)}remove(e){this.subscriptions.delete(e)}setDefaultAction(e){if(this.defaultAction)throw new Error("default action can only be set once");this.defaultAction=e}register(e,t){if(this.subscriptions.has(e))throw new Error(`Subscription already registered for action: ${e}. Unsubscribe before adding new subscription`);return this.subscriptions.set(e,t),!0}}ke.ChannelBase=Le;var $e,Be,Ge,We=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},He=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(je,"__esModule",{value:!0}),je.ChannelClient=void 0;const Ne=ke,De=new Map;class Ue extends Ne.ChannelBase{static closeChannelByEndpointId(e){const t=De.get(e);t&&We(t,Ge,"f").call(t)}static handleProviderDisconnect(e){for(const t of De.values())t.providerIdentity.channelId===e.channelId&&(t.disconnectListener(e),We(t,Ge,"f").call(t))}constructor(e,t,n){super(),$e.set(this,void 0),Be.set(this,void 0),this.processAction=(e,t,n)=>super.processAction(e,t,n),Ge.set(this,(()=>{De.delete(this.endpointId),We(this,Be,"f").close()})),He(this,$e,new Ne.ProtectedItems(e,t),"f"),this.disconnectListener=()=>{},this.endpointId=e.endpointId,He(this,Be,n,"f"),De.set(this.endpointId,this),n.receive(this.processAction)}get providerIdentity(){return We(this,$e,"f").providerIdentity}async dispatch(e,t){if(We(this,Be,"f").isEndpointConnected(this.providerIdentity.channelId))return We(this,Be,"f").send(this.providerIdentity.channelId,e,t);throw new Error("The client you are trying to dispatch from is disconnected from the target provider.")}onDisconnection(e){this.disconnectListener=t=>{try{e(t)}catch(e){throw new Error(`Error while calling the onDisconnection callback: ${e.message}`)}finally{this.disconnectListener=()=>{}}}}async disconnect(){await this.sendDisconnectAction(),We(this,Ge,"f").call(this)}async sendDisconnectAction(){const e=We(this,$e,"f");await e.close()}static async wireClose(e,t,n){const{channelName:i,uuid:r,name:o}=t;await e.sendAction("disconnect-from-channel",{channelName:i,uuid:r,name:o,endpointId:n})}}je.ChannelClient=Ue,$e=new WeakMap,Be=new WeakMap,Ge=new WeakMap;var Ve={},ze={};Object.defineProperty(ze,"__esModule",{value:!0}),ze.exhaustiveCheck=void 0,ze.exhaustiveCheck=function(e,t){throw new Error(`Unsupported value: ${e}${t?`\n Supported values are: ${t.join("")}`:""}`)};var Ke,qe,Ye,Je={},Ze=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},Qe=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Je,"__esModule",{value:!0}),Je.ClassicInfo=Je.ClassicStrategy=void 0;Je.ClassicStrategy=class{constructor(e,t,n,i){this.messageReceiver=t,this.endpointId=n,this.providerIdentity=i,Ke.set(this,void 0),qe.set(this,new Map),Ye.set(this,new Map),this.send=async(e,t,n)=>{const i=Qe(this,qe,"f").get(e);if(!i)throw new Error(`Could not locate routing info for endpoint ${e}`);const r={...i};r.isLocalEndpointId&&delete r.endpointId,delete r.isLocalEndpointId;const o=Qe(this,Ke,"f").sendAction("send-channel-message",{...r,providerIdentity:this.providerIdentity,action:t,payload:n});Qe(this,Ye,"f").get(e)?.add(o);return(await o.catch((e=>{throw new Error(e.message)})).finally((()=>{Qe(this,Ye,"f").get(e)?.delete(o)}))).payload.data.result},this.close=async()=>{this.messageReceiver.removeEndpoint(this.providerIdentity.channelId,this.endpointId),[...Qe(this,qe,"f").keys()].forEach((e=>this.closeEndpoint(e))),Ze(this,qe,new Map,"f")},Ze(this,Ke,e,"f")}onEndpointDisconnect(e,t){}receive(e){this.messageReceiver.addEndpoint(e,this.providerIdentity.channelId,this.endpointId)}async closeEndpoint(e){const t=Qe(this,qe,"f").get(e);Qe(this,qe,"f").delete(e);const n=Qe(this,Ye,"f").get(e);n?.forEach((n=>{const i=`Channel connection with identity uuid: ${t?.uuid} / name: ${t?.name} / endpointId: ${e} no longer connected.`;n.cancel(new Error(i))}))}isEndpointConnected(e){return Qe(this,qe,"f").has(e)}addEndpoint(e,t){Qe(this,qe,"f").set(e,t.endpointIdentity),Qe(this,Ye,"f").set(e,new Set)}isValidEndpointPayload(e){return"string"==typeof e?.endpointIdentity?.endpointId||"string"==typeof e?.endpointIdentity?.channelId}},Ke=new WeakMap,qe=new WeakMap,Ye=new WeakMap,Je.ClassicInfo={version:5,minimumVersion:0,type:"classic"};var Xe={},et={},tt={};Object.defineProperty(tt,"__esModule",{value:!0}),tt.errorToPOJO=void 0,tt.errorToPOJO=function(e){return{stack:e.stack,name:e.name,message:e.message,toString:()=>e.stack||e.toString()}};var nt,it,rt=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},ot=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(et,"__esModule",{value:!0}),et.RTCEndpoint=void 0;const st=tt;et.RTCEndpoint=class{static isValidEndpointPayload(e){const t=e=>"object"==typeof e&&null!==e;return t(e)&&t(e.endpointIdentity)&&t(e.rtc)&&"string"==typeof e.endpointIdentity.endpointId}constructor({rtc:e,endpointIdentity:t}){this.responseMap=new Map,nt.set(this,null),it.set(this,void 0),this.connectionStateChangeHandler=e=>{"connected"!==this.rtc.rtcClient.connectionState&&(this.rtc.rtcClient.removeEventListener("connectionstatechange",this.connectionStateChangeHandler),this.close(),rt(this,it,"f")&&rt(this,it,"f").call(this))},this.send=async(e,t)=>{const n=`message-${Math.random()}`,i=new Promise(((e,t)=>{this.responseMap.set(n,{resolve:e,reject:t})}));return this.rtc.channels.request.send(JSON.stringify({action:e,payload:t,messageId:n})),i},this.close=()=>{this.responseMap.forEach((e=>e.reject("Connection has closed."))),this.responseMap=new Map,this.rtc.channels.request.close(),this.rtc.channels.response.close(),this.rtc.rtcClient.close()},this.rtc=e,this.endpointIdentity=t,this.rtc.channels.response.addEventListener("message",(e=>{let{data:t}=e;e.data instanceof ArrayBuffer&&(t=(new TextDecoder).decode(e.data));const{messageId:n,payload:i,success:r,error:o}=JSON.parse(t),{resolve:s,reject:a}=this.responseMap.get(n)??{};s&&a?(this.responseMap.delete(n),r?s(i):a(o)):(console.log("Could not find id in responseMap."),console.log(e))})),this.rtc.channels.request.addEventListener("message",(async e=>{let{data:n}=e;e.data instanceof ArrayBuffer&&(n=(new TextDecoder).decode(e.data));const{messageId:i,action:r,payload:o}=JSON.parse(n);if(rt(this,nt,"f"))try{const e=await rt(this,nt,"f").call(this,r,o,t);this.rtc.channels.response.send(JSON.stringify({messageId:i,payload:e,success:!0}))}catch(e){"open"===this.rtc.channels.response.readyState&&this.rtc.channels.response.send(JSON.stringify({messageId:i,error:(0,st.errorToPOJO)(e),success:!1}))}else"open"===this.rtc.channels.response.readyState&&this.rtc.channels.response.send(JSON.stringify({messageId:i,success:!1,error:"Connection not ready."}))})),this.rtc.rtcClient.addEventListener("connectionstatechange",this.connectionStateChangeHandler),Object.values(this.rtc.channels).forEach((e=>{e.onclose=e=>{[...this.responseMap.values()].forEach((e=>e.reject(new Error("RTCDataChannel closed unexpectedly, this is most commonly caused by message size. Note: RTC Channels have a message size limit of ~255kB.")))),this.close(),rt(this,it,"f")&&rt(this,it,"f").call(this)}}))}onDisconnect(e){if(rt(this,it,"f"))throw new Error("RTCEndpoint disconnectListener cannot be set twice.");ot(this,it,e,"f")}receive(e){if(rt(this,nt,"f"))throw new Error("You have already set a listener for this RTC Endpoint.");ot(this,nt,e,"f")}get connected(){return"connected"===this.rtc.rtcClient.connectionState}},nt=new WeakMap,it=new WeakMap;var at,ct,dt,ht={},lt=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},ut=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(ht,"__esModule",{value:!0}),ht.EndpointStrategy=void 0;ht.EndpointStrategy=class{constructor(e,t,n){this.EndpointType=e,this.StrategyName=n,at.set(this,null),ct.set(this,new Map),dt.set(this,!0),this.send=async(e,t,n)=>this.getEndpointById(e).send(t,n),this.close=async()=>{lt(this,dt,"f")&&(lt(this,ct,"f").forEach((e=>e.close())),ut(this,ct,new Map,"f")),ut(this,dt,!1,"f")},this.isValidEndpointPayload=t}onEndpointDisconnect(e,t){this.getEndpointById(e).onDisconnect(t)}receive(e){if(lt(this,at,"f"))throw new Error(`You have already set a listener for this ${this.StrategyName} Strategy`);ut(this,at,e,"f"),lt(this,ct,"f").forEach((e=>e.receive(lt(this,at,"f"))))}getEndpointById(e){const t=lt(this,ct,"f").get(e);if(!t)throw new Error(`Client with endpoint id ${e} is not connected`);return t}get connected(){return lt(this,dt,"f")}isEndpointConnected(e){return lt(this,ct,"f").has(e)}addEndpoint(e,t){if(!lt(this,dt,"f"))return void console.warn(`Adding endpoint to disconnected ${this.StrategyName} Strategy`);const n=new this.EndpointType(t);lt(this,at,"f")&&n.receive(lt(this,at,"f")),lt(this,ct,"f").set(e,n)}async closeEndpoint(e){lt(this,ct,"f").delete(e)}},at=new WeakMap,ct=new WeakMap,dt=new WeakMap,Object.defineProperty(Xe,"__esModule",{value:!0}),Xe.RTCInfo=Xe.RTCStrategy=void 0;const pt=et,wt=ht;class yt extends wt.EndpointStrategy{constructor(){super(pt.RTCEndpoint,pt.RTCEndpoint.isValidEndpointPayload,"RTC")}}Xe.RTCStrategy=yt,Xe.RTCInfo={version:2,minimumVersion:0,type:"rtc"};var ft={};Object.defineProperty(ft,"__esModule",{value:!0}),ft.RTCICEManager=void 0;const gt=a;class mt extends gt.EmitterBase{constructor(e){super(e,"channel"),this.ensureChannelOpened=e=>new Promise(((t,n)=>{if("open"===e.readyState)t();else if("connecting"===e.readyState){const n=()=>{e.removeEventListener("open",n),t()};e.addEventListener("open",n)}else n(new Error("This Channel has already closed"))}))}static createDataChannelPromise(e,t){let n;const i=new Promise((e=>{n=e})),r=i=>{const o=()=>{i.channel.removeEventListener("open",o),n(i.channel)};i.channel.label===e&&(i.channel.addEventListener("open",o),t.removeEventListener("datachannel",r))};return t.addEventListener("datachannel",r),i}async listenForProviderIce(e,t){await this.on(this.createProviderEventName(e),t,{timestamp:Date.now()})}async raiseProviderIce(e,t){await this.wire.environment.raiseEvent(this.createRouteString(this.createProviderEventName(e)),t)}async listenForClientIce(e,t){await this.on(this.createClientEventName(e),t,{timestamp:Date.now()})}async raiseClientIce(e,t){await this.wire.environment.raiseEvent(this.createRouteString(this.createClientEventName(e)),t)}cleanupIceListeners(e){this.removeAllListeners(this.createClientEventName(e)),this.removeAllListeners(this.createProviderEventName(e))}createClientEventName(e){return`ice-client-${e}`}createProviderEventName(e){return`ice-provider-${e}`}createRouteString(e){return`channel/${e}`}createRtcPeer(){return this.wire.environment.getRtcPeer()}async startClientOffer(){const e=Math.random().toString(),t=this.createRtcPeer();t.addEventListener("icecandidate",(async t=>{t.candidate&&await this.raiseClientIce(e,{candidate:t.candidate?.toJSON()})})),await this.listenForProviderIce(e,(async e=>{await t.addIceCandidate(e.candidate)}));const n={request:t.createDataChannel("request"),response:t.createDataChannel("response")},i=await t.createOffer();await t.setLocalDescription(i);const r=Promise.all([n.request,n.response].map(this.ensureChannelOpened)).then((()=>{}));return{rtcClient:t,channels:n,offer:i,rtcConnectionId:e,channelsOpened:r}}async finishClientOffer(e,t,n){return await e.setRemoteDescription(t),await n,!0}async createProviderAnswer(e,t){const n=this.createRtcPeer(),i=mt.createDataChannelPromise("request",n),r=mt.createDataChannelPromise("response",n);n.addEventListener("icecandidate",(async t=>{t.candidate&&await this.raiseProviderIce(e,{candidate:t.candidate?.toJSON()})})),await this.listenForClientIce(e,(async e=>{await n.addIceCandidate(e.candidate)})),await n.setRemoteDescription(t);const o=await n.createAnswer();await n.setLocalDescription(o);const s=Promise.all([i,r]).then((([t,n])=>(this.cleanupIceListeners(e),{request:t,response:n})));return{rtcClient:n,answer:o,channels:s}}}ft.RTCICEManager=mt;var vt={},Ct={};function bt(e){return[...e.split(".").reverse().entries()].reduce(((e,[t,n])=>e+ +n*1e4**t),0)}function It(e,t){return bt(e)>=bt(t)}function Et(e){return e.split("/")[0]}Object.defineProperty(Ct,"__esModule",{value:!0}),Ct.runtimeUuidMeetsMinimumRuntimeVersion=Ct.parseRuntimeUuid=Ct.meetsMinimumRuntimeVersion=void 0,Ct.meetsMinimumRuntimeVersion=It,Ct.parseRuntimeUuid=Et,Ct.runtimeUuidMeetsMinimumRuntimeVersion=function(e,t){return It(Et(e),t)};var xt,At,Pt,Mt,Ot,_t=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},Rt=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(vt,"__esModule",{value:!0}),vt.ChannelProvider=void 0;const St=ke,Ft=Ct;class jt extends St.ChannelBase{get connections(){return[..._t(this,xt,"f")]}static handleClientDisconnection(e,t){const n=e.connections.find((e=>e.endpointId===t.endpointId));if(n)_t(e,Mt,"f").call(e,n);else{e.connections.filter((e=>e.uuid===t.uuid&&e.name===t.name)).forEach(_t(e,Mt,"f"))}e.disconnectListener(t)}static setProviderRemoval(e,t){jt.removalMap.set(e,t)}constructor(e,t,n){super(),xt.set(this,void 0),At.set(this,void 0),Pt.set(this,void 0),Mt.set(this,(e=>{const t=this.connections.filter((t=>t.endpointId!==e.endpointId));_t(this,Pt,"f").closeEndpoint(e.endpointId),Rt(this,xt,t,"f")})),this.processAction=async(e,t,n)=>(jt.clientIsMultiRuntime(n)&&!(0,Ft.runtimeUuidMeetsMinimumRuntimeVersion)(n.runtimeUuid,"18.87.56.0")?this.handleMultiRuntimeLegacyClient(n):this.checkForClientConnection(n),super.processAction(e,t,n)),Ot.set(this,(()=>{_t(this,Pt,"f").close();const e=jt.removalMap.get(this);e&&e()})),Rt(this,At,new St.ProtectedItems(e,t),"f"),this.connectListener=()=>{},this.disconnectListener=()=>{},Rt(this,xt,[],"f"),Rt(this,Pt,n,"f"),n.receive(this.processAction)}dispatch(e,t,n){const i=e.endpointId??this.getEndpointIdForOpenFinId(e,t);return i&&_t(this,Pt,"f").isEndpointConnected(i)?_t(this,Pt,"f").send(i,t,n):Promise.reject(new Error(`Client connection with identity uuid: ${e.uuid} / name: ${e.name} / endpointId: ${i} no longer connected.`))}async processConnection(e,t){return _t(this,xt,"f").push(e),this.connectListener(e,t)}publish(e,t){return this.connections.map((n=>_t(this,Pt,"f").send(n.endpointId,e,t)))}onConnection(e){this.connectListener=e}onDisconnection(e){this.disconnectListener=e}async destroy(){const e=_t(this,At,"f");e.providerIdentity,Rt(this,xt,[],"f"),await e.close(),_t(this,Ot,"f").call(this)}async getAllClientInfo(){return this.connections.map((e=>{const{uuid:t,name:n,endpointId:i,entityType:r,connectionUrl:o}=e;return{uuid:t,name:n,endpointId:i,entityType:r,connectionUrl:o}}))}checkForClientConnection(e){if(!this.isClientConnected(e))throw new Error(`This action was sent from a client that is not connected to the provider.\n                    Client Identity: {uuid: ${e.uuid}, name: ${e.name}, endpointId: ${e.endpointId}}`)}isClientConnected(e){return jt.clientIdentityIncludesEndpointId(e)?this.connections.some((t=>t.endpointId===e.endpointId&&t.uuid===e.uuid&&t.name===e.name)):this.isLegacyClientConnected(e)}isLegacyClientConnected(e){return this.connections.some((t=>t.uuid===e.uuid&&t.name===e.name))}handleMultiRuntimeLegacyClient(e){if(!this.isLegacyClientConnected(e))throw new Error(`This action was sent from a client that is not connected to the provider. Client Identity:\n                    {uuid: ${e.uuid}, name: ${e.name}, endpointId: ${e.endpointId}}`)}getEndpointIdForOpenFinId(e,t){const n=this.connections.filter((t=>t.name===e.name&&t.uuid===e.uuid));if(n.length>=2){const n=_t(this,At,"f"),{uuid:i,name:r}=e,o=n?.providerIdentity.uuid,s=n?.providerIdentity.name;console.warn(`WARNING: Dispatch call may have unintended results. The "to" argument of your dispatch call is missing the\n                "endpointId" parameter. The identity you are dispatching to ({uuid: ${i}, name: ${r}})\n                has multiple channelClients for this channel. Your dispatched action: (${t}) from the provider:\n                ({uuid: ${o}, name: ${s}}) will only be processed by the most recently-created client.`)}return n.pop()?.endpointId}static clientIdentityIncludesEndpointId(e){return void 0!==e.endpointId}static clientIsMultiRuntime(e){return void 0!==e.runtimeUuid}static async wireClose(e,t){await e.sendAction("destroy-channel",{channelName:t})}}vt.ChannelProvider=jt,xt=new WeakMap,At=new WeakMap,Pt=new WeakMap,Mt=new WeakMap,Ot=new WeakMap,jt.removalMap=new WeakMap;var kt={};Object.defineProperty(kt,"__esModule",{value:!0}),kt.MessageReceiver=void 0;const Tt=je,Lt=a;class $t extends Lt.Base{constructor(e){super(e),this.onmessage=e=>"process-channel-message"===e.action&&(this.processChannelMessage(e),!0),this.endpointMap=new Map,this.latestEndpointIdByChannelId=new Map,e.registerMessageHandler(this.onmessage.bind(this))}async processChannelMessage(e){const{senderIdentity:t,providerIdentity:n,action:i,ackToSender:r,payload:o,intendedTargetIdentity:s}=e.payload,a=s.channelId??s.endpointId??this.latestEndpointIdByChannelId.get(n.channelId),c=this.endpointMap.get(a);if(!c)return r.payload.success=!1,r.payload.reason=`Client connection with identity uuid: ${this.wire.me.uuid} / name: ${this.wire.me.name} / endpointId: ${a} no longer connected.`,this.wire.sendRaw(r);try{const e=await c(i,o,t);return r.payload.payload=r.payload.payload||{},r.payload.payload.result=e,this.wire.sendRaw(r)}catch(e){return r.payload.success=!1,r.payload.reason=e.message,this.wire.sendRaw(r)}}addEndpoint(e,t,n){this.endpointMap.set(n,e),t!==n&&this.latestEndpointIdByChannelId.set(t,n)}removeEndpoint(e,t){this.endpointMap.delete(t),this.latestEndpointIdByChannelId.get(e)===t&&this.latestEndpointIdByChannelId.delete(e)}checkForPreviousClientConnection(e){const t=this.latestEndpointIdByChannelId.get(e);t&&(Tt.ChannelClient.closeChannelByEndpointId(t),console.warn("You have created a second connection to an older provider. First connection has been removed from the clientMap"),console.warn("If the provider calls publish(), you may receive multiple messages."))}}kt.MessageReceiver=$t;var Bt={};Object.defineProperty(Bt,"__esModule",{value:!0}),Bt.ProtocolManager=void 0;Bt.ProtocolManager=class{constructor(e){this.ProtocolsInPreferenceOrder=e,this.DefaultClientProtocols=["classic"],this.DefaultProviderProtocols=["classic"],this.getClientProtocols=e=>{const t=e?this.ProtocolsInPreferenceOrder.filter((t=>e.includes(t))):this.DefaultClientProtocols;if(!t.length)throw new Error(`No valid protocols were passed in. Accepted values are: ${this.ProtocolsInPreferenceOrder.join(", ")}.`);return t},this.getProviderProtocols=e=>{const t=e?this.ProtocolsInPreferenceOrder.filter((t=>e.includes(t))):this.DefaultProviderProtocols;if(!t.length)throw new Error(`No valid protocols were passed in. Accepted values are: ${this.ProtocolsInPreferenceOrder.join(", ")}.`);return t},this.getCompatibleProtocols=(e,t)=>t.supportedProtocols.filter((t=>e.some((e=>e.type===t.type&&t.version>=e.minimumVersion&&e.version>=(t.minimumVersion??0))))).slice(0,t.maxProtocols)}};var Gt={};Object.defineProperty(Gt,"__esModule",{value:!0});class Wt{static combine(e,t){return new Wt(e,t)}constructor(e,t){this.primary=e,this.secondary=t}onEndpointDisconnect(e,t){this.primary.onEndpointDisconnect(e,(()=>{this.secondary.isEndpointConnected(e)||t()})),this.secondary.onEndpointDisconnect(e,(()=>{this.primary.isEndpointConnected(e)||t()}))}isValidEndpointPayload(e){return this.primary.isValidEndpointPayload(e)||this.secondary.isValidEndpointPayload(e)}async closeEndpoint(e){await this.primary.closeEndpoint(e),await this.secondary.closeEndpoint(e)}isEndpointConnected(e){return this.primary.isEndpointConnected(e)||this.secondary.isEndpointConnected(e)}async addEndpoint(e,t){this.primary.isValidEndpointPayload(t)&&await this.primary.addEndpoint(e,t),this.secondary.isValidEndpointPayload(t)&&await this.secondary.addEndpoint(e,t)}receive(e){this.primary.receive(e),this.secondary.receive(e)}send(e,t,n){return this.primary.isEndpointConnected(e)?this.primary.send(e,t,n):this.secondary.send(e,t,n)}async close(){await Promise.all([this.primary.close(),this.secondary.close()])}}Gt.default=Wt;var Ht,Nt,Dt=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},Ut=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Ve,"__esModule",{value:!0}),Ve.ConnectionManager=void 0;const Vt=ze,zt=a,Kt=Je,qt=Xe,Yt=ft,Jt=vt,Zt=kt,Qt=Bt,Xt=Gt;class en extends zt.Base{static getProtocolOptionsFromStrings(e){return e.map((e=>{switch(e){case"rtc":return qt.RTCInfo;case"classic":return Kt.ClassicInfo;default:return(0,Vt.exhaustiveCheck)(e,["rtc","classic"])}}))}constructor(e){super(e),Ht.set(this,void 0),Nt.set(this,void 0),this.removeChannelFromProviderMap=e=>{this.providerMap.delete(e)},this.onmessage=e=>"process-channel-connection"===e.action&&(this.processChannelConnection(e),!0),this.providerMap=new Map,this.protocolManager=new Qt.ProtocolManager("node"===this.wire.environment.type?["classic"]:["rtc","classic"]),Dt(this,Ht,new Zt.MessageReceiver(e),"f"),Dt(this,Nt,new Yt.RTCICEManager(e),"f"),e.registerMessageHandler(this.onmessage.bind(this))}createProvider(e,t){const n=Object.assign(this.wire.environment.getDefaultChannelOptions().create,e||{}),i=this.protocolManager.getProviderProtocols(n?.protocols),r=i.map((e=>{switch(e){case"rtc":return new qt.RTCStrategy;case"classic":return new Kt.ClassicStrategy(this.wire,Ut(this,Ht,"f"),t.channelId,t);default:return(0,Vt.exhaustiveCheck)(e,["rtc","classic"])}}));let o;if(2===r.length){const[e,t]=r;o=Xt.default.combine(e,t)}else{if(1!==r.length)throw new Error("failed to combine strategies");[o]=r}const s=new Jt.ChannelProvider(t,(()=>Jt.ChannelProvider.wireClose(this.wire,t.channelName)),o),a=t.channelId;return this.providerMap.set(a,{provider:s,strategy:o,supportedProtocols:en.getProtocolOptionsFromStrings(i)}),Jt.ChannelProvider.setProviderRemoval(s,this.removeChannelFromProviderMap.bind(this)),s}async createClientOffer(e){const t=this.protocolManager.getClientProtocols(e?.protocols);let n;return{offer:{supportedProtocols:await Promise.all(t.map((async e=>{switch(e){case"rtc":{const{rtcClient:e,channels:t,offer:i,rtcConnectionId:r,channelsOpened:o}=await Ut(this,Nt,"f").startClientOffer();return n={rtcClient:e,channels:t,channelsOpened:o},{type:"rtc",version:qt.RTCInfo.version,payload:{offer:i,rtcConnectionId:r}}}case"classic":return{type:"classic",version:Kt.ClassicInfo.version};default:return(0,Vt.exhaustiveCheck)(e,["rtc","classic"])}}))),maxProtocols:2},rtc:n}}async createClientStrategy(e,t){t.endpointId||(t.endpointId=this.wire.environment.getNextMessageId(),Ut(this,Ht,"f").checkForPreviousClientConnection(t.channelId));const n=t.answer??{supportedProtocols:[{type:"classic",version:1}]},i=(await Promise.all(n.supportedProtocols.map((async n=>"rtc"===n.type&&e?(await Ut(this,Nt,"f").finishClientOffer(e.rtcClient,n.payload.answer,e.channelsOpened),new qt.RTCStrategy):"classic"===n.type?new Kt.ClassicStrategy(this.wire,Ut(this,Ht,"f"),t.endpointId,t):null)))).filter((e=>null!==e));let r;if(e&&!i.some((e=>e instanceof qt.RTCStrategy))&&e&&e.rtcClient.close(),i.length>=2)r=Xt.default.combine(i[0],i[1]);else{if(!i.length)throw new Error("No compatible protocols");[r]=i}const o={endpointIdentity:t,rtc:e};return r.addEndpoint(t.channelId,o),r}async processChannelConnection(e){const{clientIdentity:t,providerIdentity:n,ackToSender:i,payload:r,offer:o}=e.payload;t.endpointId?t.isLocalEndpointId=!1:(t.endpointId=this.wire.environment.getNextMessageId(),t.isLocalEndpointId=!0);const s=n.channelId,a=this.providerMap.get(s);if(!a)return i.payload.success=!1,i.payload.reason=`Channel "${n.channelName}" has been destroyed.`,this.wire.sendRaw(i);const{provider:c,strategy:d,supportedProtocols:h}=a;try{if(!(c instanceof Jt.ChannelProvider))throw Error("Cannot connect to a channel client");const e=o??{supportedProtocols:[{type:"classic",version:1}],maxProtocols:1},n=this.protocolManager.getCompatibleProtocols(h,e);if(!n.length)throw new Error("This provider does not support any of the offered protocols.");const s=await c.processConnection(t,r);i.payload.payload=i.payload.payload||{};let a={supportedProtocols:[],endpointPayloadPromise:Promise.resolve({endpointIdentity:t})};return a=await n.reduce((async(e,t)=>{const n=await e;if("rtc"===t.type){const{answer:e,rtcClient:i,channels:r}=await Ut(this,Nt,"f").createProviderAnswer(t.payload.rtcConnectionId,t.payload.offer);n.supportedProtocols.push({type:"rtc",version:qt.RTCInfo.version,payload:{answer:e}}),n.endpointPayloadPromise=n.endpointPayloadPromise.then((e=>r.then((t=>({...e,rtc:{rtcClient:i,channels:t}})))))}else n.supportedProtocols.push({type:"classic",version:Kt.ClassicInfo.version});return n}),Promise.resolve(a)),a.endpointPayloadPromise.then((e=>d.addEndpoint(t.endpointId,e))),i.payload.payload.result=s,i.payload.payload.answer=a,this.wire.sendRaw(i)}catch(e){return i.payload.success=!1,i.payload.reason=e.message,this.wire.sendRaw(i)}}}Ve.ConnectionManager=en,Ht=new WeakMap,Nt=new WeakMap;var tn,nn,rn,on=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},sn=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Fe,"__esModule",{value:!0}),Fe.Channel=void 0;const an=t,cn=$,dn=a,hn=je,ln=Ve,un=vt;function pn(e){const t=Math.floor(e/10),n=Math.min(3e4,500*2**t);return new Promise((e=>{setTimeout((()=>{e(!1)}),n)}))}class wn extends dn.EmitterBase{constructor(e){super(e,"channel"),tn.set(this,void 0),nn.set(this,new an.EventEmitter),rn.set(this,new cn.AsyncRetryableLazy((async()=>{await Promise.all([this.on("disconnected",(e=>{hn.ChannelClient.handleProviderDisconnect(e)})),this.on("connected",((...e)=>{sn(this,nn,"f").emit("connected",...e)}))]).catch((()=>new Error("error setting up channel connection listeners")))}))),on(this,tn,new ln.ConnectionManager(e),"f")}async getAllChannels(){return this.wire.sendAction("get-all-channels").then((({payload:e})=>e.data))}async onChannelConnect(e){await this.on("connected",e)}async onChannelDisconnect(e){await this.on("disconnected",e)}async safeConnect(e,t,n){const i={count:0};do{let r=()=>{};const o=new Promise((t=>{r=n=>{e===n.channelName&&t(!0)},sn(this,nn,"f").on("connected",r)}));try{if(i.count>0){i.gotConnectedEvent=await Promise.race([pn(i.count),o]);const t=await this.wire.sendAction("connect-to-channel",{...n,retryInfo:i});return console.log(`Successfully connected to channelName: ${e}`),t.payload.data}const t=this.wire.sendAction("connect-to-channel",n);i.originalMessageId=t.messageId;return(await t).payload.data}catch(n){if(!n.message.includes("internal-nack"))throw n;t&&0===i.count&&console.warn(`No channel found for channelName: ${e}. Waiting for connection...`)}finally{i.count+=1,sn(this,nn,"f").removeListener("connected",r)}}while(t);throw new Error(`No channel found for channelName: ${e}.`)}async connect(e,t={}){if(await sn(this,rn,"f").getValue(),!e||"string"!=typeof e)throw new Error("Please provide a channelName string to connect to a channel.");const n={wait:!0,...this.wire.environment.getDefaultChannelOptions().connect,...t},{offer:i,rtc:r}=await sn(this,tn,"f").createClientOffer(n);let o;(this.fin.me.isFrame||this.fin.me.isView||this.fin.me.isWindow)&&(o=(await this.fin.me.getInfo()).url);const s={channelName:e,...n,offer:i,connectionUrl:o},a=await this.safeConnect(e,n.wait,s),c=await sn(this,tn,"f").createClientStrategy(r,a),d=new hn.ChannelClient(a,(()=>hn.ChannelClient.wireClose(this.wire,a,a.endpointId)),c);return c.onEndpointDisconnect(a.channelId,(async()=>{try{await d.sendDisconnectAction()}catch(e){console.warn(`Something went wrong during disconnect for client with uuid: ${a.uuid} / name: ${a.name} / endpointId: ${a.endpointId}.`)}finally{hn.ChannelClient.handleProviderDisconnect(a)}})),d}async create(e,t){if(!e)throw new Error("Please provide a channelName to create a channel");const{payload:{data:n}}=await this.wire.sendAction("create-channel",{channelName:e}),i=sn(this,tn,"f").createProvider(t,n);return this.on("client-disconnected",(t=>{t.channelName===e&&un.ChannelProvider.handleClientDisconnection(i,t)})),i}}Fe.Channel=wn,tn=new WeakMap,nn=new WeakMap,rn=new WeakMap,Object.defineProperty(Re,"__esModule",{value:!0}),Re.InterAppPayload=Re.InterApplicationBus=void 0;const yn=t,fn=a,gn=Se,mn=Fe,vn=M;class Cn extends fn.Base{constructor(e){super(e),this.events={subscriberAdded:"subscriber-added",subscriberRemoved:"subscriber-removed"},this.refCounter=new gn.RefCounter,this.Channel=new mn.Channel(e),this.emitter=new yn.EventEmitter,e.registerMessageHandler(this.onmessage.bind(this)),this.on=this.emitter.on.bind(this.emitter),this.removeAllListeners=this.emitter.removeAllListeners.bind(this.emitter)}async publish(e,t){await this.wire.sendAction("publish-message",{topic:e,message:t,sourceWindowName:this.me.name})}async send(e,t,n){const i=(0,vn.validateIdentity)(e);if(i)throw new Error(i);await this.wire.sendAction("send-message",{destinationUuid:e.uuid,destinationWindowName:e.name,topic:t,message:n,sourceWindowName:this.me.name})}subscribe(e,t,n){const i=this.createSubscriptionKey(e.uuid,e.name||"*",t);return this.emitter.on(i,n),this.refCounter.actOnFirst(i,(async()=>{await this.wire.sendAction("subscribe",{sourceUuid:e.uuid,sourceWindowName:e.name||"*",topic:t,destinationWindowName:this.me.name})}),(()=>Promise.resolve()))}unsubscribe(e,t,n){const i=e.name||"*",r=this.createSubscriptionKey(e.uuid,i,t);return this.emitter.removeListener(r,n),this.refCounter.actOnLast(r,(async()=>{await this.wire.sendAction("unsubscribe",{sourceUuid:e.uuid,sourceWindowName:i,topic:t,destinationWindowName:this.me.name})}),(()=>new Promise((e=>e)).then((()=>{}))))}processMessage(e){const{payload:{message:t,sourceWindowName:n,sourceUuid:i,topic:r}}=e,o=[this.createSubscriptionKey(i,n,r),this.createSubscriptionKey(i,"*",r),this.createSubscriptionKey("*","*",r)],s={uuid:i,name:n};o.forEach((e=>{this.emitter.emit(e,t,s)}))}emitSubscriverEvent(e,t){const{payload:{targetName:n,uuid:i,topic:r}}=t,o={name:n,uuid:i,topic:r};this.emitter.emit(e,o)}createSubscriptionKey(e,t,n){const i=t||"*";if(!(e&&i&&n))throw new Error("Missing uuid, name, or topic string");return function(...e){return e.map((e=>Buffer.from(`${e}`).toString("base64"))).join("/")}(e,i,n)}onmessage(e){const{action:t}=e;switch(t){case"process-message":this.processMessage(e);break;case this.events.subscriberAdded:this.emitSubscriverEvent(this.events.subscriberAdded,e);break;case this.events.subscriberRemoved:this.emitSubscriverEvent(this.events.subscriberRemoved,e)}return!0}}Re.InterApplicationBus=Cn;Re.InterAppPayload=class{};var bn={};Object.defineProperty(bn,"__esModule",{value:!0}),bn.Clipboard=void 0;const In=a;class En extends In.Base{async writeText(e){await this.wire.sendAction("clipboard-write-text",e)}async readText(e){const{payload:t}=await this.wire.sendAction("clipboard-read-text",{type:e});return t.data}async writeImage(e){await this.wire.sendAction("clipboard-write-image",e)}async readImage(e={format:"dataURL"}){const{payload:t}=await this.wire.sendAction("clipboard-read-image",e);return t.data}async writeHtml(e){await this.wire.sendAction("clipboard-write-html",e)}async readHtml(e){const{payload:t}=await this.wire.sendAction("clipboard-read-html",{type:e});return t.data}async writeRtf(e){await this.wire.sendAction("clipboard-write-rtf",e)}async readRtf(e){const{payload:t}=await this.wire.sendAction("clipboard-read-rtf",{type:e});return t.data}async write(e){await this.wire.sendAction("clipboard-write",e)}async getAvailableFormats(e){const{payload:t}=await this.wire.sendAction("clipboard-read-formats",{type:e});return t.data}}bn.Clipboard=En;var xn={},An={},Pn={};Object.defineProperty(Pn,"__esModule",{value:!0}),Pn.ExternalApplication=void 0;const Mn=a;class On extends Mn.EmitterBase{constructor(e,t){super(e,"external-application",t.uuid),this.identity=t}getInfo(){return this.wire.sendAction("get-external-application-info",this.identity).then((({payload:e})=>e.data))}}Pn.ExternalApplication=On,Object.defineProperty(An,"__esModule",{value:!0}),An.ExternalApplicationModule=void 0;const _n=a,Rn=Pn;class Sn extends _n.Base{wrap(e){return this.wire.sendAction("external-application-wrap").catch((e=>{})),Promise.resolve(new Rn.ExternalApplication(this.wire,{uuid:e}))}wrapSync(e){return this.wire.sendAction("external-application-wrap-sync").catch((e=>{})),new Rn.ExternalApplication(this.wire,{uuid:e})}}An.ExternalApplicationModule=Sn,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(An,e),n(Pn,e)}(xn);var Fn={},jn={},kn={};Object.defineProperty(kn,"__esModule",{value:!0}),kn._Frame=void 0;const Tn=a;class Ln extends Tn.EmitterBase{constructor(e,t){super(e,"frame",t.uuid,t.name),this.identity=t}getInfo(){return this.wire.sendAction("get-frame-info",this.identity).then((({payload:e})=>e.data))}getParentWindow(){return this.wire.sendAction("get-parent-window",this.identity).then((({payload:e})=>e.data))}}kn._Frame=Ln,Object.defineProperty(jn,"__esModule",{value:!0}),jn._FrameModule=void 0;const $n=a,Bn=M,Gn=kn;class Wn extends $n.Base{async wrap(e){this.wire.sendAction("frame-wrap").catch((e=>{}));const t=(0,Bn.validateIdentity)(e);if(t)throw new Error(t);return new Gn._Frame(this.wire,e)}wrapSync(e){this.wire.sendAction("frame-wrap-sync").catch((e=>{}));const t=(0,Bn.validateIdentity)(e);if(t)throw new Error(t);return new Gn._Frame(this.wire,e)}getCurrent(){return this.wire.sendAction("frame-get-current").catch((e=>{})),Promise.resolve(new Gn._Frame(this.wire,this.wire.environment.getCurrentEntityIdentity()))}getCurrentSync(){return this.wire.sendAction("frame-get-current-sync").catch((e=>{})),new Gn._Frame(this.wire,this.wire.environment.getCurrentEntityIdentity())}}jn._FrameModule=Wn,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(jn,e),n(kn,e)}(Fn);var Hn={};Object.defineProperty(Hn,"__esModule",{value:!0}),Hn.GlobalHotkey=void 0;const Nn=a;class Dn extends Nn.EmitterBase{constructor(e){super(e,"global-hotkey")}async register(e,t){await this.on(e,t),await this.wire.sendAction("global-hotkey-register",{hotkey:e})}async unregister(e){await this.removeAllListeners(e),await this.wire.sendAction("global-hotkey-unregister",{hotkey:e})}async unregisterAll(){await Promise.all(this.eventNames().filter((e=>!("registered"===e||"unregistered"===e))).map((e=>this.removeAllListeners(e)))),await this.wire.sendAction("global-hotkey-unregister-all",{})}async isRegistered(e){const{payload:{data:t}}=await this.wire.sendAction("global-hotkey-is-registered",{hotkey:e});return t}}Hn.GlobalHotkey=Dn;var Un,Vn={},zn={},Kn={},qn=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Kn,"__esModule",{value:!0}),Kn.Platform=void 0;const Yn=a,Jn=M,Zn=new Map;class Qn extends Yn.EmitterBase{constructor(e,t){super(t.wire,"application",e.uuid),this.getClient=e=>{this.wire.sendAction("platform-get-client",this.identity).catch((e=>{}));const t=e||this.identity,{uuid:n}=t;if(!Zn.has(n)){const e=qn(this,Un,"f").call(this,n);Zn.set(n,e)}return Zn.get(n)},Un.set(this,(async e=>{try{const t=`custom-frame-${e}`,n=await this._channel.connect(t,{wait:!1});return n.onDisconnection((()=>{Zn.delete(e)})),n}catch(t){throw Zn.delete(e),new Error("The targeted Platform is not currently running. Listen for application-started event for the given Uuid.")}})),this.launchLegacyManifest=this.launchContentManifest;const n=(0,Jn.validateIdentity)(e);if(n)throw new Error(n);this._channel=t,this.identity={uuid:e.uuid},this.Layout=this.fin.Platform.Layout,this.Application=this.fin.Application.wrapSync(this.identity)}async createView(e,t,n){this.wire.sendAction("platform-create-view",this.identity).catch((e=>{}));const i=await this.getClient(),r=await i.dispatch("create-view",{target:t,opts:e,targetView:n});if(!r||(0,Jn.validateIdentity)(r.identity))throw new Error(`When overwriting the createView call, please return an object that has a valid 'identity' property: ${JSON.stringify(r)}`);return this.fin.View.wrapSync(r.identity)}async createWindow(e){this.wire.sendAction("platform-create-window",this.identity).catch((e=>{}));const t=await this.getClient();e.reason||(e.reason="api-call");const n=await t.dispatch("create-view-container",e);if(!n||(0,Jn.validateIdentity)(n.identity))throw new Error(`When overwriting the createWindow call, please return an object that has a valid 'identity' property: ${JSON.stringify(n)}`);const{identity:i}=n,r=this.fin.Window.wrapSync(i);return r.name=i.name,r.uuid=i.uuid,r}async quit(){this.wire.sendAction("platform-quit",this.identity).catch((e=>{}));return(await this.getClient()).dispatch("quit")}async closeView(e){this.wire.sendAction("platform-close-view",this.identity).catch((e=>{}));const t=await this.getClient();await t.dispatch("close-view",{view:e})}async reparentView(e,t){console.warn("Platform.reparentView has been deprecated, please use Platform.createView"),this.wire.sendAction("platform-reparent-view",this.identity).catch((e=>{}));const n={...e,uuid:e.uuid??this.identity.uuid},i=await this.fin.View.wrap(n),r=await i.getOptions();return this.createView(r,t)}async getSnapshot(){this.wire.sendAction("platform-get-snapshot",this.identity).catch((e=>{}));return(await this.getClient()).dispatch("get-snapshot")}async getViewSnapshot(e){return(await this.getClient()).dispatch("get-view-snapshot",{viewIdentity:e})}async applySnapshot(e,t){this.wire.sendAction("platform-apply-snapshot",this.identity).catch((e=>{}));const n="Requested snapshot must be a valid Snapshot object, or a url or filepath to such an object.";let i;if("string"==typeof e)try{i=(await this._channel.wire.sendAction("get-application-manifest",{manifestUrl:e})).payload.data}catch(e){throw new Error(`${n}: ${e}`)}else i=e;if(!i.windows)throw new Error(n);const r=await this.getClient();return await r.dispatch("apply-snapshot",{snapshot:i,options:t}),this}async fetchManifest(e){return(await this.getClient()).dispatch("platform-fetch-manifest",{manifestUrl:e})}async launchContentManifest(e){this.wire.sendAction("platform-launch-content-manifest",this.identity).catch((()=>{}));const t=await this.getClient(),n=await this.fetchManifest(e);return t.dispatch("launch-into-platform",{manifest:n,manifestUrl:e}),this}async setWindowContext(e={},t){if(this.wire.sendAction("platform-set-window-context",this.identity).catch((e=>{})),!e)throw new Error("Please provide a serializable object or string to set the context.");const n=await this.getClient(),{entityType:i}=t?await this.fin.System.getEntityInfo(t.uuid,t.name):this.fin.me;await n.dispatch("set-window-context",{context:e,entityType:i,target:t||{uuid:this.fin.me.uuid,name:this.fin.me.name}})}async getWindowContext(e){this.wire.sendAction("platform-get-window-context",this.identity).catch((e=>{}));const t=await this.getClient(),{entityType:n}=e?await this.fin.System.getEntityInfo(e.uuid,e.name):this.fin.me;return t.dispatch("get-window-context",{target:e||{uuid:this.fin.me.uuid,name:this.fin.me.name},entityType:n})}async closeWindow(e,t={skipBeforeUnload:!1}){this.wire.sendAction("platform-close-window",this.identity).catch((e=>{}));return(await this.getClient()).dispatch("close-window",{windowId:e,options:t})}}Kn.Platform=Qn,Un=new WeakMap;var Xn={},ei={},ti={},ni={};function ii(e){switch(e){case"columns":case"grid":case"rows":case"tabs":return!0;default:return!1}}Object.defineProperty(ni,"__esModule",{value:!0}),ni.overrideFromComposables=ni.isValidPresetType=void 0,ni.isValidPresetType=ii,ni.overrideFromComposables=function(...e){return t=>e.reduceRight(((e,t)=>n=>t(e(n))),(e=>e))(t)},ni.default={isValidPresetType:ii};var ri,oi=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(ti,"__esModule",{value:!0}),ti.Layout=void 0;const si=$,ai=M,ci=a,di=ni,hi=B,li=ae;class ui extends ci.Base{constructor(e,t){super(t),ri.set(this,new si.Lazy((async()=>hi.LayoutNode.newLayoutEntitiesClient(await this.platform.getClient(),li.LAYOUT_CONTROLLER_ID,this.identity)))),this.replace=async e=>{this.wire.sendAction("layout-replace").catch((e=>{}));const t=await this.platform.getClient();await t.dispatch("replace-layout",{target:this.identity,opts:{layout:e}})},this.replaceView=async(e,t)=>{this.wire.sendAction("layout-replace-view").catch((e=>{}));const n=await this.platform.getClient();await n.dispatch("replace-view",{target:this.identity,opts:{viewToReplace:e,newView:t}})},this.applyPreset=async e=>{this.wire.sendAction("layout-apply-preset").catch((e=>{}));const t=await this.platform.getClient(),{presetType:n}=e;if(!n||!(0,di.isValidPresetType)(n))throw new Error("Cannot apply preset layout, please include an applicable presetType property in the PresetLayoutOptions.");await t.dispatch("apply-preset-layout",{target:this.identity,opts:{presetType:n}})};const n=(0,ai.validateIdentity)(e);if(n)throw new Error(n);this.identity=e,this.platform=this.fin.Platform.wrapSync({uuid:e.uuid}),e.uuid===this.fin.me.uuid&&e.name===this.fin.me.name&&(this.init=this.fin.Platform.Layout.init)}async getConfig(){this.wire.sendAction("layout-get-config").catch((e=>{}));return(await this.platform.getClient()).dispatch("get-frame-snapshot",{target:this.identity})}async getCurrentViews(){this.wire.sendAction("layout-get-views").catch((e=>{}));const e=await this.platform.getClient();return(await e.dispatch("get-layout-views",{target:this.identity})).map((e=>this.fin.View.wrapSync(e)))}async getRootItem(){this.wire.sendAction("layout-get-root-item").catch((()=>{}));const e=await oi(this,ri,"f").getValue(),t=await e.getRoot("layoutName"in this.identity?this.identity:void 0);return hi.LayoutNode.getEntity(t,e)}}ti.Layout=ui,ri=new WeakMap;var pi,wi,yi,fi,gi,mi=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},vi=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(ei,"__esModule",{value:!0}),ei.LayoutModule=void 0;const Ci=a,bi=ti,Ii=ae;class Ei extends Ci.Base{constructor(){super(...arguments),pi.add(this),wi.set(this,!1),yi.set(this,null),this.init=async(e={})=>{if(this.wire.sendAction("layout-init").catch((e=>{})),!this.fin.me.isWindow)throw new Error("Layout.init can only be called from a Window context.");if(mi(this,wi,"f"))throw new Error("Layout.init was already called, please use Layout.create to add additional layouts.");if(vi(this,wi,!0,"f"),await this.fin.Platform.getCurrentSync().getClient(),vi(this,yi,await this.wire.environment.initLayoutManager(this.fin,this.wire,e),"f"),await this.wire.environment.applyLayoutSnapshot(this.fin,mi(this,yi,"f"),e),!e.layoutManagerOverride){const e={layoutName:Ii.DEFAULT_LAYOUT_KEY,...this.fin.me.identity};return mi(this,fi,"f").call(this,e)}return this.wrapSync(this.fin.me.identity)},fi.set(this,(e=>{const t="[Layout] You are using a deprecated property `layoutManager` - it will throw if you access it starting in v37.",n=new Proxy({},{get(e,n){throw console.warn(`[Layout-mgr-proxy] accessing ${n.toString()}`),new Error(t)}}),i=Object.assign(this.wrapSync(e),{layoutManager:n});return new Proxy(i,{get(e,n){if("layoutManager"===n)throw console.warn(`[Layout-proxy] accessing ${n.toString()}`),new Error(t);return e[n]}})})),this.getCurrentLayoutManagerSync=()=>mi(this,pi,"m",gi).call(this,"fin.Platform.Layout.getCurrentLayoutManagerSync()"),this.create=async e=>this.wire.environment.createLayout(mi(this,pi,"m",gi).call(this,"fin.Platform.Layout.create()"),e),this.destroy=async e=>this.wire.environment.destroyLayout(mi(this,pi,"m",gi).call(this,"fin.Platform.Layout.destroy()"),e)}async wrap(e){return this.wire.sendAction("layout-wrap").catch((e=>{})),new bi.Layout(e,this.wire)}wrapSync(e){return this.wire.sendAction("layout-wrap-sync").catch((e=>{})),new bi.Layout(e,this.wire)}async getCurrent(){if(this.wire.sendAction("layout-get-current").catch((e=>{})),!this.fin.me.isWindow)throw new Error("You are not in a Window context.  Only Windows can have a Layout.");const{uuid:e,name:t}=this.fin.me;return this.wrap({uuid:e,name:t})}getCurrentSync(){if(this.wire.sendAction("layout-get-current-sync").catch((e=>{})),!this.fin.me.isWindow)throw new Error("You are not in a Window context.  Only Windows can have a Layout.");const{uuid:e,name:t}=this.fin.me;return this.wrapSync({uuid:e,name:t})}}ei.LayoutModule=Ei,wi=new WeakMap,yi=new WeakMap,fi=new WeakMap,pi=new WeakSet,gi=function(e){if(!mi(this,yi,"f"))throw new Error(`You must call init before using the API ${e}`);return mi(this,yi,"f")},function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(ei,e),n(ti,e)}(Xn),Object.defineProperty(zn,"__esModule",{value:!0}),zn.PlatformModule=void 0;const xi=a,Ai=Kn,Pi=Xn;class Mi extends xi.Base{constructor(e,t){super(e),this._channel=t,this.Layout=new Pi.LayoutModule(this.wire)}async init(e){if(!fin.__internal_.isPlatform||fin.me.name!==fin.me.uuid)throw new Error("fin.Platform.init should only be called from a custom platform provider running in the main window of the application.");return this.wire.environment.initPlatform(this.fin,e)}async wrap(e){return this.wire.sendAction("platform-wrap").catch((e=>{})),new Ai.Platform({uuid:e.uuid},this._channel)}wrapSync(e){return this.wire.sendAction("platform-wrap-sync").catch((e=>{})),new Ai.Platform({uuid:e.uuid},this._channel)}async getCurrent(){return this.wire.sendAction("platform-get-current").catch((e=>{})),this.wrap({uuid:this.wire.me.uuid})}getCurrentSync(){return this.wire.sendAction("platform-get-current-sync").catch((e=>{})),this.wrapSync({uuid:this.wire.me.uuid})}start(e){return this.wire.sendAction("platform-start").catch((e=>{})),new Promise((async(t,n)=>{try{const{uuid:n}=e,i=await this.fin.Application._create({...e,isPlatformController:!0});i.once("platform-api-ready",(()=>t(this.wrapSync({uuid:n})))),i._run({uuid:n})}catch(e){n(e)}}))}startFromManifest(e,t){return this.wire.sendAction("platform-start-from-manifest").catch((e=>{})),new Promise((async(n,i)=>{try{const i=await this.fin.Application._createFromManifest(e);i.once("platform-api-ready",(()=>n(this.wrapSync({uuid:i.identity.uuid})))),i._run(t)}catch(e){i(e)}}))}}zn.PlatformModule=Mi,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(zn,e),n(Kn,e)}(Vn);var Oi={};!function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.getMe=e.getBaseMe=e.environmentUnsupportedMessage=void 0;const t=fe(),n=Fn,i=xe(),r=xn;function o(e,t,n){return{...{isView:"view"===e,isWindow:"window"===e,isFrame:"iframe"===e,isExternal:"external connection"===e},uuid:t,name:n,entityType:e}}e.environmentUnsupportedMessage="You are not running in OpenFin.",e.getBaseMe=o,e.getMe=function(s){const{uuid:a,name:c,entityType:d}=s.me,h={setContext(){throw new Error(e.environmentUnsupportedMessage)},addContextHandler(){throw new Error(e.environmentUnsupportedMessage)},getContextGroups(){throw new Error(e.environmentUnsupportedMessage)},joinContextGroup(){throw new Error(e.environmentUnsupportedMessage)},removeFromContextGroup(){throw new Error(e.environmentUnsupportedMessage)},getAllClientsInContextGroup(){throw new Error(e.environmentUnsupportedMessage)},getInfoForContextGroup(){throw new Error(e.environmentUnsupportedMessage)}},l="Interop API has not been instantiated. Either connection has failed or you have not declared interop in your config.",u={setContext(){throw new Error(l)},addContextHandler(){throw new Error(l)},getContextGroups(){throw new Error(l)},joinContextGroup(){throw new Error(l)},removeFromContextGroup(){throw new Error(l)},getAllClientsInContextGroup(){throw new Error(l)},getInfoForContextGroup(){throw new Error(l)}},p={eventNames:()=>{throw new Error(e.environmentUnsupportedMessage)},emit:()=>{throw new Error(e.environmentUnsupportedMessage)},listeners:()=>{throw new Error(e.environmentUnsupportedMessage)},listenerCount:()=>{throw new Error(e.environmentUnsupportedMessage)},on:()=>{throw new Error(e.environmentUnsupportedMessage)},addListener:()=>{throw new Error(e.environmentUnsupportedMessage)},once:()=>{throw new Error(e.environmentUnsupportedMessage)},prependListener:()=>{throw new Error(e.environmentUnsupportedMessage)},prependOnceListener:()=>{throw new Error(e.environmentUnsupportedMessage)},removeListener:()=>{throw new Error(e.environmentUnsupportedMessage)},removeAllListeners:()=>{throw new Error(e.environmentUnsupportedMessage)}};switch(d){case"view":return Object.assign(new t.View(s,{uuid:a,name:c}),o(d,a,c),{interop:u,isOpenFin:!0});case"window":return Object.assign(new i._Window(s,{uuid:a,name:c}),o(d,a,c),{interop:u,isOpenFin:!0});case"iframe":return Object.assign(new n._Frame(s,{uuid:a,name:c}),o(d,a,c),{interop:u,isOpenFin:!0});case"external connection":return Object.assign(new r.ExternalApplication(s,{uuid:a}),o(d,a,c),{interop:u,isOpenFin:!1});default:return{...o(d,a,c),...p,interop:h,isOpenFin:!1}}}}(Oi);var _i={},Ri={},Si={};Object.defineProperty(Si,"__esModule",{value:!0}),Si.createWarningObject=Si.createUnusableObject=void 0,Si.createUnusableObject=function(e){const t=()=>{throw new Error(e)};return new Proxy({},{apply:t,construct:t,defineProperty:t,deleteProperty:t,get:t,getOwnPropertyDescriptor:t,getPrototypeOf:t,has:t,isExtensible:t,ownKeys:t,preventExtensions:t,set:t,setPrototypeOf:t})},Si.createWarningObject=function(e,t){return new Proxy(t,{get:(...t)=>(console.warn(e),Reflect.get(...t)),set:(...t)=>(console.warn(e),Reflect.set(...t)),getOwnPropertyDescriptor:(...t)=>(console.warn(e),Reflect.getOwnPropertyDescriptor(...t)),ownKeys:(...t)=>(console.warn(e),Reflect.ownKeys(...t))})};var Fi,ji={},ki={};var Ti={};!function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.wrapIntentHandler=e.BROKER_ERRORS=e.generateOverrideWarning=e.generateOverrideError=e.wrapContextHandler=e.wrapInTryCatch=e.generateId=void 0;e.generateId=()=>`${Math.random()}${Date.now()}`;e.wrapInTryCatch=(e,t)=>(...n)=>{try{return e(...n)}catch(e){throw new Error((t||"")+e)}};e.wrapContextHandler=(e,t)=>async n=>{try{await e(n)}catch(e){throw console.error(`Error thrown by handler ${t} for context type ${n.type}: ${e}`),e}};e.generateOverrideError=(e,t)=>`You have tried to to use ${e} but ${t} has not been overridden in the Interop Broker. Please override this function. Refer to our documentation for more info.`;e.generateOverrideWarning=(e,t,n,i)=>{const{uuid:r,name:o}=n;return i?`Entity with identity: ${r}/${o} has called ${i} or ${e} but ${t} has not been overridden.`:`Entity with identity: ${r}/${o} has called ${e} but ${t} has not been overridden.`},e.BROKER_ERRORS={fireIntent:(0,e.generateOverrideError)("fireIntent","handleFiredIntent"),fireIntentForContext:(0,e.generateOverrideError)("fireIntentForContext","handleFiredIntentForContext"),getInfoForIntent:(0,e.generateOverrideError)("getInfoForIntent","handleInfoForIntent"),getInfoForIntentsByContext:(0,e.generateOverrideError)("getInfoForIntentsByContext","handleInfoForIntentsByContext"),joinSessionContextGroupWithJoinContextGroup:"The Context Group you have tried to join is a Session Context Group. Custom Context Groups can only be defined by the Interop Broker through code or manifest configuration. Please use joinSessionContextGroup.",fdc3Open:(0,e.generateOverrideError)("fdc3.open","fdc3HandleOpen"),fdc3FindInstances:(0,e.generateOverrideError)("fdc3.findInstances","fdc3HandleFindInstances"),fdc3GetAppMetadata:(0,e.generateOverrideError)("fdc3.getAppMetadata","fdc3HandleGetAppMetadata"),fdc3GetInfo:(0,e.generateOverrideError)("fdc3.getInfo","fdc3HandleGetInfo")};e.wrapIntentHandler=(e,t)=>async n=>{try{return e(n)}catch(e){throw console.error(`Error thrown by handler ${t}: ${e}`),e}}}(Ti);var Li,$i,Bi={};function Gi(){if($i)return ji;$i=1;var e,t,i,o=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},s=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(ji,"__esModule",{value:!0}),ji.InteropBroker=void 0;const c=a,d=function(){if(Fi)return ki;Fi=1,Object.defineProperty(ki,"__esModule",{value:!0});const e=lr();return ki.default=class{constructor(e,t){this.provider=e,this.id=t,this.lastContext=void 0,this.contextGroupMap=new Map,this.clients=new Map,this.registerListeners()}registerListeners(){this.provider.register(`sessionContextGroup:getContext-${this.id}`,this.getCurrentContext.bind(this)),this.provider.register(`sessionContextGroup:setContext-${this.id}`,this.setContext.bind(this)),this.provider.register(`sessionContextGroup:handlerAdded-${this.id}`,this.handlerAdded.bind(this)),this.provider.register(`sessionContextGroup:handlerRemoved-${this.id}`,this.handlerRemoved.bind(this))}getCurrentContext(e){return e.type?this.contextGroupMap.get(e.type):this.lastContext}setContext(t,n){const{context:i}=t,r=e.InteropBroker.checkContextIntegrity(i);if(!1===r.isValid)throw new Error(`Failed to set Context - bad Context. Reason: ${r.reason}. Context: ${JSON.stringify(i)}`);if(!this.getClientState(n))throw new Error(`Client with Identity: ${n.uuid} ${n.name} not in Session Client State Map`);this.contextGroupMap.set(i.type,i),this.lastContext=i,Array.from(this.clients.values()).forEach((e=>{e.contextHandlers.get(i.type)?.forEach((t=>{this.provider.dispatch(e.clientIdentity,t,i)})),e.globalHandler&&this.provider.dispatch(e.clientIdentity,e.globalHandler,i)}))}getClientState(e){return this.clients.get(e.endpointId)}async handlerAdded(e,t){const{handlerId:n,contextType:i}=e,r=this.getClientState(t);if(!r)throw new Error(`Client with Identity: ${t.uuid} ${t.name} not in Client State Map`);if(i){const e=r.contextHandlers.get(i)||[];r.contextHandlers.set(i,[...e,n]);const o=this.contextGroupMap.get(i);o&&await this.provider.dispatch(t,n,o)}else{r.globalHandler=n;const e=[...this.contextGroupMap.keys()].map((async e=>{const i=this.contextGroupMap.get(e);i&&await this.provider.dispatch(t,n,i)}));await Promise.all(e)}}handlerRemoved(e,t){const{handlerId:n}=e,i=this.clients.get(t.endpointId);i?(Array.from(i.contextHandlers).forEach((([,e])=>{const t=e.indexOf(n);t>-1&&e.splice(t,1)})),i.globalHandler===n&&(i.globalHandler=void 0)):console.warn(`Trying to remove a handler from a client that isn't mapped. handlerId: ${n}. clientIdentity: ${t}`)}registerNewClient(e){if(!this.clients.has(e.endpointId)){const t={contextHandlers:new Map,clientIdentity:e,globalHandler:void 0};this.clients.set(e.endpointId,t)}}onDisconnection(e){this.clients.delete(e.endpointId)}},ki}(),h=Ti,l=n,u=function(){if(Li)return Bi;Li=1,Object.defineProperty(Bi,"__esModule",{value:!0}),Bi.PrivateChannelProvider=void 0;const e=Gi();return Bi.PrivateChannelProvider=class t{constructor(e,t){this.provider=e,this.id=t,this.clients=new Map,this.registerListeners(),this.contextByContextType=new Map,this.lastContext=void 0,this.provider.onConnection((e=>this.registerNewClient(e))),this.provider.onDisconnection((async e=>{const{endpointId:t}=e;this.clients.has(t)&&await this.handleClientDisconnecting(e),0===(await this.provider.getAllClientInfo()).length&&this.provider.destroy()}))}getClientState(e){return this.clients.get(e.endpointId)}registerListeners(){this.provider.register("broadcast",this.broadcast.bind(this)),this.provider.register("getCurrentContext",this.getCurrentContext.bind(this)),this.provider.register("contextHandlerAdded",this.contextHandlerAdded.bind(this)),this.provider.register("contextHandlerRemoved",this.contextHandlerRemoved.bind(this)),this.provider.register("nonStandardHandlerRemoved",this.nonStandardHandlerRemoved.bind(this)),this.provider.register("onAddContextHandlerAdded",this.onAddContextHandlerAdded.bind(this)),this.provider.register("onDisconnectHandlerAdded",this.onDisconnectHandlerAdded.bind(this)),this.provider.register("onUnsubscribeHandlerAdded",this.onUnsubscribeHandlerAdded.bind(this)),this.provider.register("clientDisconnecting",((e,t)=>{this.handleClientDisconnecting(t)}))}broadcast(t,n){const{context:i}=t;if(!this.getClientState(n))throw new Error(`Client with Identity: ${n.uuid} ${n.name}, tried to call broadcast, is not connected to this Private Channel`);const r=e.InteropBroker.checkContextIntegrity(i);if(!1===r.isValid)throw new Error(`Failed to broadcast - bad Context. Reason: ${r.reason}. Context: ${JSON.stringify(i)}`);this.contextByContextType.set(i.type,i),this.lastContext=i,Array.from(this.clients.values()).forEach((e=>{const t=e.handlerIdsByContextTypes.get(i.type);t&&t.forEach((t=>{this.provider.dispatch(e.clientIdentity,t,i)})),e.globalHandler&&this.provider.dispatch(e.clientIdentity,e.globalHandler,i)}))}getCurrentContext(e,t){const{contextType:n}=e;if(!this.getClientState(t))throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call getCurrentContext, is not connected to this Private Channel`);if(void 0!==n){return this.contextByContextType.get(n)||null}return this.lastContext?this.lastContext:null}contextHandlerAdded(e,t){const{handlerId:n,contextType:i}=e,r=this.getClientState(t);if(!r)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call addContextListener, is not connected to this Private Channel`);if(i){const e=r.handlerIdsByContextTypes.get(i)||[];r.handlerIdsByContextTypes.set(i,[...e,n])}else r.globalHandler=n;Array.from(this.clients.values()).forEach((e=>{e.clientIdentity.endpointId!==t.endpointId&&e.onAddContextListenerHandlerId&&this.provider.dispatch(e.clientIdentity,e.onAddContextListenerHandlerId,i)}))}async contextHandlerRemoved(e,t){const{handlerId:n}=e,i=this.getClientState(t);if(i){let e;if(i.globalHandler===n)i.globalHandler=void 0;else for(const[t,r]of i.handlerIdsByContextTypes){const i=r.indexOf(n);i>-1&&(r.splice(i,1),e=t)}const r=(await this.getConnectedClients()).map((async n=>{const{clientIdentity:i,clientIdentity:{endpointId:r},onUnsubscribeHandlerId:o}=n;r!==t.endpointId&&o&&await this.provider.dispatch(i,o,e)}));try{await Promise.all(r)}catch(e){throw console.error(`Problem when attempting to dispatch to onUnsubscribeHandlers. Error: ${e} Removing Client: ${n}. uuid: ${t.uuid}. name: ${t.name}. endpointId: ${t.endpointId}`),new Error(e)}}else console.warn(`Trying to remove a handler from a client that isn't mapped. handlerId: ${n}. uuid: ${t.uuid}. name: ${t.name}. endpointId: ${t.endpointId}.`)}nonStandardHandlerRemoved(e,t){const{handlerId:n}=e,i=this.getClientState(t);i?i.onDisconnectHandlerId===n?i.onDisconnectHandlerId=void 0:i.onAddContextListenerHandlerId===n?i.onAddContextListenerHandlerId=void 0:i.onUnsubscribeHandlerId===n&&(i.onUnsubscribeHandlerId=void 0):console.warn(`Trying to remove a handler from a client that isn't mapped. handlerId: ${n}. clientIdentity: ${t}`)}onAddContextHandlerAdded(e,t){const n=this.getClientState(t),{handlerId:i}=e;if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call onAddContextListener, is not connected to this Private Channel`);n.onAddContextListenerHandlerId=i,Array.from(this.clients.values()).forEach((e=>{e.clientIdentity.endpointId!==t.endpointId&&Array.from(e.handlerIdsByContextTypes.keys()).forEach((e=>{this.provider.dispatch(t,i,e)}))}))}onDisconnectHandlerAdded(e,t){const n=this.getClientState(t),{handlerId:i}=e;if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call onDisconnect, is not connected to this Private Channel`);n.onDisconnectHandlerId=i}onUnsubscribeHandlerAdded(e,t){const n=this.getClientState(t),{handlerId:i}=e;if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call onUnsubscribe, is not connected to this Private Channel`);n.onUnsubscribeHandlerId=i}removeClient(e){const t=this.getClientState(e);if(!t)throw new Error(`Client with Identity: ${e.uuid} ${e.name}, tried to call disconnect, is not connected to this Private Channel`);t.handlerIdsByContextTypes.clear(),this.clients.delete(e.endpointId)}async fireOnDisconnectForOtherClients(e){const{endpointId:t}=e,n=(await this.getConnectedClients()).map((async e=>{const{clientIdentity:{endpointId:n},onDisconnectHandlerId:i}=e;n!==t&&i&&await this.provider.dispatch(e.clientIdentity,i)}));try{await Promise.all(n)}catch(t){throw console.error(`Problem when attempting to dispatch to onDisconnectHandlers. Error: ${t} Disconnecting Client: uuid: ${e.uuid}. name: ${e.name}. endpointId: ${e.endpointId}`),new Error(t)}}async unsubscribeAll(e){const{endpointId:t}=e,n=this.clients.get(t);if(n){const t=Array.from(n.handlerIdsByContextTypes.values()).flat(),i=n.globalHandler;if(t.length>0){const n=t.map((async t=>this.contextHandlerRemoved({handlerId:t},e)));try{await Promise.all(n)}catch(e){console.error(e.message)}}if(i)try{await this.contextHandlerRemoved({handlerId:i},e)}catch(e){console.error(e.message)}}}async handleClientDisconnecting(e){await this.unsubscribeAll(e),this.removeClient(e),await this.fireOnDisconnectForOtherClients(e)}registerNewClient(e){if(!this.clients.has(e.endpointId)){const t={clientIdentity:e,handlerIdsByContextTypes:new Map,globalHandler:void 0,onAddContextListenerHandlerId:void 0,onUnsubscribeHandlerId:void 0,onDisconnectHandlerId:void 0};this.clients.set(e.endpointId,t)}}async getConnectedClients(){const e=await this.provider.getAllClientInfo();return Array.from(this.clients.values()).filter((t=>{const{uuid:n,name:i}=t.clientIdentity;return e.some((e=>i===e.name&&n===e.uuid))}))}static init(e,n){return new t(e,n)}},Bi}(),p=$,w=[{id:"green",displayMetadata:{color:"#00CC88",name:"green"}},{id:"purple",displayMetadata:{color:"#8C61FF",name:"purple"}},{id:"orange",displayMetadata:{color:"#FF8C4C",name:"orange"}},{id:"red",displayMetadata:{color:"#FF5E60",name:"red"}},{id:"pink",displayMetadata:{color:"#FF8FB8",name:"pink"}},{id:"yellow",displayMetadata:{color:"#E9FF8F",name:"yellow"}}];let y=class n extends c.Base{constructor(n,r,a){super(n),e.set(this,void 0),t.set(this,void 0),i.set(this,void 0),this.getProvider=()=>s(this,i,"f").getValue(),this.interopClients=new Map,this.contextGroupsById=new Map,o(this,t,a.contextGroups??[...w],"f"),o(this,e,a.fdc3Info,"f"),a?.logging&&(this.logging=a.logging),this.intentClientMap=new Map,this.lastContextMap=new Map,this.sessionContextGroupMap=new Map,o(this,i,new p.Lazy(r),"f"),this.setContextGroupMap(),this.setupChannelProvider()}static createClosedConstructor(...e){return class extends n{constructor(...t){if(t.length){const[n,i,r]=t;if(r&&"object"==typeof r&&!(0,l.isEqual)(r,e[2]))return console.warn("You have modified the parameters of the InteropOverride constructor. This behavior is deprecated and will be removed in a future version. You can modify these options in your manifest. Please consult our Interop docs for guidance on migrating to the new override scheme."),void super(e[0],e[1],r);console.warn("You are attempting to pass arguments to the InteropOverride constructor. This is not necessary, and these passed arguments will be ignored. You are likely using an older InteropBroker override scheme. Please consult our Interop docs for guidance on migrating to the new override scheme.")}super(...e)}}}setContext({context:e},t){this.wire.sendAction("interop-broker-set-context").catch((e=>{}));const n=this.getClientState(t);if(!n||!n.contextGroupId)throw n?new Error("You must join a context group before you can set context."):new Error(`Client with Identity: ${t.uuid} ${t.name} not in Client State Map`);{const{contextGroupId:t}=n;this.setContextForGroup({context:e},t)}}setContextForGroup({context:e},t){this.wire.sendAction("interop-broker-set-context-for-group").catch((e=>{}));const i=this.contextGroupsById.get(t);if(!i)throw new Error(`Unable to set context for context group that isn't in the context group mapping: ${t}.`);const r=n.checkContextIntegrity(e);if(!1===r.isValid)throw new Error(`Failed to set Context - bad Context. Reason: ${r.reason}. Context: ${JSON.stringify(e)}`);const o=e.type;i.set(o,e),this.lastContextMap.set(t,o);Array.from(this.interopClients.values()).filter((e=>e.contextGroupId===t)).forEach((t=>{for(const[,i]of t.contextHandlers)n.isContextTypeCompatible(o,i.contextType)&&this.invokeContextHandler(t.clientIdentity,i.handlerId,e)}))}getCurrentContext(e,t){this.wire.sendAction("interop-broker-get-current-context").catch((e=>{}));const n=this.getClientState(t);if(!n?.contextGroupId)throw new Error("You must be a member of a context group to call getCurrentContext");const{contextGroupId:i}=n,r=this.contextGroupsById.get(i),o=this.lastContextMap.get(i),s=e?.contextType??o;return r&&s?r.get(s):void 0}async joinContextGroup({contextGroupId:e,target:t},i){if(this.wire.sendAction("interop-broker-join-context-group").catch((e=>{})),this.sessionContextGroupMap.has(e))throw new Error(h.BROKER_ERRORS.joinSessionContextGroupWithJoinContextGroup);if(t){n.hasEndpointId(t)&&await this.addClientToContextGroup({contextGroupId:e},t);try{const n=this.channel.connections.filter((e=>e.uuid===t.uuid&&e.name===t.name));if(!n.length)throw new Error(`Given Identity ${t.uuid} ${t.name} is not connected to the Interop Broker.`);n.length>1&&console.warn(`More than one connection found for identity ${t.uuid} ${t.name}`);const i=[];for(const t of n)i.push(this.addClientToContextGroup({contextGroupId:e},t));await Promise.all(i)}catch(e){throw new Error(e)}}else await this.addClientToContextGroup({contextGroupId:e},i)}async addClientToContextGroup({contextGroupId:e},t){this.wire.sendAction("interop-broker-add-client-to-context-group").catch((e=>{}));const n=this.getClientState(t);if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name} not in Client State Map`);if(!this.getContextGroups().find((t=>t.id===e)))throw new Error(`Attempting to join a context group that does not exist: ${e}. You may only join existing context groups.`);if(n.contextGroupId!==e){n.contextGroupId=e,await this.setCurrentContextGroupInClientOptions(t,e);const i=this.contextGroupsById.get(e);for(const[,e]of n.contextHandlers){const{contextType:n,handlerId:r}=e;if(void 0===n)i.forEach(((e,n)=>{this.invokeContextHandler(t,r,e)}));else if(i.has(n)){const e=i.get(n);e&&this.invokeContextHandler(t,r,e)}}}}async removeFromContextGroup({target:e},t){if(this.wire.sendAction("interop-broker-remove-from-context-group").catch((e=>{})),e){n.hasEndpointId(e)&&await this.removeClientFromContextGroup(e);try{const t=this.channel.connections.filter((t=>t.uuid===e.uuid&&t.name===e.name));if(!t.length)throw new Error(`No connection found for given Identity ${e.uuid} ${e.name}`);t.length>1&&console.warn(`More than one connection found for identity ${e.uuid} ${e.name}`);const n=[];for(const e of t)n.push(this.removeClientFromContextGroup(e));await Promise.all(n)}catch(e){throw new Error(e)}}else await this.removeClientFromContextGroup(t)}async removeClientFromContextGroup(e){this.wire.sendAction("interop-broker-remove-client-from-context-group").catch((e=>{}));const t=this.getClientState(e);t&&(t.contextGroupId=void 0),await this.setCurrentContextGroupInClientOptions(e,null)}getContextGroups(){return this.wire.sendAction("interop-broker-get-context-groups").catch((e=>{})),s(this,t,"f").map((e=>({...e})))}getInfoForContextGroup({contextGroupId:e}){return this.wire.sendAction("interop-broker-get-info-for-context-group").catch((e=>{})),this.getContextGroups().find((t=>t.id===e))}getAllClientsInContextGroup({contextGroupId:e}){this.wire.sendAction("interop-broker-get-all-clients-in-context-group").catch((e=>{}));return Array.from(this.interopClients.values()).filter((t=>t.contextGroupId===e)).map((e=>e.clientIdentity))}async handleFiredIntent(e,t){const n=(0,h.generateOverrideWarning)("fdc3.raiseIntent","InteropBroker.handleFiredIntent",t,"interopClient.fireIntent");throw console.warn(n),new Error(h.BROKER_ERRORS.fireIntent)}async setIntentTarget(e,t){this.wire.sendAction("interop-broker-set-intent-target").catch((e=>{}));const n=this.intentClientMap.get(t.name),i=`intent-handler-${e.name}`;if(n){const t=n.get(i);if(t){if(t.pendingIntents.push(e),t.clientIdentity&&t.isReady){const{clientIdentity:e,pendingIntents:n}=t;try{const r=n[n.length-1];await this.invokeIntentHandler(e,i,r),t.pendingIntents=[]}catch(n){console.error(`Error invoking intent handler for client ${e.uuid}/${e.name}/${e.endpointId}`),t.isReady=!1}}}else n.set(i,{isReady:!1,pendingIntents:[e]})}else{this.intentClientMap.set(t.name,new Map);const n=this.intentClientMap.get(t.name);n&&n.set(i,{isReady:!1,pendingIntents:[e]})}}async handleInfoForIntent(e,t){const n=(0,h.generateOverrideWarning)("fdc3.findIntent","InteropBroker.handleInfoForIntent",t,"interopClient.getInfoForIntent");throw console.warn(n),new Error(h.BROKER_ERRORS.getInfoForIntent)}async handleInfoForIntentsByContext(e,t){const n=(0,h.generateOverrideWarning)("fdc3.findIntentsByContext","InteropBroker.handleInfoForIntentsByContext",t,"interopClient.getInfoForIntentsByContext");throw console.warn(n),new Error(h.BROKER_ERRORS.getInfoForIntentsByContext)}async handleFiredIntentForContext(e,t){const n=(0,h.generateOverrideWarning)("fdc3.raiseIntentForContext","InteropBroker.handleFiredIntentForContext",t,"interopClient.fireIntentForContext");throw console.warn(n),new Error(h.BROKER_ERRORS.fireIntentForContext)}async clientDisconnected(e){}async fdc3HandleOpen({app:e,context:t},n){const i=(0,h.generateOverrideWarning)("fdc3.open","InteropBroker.fdc3HandleOpen",n);throw console.warn(i),new Error(h.BROKER_ERRORS.fdc3Open)}async fdc3HandleFindInstances(e,t){const n=(0,h.generateOverrideWarning)("fdc3.open","InteropBroker.fdc3HandleFindInstances",t);throw console.warn(n),new Error(h.BROKER_ERRORS.fdc3FindInstances)}async fdc3HandleGetAppMetadata(e,t){const n=(0,h.generateOverrideWarning)("fdc3.getAppMetadata","InteropBroker.fdc3HandleGetAppMetadata",t);throw console.warn(n),new Error(h.BROKER_ERRORS.fdc3GetAppMetadata)}async invokeContextHandler(e,t,n){const i=await this.getProvider();try{await i.dispatch(e,t,n)}catch(i){console.error(`Error invoking context handler ${t} for context type ${n.type} in client ${e.uuid}/${e.name}/${e.endpointId}`,i)}}async invokeIntentHandler(e,t,n){const i=await this.getProvider();await i.dispatch(e,t,n)}async fdc3HandleGetInfo(t,n){const{fdc3Version:i}=t;return{fdc3Version:i,...s(this,e,"f"),optionalFeatures:{OriginatingAppMetadata:!1,UserChannelMembershipAPIs:!0},appMetadata:{appId:"",instanceId:""}}}async getAllClientInfo(){return(await this.getProvider()).getAllClientInfo()}decorateSnapshot(e){return{...e,interopSnapshotDetails:{contextGroupStates:this.getContextGroupStates()}}}applySnapshot(e,t){const n=e?.interopSnapshotDetails?.contextGroupStates;n&&(t?.closeExistingWindows||this.updateExistingClients(n),this.rehydrateContextGroupStates(n))}updateExistingClients(e){this.interopClients.forEach((t=>{const{clientIdentity:i,contextGroupId:r,contextHandlers:o}=t;if(r){const t=e[r];for(const[,e]of Object.entries(t))o.forEach((t=>{const{handlerId:r,contextType:o}=t;n.isContextTypeCompatible(e.type,o)&&this.invokeContextHandler(i,r,e)}))}}))}getContextGroupStates(){return n.toObject(this.contextGroupsById)}rehydrateContextGroupStates(e){const t=Object.entries(e);for(const[e,n]of t){const t=Object.entries(n);for(const[n,i]of t)if(this.contextGroupsById.has(e)){this.contextGroupsById.get(e).set(n,i)}else console.warn(`Attempting to set a context group that isn't in the context group mapping. Skipping context group rehydration for: ${e}`)}}contextHandlerRegistered({contextType:e,handlerId:t},n){const i={contextType:e,handlerId:t},r=this.getClientState(n);if(r?.contextHandlers.set(t,i),r&&r.contextGroupId){const{contextGroupId:i}=r,o=this.contextGroupsById.get(i);if(void 0===e)o.forEach(((e,i)=>{this.invokeContextHandler(n,t,e)}));else if(o.has(e)){const i=o.get(e);i&&this.invokeContextHandler(n,t,i)}}}async intentHandlerRegistered(e,t){const{handlerId:n}=e,i=this.intentClientMap.get(t.name),r=i?.get(n);if(i)if(r){const{pendingIntents:e}=r;r.clientIdentity=t,r.isReady=!0;try{if(e.length>0){const i=e[e.length-1];await this.invokeIntentHandler(t,n,i),r.pendingIntents=[]}}catch(e){console.error(`Error invoking intent handler: ${n} for client ${t.uuid}/${t.name}/${t.endpointId}`)}}else i.set(n,{isReady:!0,pendingIntents:[],clientIdentity:t});else{this.intentClientMap.set(t.name,new Map);const e=this.intentClientMap.get(t.name);e&&e.set(n,{isReady:!0,pendingIntents:[],clientIdentity:t})}}removeContextHandler({handlerId:e},t){const n=this.getClientState(t);n&&n.contextHandlers.delete(e)}handleJoinSessionContextGroup({sessionContextGroupId:e},t){try{if(!e)throw new Error("Failed to join session context group: must specify group id.");const n=this.sessionContextGroupMap.get(e);if(n)n.registerNewClient(t);else{const n=new d.default(this.channel,e);n.registerNewClient(t),this.sessionContextGroupMap.set(e,n)}return{hasConflict:this.contextGroupsById.has(e)}}catch(e){throw new Error(e)}}getClientState(e){return this.interopClients.get(e.endpointId)}static toObject(e){const t=Object.fromEntries(e),n={};return Object.entries(t).forEach((([e,t])=>{const i=Object.fromEntries(t);n[e]=i})),n}static checkContextIntegrity(e){if(!e)return{isValid:!1,reason:"No context supplied"};if("object"!=typeof e)return{isValid:!1,reason:"Context must be an Object"};if(!e.type)return{isValid:!1,reason:"Context must have a type property"};if(e.id&&"object"!=typeof e.id)return{isValid:!1,reason:"Context id must be an Object populated with key-value identifiers (if set)"};if(e.id){const{id:t}=e,n=Object.keys(t);let i=!1;if(!n.length)return{isValid:!1,reason:"Context id must have at least one key-value identifier"};if(n.forEach((e=>{"string"==typeof e&&"string"==typeof t[e]||(i=!0)})),i)return{isValid:!1,reason:"Context id key-value identifiers must be of type string"}}return e.name&&"string"!=typeof e.name?{isValid:!1,reason:"Context name must be of string type (if set)"}:{isValid:!0}}static hasEndpointId(e){return void 0!==e.endpointId}static isContextTypeCompatible(e,t){return void 0===t||e===t}setContextGroupMap(){for(const e of this.getContextGroups())this.contextGroupsById.set(e.id,new Map)}async setCurrentContextGroupInClientOptions(e,t){try{const n=await this.fin.System.getEntityInfo(e.uuid,e.name);let i;"view"===n.entityType?i=await this.fin.View.wrap(e):"window"===n.entityType&&(i=await this.fin.Window.wrap(e)),i&&await i.updateOptions({interop:{currentContextGroup:t}})}catch(e){}}async setupChannelProvider(){try{const e=await this.getProvider();this.channel=e,this.wireChannel(e)}catch(e){throw new Error(`Error setting up Interop Broker Channel Provider: ${e}`)}}wireChannel(e){e.onConnection((async(e,t)=>{if(!await this.isConnectionAuthorized(e,t))throw new Error(`Connection not authorized for ${e.uuid}, ${e.name}`);if(!e.endpointId)throw new Error("Version too old to be compatible with Interop. Please upgrade your runtime to a more recent version.");const n={contextGroupId:void 0,contextHandlers:new Map,clientIdentity:e};t?.currentContextGroup&&this.contextGroupsById.has(t.currentContextGroup)&&(n.contextGroupId=t?.currentContextGroup),this.interopClients.set(e.endpointId,n)})),e.onDisconnection((e=>{this.interopClients.delete(e.endpointId);const t=this.intentClientMap.get(e.name);t&&e.uuid===this.fin.me.uuid&&t.forEach((e=>{e.isReady=!1})),this.sessionContextGroupMap.forEach((t=>{t.onDisconnection(e)})),this.clientDisconnected(e)})),e.beforeAction((async(e,t,n)=>{if(!await this.isActionAuthorized(e,t,n))throw new Error(`Action (${e}) not authorized for ${n.uuid}, ${n.name}`);this.logging?.beforeAction?.enabled&&console.log(e,t,n)})),e.afterAction(((e,t,n)=>{this.logging?.afterAction?.enabled&&console.log(e,t,n)})),e.register("setContext",this.setContext.bind(this)),e.register("fireIntent",this.handleFiredIntent.bind(this)),e.register("getCurrentContext",this.getCurrentContext.bind(this)),e.register("getInfoForIntent",this.handleInfoForIntent.bind(this)),e.register("getInfoForIntentsByContext",this.handleInfoForIntentsByContext.bind(this)),e.register("fireIntentForContext",this.handleFiredIntentForContext.bind(this)),e.register("getContextGroups",this.getContextGroups.bind(this)),e.register("joinContextGroup",this.joinContextGroup.bind(this)),e.register("removeFromContextGroup",this.removeFromContextGroup.bind(this)),e.register("getAllClientsInContextGroup",this.getAllClientsInContextGroup.bind(this)),e.register("getInfoForContextGroup",this.getInfoForContextGroup.bind(this)),e.register("contextHandlerRegistered",this.contextHandlerRegistered.bind(this)),e.register("intentHandlerRegistered",this.intentHandlerRegistered.bind(this)),e.register("removeContextHandler",this.removeContextHandler.bind(this)),e.register("sessionContextGroup:createIfNeeded",this.handleJoinSessionContextGroup.bind(this)),e.register("fdc3Open",this.fdc3HandleOpen.bind(this)),e.register("fdc3v2FindIntentsByContext",this.handleInfoForIntentsByContext.bind(this)),e.register("fdc3FindInstances",this.fdc3HandleFindInstances.bind(this)),e.register("fdc3GetAppMetadata",this.fdc3HandleGetAppMetadata.bind(this)),e.register("fdc3v2GetInfo",(async(e,t)=>this.fdc3HandleGetInfo.bind(this)(e,t))),e.register("createPrivateChannelProvider",(async e=>{const{channelId:t}=e,n=await this.fin.InterApplicationBus.Channel.create(t);u.PrivateChannelProvider.init(n,t)}))}isConnectionAuthorized(e,t){return this.wire.sendAction("interop-broker-is-connection-authorized").catch((e=>{})),Promise.resolve(!0)}isActionAuthorized(e,t,n){return this.wire.sendAction("interop-broker-is-action-authorized").catch((e=>{})),Promise.resolve(!0)}};return ji.InteropBroker=y,e=new WeakMap,t=new WeakMap,i=new WeakMap,ji}var Wi,Hi={},Ni={},Di=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},Ui=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Ni,"__esModule",{value:!0});const Vi=a,zi=Ti;class Ki extends Vi.Base{constructor(e,t,n){super(e),Wi.set(this,void 0),this.id=n,Di(this,Wi,t,"f")}async setContext(e){this.wire.sendAction("interop-session-context-group-set-context").catch((e=>{}));return(await Ui(this,Wi,"f")).dispatch(`sessionContextGroup:setContext-${this.id}`,{sessionContextGroupId:this.id,context:e})}async getCurrentContext(e){this.wire.sendAction("interop-session-context-group-get-context").catch((e=>{}));return(await Ui(this,Wi,"f")).dispatch(`sessionContextGroup:getContext-${this.id}`,{sessionContextGroupId:this.id,type:e})}async addContextHandler(e,t){if(this.wire.sendAction("interop-session-context-group-add-handler").catch((e=>{})),"function"!=typeof e)throw new Error("Non-function argument passed to the first parameter 'handler'. Be aware that the argument order does not match the FDC3 standard.");const n=await Ui(this,Wi,"f");let i;return i=t?`sessionContextHandler:invoke-${this.id}-${t}-${(0,zi.generateId)()}`:`sessionContextHandler:invoke-${this.id}`,n.register(i,(0,zi.wrapContextHandler)(e,i)),await n.dispatch(`sessionContextGroup:handlerAdded-${this.id}`,{handlerId:i,contextType:t}),{unsubscribe:await this.createUnsubscribeCb(i)}}async createUnsubscribeCb(e){const t=await Ui(this,Wi,"f");return async()=>{t.remove(e),await t.dispatch(`sessionContextGroup:handlerRemoved-${this.id}`,{handlerId:e})}}getUserInstance(){return{id:this.id,setContext:(0,zi.wrapInTryCatch)(this.setContext.bind(this),"Failed to set context: "),getCurrentContext:(0,zi.wrapInTryCatch)(this.getCurrentContext.bind(this),"Failed to get context: "),addContextHandler:(0,zi.wrapInTryCatch)(this.addContextHandler.bind(this),"Failed to add context handler: ")}}}Ni.default=Ki,Wi=new WeakMap;var qi={},Yi={},Ji={},Zi={};Object.defineProperty(Zi,"__esModule",{value:!0}),Zi.PrivateChannelClient=void 0;const Qi=Ti;var Xi,er;function tr(){if(Xi)return Yi;Xi=1;var e,t=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},i=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(Yi,"__esModule",{value:!0}),Yi.FDC3ModuleBase=void 0;const o=Ji,s=Ti,a=or(),c=n;return Yi.FDC3ModuleBase=class{get client(){return t(this,e,"f").call(this)}get fin(){return this.wire.getFin()}constructor(t,n){this.wire=n,e.set(this,void 0),i(this,e,t,"f")}async broadcast(e){return this.wire.sendAction("fdc3-broadcast").catch((e=>{})),this.client.setContext(e)}async _open(e,t){this.wire.sendAction("fdc3-open").catch((e=>{}));try{return await a.InteropClient.ferryFdc3Call(this.client,"fdc3Open",{app:e,context:t})}catch(e){const t=e.message===s.BROKER_ERRORS.fdc3Open?"ResolverUnavailable":e.message;throw new Error(t)}}async getOrCreateChannel(e){this.wire.sendAction("fdc3-get-or-create-channel").catch((e=>{}));const t=(await this.getSystemChannels()).find((t=>t.id===e));if(t)return{...t,type:"system",...(0,o.getUnsupportedChannelApis)()};try{const t=await this.client.joinSessionContextGroup(e);return(0,o.buildAppChannelObject)(t)}catch(e){throw console.error(e.message),new Error(o.ChannelError.CreationFailed)}}async getSystemChannels(){this.wire.sendAction("fdc3-get-system-channels").catch((e=>{}));return(await this.client.getContextGroups()).map((e=>({...e,type:"system",...(0,o.getUnsupportedChannelApis)()})))}async joinChannel(e){this.wire.sendAction("fdc3-join-channel").catch((e=>{}));try{return await this.client.joinContextGroup(e)}catch(e){if(e.message===s.BROKER_ERRORS.joinSessionContextGroupWithJoinContextGroup?console.error("The Channel you have tried to join is an App Channel. Custom Channels can only be defined by the Interop Broker through code or manifest configuration. Please use getOrCreateChannel."):console.error(e.message),e.message.startsWith("Attempting to join a context group that does not exist"))throw new Error(o.ChannelError.NoChannelFound);throw new Error(o.ChannelError.AccessDenied)}}async getCurrentChannel(){this.wire.sendAction("fdc3-get-current-channel").catch((e=>{}));const e=await this.getCurrentContextGroupInfo();return e?this.buildChannelObject(e):null}async leaveCurrentChannel(){return this.wire.sendAction("fdc3-leave-current-channel").catch((e=>{})),this.client.removeFromContextGroup()}async getCurrentContextGroupInfo(){const e=await this.client.getContextGroups(),t=e.map((async e=>this.client.getAllClientsInContextGroup(e.id))),n=(await Promise.all(t)).findIndex((e=>e.some((e=>{const{uuid:t,name:n}=e;return this.wire.me.uuid===t&&this.wire.me.name===n}))));return e[n]}async buildChannelObject(e){return{...e,type:"system",addContextListener:(...[e,t])=>{let n,i;"function"==typeof e?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),n=e):(n=t,"string"==typeof e&&(i=e));const r=(async()=>{let e=!0;const t=await this.client.getCurrentContext(i);return this.client.addContextHandler(((i,r)=>{if(!e||(e=!1,!(0,c.isEqual)(t,i)))return n(i,r)}),i)})();return{...r,unsubscribe:()=>r.then((e=>e.unsubscribe()))}},broadcast:this.broadcast.bind(this),getCurrentContext:async e=>{const t=await this.client.getCurrentContext(e);return void 0===t?null:t}}}},e=new WeakMap,Yi}Zi.PrivateChannelClient=class{constructor(e,t){this.id=t,this.client=e,this.listeners=new Map}async broadcast(e){return this.client.dispatch("broadcast",{context:e})}async getCurrentContext(e){return this.client.dispatch("getCurrentContext",{contextType:e})}async addContextListener(e,t){if("function"!=typeof t)throw new Error("Non-function argument passed to the second parameter 'handler'. Be aware that the argument order does not match the FDC3 standard.");let n;n=e?`contextHandler:invoke-${this.id}-${e}-${Qi.generateId()}`:`contextHandler:invoke-${this.id}-${Qi.generateId()}`,this.client.register(n,Qi.wrapContextHandler(t,n));const i={unsubscribe:await this.createContextUnsubscribeCb(n)};return this.listeners.set(n,i),await this.client.dispatch("contextHandlerAdded",{handlerId:n,contextType:e}),i}createNonStandardUnsubscribeCb(e){return async()=>{this.client.remove(e),this.listeners.delete(e),await this.client.dispatch("nonStandardHandlerRemoved",{handlerId:e})}}createContextUnsubscribeCb(e){return async()=>{this.client.remove(e),this.listeners.delete(e),await this.client.dispatch("contextHandlerRemoved",{handlerId:e})}}onAddContextListener(e){const t=`onContextHandlerAdded:invoke-${this.id}-${Qi.generateId()}`;this.client.register(t,e);const n={unsubscribe:this.createNonStandardUnsubscribeCb(t)};return this.listeners.set(t,n),this.client.dispatch("onAddContextHandlerAdded",{handlerId:t}),n}onDisconnect(e){const t=`onDisconnect:invoke-${this.id}-${Qi.generateId()}`;this.client.register(t,e);const n={unsubscribe:this.createNonStandardUnsubscribeCb(t)};return this.listeners.set(t,n),this.client.dispatch("onDisconnectHandlerAdded",{handlerId:t}),n}onUnsubscribe(e){const t=`onUnsubscribe:invoke-${this.id}-${Qi.generateId()}`;this.client.register(t,e);const n={unsubscribe:this.createNonStandardUnsubscribeCb(t)};return this.listeners.set(t,n),this.client.dispatch("onUnsubscribeHandlerAdded",{handlerId:t}),n}async cleanUpAllSubs(){Array.from(this.listeners.keys()).forEach((e=>{this.client.remove(e),this.listeners.delete(e)}))}async disconnect(){try{await this.client.dispatch("clientDisconnecting"),await this.cleanUpAllSubs(),await this.client.disconnect()}catch(e){throw new Error(e.message)}}},function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.getIntentResolution=e.isChannel=e.isContext=e.connectPrivateChannel=e.buildAppChannelObject=e.buildPrivateChannelObject=e.ChannelError=e.ResultError=e.UnsupportedChannelApiError=e.getUnsupportedChannelApis=void 0;const t=Ti,i=Zi,r=n;e.getUnsupportedChannelApis=e=>({addContextListener:()=>{throw new o("Channel.addContextListener",e)},broadcast:()=>{throw new o("Channel.broadcast",e)},getCurrentContext:()=>{throw new o("Channel.getCurrentContext",e)}});class o extends Error{constructor(e,t="System"){super(e),this.message=`Calling ${e} on an instance of a ${t} Channel returned by fdc3.get${t}Channels is not supported. If you would like to use a ${t} Channel, please use fdc3.joinChannel, fdc3.addContextListener, and fdc3.broadcast instead.`}}var s,a;e.UnsupportedChannelApiError=o,function(e){e.NoResultReturned="NoResultReturned",e.IntentHandlerRejected="IntentHandlerRejected"}(s=e.ResultError||(e.ResultError={})),(a=e.ChannelError||(e.ChannelError={})).NoChannelFound="NoChannelFound",a.AccessDenied="AccessDenied",a.CreationFailed="CreationFailed";e.buildPrivateChannelObject=e=>{let t=!1;const n=()=>{if(t)throw new Error("Private Channel Client has been disconnected from the Private Channel")};return{id:e.id,type:"private",broadcast:async t=>(n(),e.broadcast(t)),getCurrentContext:async t=>(n(),e.getCurrentContext(t)),addContextListener:async(t,i)=>{n();let r=i,o=t;"function"==typeof t&&(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),r=t,o=null);return e.addContextListener(o,r)},onAddContextListener:t=>(n(),e.onAddContextListener(t)),disconnect:async()=>(n(),t=!0,e.disconnect()),onDisconnect:t=>(n(),e.onDisconnect(t)),onUnsubscribe:t=>(n(),e.onUnsubscribe(t))}};e.buildAppChannelObject=e=>({id:e.id,type:"app",broadcast:e.setContext,getCurrentContext:async t=>{const n=await e.getCurrentContext(t);return void 0===n?null:n},addContextListener:(t,n)=>{let i,o;"function"==typeof t?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),i=t):(i=n,"string"==typeof t&&(o=t));const s=(async()=>{let t=!0;const n=await e.getCurrentContext(o);return e.addContextHandler(((e,o)=>{if(!t||(t=!1,!(0,r.isEqual)(n,e)))return i(e,o)}),o)})();return{...s,unsubscribe:()=>s.then((e=>e.unsubscribe()))}}});e.connectPrivateChannel=async t=>{try{const n=await fin.InterApplicationBus.Channel.connect(t),r=new i.PrivateChannelClient(n,t);return(0,e.buildPrivateChannelObject)(r)}catch(e){throw new Error(`Private Channel with id: ${t} doesn't exist`)}};e.isContext=e=>{if(e&&"object"==typeof e&&"type"in e){const{type:t}=e;return"string"==typeof t}return!1};e.isChannel=e=>{if(e&&"object"==typeof e&&"type"in e&&"id"in e){const{type:t,id:n}=e;return"string"==typeof t&&"string"==typeof n&&("app"===t||"private"===t)}return!1};e.getIntentResolution=async(n,i,r,o)=>{const a=(0,t.generateId)(),c=new Promise(((e,t)=>{fin.InterApplicationBus.subscribe({uuid:"*"},a,(t=>{e(t)})).catch((()=>t(new Error("getResult is not supported in this environment"))))})),d=r?{target:r,intentResolutionResultId:a}:{intentResolutionResultId:a},h=o?{name:o,context:i,metadata:d}:{...i,metadata:d},l=async()=>{let t=await c;if(!t||"object"!=typeof t)throw new Error(s.NoResultReturned);const{error:i}=t;if(i)throw new Error(s.IntentHandlerRejected);if((0,e.isChannel)(t)){const{id:i,type:r}=t;switch(r){case"private":t=await(0,e.connectPrivateChannel)(i);break;case"app":{const r=await n.joinSessionContextGroup(i);t=(0,e.buildAppChannelObject)(r);break}}}else if(!(0,e.isContext)(t))throw new Error(s.NoResultReturned);return t},u=o?await n.fireIntent(h):await n.fireIntentForContext(h);return"object"!=typeof u?{source:{appId:"",instanceId:""},intent:"",version:"2.0",getResult:l}:{...u,getResult:l}}}(Ji);var nr,ir,rr={};function or(){if(ir)return Hi;ir=1;var e,t,n=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},i=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Hi,"__esModule",{value:!0}),Hi.InteropClient=void 0;const o=a,s=Ni,c=function(){if(er)return qi;er=1,Object.defineProperty(qi,"__esModule",{value:!0}),qi.Fdc3Module=void 0;const e=Ti,t=tr();class n extends t.FDC3ModuleBase{async open(e,t){await super._open(e,t)}addContextListener(e,t){let n;return this.wire.sendAction("fdc3-add-context-listener").catch((e=>{})),"function"==typeof e?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),n=this.client.addContextHandler(e)):n=this.client.addContextHandler(t,null===e?void 0:e),{...n,unsubscribe:()=>n.then((e=>e.unsubscribe()))}}addIntentListener(e,t){this.wire.sendAction("fdc3-add-intent-listener").catch((e=>{}));const n=this.client.registerIntentHandler((e=>{const{context:n,metadata:i}=e,{metadata:r}=n,o=i?.intentResolutionResultId||r?.intentResolutionResultId;o&&this.fin.InterApplicationBus.publish(o,null).catch((()=>null)),t(e.context)}),e,{fdc3Version:"1.2"});return{...n,unsubscribe:()=>n.then((e=>e.unsubscribe()))}}async raiseIntent(t,n,i){this.wire.sendAction("fdc3-raise-intent").catch((e=>{}));const r=i?{name:t,context:n,metadata:{target:i}}:{name:t,context:n};try{return await this.client.fireIntent(r)}catch(t){const n=t.message===e.BROKER_ERRORS.fireIntent?"ResolverUnavailable":t.message;throw new Error(n)}}async findIntent(t,n){this.wire.sendAction("fdc3-find-intent").catch((e=>{}));try{return await this.client.getInfoForIntent({name:t,context:n})}catch(t){const n=t.message===e.BROKER_ERRORS.getInfoForIntent?"ResolverUnavailable":t.message;throw new Error(n)}}async findIntentsByContext(t){this.wire.sendAction("fdc3-find-intents-by-context").catch((e=>{}));try{return await this.client.getInfoForIntentsByContext(t)}catch(t){const n=t.message===e.BROKER_ERRORS.getInfoForIntentsByContext?"ResolverUnavailable":t.message;throw new Error(n)}}async raiseIntentForContext(t,n){this.wire.sendAction("fdc3-raise-intent-for-context").catch((e=>{}));try{return await this.client.fireIntentForContext({...t,metadata:{target:n}})}catch(t){const n=t.message===e.BROKER_ERRORS.fireIntentForContext?"ResolverUnavailable":t.message;throw new Error(n)}}async getOrCreateChannel(e){return super.getOrCreateChannel(e)}getInfo(){this.wire.sendAction("fdc3-get-info").catch((e=>{}));const{uuid:e,fdc3InteropApi:t}=fin.__internal_.initialOptions;return{fdc3Version:t,provider:`openfin-${e}`,providerVersion:fin.desktop.getVersion()}}}return qi.Fdc3Module=n,qi}(),d=function(){if(nr)return rr;nr=1,Object.defineProperty(rr,"__esModule",{value:!0}),rr.Fdc3Module2=void 0;const e=tr(),t=Ti,n=or(),i=Ji,r=Zi;class o extends e.FDC3ModuleBase{async open(e,t){return"string"==typeof e&&console.warn("Passing a string as the app parameter is deprecated, please use an AppIdentifier ({ appId: string; instanceId?: string })."),super._open(e,t)}async findInstances(e){this.wire.sendAction("fdc3-find-instances").catch((e=>{}));try{return await n.InteropClient.ferryFdc3Call(this.client,"fdc3FindInstances",e)}catch(e){const n=e.message===t.BROKER_ERRORS.fdc3FindInstances?"ResolverUnavailable":e.message;throw new Error(n)}}async getAppMetadata(e){this.wire.sendAction("fdc3-get-app-metadata").catch((e=>{}));try{return await n.InteropClient.ferryFdc3Call(this.client,"fdc3GetAppMetadata",e)}catch(e){const n=e.message===t.BROKER_ERRORS.fdc3GetAppMetadata?"ResolverUnavailable":e.message;throw new Error(n)}}async addContextListener(e,t){this.wire.sendAction("fdc3-add-context-listener").catch((e=>{}));const n=e=>t=>{const{contextMetadata:n,...i}=t,r=n?[{...i},n]:[t,null];e(...r)};let i=t,r=n(i);return"function"==typeof e?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),i=e,r=n(i),this.client.addContextHandler(r)):this.client.addContextHandler(r,null===e?void 0:e)}async findIntent(e,n,i){this.wire.sendAction("fdc3-find-intent").catch((e=>{}));try{return await this.client.getInfoForIntent({name:e,context:n,metadata:{resultType:i}})}catch(e){const n=e.message===t.BROKER_ERRORS.getInfoForIntent?"ResolverUnavailable":e.message;throw new Error(n)}}async findIntentsByContext(e,i){this.wire.sendAction("fdc3-find-intents-by-context").catch((e=>{}));const r=i?{context:e,metadata:{resultType:i}}:e;try{return await n.InteropClient.ferryFdc3Call(this.client,"fdc3v2FindIntentsByContext",r)}catch(e){const n=e.message===t.BROKER_ERRORS.getInfoForIntentsByContext?"ResolverUnavailable":e.message;throw new Error(n)}}async raiseIntent(e,n,r){this.wire.sendAction("fdc3-raise-intent").catch((e=>{}));try{return"string"==typeof r&&console.warn("Passing a string as the app parameter is deprecated, please use an AppIdentifier ({ appId: string; instanceId?: string })."),(0,i.getIntentResolution)(this.client,n,r,e)}catch(e){const n=e.message===t.BROKER_ERRORS.fireIntent?"ResolverUnavailable":e.message;throw new Error(n)}}async raiseIntentForContext(e,n){this.wire.sendAction("fdc3-raise-intent-for-context").catch((e=>{}));try{return"string"==typeof n&&console.warn("Passing a string as the app parameter is deprecated, please use an AppIdentifier ({ appId: string; instanceId?: string })."),(0,i.getIntentResolution)(this.client,e,n)}catch(e){const n=e.message===t.BROKER_ERRORS.fireIntent?"ResolverUnavailable":e.message;throw new Error(n)}}async addIntentListener(e,t){if(this.wire.sendAction("fdc3-add-intent-listener").catch((e=>{})),"string"!=typeof e)throw new Error("First argument must be an Intent name");return this.client.registerIntentHandler((async e=>{let n,i;const{context:r,metadata:o}=e,{contextMetadata:s,metadata:a,...c}=r,d=o?.intentResolutionResultId||a?.intentResolutionResultId;try{const e=a?{metadata:a,...c}:{...c};n=await t(e,s),i=n}catch(e){n=e,i={error:!0}}if(d&&this.fin.InterApplicationBus.publish(d,i).catch((()=>null)),n instanceof Error)throw new Error(n.message);return n}),e,{fdc3Version:"2.0"})}async getOrCreateChannel(e){return super.getOrCreateChannel(e)}async createPrivateChannel(){const e=(0,t.generateId)();await n.InteropClient.ferryFdc3Call(this.client,"createPrivateChannelProvider",{channelId:e});const o=await this.fin.InterApplicationBus.Channel.connect(e),s=new r.PrivateChannelClient(o,e);return(0,i.buildPrivateChannelObject)(s)}async getUserChannels(){return(await this.client.getContextGroups()).map((e=>({...e,type:"user",...(0,i.getUnsupportedChannelApis)("User")})))}async getSystemChannels(){return console.warn("This API has been deprecated. Please use fdc3.getUserChannels instead."),super.getSystemChannels()}async joinUserChannel(e){return super.joinChannel(e)}async joinChannel(e){return console.warn("This API has been deprecated. Please use fdc3.joinUserChannel instead."),super.joinChannel(e)}async getCurrentChannel(){const e=await super.getCurrentChannel();return e?{...e,type:"user",broadcast:this.broadcast.bind(this)}:null}async getInfo(){return n.InteropClient.ferryFdc3Call(this.client,"fdc3v2GetInfo",{fdc3Version:"2.0"})}}return rr.Fdc3Module2=o,rr}(),h=Ti;let l=class extends o.Base{constructor(i,r){super(i),e.set(this,void 0),t.set(this,void 0),n(this,t,new Map,"f"),n(this,e,r,"f")}async setContext(t){this.wire.sendAction("interop-client-set-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("setContext",{context:t})}async addContextHandler(t,n){if(this.wire.sendAction("interop-client-add-context-handler").catch((e=>{})),"function"!=typeof t)throw new Error("Non-function argument passed to the first parameter 'handler'. Be aware that the argument order does not match the FDC3 standard.");const r=await i(this,e,"f");let o;n?(o=`invokeContextHandler-${n}-${(0,h.generateId)()}`,console.warn(`Warning: By providing a contextType (${n}), you are using the experimental addContextHandler. To avoid issues, make sure you are adding your context handlers at the top level in your application.`)):o="invokeContextHandler";const s=(0,h.wrapContextHandler)(t,o);return r.register(o,s),await r.dispatch("contextHandlerRegistered",{handlerId:o,contextType:n}),{unsubscribe:async()=>{r.remove(o),await r.dispatch("removeContextHandler",{handlerId:o})}}}async getContextGroups(){this.wire.sendAction("interop-client-get-context-groups").catch((e=>{}));return(await i(this,e,"f")).dispatch("getContextGroups")}async joinContextGroup(t,n){this.wire.sendAction("interop-client-join-context-group").catch((e=>{}));const r=await i(this,e,"f");if(!t)throw new Error("No contextGroupId specified for joinContextGroup.");return r.dispatch("joinContextGroup",{contextGroupId:t,target:n})}async removeFromContextGroup(t){this.wire.sendAction("interop-client-remove-from-context-group").catch((e=>{}));return(await i(this,e,"f")).dispatch("removeFromContextGroup",{target:t})}async getAllClientsInContextGroup(t){this.wire.sendAction("interop-client-get-all-clients-in-context-group").catch((e=>{}));const n=await i(this,e,"f");if(!t)throw new Error("No contextGroupId specified for getAllClientsInContextGroup.");return n.dispatch("getAllClientsInContextGroup",{contextGroupId:t})}async getInfoForContextGroup(t){this.wire.sendAction("interop-client-get-info-for-context-group").catch((e=>{}));const n=await i(this,e,"f");if(!t)throw new Error("No contextGroupId specified for getInfoForContextGroup.");return n.dispatch("getInfoForContextGroup",{contextGroupId:t})}async fireIntent(t){this.wire.sendAction("interop-client-fire-intent").catch((e=>{}));return(await i(this,e,"f")).dispatch("fireIntent",t)}async registerIntentHandler(t,n,r){this.wire.sendAction("interop-client-register-intent-handler").catch((e=>{}));const o=await i(this,e,"f"),s=`intent-handler-${n}`,a=(0,h.wrapIntentHandler)(t,s);try{await o.register(s,a),await o.dispatch("intentHandlerRegistered",{handlerId:s,...r})}catch(e){throw new Error("Unable to register intent handler")}return{unsubscribe:async()=>{o.remove(s)}}}async getCurrentContext(t){this.wire.sendAction("interop-client-get-current-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("getCurrentContext",{contextType:t})}async getInfoForIntent(t){this.wire.sendAction("interop-client-get-info-for-intent").catch((e=>{}));return(await i(this,e,"f")).dispatch("getInfoForIntent",t)}async getInfoForIntentsByContext(t){this.wire.sendAction("interop-client-get-info-for-intents-by-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("getInfoForIntentsByContext",t)}async fireIntentForContext(t){this.wire.sendAction("interop-client-fire-intent-for-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("fireIntentForContext",t)}async joinSessionContextGroup(n){try{const r=i(this,t,"f").get(n);if(r)return r.getUserInstance();const o=await i(this,e,"f"),{hasConflict:a}=await o.dispatch("sessionContextGroup:createIfNeeded",{sessionContextGroupId:n});a&&console.warn(`A (non-session) context group with the name "${n}" already exists. If you are trying to join a Context Group, call joinContextGroup instead.`);const c=new s.default(this.wire,i(this,e,"f"),n);return i(this,t,"f").set(n,c),c.getUserInstance()}catch(e){throw console.error(`Error thrown trying to create Session Context Group with id "${n}": ${e}`),e}}async onDisconnection(t){this.wire.sendAction("interop-client-add-ondisconnection-listener").catch((e=>{}));return(await i(this,e,"f")).onDisconnection((e=>{const{uuid:n}=e;t({type:"interop-broker",topic:"disconnected",brokerName:n})}))}getFDC3Sync(e){switch(e){case"1.2":return new c.Fdc3Module((()=>this),this.wire);case"2.0":return new d.Fdc3Module2((()=>this),this.wire);default:throw new Error(`Invalid FDC3 version provided: ${e}. Must be '1.2' or '2.0'`)}}async getFDC3(e){return this.getFDC3Sync(e)}static async ferryFdc3Call(t,n,r){return(await i(t,e,"f")).dispatch(n,r||null)}};return Hi.InteropClient=l,e=new WeakMap,t=new WeakMap,Hi}var sr,ar,cr,dr={};function hr(){if(sr)return dr;sr=1,Object.defineProperty(dr,"__esModule",{value:!0}),dr.overrideCheck=dr.checkFDC32Overrides=dr.getDefaultViewFdc3VersionFromAppInfo=void 0;const e=Gi();function t(t){return["fdc3HandleFindInstances","handleInfoForIntent","handleInfoForIntentsByContext","fdc3HandleGetAppMetadata","fdc3HandleGetInfo","fdc3HandleOpen","handleFiredIntent","handleFiredIntentForContext"].filter((n=>t[n]===e.InteropBroker.prototype[n]))}return dr.getDefaultViewFdc3VersionFromAppInfo=function({manifest:e,initialOptions:t}){const n=e?.platform?.defaultViewOptions?.fdc3InteropApi??t.defaultViewOptions?.fdc3InteropApi;return["1.2","2.0"].includes(n??"")?n:void 0},dr.checkFDC32Overrides=t,dr.overrideCheck=function(e,n){if(n&&"2.0"===n){const n=t(e);n.length>0&&console.warn(`WARNING: FDC3 2.0 has been set as a default option for Views in this Platform, but the required InteropBroker APIs for FDC3 2.0 compliance have not all been overridden.\nThe following APIs need to be overridden:\n${n.join("\n")}`)}},dr}function lr(){return cr||(cr=1,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),i=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),i(function(){if(ar)return Ri;ar=1,Object.defineProperty(Ri,"__esModule",{value:!0}),Ri.InteropModule=void 0;const e=n,t=Si,i=a,r=Gi(),o=or(),s=hr(),c=ni,d=e=>new e,h="You have attempted to use or modify InteropBroker parameters, which is not allowed. You are likely using an older InteropBroker override scheme. Please consult our Interop docs for guidance on migrating to the new override scheme.";class l extends i.Base{async init(n,i=d){this.wire.sendAction("interop-init").catch((()=>{}));const o=await this.wire.environment.getInteropInfo(this.wire.getFin()),a=(0,t.createUnusableObject)(h),l=(0,t.createWarningObject)(h,(0,e.cloneDeep)(o)),u=async()=>{throw new Error(h)},p=r.InteropBroker.createClosedConstructor(this.wire,(()=>this.fin.InterApplicationBus.Channel.create(`interop-broker-${n}`)),o);let w;return w=Array.isArray(i)?new((0,c.overrideFromComposables)(...i)(p))(a,u,l):await i(p,a,u,l),(0,s.overrideCheck)(w,o.fdc3Version),w}connectSync(e,t){return this.wire.sendAction("interop-connect-sync").catch((()=>{})),new o.InteropClient(this.wire,this.wire.environment.whenReady().then((()=>this.fin.InterApplicationBus.Channel.connect(`interop-broker-${e}`,{payload:t}))))}}return Ri.InteropModule=l,Ri}(),e),i(or(),e),i(Gi(),e)}(_i)),_i}var ur={},pr={},wr={},yr={};Object.defineProperty(yr,"__esModule",{value:!0}),yr.getSnapshotSourceChannelName=void 0;yr.getSnapshotSourceChannelName=e=>`snapshot-source-provider-${e.uuid}`;var fr,gr,mr,vr,Cr,br=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},Ir=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(wr,"__esModule",{value:!0}),wr.SnapshotSource=void 0;const Er=a,xr=yr,Ar=new Map;class Pr extends Er.Base{constructor(e,t){super(e),fr.set(this,void 0),gr.set(this,(()=>(Ar.has(this.identity.uuid)||Ar.set(this.identity.uuid,{eventFired:null,clientPromise:null}),Ar.get(this.identity.uuid)))),mr.set(this,(()=>(Ir(this,gr,"f").call(this).clientPromise||(Ir(this,gr,"f").call(this).clientPromise=Ir(this,vr,"f").call(this)),Ir(this,gr,"f").call(this).clientPromise))),vr.set(this,(async()=>{const e=(0,xr.getSnapshotSourceChannelName)(this.identity);try{Ir(this,gr,"f").call(this).eventFired||await Ir(this,Cr,"f").call(this);const t=await this.fin.InterApplicationBus.Channel.connect(e,{wait:!1});return t.onDisconnection((()=>{Ir(this,gr,"f").call(this).clientPromise=null,Ir(this,gr,"f").call(this).eventFired=null})),t}catch(e){throw Ir(this,gr,"f").call(this).clientPromise=null,new Error("The targeted SnapshotSource is not currently initialized. Await this object's ready() method.")}})),Cr.set(this,(async()=>{const e=(0,xr.getSnapshotSourceChannelName)(this.identity);let t,n;const i=new Promise(((e,i)=>{t=e,n=i}));Ir(this,gr,"f").call(this).eventFired=i;const r=async i=>{try{i.channelName===e&&(t(),await this.fin.InterApplicationBus.Channel.removeListener("connected",r))}catch(e){n(e)}};await this.fin.InterApplicationBus.Channel.on("connected",r)})),br(this,fr,t,"f")}get identity(){return Ir(this,fr,"f")}async ready(){this.wire.sendAction("snapshot-source-ready").catch((e=>{}));try{await Ir(this,mr,"f").call(this)}catch(e){await Ir(this,gr,"f").call(this).eventFired}}async getSnapshot(){this.wire.sendAction("snapshot-source-get-snapshot").catch((e=>{}));const e=await Ir(this,mr,"f").call(this),t=await e.dispatch("get-snapshot");return(await t).snapshot}async applySnapshot(e){this.wire.sendAction("snapshot-source-apply-snapshot").catch((e=>{}));return(await Ir(this,mr,"f").call(this)).dispatch("apply-snapshot",{snapshot:e})}}wr.SnapshotSource=Pr,fr=new WeakMap,gr=new WeakMap,mr=new WeakMap,vr=new WeakMap,Cr=new WeakMap,Object.defineProperty(pr,"__esModule",{value:!0}),pr.SnapshotSourceModule=void 0;const Mr=a,Or=wr,_r=yr;class Rr extends Mr.Base{async init(e){if(this.wire.sendAction("snapshot-source-init").catch((e=>{})),"object"!=typeof e||"function"!=typeof e.getSnapshot||"function"!=typeof e.applySnapshot)throw new Error("you must pass in a valid SnapshotProvider");const t=await this.fin.InterApplicationBus.Channel.create((0,_r.getSnapshotSourceChannelName)(this.fin.me));t.register("get-snapshot",(async()=>({snapshot:await e.getSnapshot()}))),t.register("apply-snapshot",(({snapshot:t})=>e.applySnapshot(t)))}wrapSync(e){return this.wire.sendAction("snapshot-source-wrap-sync").catch((e=>{})),new Or.SnapshotSource(this.wire,e)}async wrap(e){return this.wire.sendAction("snapshot-source-wrap").catch((e=>{})),this.wrapSync(e)}}pr.SnapshotSourceModule=Rr,function(e){var t=r&&r.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=r&&r.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(pr,e),n(wr,e)}(ur),Object.defineProperty(o,"__esModule",{value:!0});var Sr=o.Fin=void 0;const Fr=t,jr=s,kr=xe(),Tr=me(),Lr=Re,$r=bn,Br=xn,Gr=Fn,Wr=Hn,Hr=fe(),Nr=Vn,Dr=Oi,Ur=lr(),Vr=ur;class zr extends Fr.EventEmitter{constructor(e){super(),this.wire=e,this.System=new jr.System(e),this.Window=new kr._WindowModule(e),this.Application=new Tr.ApplicationModule(e),this.InterApplicationBus=new Lr.InterApplicationBus(e),this.Clipboard=new $r.Clipboard(e),this.ExternalApplication=new Br.ExternalApplicationModule(e),this.Frame=new Gr._FrameModule(e),this.GlobalHotkey=new Wr.GlobalHotkey(e),this.Platform=new Nr.PlatformModule(e,this.InterApplicationBus.Channel),this.View=new Hr.ViewModule(e),this.Interop=new Ur.InteropModule(e),this.SnapshotSource=new Vr.SnapshotSourceModule(e),e.registerFin(this),this.me=(0,Dr.getMe)(e),e.on("disconnected",(()=>{this.emit("disconnected")}))}}Sr=o.Fin=zr;var Kr={},qr={};function Yr(e){return"string"==typeof e.manifestUrl}function Jr(e){return Qr(e)&&"string"==typeof e.address}function Zr(e){return Jr(e)&&"string"==typeof e.token}function Qr(e){return"string"==typeof e.uuid}function Xr(e){return e.runtime&&"string"==typeof e.runtime.version}function eo(e){return Qr(e)&&Xr(e)}Object.defineProperty(qr,"__esModule",{value:!0}),qr.isInternalConnectConfig=qr.isPortDiscoveryConfig=qr.isNewConnectConfig=qr.isConfigWithReceiver=qr.isRemoteConfig=qr.isExistingConnectConfig=qr.isExternalConfig=void 0,qr.isExternalConfig=Yr,qr.isExistingConnectConfig=Jr,qr.isRemoteConfig=Zr,qr.isConfigWithReceiver=function(e){return"object"==typeof e.receiver&&Zr({...e,address:""})},qr.isNewConnectConfig=eo,qr.isPortDiscoveryConfig=function(e){return Yr(e)&&Xr(e)||eo(e)},qr.isInternalConnectConfig=function(e){return Jr(e)||eo(e)};var to={},no={};Object.defineProperty(no,"__esModule",{value:!0}),no.EmitterMap=void 0;const io=t;function ro(e){return Buffer.from(e).toString("base64")}no.EmitterMap=class{constructor(){this.storage=new Map}hashKeys(e){return e.map(ro).join("/")}getOrCreate(e){const t=this.hashKeys(e);return this.storage.has(t)||this.storage.set(t,new io.EventEmitter),this.storage.get(t)}has(e){return this.storage.has(this.hashKeys(e))}delete(e){const t=this.hashKeys(e);return this.storage.delete(t)}},Object.defineProperty(to,"__esModule",{value:!0});const oo=no;class so extends oo.EmitterMap{constructor(){super(...arguments),this.dispatchEvent=e=>{if(function(e){return"process-desktop-event"===e.action}(e)){const{payload:t}=e,n=function(e){const{topic:t}=e;if("frame"===t||"window"===t||"view"===t){const{uuid:n,name:i}=e;return[t,n,i]}if("application"===t){const{uuid:n}=e;return[t,n]}return[t]}(t);if(this.has(n))return this.getOrCreate(n).emit(t.type,t),!0}return!1}}}to.default=so;var ao,co,ho=r&&r.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},lo=r&&r.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Kr,"__esModule",{value:!0});var uo=Kr.Transport=void 0;const po=t,wo=qr,yo=y,fo=to,go=Oi,mo=tt;class vo extends po.EventEmitter{constructor(e,t,n){super(),this.wireListeners=new Map,this.topicRefMap=new Map,this.eventAggregator=new fo.default,this.messageHandlers=[this.eventAggregator.dispatchEvent],ao.set(this,void 0),co.set(this,void 0),this.connectSync=()=>{lo(this,ao,"f").connectSync()},this.getPort=()=>lo(this,ao,"f").getPort(),ho(this,ao,new e(this.onmessage.bind(this)),"f"),this.environment=t,this.sendRaw=lo(this,ao,"f").send.bind(lo(this,ao,"f")),this.registerMessageHandler(this.handleMessage.bind(this)),lo(this,ao,"f").on("disconnected",(()=>{for(const[,{handleNack:e}]of this.wireListeners)e({reason:"Remote connection has closed"});this.wireListeners.clear(),this.emit("disconnected")}));const{uuid:i,name:r}=n,o=this.environment.getCurrentEntityType();this.me=(0,go.getBaseMe)(o,i,r)}getFin(){if(!lo(this,co,"f"))throw new Error("No Fin object registered for this transport");return lo(this,co,"f")}registerFin(e){if(lo(this,co,"f"))throw new Error("Fin object has already been registered for this transport");ho(this,co,e,"f")}shutdown(){return lo(this,ao,"f").shutdown()}async connect(e){if((0,wo.isConfigWithReceiver)(e))return await lo(this,ao,"f").connect(e.receiver),this.authorize(e);if((0,wo.isRemoteConfig)(e))return this.connectRemote(e);if((0,wo.isExistingConnectConfig)(e))return this.connectByPort(e);if((0,wo.isNewConnectConfig)(e)){const t=await this.environment.retrievePort(e);return this.connectByPort({...e,address:`ws://localhost:${t}`})}}async connectRemote(e){return await lo(this,ao,"f").connect(new(this.environment.getWsConstructor())(e.address)),this.authorize(e)}async connectByPort(e){const{address:t,uuid:n}=e,i={...e,type:"file-token"},r=lo(this,ao,"f");await r.connect(new(this.environment.getWsConstructor())(e.address));const o=await this.sendAction("request-external-authorization",{uuid:n,type:"file-token"},!0);if("external-authorization-response"!==o.action)throw new yo.UnexpectedActionError(o.action);return await this.environment.writeToken(o.payload.file,o.payload.token),this.authorize(i)}async authorize(e){const t=await this.sendAction("request-authorization",e,!0);if("authorization-response"!==t.action)throw new yo.UnexpectedActionError(t.action);if(!0!==t.payload.success)throw new yo.RuntimeError(t.payload)}sendAction(e,t={},n=!1){let i=()=>{};const r=yo.RuntimeError.getCallSite(1),o=this.environment.getNextMessageId(),s=new Promise(((s,a)=>{i=a;const c={action:e,payload:t,messageId:o},d=lo(this,ao,"f");return this.addWireListener(o,s,(e=>this.nackHandler(e,a,r)),n),d.send(c).catch(a)}));return Object.assign(s,{cancel:i,messageId:o})}nackHandler(e,t,n){t("string"==typeof e?e:new yo.RuntimeError(e,n))}ferryAction(e){return new Promise(((t,n)=>{const i=this.environment.getNextMessageId();e.messageId=i;const r=e=>{t(e.payload)};return lo(this,ao,"f").send(e).then((()=>this.addWireListener(i,r,(e=>this.nackHandler(e,n)),!1))).catch(n)}))}registerMessageHandler(e){this.messageHandlers.push(e)}addWireListener(e,t,n,i){i?this.uncorrelatedListener=t:this.wireListeners.has(e)?n({reason:"Duplicate handler id",error:(0,mo.errorToPOJO)(new yo.DuplicateCorrelationError(String(e)))}):this.wireListeners.set(e,{resolve:t,handleNack:n})}onmessage(e){for(const t of this.messageHandlers)t.call(null,e)}handleMessage(e){const t=e.correlationId||NaN;if("correlationId"in e){if(!this.wireListeners.has(t))return!1;{const{resolve:n,handleNack:i}=this.wireListeners.get(t);"ack"!==e.action?i({reason:"Did not receive ack action",error:(0,mo.errorToPOJO)(new yo.NoAckError(e.action))}):"payload"in e?e.payload.success?n.call(null,e):i(e.payload):"string"==typeof e.reason?i(e):(console.warn("Received invalid response from core",e),i({reason:"invalid response shape"})),this.wireListeners.delete(t)}}else this.uncorrelatedListener&&this.uncorrelatedListener.call(null,e),this.uncorrelatedListener=()=>{};return!0}}uo=Kr.Transport=vo,ao=new WeakMap,co=new WeakMap;const Co=(...e)=>({log:(...t)=>console.log(`[${(new Date).toISOString()}]`,...(e=>e.map((e=>`[${e}]`)))(e),...t),getLogger:(...t)=>Co(...e,...t)}),bo=Co("[@openfin/web-interop/client");function Io(e,t){if(!function(e){return"string"==typeof e}(e))throw new Error(`Property ${t} has invalid type. Expected string, got ${typeof e}.`)}const Eo="web-broker-ports-ready",xo=bo.getLogger("get-web-interop-ports"),Ao=async(e,t,n)=>{const{origin:i}=new URL(e),r=document.createElement("IFRAME");let o;r.style.display="none";try{return await new Promise(((s,a)=>{const c=e=>{if(e.source===r.contentWindow&&e.data?.topic===`ack-${Eo}`){if(e.origin!==i)a(new Error(`Broker redirected to unexpected origin ${e.origin}, expected ${i}.`));else if(e.data.success){const[t,n]=e.ports;s({iframeBrokerPort:t,workerPort:n})}else a(new f(e.data));window.removeEventListener("message",c),clearTimeout(o)}};var d;window.addEventListener("message",c),xo.log(`Connecting to broker ${e}`),r.setAttribute("src",e),r.setAttribute("name",(d=t,`${"of-broker"}<${btoa(JSON.stringify(d))}>`)),document.body.appendChild(r),xo.log("Iframe loaded, awaiting init message from iframe"),n&&(o=setTimeout((()=>{window.removeEventListener("message",c),document.body.removeChild(r),a(new Error("Worker did not initialize in time"))}),n))}))}catch(e){throw new Error(`Failed to initialise Fin Web Client. ${e.message}`,{cause:e})}};function Po(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)}const Mo=e=>{var n,i,r;return r=class extends t.EventEmitter{constructor(t){super(),n.set(this,void 0),i.set(this,!1),this.connectSync=()=>{Po(this,i,"f")||(e.addEventListener("message",(e=>{e.data?.topic?.startsWith("wire-message")&&e.data.message&&Po(this,n,"f").call(this,{...JSON.parse(e.data.message),ports:e.ports})})),e.start())},this.connect=async()=>{this.connectSync()},this.send=t=>(e.postMessage({topic:"wire-message",message:JSON.stringify(t)}),Promise.resolve()),this.shutdown=async()=>{e.close()},function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");"a"===i?r.call(e,n):r?r.value=n:t.set(e,n)}(this,n,t,"f")}getPort(){return e}},n=new WeakMap,i=new WeakMap,r};var Oo={},_o={};Object.defineProperty(_o,"__esModule",{value:!0}),_o.BaseEnvironment=void 0;const Ro=hr();_o.BaseEnvironment=class{async getInteropInfo(e){const t=await e.Application.getCurrentSync().getInfo().catch((()=>null)),n=t?.initialOptions?.interopBrokerConfiguration??{};return{fdc3Version:t?(0,Ro.getDefaultViewFdc3VersionFromAppInfo)(t):void 0,...n,fdc3Info:{providerVersion:await e.System.getVersion(),provider:"OpenFin"}}}},Object.defineProperty(Oo,"__esModule",{value:!0});var So=Oo.BrowserEnvironment=void 0;const Fo=_o;class jo extends Fo.BaseEnvironment{constructor(){super(...arguments),this.type="other",this.getRandomId=()=>{const e=new Uint32Array(1);return window.crypto.getRandomValues(e)[0].toString(32)}}observeBounds(e,t){throw new Error("Method not implemented.")}initLayoutManager(e,t,n){throw new Error("Method not implemented.")}applyLayoutSnapshot(e,t,n){throw new Error("Method not implemented.")}createLayout(e,t){throw new Error("Method not implemented.")}destroyLayout(e,t){throw new Error("Method not implemented.")}resolveLayout(e,t){throw new Error("Method not implemented.")}initPlatform(...e){throw new Error("Method not implemented.")}writeToken(e,t){return Promise.resolve("")}retrievePort(e){throw new Error("Method not implemented.")}getNextMessageId(){return this.getRandomId()}createChildContent(e){throw new Error("Method not implemented.")}getWebWindow(e){throw new Error("Method not implemented.")}getCurrentEntityIdentity(){throw new Error("Method not implemented.")}getCurrentEntityType(){return"external connection"}raiseEvent(e,t){throw new Error("Method not implemented.")}getUrl(){return location.href}getDefaultChannelOptions(){return{create:{},connect:{}}}getRtcPeer(){return new RTCPeerConnection}getWsConstructor(){return WebSocket}whenReady(){return Promise.resolve()}}So=Oo.BrowserEnvironment=jo;class ko extends So{async getInteropInfo(e){return{...{contextGroups:void 0,logging:{beforeAction:{enabled:!1},afterAction:{enabled:!1}}},fdc3Version:void 0,fdc3Info:{providerVersion:"0.37.17",provider:"OpenFin Web"}}}}const To=()=>{const e=((e,t)=>{const n=new RegExp(`^${t}<(?<meta>.*)>$`).exec(e)?.groups?.meta;if(n)try{return JSON.parse(atob(n))}catch(e){throw new Error(`Failed to decode JSON from ${n}.`)}})(window.name,"of-frame");if(e)try{const{name:t,uuid:n,brokerUrl:i,providerId:r,contextGroup:o}=e;return Io(i,"brokerUrl"),Io(n,"uuid"),Io(t,"name"),{identity:{name:t,uuid:n},brokerUrl:i,interopConfig:{providerId:r,currentContextGroup:o}}}catch(e){throw new Error(`Unexpected error occurred when inferring platform information: ${e.stack}`)}},Lo=()=>{const e=i.v4();return{uuid:e,name:e}},$o=async e=>{if("enabled"===e.connectionInheritance){const t=await(async e=>{const t=To();if(t){const{validateOptions:n=(()=>!0)}=e,{identity:i,...r}=t;if(!await n(r))throw new Error("Parent options were rejected by validateOptions.");return t}})(e);if(t)return t}if(!e.options){const t="enabled"===e.connectionInheritance?"Broker URL was not specified nor provided by a platform container.":"Connection inheritance is disabled but no options were provided.";throw new Error(t)}return{...e.options,identity:Lo()}};exports.connect=async t=>{try{bo.log("Establishing connection",t);const{brokerUrl:n,identity:i,timeout:r,interopConfig:o}=await $o(t),{workerPort:s,iframeBrokerPort:a}=await Ao(n,i,r);bo.log("Successfully established connection to shared worker");const c={entityType:"external connection",...i};s.start(),a.start();const d=Mo(s),h=new uo(d,new ko,c);h.connectSync(),window.Buffer=e.Buffer;const l=new Sr(h);return o?.providerId&&(l.me.interop=l.Interop.connectSync(o.providerId),o?.currentContextGroup&&l.me.interop.joinContextGroup(o.currentContextGroup).catch((e=>{console.warn(`Error joining specified context group: ${o?.currentContextGroup}, continuing`,e)}))),{...l,me:{...l.me,identity:{uuid:l.me.uuid,name:l.me.name}}}}catch(e){throw new Error(`An error occured during web-interop connection: ${e.message}`)}};
+var e=__webpack_require__(/*! buffer/ */ "../../node_modules/buffer/index.js"),t=__webpack_require__(/*! events */ "../../node_modules/events/events.js"),n=__webpack_require__(/*! lodash */ "../../node_modules/lodash/lodash.js"),i=__webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/index.js");const r=(e,t)=>`${t}<${btoa(JSON.stringify(e))}>`;var o="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof __webpack_require__.g?__webpack_require__.g:"undefined"!=typeof self?self:{},s={},a={},c={},d={};async function h(e){const t=[];for(const n of e){const e=await n();t.push(e)}return t}Object.defineProperty(d,"__esModule",{value:!0}),d.promiseMapSerial=d.serial=d.promiseMap=d.promisify=void 0,d.promisify=function(e){return(...t)=>new Promise(((n,i)=>{e(...t,((e,t)=>e?i(e):n(t)))}))},d.promiseMap=async function(e,t){return Promise.all(e.map(t))},d.serial=h,d.promiseMapSerial=async function(e,t){return h(e.map(((e,n,i)=>()=>t(e,n,i))))};var l,u=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},p=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(c,"__esModule",{value:!0}),c.Reply=c.EmitterBase=c.Base=void 0;const w=d;class y{constructor(e){this.isNodeEnvironment=()=>"node"===this.wire.environment.type,this.isOpenFinEnvironment=()=>"openfin"===this.wire.environment.type,this.isBrowserEnvironment=()=>"other"===this.wire.environment.type,this.wire=e}get fin(){return this.wire.getFin()}get me(){return this.wire.me}}c.Base=y;c.EmitterBase=class extends y{constructor(e,t,...n){super(e),this.topic=t,l.set(this,void 0),this.eventNames=()=>this.hasEmitter()?this.getOrCreateEmitter().eventNames():[],this.emit=(e,t,...n)=>!!this.hasEmitter()&&this.getOrCreateEmitter().emit(e,t,...n),this.hasEmitter=()=>this.wire.eventAggregator.has(p(this,l,"f")),this.getOrCreateEmitter=()=>this.wire.eventAggregator.getOrCreate(p(this,l,"f")),this.listeners=e=>this.hasEmitter()?this.getOrCreateEmitter().listeners(e):[],this.listenerCount=e=>this.hasEmitter()?this.getOrCreateEmitter().listenerCount(e):0,this.registerEventListener=async(e,t={},n,i)=>{const r={...this.identity,timestamp:t.timestamp||Date.now(),topic:this.topic,type:e},o=this.getOrCreateEmitter();n(o);try{await this.wire.sendAction("subscribe-to-desktop-event",r)}catch(e){throw i(o),this.deleteEmitterIfNothingRegistered(o),e}},this.deregisterEventListener=async(e,t={})=>{if(this.hasEmitter()){const n={...this.identity,timestamp:t.timestamp||Date.now(),topic:this.topic,type:e};await this.wire.sendAction("unsubscribe-to-desktop-event",n).catch((()=>null));return this.getOrCreateEmitter()}return Promise.resolve()},u(this,l,[t,...n],"f"),this.listeners=e=>this.hasEmitter()?this.getOrCreateEmitter().listeners(e):[]}async on(e,t,n){return await this.registerEventListener(e,n,(n=>{n.on(e,t)}),(n=>{n.removeListener(e,t)})),this}async addListener(e,t,n){return this.on(e,t,n)}async once(e,t,n){const i=()=>this.deregisterEventListener(e);return await this.registerEventListener(e,n,(n=>{n.once(e,i),n.once(e,t)}),(n=>{n.removeListener(e,i),n.removeListener(e,t)})),this}async prependListener(e,t,n){return await this.registerEventListener(e,n,(n=>{n.prependListener(e,t)}),(n=>{n.removeListener(e,t)})),this}async prependOnceListener(e,t,n){const i=()=>this.deregisterEventListener(e);return await this.registerEventListener(e,n,(n=>{n.prependOnceListener(e,t),n.once(e,i)}),(n=>{n.removeListener(e,t),n.removeListener(e,i)})),this}async removeListener(e,t,n){const i=await this.deregisterEventListener(e,n);return i&&(i.removeListener(e,t),this.deleteEmitterIfNothingRegistered(i)),this}async deregisterAllListeners(e){const t={...this.identity,type:e,topic:this.topic};if(this.hasEmitter()){const e=this.getOrCreateEmitter(),n=e.listenerCount(t.type),i=[];for(let e=0;e<n;e++)i.push(this.wire.sendAction("unsubscribe-to-desktop-event",t).catch((()=>null)));return await Promise.all(i),e}}async removeAllListeners(e){const t=async e=>{const t=await this.deregisterAllListeners(e);t&&(t.removeAllListeners(e),this.deleteEmitterIfNothingRegistered(t))};if(e)await t(e);else if(this.hasEmitter()){const e=this.getOrCreateEmitter().eventNames();await(0,w.promiseMap)(e,t)}return this}deleteEmitterIfNothingRegistered(e){0===e.eventNames().length&&this.wire.eventAggregator.delete(p(this,l,"f"))}},l=new WeakMap;c.Reply=class{};var f={};Object.defineProperty(f,"__esModule",{value:!0});var g=f.RuntimeError=f.NotSupportedError=f.NotImplementedError=f.NoAckError=f.DuplicateCorrelationError=f.UnexpectedActionError=f.DisconnectedError=void 0;class m extends Error{constructor(e){super(`Expected websocket state OPEN but found ${e}`),this.readyState=e}}f.DisconnectedError=m;class v extends Error{}f.UnexpectedActionError=v;class C extends Error{}f.DuplicateCorrelationError=C;class b extends Error{}f.NoAckError=b;class I extends Error{}f.NotImplementedError=I;class E extends Error{}f.NotSupportedError=E;class x extends Error{constructor(e){const{message:t,name:n,stack:i,...r}=e;super(t),this.name=n||"Error",this.stack=i??this.toString(),Object.keys(r).forEach((e=>{this[e]=r[e]}))}}class A extends Error{static getCallSite(e=0){const t=Error.stackTraceLimit,n=e+1;Error.stackTraceLimit=t+n;const i=Error.prepareStackTrace;Error.prepareStackTrace=(e,t)=>t;const r=(new Error).stack?.slice(n)??[];return Error.prepareStackTrace=i,Error.stackTraceLimit=t,r}static prepareStackTrace(e,t){if("function"==typeof Error.prepareStackTrace)return Error.prepareStackTrace(e,t);let n="";n+=e.name||"Error",n+=`: ${e.message||""}`;for(const e of t)n+=`\n    at ${e.toString()}`;return n}constructor(e,t){const{reason:n,error:i}=e;super(n),this.name="RuntimeError",i?.stack&&(this.cause=new x(i)),t&&(this.stack=A.prepareStackTrace(this,t))}}g=f.RuntimeError=A;var P={},M={},O={};Object.defineProperty(O,"__esModule",{value:!0}),O.validateIdentity=void 0,O.validateIdentity=function(e){let t;return"object"==typeof e&&"string"==typeof e.uuid||(t="Not a valid identity object"),t};var _={},S={},R={},F={},j={},k={},L={};Object.defineProperty(L,"__esModule",{value:!0}),L.handleDeprecatedWarnings=void 0;var T;L.handleDeprecatedWarnings=e=>{(e.contentNavigation?.whitelist||e.contentNavigation?.blacklist||e.contentRedirect?.whitelist||e.contentRedirect?.blacklist)&&console.warn("The properties 'whitelist' and 'blacklist' have been marked as deprecated and will be removed in a future version. Please use 'allowlist' and 'denylist'.")};var $={},B={};Object.defineProperty(B,"__esModule",{value:!0}),B.AsyncRetryableLazy=G=B.Lazy=void 0;var G=B.Lazy=class{constructor(e){this.producerFn=e}getValue(){return this.value||(this.value=this.producerFn()),this.value}};B.AsyncRetryableLazy=class{constructor(e){this.producerFn=e}async getValue(){return this.promise||(this.promise=this.producerFn().catch((e=>{throw delete this.promise,e}))),this.promise}};var W={},H={},N={};Object.defineProperty(N,"__esModule",{value:!0}),N.ApiConsumer=void 0;N.ApiConsumer=class{constructor(e){this.strategy=e,this.consume=async e=>(await this.strategy.getExposedFunctions(e)).reduce(((t,n)=>({...t,[n.key]:this.strategy.createFunction(n,e)})),{})}};var D={},U={};Object.defineProperty(U,"__esModule",{value:!0}),U.expose=U.getExposedProperties=void 0;const V=Symbol("exposedProperties");U.getExposedProperties=e=>e[V]||e.prototype[V]||[];U.expose=e=>(t,n,i)=>{t[V]=t[V]||[],t[V].push({key:n,descriptor:i,options:e})},Object.defineProperty(D,"__esModule",{value:!0}),D.ApiExposer=void 0;const z=U;D.ApiExposer=class{constructor(e){this.strategy=e,this.exposeInstance=async(e,t)=>{const n=(0,z.getExposedProperties)(e),i=await Promise.all(n.map((async({key:n,options:i})=>({key:n,options:await this.strategy.exposeFunction(e[n].bind(e),{key:n,options:i,meta:t})}))));await this.strategy.exposeMeta(t,i)}}};var K={},q={},Y={};Object.defineProperty(Y,"__esModule",{value:!0}),Y.ChannelsConsumer=void 0;Y.ChannelsConsumer=class{constructor(e){this.channel=e,this.getExposedFunctions=async e=>{const{id:t}=e,{props:n}=await this.channel.dispatch(`api-meta:${t}`);return n},this.createFunction=e=>(...t)=>{const{action:n}=e.options;return this.channel.dispatch(n,{args:t})}}};var J={};Object.defineProperty(J,"__esModule",{value:!0}),J.ChannelsExposer=void 0;J.ChannelsExposer=class{constructor(e){this.channelProviderOrClient=e,this.exposeFunction=async(e,t)=>{const{key:n,options:i,meta:r}=t,{id:o}=r,s=`${o}.${i?.action||n}`;return await this.channelProviderOrClient.register(s,(async({args:t})=>e(...t))),{action:s}},this.exposeMeta=async({id:e},t)=>{const n=`api-meta:${e}`;await this.channelProviderOrClient.register(n,(()=>({props:t})))}}},function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(Y,e),n(J,e)}(q),function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(q,e)}(K),function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(N,e),n(D,e),n(K,e),n(U,e)}(H);var Z={};Object.defineProperty(Z,"__esModule",{value:!0}),Z.createRelayedDispatch=Z.relayChannelClientApi=void 0;const Q=["no longer connected","RTCDataChannel closed unexpectedly","The client you are trying to dispatch from is disconnected from the target provider"];Z.relayChannelClientApi=async(e,t)=>{e.register(`relay:${t}`,(({action:t,target:n,payload:i})=>e.dispatch(n,t,i))),await Promise.resolve()};Z.createRelayedDispatch=(e,t,n,i)=>async(r,o)=>{try{return await e.dispatch(`relay:${n}`,{action:r,payload:o,target:t})}catch(e){if(s=e.message,Q.some((e=>s.includes(e)))&&i)throw new Error(i);throw e}var s};var X,ee,te,ne=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},ie=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(W,"__esModule",{value:!0}),W.ColumnOrRow=W.TabStack=W.LayoutNode=void 0;const re=H,oe=Z;class se{constructor(e,t){X.set(this,void 0),this.isRoot=()=>ie(this,X,"f").isRoot(this.entityId),this.exists=()=>ie(this,X,"f").exists(this.entityId),this.getParent=async()=>{const e=await ie(this,X,"f").getParent(this.entityId);if(e)return se.getEntity(e,ie(this,X,"f"))},this.createAdjacentStack=async(e,t)=>{const n=await ie(this,X,"f").createAdjacentStack(this.entityId,e,t);return se.getEntity({entityId:n,type:"stack"},ie(this,X,"f"))},this.getAdjacentStacks=async e=>(await ie(this,X,"f").getAdjacentStacks({targetId:this.entityId,edge:e})).map((e=>se.getEntity({type:"stack",entityId:e.entityId},ie(this,X,"f")))),ne(this,X,e,"f"),this.entityId=t}}W.LayoutNode=se,X=new WeakMap,se.newLayoutEntitiesClient=async(e,t,n)=>{const i=(0,oe.createRelayedDispatch)(e,n,"layout-relay","You are trying to interact with a layout component on a window that does not exist or has been destroyed.");return new re.ApiConsumer(new re.ChannelsConsumer({dispatch:i})).consume({id:t})},se.getEntity=(e,t)=>{const{entityId:n,type:i}=e;switch(i){case"column":case"row":return new ce(t,n,i);case"stack":return new ae(t,n);default:throw new Error(`Unrecognised Layout Entity encountered ('${JSON.stringify(e)})`)}};class ae extends se{constructor(e,t){super(e,t),ee.set(this,void 0),this.type="stack",this.getViews=()=>ie(this,ee,"f").getStackViews(this.entityId),this.addView=async(e,t={index:0})=>ie(this,ee,"f").addViewToStack(this.entityId,e,t),this.removeView=async e=>{await ie(this,ee,"f").removeViewFromStack(this.entityId,e)},this.setActiveView=async e=>{await ie(this,ee,"f").setStackActiveView(this.entityId,e)},ne(this,ee,e,"f")}}W.TabStack=ae,ee=new WeakMap;class ce extends se{constructor(e,t,n){super(e,t),te.set(this,void 0),this.getContent=async()=>(await ie(this,te,"f").getContent(this.entityId)).map((e=>se.getEntity(e,ie(this,te,"f")))),ne(this,te,e,"f"),this.type=n}}W.ColumnOrRow=ce,te=new WeakMap;var de={};Object.defineProperty(de,"__esModule",{value:!0}),de.DEFAULT_LAYOUT_KEY=de.LAYOUT_CONTROLLER_ID=void 0,de.LAYOUT_CONTROLLER_ID="layout-entities",de.DEFAULT_LAYOUT_KEY="__default__";var he={};Object.defineProperty(he,"__esModule",{value:!0}),he.WebContents=void 0;const le=c;class ue extends le.EmitterBase{constructor(e,t,n){super(e,n,t.uuid,t.name),this.identity=t,this.entityType=n}capturePage(e){return this.wire.sendAction("capture-page",{options:e,...this.identity}).then((({payload:e})=>e.data))}executeJavaScript(e){return this.wire.sendAction("execute-javascript-in-window",{...this.identity,code:e}).then((({payload:e})=>e.data))}getZoomLevel(){return this.wire.sendAction("get-zoom-level",this.identity).then((({payload:e})=>e.data))}setZoomLevel(e){return this.wire.sendAction("set-zoom-level",{...this.identity,level:e}).then((()=>{}))}navigate(e){return this.wire.sendAction("navigate-window",{...this.identity,url:e}).then((()=>{}))}navigateBack(){return this.wire.sendAction("navigate-window-back",{...this.identity}).then((()=>{}))}async navigateForward(){await this.wire.sendAction("navigate-window-forward",{...this.identity})}stopNavigation(){return this.wire.sendAction("stop-window-navigation",{...this.identity}).then((()=>{}))}reload(e=!1){return this.wire.sendAction("reload-window",{ignoreCache:e,...this.identity}).then((()=>{}))}print(e={}){return this.wire.sendAction("print",{...this.identity,options:e}).then((()=>{}))}findInPage(e,t){return this.wire.sendAction("find-in-page",{...this.identity,searchTerm:e,options:t}).then((({payload:e})=>e.data))}stopFindInPage(e){return this.wire.sendAction("stop-find-in-page",{...this.identity,action:e}).then((()=>{}))}getPrinters(){return this.wire.sendAction("get-printers",{...this.identity}).then((({payload:e})=>e.data))}async focus({emitSynthFocused:e}={emitSynthFocused:!0}){await this.wire.sendAction("focus-window",{emitSynthFocused:e,...this.identity})}async showDeveloperTools(){await this.wire.sendAction("show-developer-tools",this.identity)}async getProcessInfo(){const{payload:{data:e}}=await this.wire.sendAction("get-process-info",this.identity);return e}async getSharedWorkers(){return this.wire.sendAction("get-shared-workers",this.identity).then((({payload:e})=>e.data))}async inspectSharedWorker(){await this.wire.sendAction("inspect-shared-worker",{...this.identity})}async inspectSharedWorkerById(e){await this.wire.sendAction("inspect-shared-worker-by-id",{...this.identity,workerId:e})}async inspectServiceWorker(){await this.wire.sendAction("inspect-service-worker",{...this.identity})}async showPopupWindow(e){if(this.wire.sendAction(`${this.entityType}-show-popup-window`,this.identity).catch((()=>{})),e?.onPopupReady){const t=async({popupName:t})=>{try{const n=this.fin.Window.wrapSync({uuid:this.fin.me.uuid,name:t});await e.onPopupReady(n)}catch(e){throw new Error(`Something went wrong during onPopupReady execution: ${e}`)}};await this.once("popup-ready",t)}const{payload:t}=await this.wire.sendAction("try-create-popup-window",{options:{...e,hasResultCallback:!!e?.onPopupResult,hasReadyCallback:!!e?.onPopupReady},...this.identity}),{data:{willOpen:n,options:i}}=t;n&&await this.fin.Window.create(i.initialOptions);if(e?.onPopupResult){const t=async t=>{await e.onPopupResult((e=>{const{name:t,uuid:n,result:i,data:r}=e,o={identity:{name:t,uuid:n},result:i};return r&&(o.data=r),o})(t))},n=async()=>{await this.removeListener("popup-result",t)};await this.on("popup-result",t),await this.once("popup-teardown",n)}const{payload:r}=await this.wire.sendAction("show-popup-window",{options:i,...this.identity});return r.data}}var pe,we,ye,fe,ge;function me(){return we||(we=1,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(function(){if(T)return k;T=1,Object.defineProperty(k,"__esModule",{value:!0}),k.ViewModule=void 0;const e=c,t=O,n=me(),i=L;class r extends e.Base{async create(e){const{uuid:t}=this.wire.me;if(!e.name||"string"!=typeof e.name)throw new Error("Please provide a name property as a string in order to create a View.");return(0,i.handleDeprecatedWarnings)(e),this.wire.environment.childViews?await this.wire.environment.createChildContent({entityType:"view",options:{...e,uuid:t}}):await this.wire.sendAction("create-view",{...e,uuid:t}),this.wrapSync({uuid:t,name:e.name})}async wrap(e){this.wire.sendAction("view-wrap");const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.View(this.wire,e)}wrapSync(e){this.wire.sendAction("view-wrap-sync").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.View(this.wire,e)}getCurrent(){if(this.wire.sendAction("view-get-current").catch((e=>{})),!this.wire.me.isView)throw new Error("You are not in a View context");const{uuid:e,name:t}=this.wire.me;return this.wrap({uuid:e,name:t})}getCurrentSync(){if(this.wire.sendAction("view-get-current-sync").catch((e=>{})),!this.wire.me.isView)throw new Error("You are not in a View context");const{uuid:e,name:t}=this.wire.me;return this.wrapSync({uuid:e,name:t})}}return k.ViewModule=r,k}(),e),n(function(){if(pe)return $;pe=1;var e,t=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty($,"__esModule",{value:!0}),$.View=void 0;const n=f,i=B,r=W,s=de,a=he,c=Pe();class d extends a.WebContents{constructor(o,a){super(o,a,"view"),this.identity=a,e.set(this,new i.Lazy((()=>this.fin.Platform.wrapSync(this.identity).getClient()))),this.attach=async e=>{await this.wire.sendAction("attach-view",{target:e,...this.identity})},this.destroy=async()=>{await this.wire.sendAction("destroy-view",{...this.identity})},this.show=async()=>{await this.wire.sendAction("show-view",{...this.identity})},this.showAt=async e=>{await this.wire.sendAction("show-view-at",{bounds:e,...this.identity})},this.hide=async()=>{await this.wire.sendAction("hide-view",{...this.identity})},this.setBounds=async e=>{await this.wire.sendAction("set-view-bounds",{bounds:e,...this.identity})},this.getBounds=async()=>(await this.wire.sendAction("get-view-bounds",{...this.identity})).payload.data,this.getInfo=async()=>(await this.wire.sendAction("get-view-info",{...this.identity})).payload.data,this.getParentLayout=async()=>{this.wire.sendAction("view-get-parent-layout",{...this.identity}).catch((()=>{}));const n=await this.getCurrentWindow();try{const i=await t(this,e,"f").getValue(),o=await r.LayoutNode.newLayoutEntitiesClient(i,s.LAYOUT_CONTROLLER_ID,n.identity),a=await o.getLayoutIdentityForViewOrThrow(this.identity);return this.fin.Platform.Layout.wrap(a)}catch(e){if(!["No action registered at target for","getLayoutIdentityForViewOrThrow is not a function"].some((t=>e.message.includes(t))))throw e;return this.fin.Platform.Layout.wrap(n.identity)}},this.getOptions=async()=>this.wire.sendAction("get-view-options",{...this.identity}).then((({payload:e})=>e.data)),this.updateOptions=async e=>this.wire.sendAction("update-view-options",{options:e,...this.identity}).then((()=>{})),this.getCurrentWindow=async()=>{const{payload:{data:e}}=await this.wire.sendAction("get-view-window",{...this.identity});return new c._Window(this.wire,e)},this.getCurrentStack=async()=>{this.wire.sendAction("view-get-current-stack").catch((()=>{}));try{const n=await this.getCurrentWindow(),i=await t(this,e,"f").getValue(),o=await r.LayoutNode.newLayoutEntitiesClient(i,s.LAYOUT_CONTROLLER_ID,n.identity),a=await o.getStackByView(this.identity);return r.LayoutNode.getEntity(a,o)}catch(e){throw new n.RuntimeError({reason:"This view does not belong to a stack.",error:e})}},this.triggerBeforeUnload=async()=>(await this.wire.sendAction("trigger-before-unload",{...this.identity})).payload.data,this.bindToElement=async e=>{if(!e)throw new Error("Element not found.");return this.wire.environment.observeBounds(e,(async e=>this.setBounds(e)))}}async focus({emitSynthFocused:e}={emitSynthFocused:!0}){const t=await this.getCurrentWindow();await t.focusedWebViewWasChanged(),await super.focus({emitSynthFocused:e})}}return $.View=d,e=new WeakMap,$}(),e)}(j)),j}function ve(){if(ye)return F;ye=1,Object.defineProperty(F,"__esModule",{value:!0}),F.Application=void 0;const e=c,t=Pe(),n=me();class i extends e.EmitterBase{constructor(e,n){super(e,"application",n.uuid),this.identity=n,this.window=new t._Window(this.wire,{uuid:this.identity.uuid,name:this.identity.uuid})}windowListFromIdentityList(e){const n=[];return e.forEach((e=>{n.push(new t._Window(this.wire,{uuid:e.uuid,name:e.name}))})),n}isRunning(){return this.wire.sendAction("is-application-running",this.identity).then((({payload:e})=>e.data))}async quit(e=!1){try{await this._close(e),await this.wire.sendAction("destroy-application",{force:e,...this.identity})}catch(e){if(!["Remote connection has closed","Could not locate the requested application"].some((t=>e.message.includes(t))))throw e}}async _close(e=!1){try{await this.wire.sendAction("close-application",{force:e,...this.identity})}catch(e){if(!e.message.includes("Remote connection has closed"))throw e}}close(e=!1){return console.warn("Deprecation Warning: Application.close is deprecated Please use Application.quit"),this.wire.sendAction("application-close",this.identity).catch((e=>{})),this._close(e)}getChildWindows(){return this.wire.sendAction("get-child-windows",this.identity).then((({payload:e})=>{const t=[];return e.data.forEach((e=>{t.push({uuid:this.identity.uuid,name:e})})),this.windowListFromIdentityList(t)}))}getManifest(){return this.wire.sendAction("get-application-manifest",this.identity).then((({payload:e})=>e.data))}getParentUuid(){return this.wire.sendAction("get-parent-application",this.identity).then((({payload:e})=>e.data))}getShortcuts(){return this.wire.sendAction("get-shortcuts",this.identity).then((({payload:e})=>e.data))}async getViews(){const{payload:e}=await this.wire.sendAction("application-get-views",this.identity);return e.data.map((e=>new n.View(this.wire,e)))}getZoomLevel(){return this.wire.sendAction("get-application-zoom-level",this.identity).then((({payload:e})=>e.data))}getWindow(){return this.wire.sendAction("application-get-window",this.identity).catch((e=>{})),Promise.resolve(this.window)}registerUser(e,t){return this.wire.sendAction("register-user",{userName:e,appName:t,...this.identity}).then((()=>{}))}removeTrayIcon(){return this.wire.sendAction("remove-tray-icon",this.identity).then((()=>{}))}restart(){return this.wire.sendAction("restart-application",this.identity).then((()=>{}))}run(){return console.warn("Deprecation Warning: Application.run is deprecated Please use fin.Application.start"),this.wire.sendAction("application-run",this.identity).catch((e=>{})),this._run()}_run(e={}){return this.wire.sendAction("run-application",{manifestUrl:this._manifestUrl,opts:e,...this.identity}).then((()=>{}))}scheduleRestart(){return this.wire.sendAction("relaunch-on-close",this.identity).then((()=>{}))}async sendApplicationLog(){const{payload:e}=await this.wire.sendAction("send-application-log",this.identity);return e.data}async setJumpList(e){await this.wire.sendAction("set-jump-list",{config:e,...this.identity})}setTrayIcon(e){return this.wire.sendAction("set-tray-icon",{enabledIcon:e,...this.identity}).then((()=>{}))}setShortcuts(e){return this.wire.sendAction("set-shortcuts",{data:e,...this.identity}).then((()=>{}))}async setShortcutQueryParams(e){await this.wire.sendAction("set-shortcut-query-args",{data:e,...this.identity})}setZoomLevel(e){return this.wire.sendAction("set-application-zoom-level",{level:e,...this.identity}).then((()=>{}))}async setAppLogUsername(e){await this.wire.sendAction("set-app-log-username",{data:e,...this.identity})}getTrayIconInfo(){return this.wire.sendAction("get-tray-icon-info",this.identity).then((({payload:e})=>e.data))}hasTrayIcon(){return this.wire.sendAction("has-tray-icon",this.identity).then((({payload:e})=>e.data))}terminate(){return this.wire.sendAction("terminate-application",this.identity).then((()=>{}))}wait(){return this.wire.sendAction("wait-for-hung-application",this.identity).then((()=>{}))}getInfo(){return this.wire.sendAction("get-info",this.identity).then((({payload:e})=>e.data))}async getProcessInfo(){const{payload:{data:e}}=await this.wire.sendAction("application-get-process-info",this.identity);return e}async setFileDownloadLocation(e){const{name:t}=this.wire.me,n={uuid:this.identity.uuid,name:t};await this.wire.sendAction("set-file-download-location",{...n,downloadLocation:e})}async getFileDownloadLocation(){const{payload:{data:e}}=await this.wire.sendAction("get-file-download-location",this.identity);return e}async showTrayIconPopupMenu(e){const{name:t}=this.wire.me,n={uuid:this.identity.uuid,name:t},{payload:i}=await this.wire.sendAction("show-tray-icon-popup-menu",{...n,options:e});return i.data}async closeTrayIconPopupMenu(){const{name:e}=this.wire.me,t={uuid:this.identity.uuid,name:e};await this.wire.sendAction("close-tray-icon-popup-menu",{...t})}}return F.Application=i,F}function Ce(){return ge||(ge=1,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(function(){if(fe)return R;fe=1,Object.defineProperty(R,"__esModule",{value:!0}),R.ApplicationModule=void 0;const e=c,t=O,n=ve();class i extends e.Base{async wrap(e){this.wire.sendAction("wrap-application").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.Application(this.wire,e)}wrapSync(e){this.wire.sendAction("wrap-application-sync").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n.Application(this.wire,e)}async _create(e){return void 0===e.waitForPageLoad&&(e.waitForPageLoad=!1),void 0===e.autoShow&&void 0===e.isPlatformController&&(e.autoShow=!0),await this.wire.sendAction("create-application",e),this.wrap({uuid:e.uuid})}create(e){return console.warn("Deprecation Warning: fin.Application.create is deprecated. Please use fin.Application.start"),this.wire.sendAction("application-create").catch((e=>{})),this._create(e)}async start(e){this.wire.sendAction("start-application").catch((e=>{}));const t=await this._create(e);return await this.wire.sendAction("run-application",{uuid:e.uuid}),t}async startManyManifests(e,t){return this.wire.sendAction("run-applications",{applications:e,opts:t}).then((()=>{}))}getCurrent(){return this.wire.sendAction("get-current-application").catch((e=>{})),this.wrap({uuid:this.wire.me.uuid})}getCurrentSync(){return this.wire.sendAction("get-current-application-sync").catch((e=>{})),this.wrapSync({uuid:this.wire.me.uuid})}async startFromManifest(e,t){this.wire.sendAction("application-start-from-manifest").catch((e=>{}));const n=await this._createFromManifest(e);return await n._run(t),n}createFromManifest(e){return console.warn("Deprecation Warning: fin.Application.createFromManifest is deprecated. Please use fin.Application.startFromManifest"),this.wire.sendAction("application-create-from-manifest").catch((e=>{})),this._createFromManifest(e)}_createFromManifest(e){return this.wire.sendAction("get-application-manifest",{manifestUrl:e}).then((({payload:e})=>{const t=e.data.platform?e.data.platform.uuid:e.data.startup_app.uuid;return this.wrap({uuid:t})})).then((t=>(t._manifestUrl=e,t)))}}return R.ApplicationModule=i,R}(),e),n(ve(),e)}(S)),S}he.WebContents=ue;var be={};Object.defineProperty(be,"__esModule",{value:!0}),be.promisifySubscription=void 0;var Ie,Ee,xe;function Ae(){if(Ie)return _;Ie=1,Object.defineProperty(_,"__esModule",{value:!0}),_._Window=void 0;const e=Ce(),t=he,n=me(),i=L,r=be;class o extends t.WebContents{constructor(e,t){super(e,t,"window")}async createWindow(e){this.wire.sendAction("window-create-window",this.identity).catch((e=>{}));const t=await(0,r.promisifySubscription)(this,"fire-constructor-callback");void 0===e.waitForPageLoad&&(e.waitForPageLoad=!1),void 0===e.autoShow&&(e.autoShow=!0),(0,i.handleDeprecatedWarnings)(e);const n=this.wire.environment.createChildContent({entityType:"window",options:e}),[o]=await Promise.all([t.getValue(),n]);let s;const{success:a}=o,c=o.data,{message:d}=c;s=a?{httpResponseCode:c.httpResponseCode,apiInjected:c.apiInjected}:{message:c.message,networkErrorCode:c.networkErrorCode,stack:c.stack};const h={message:d,cbPayload:s,success:a};try{this.getWebWindow().fin.__internal_.openerSuccessCBCalled()}catch(e){}return h.success?this:Promise.reject(h)}getAllFrames(){return this.wire.sendAction("get-all-frames",this.identity).then((({payload:e})=>e.data))}getBounds(){return this.wire.sendAction("get-window-bounds",this.identity).then((({payload:e})=>e.data))}center(){return this.wire.sendAction("center-window",this.identity).then((()=>{}))}blur(){return this.wire.sendAction("blur-window",this.identity).then((()=>{}))}bringToFront(){return this.wire.sendAction("bring-window-to-front",this.identity).then((()=>{}))}animate(e,t){return this.wire.sendAction("animate-window",{transitions:e,options:t,...this.identity}).then((()=>{}))}hide(){return this.wire.sendAction("hide-window",this.identity).then((()=>{}))}close(e=!1){return this.wire.sendAction("close-window",{force:e,...this.identity}).then((()=>{Object.setPrototypeOf(this,null)}))}focusedWebViewWasChanged(){return this.wire.sendAction("focused-webview-changed",this.identity).then((()=>{}))}getNativeId(){return this.wire.sendAction("get-window-native-id",this.identity).then((({payload:e})=>e.data))}async getCurrentViews(){const{payload:e}=await this.wire.sendAction("window-get-views",this.identity);return e.data.map((e=>new n.View(this.wire,e)))}disableFrame(){return console.warn("Function is deprecated; use disableUserMovement instead."),this.wire.sendAction("disable-window-frame",this.identity).then((()=>{}))}disableUserMovement(){return this.wire.sendAction("disable-window-frame",this.identity).then((()=>{}))}enableFrame(){return console.warn("Function is deprecated; use enableUserMovement instead."),this.wire.sendAction("enable-window-frame",this.identity).then((()=>{}))}enableUserMovement(){return this.wire.sendAction("enable-window-frame",this.identity).then((()=>{}))}flash(){return this.wire.sendAction("flash-window",this.identity).then((()=>{}))}stopFlashing(){return this.wire.sendAction("stop-flash-window",this.identity).then((()=>{}))}getInfo(){return this.wire.sendAction("get-window-info",this.identity).then((({payload:e})=>e.data))}async getLayout(e){this.wire.sendAction("window-get-layout",this.identity).catch((e=>{}));const t=await this.getOptions();if(!t.layout||!t.layoutSnapshot)throw new Error("Window does not have a Layout");return this.fin.Platform.Layout.wrap(e??this.identity)}getOptions(){return this.wire.sendAction("get-window-options",this.identity).then((({payload:e})=>e.data))}getParentApplication(){return this.wire.sendAction("window-get-parent-application",this.identity).catch((e=>{})),Promise.resolve(new e.Application(this.wire,this.identity))}getParentWindow(){return this.wire.sendAction("window-get-parent-window",this.identity).catch((e=>{})),Promise.resolve(new e.Application(this.wire,this.identity)).then((e=>e.getWindow()))}async getSnapshot(e){const t={area:e,...this.identity};console.warn("Window.getSnapshot has been deprecated, please use Window.capturePage");return(await this.wire.sendAction("get-window-snapshot",t)).payload.data}getState(){return this.wire.sendAction("get-window-state",this.identity).then((({payload:e})=>e.data))}getWebWindow(){return this.wire.sendAction("window-get-web-window",this.identity).catch((e=>{})),this.wire.environment.getWebWindow(this.identity)}isMainWindow(){return this.wire.sendAction("window-is-main-window",this.identity).catch((e=>{})),this.me.uuid===this.me.name}isShowing(){return this.wire.sendAction("is-window-showing",this.identity).then((({payload:e})=>e.data))}maximize(){return this.wire.sendAction("maximize-window",this.identity).then((()=>{}))}minimize(){return this.wire.sendAction("minimize-window",this.identity).then((()=>{}))}moveBy(e,t,n){return this.wire.sendAction("move-window-by",{deltaLeft:e,deltaTop:t,positioningOptions:n,...this.identity}).then((()=>{}))}moveTo(e,t,n){return this.wire.sendAction("move-window",{left:e,top:t,positioningOptions:n,...this.identity}).then((()=>{}))}resizeBy(e,t,n,i){return this.wire.sendAction("resize-window-by",{deltaWidth:Math.floor(e),deltaHeight:Math.floor(t),anchor:n,positioningOptions:i,...this.identity}).then((()=>{}))}resizeTo(e,t,n,i){return this.wire.sendAction("resize-window",{width:Math.floor(e),height:Math.floor(t),anchor:n,positioningOptions:i,...this.identity}).then((()=>{}))}restore(){return this.wire.sendAction("restore-window",this.identity).then((()=>{}))}setAsForeground(){return this.wire.sendAction("set-foreground-window",this.identity).then((()=>{}))}setBounds(e,t){return this.wire.sendAction("set-window-bounds",{...e,...this.identity,positioningOptions:t}).then((()=>{}))}show(e=!1){return this.wire.sendAction("show-window",{force:e,...this.identity}).then((()=>{}))}showAt(e,t,n=!1){return this.wire.sendAction("show-at-window",{force:n,left:Math.floor(e),top:Math.floor(t),...this.identity}).then((()=>{}))}updateOptions(e){return this.wire.sendAction("update-window-options",{options:e,...this.identity}).then((()=>{}))}authenticate(e,t){return this.wire.sendAction("window-authenticate",{userName:e,password:t,...this.identity}).then((()=>{}))}async showPopupMenu(e){const{payload:t}=await this.wire.sendAction("show-popup-menu",{options:e,...this.identity});return t.data}async closePopupMenu(){return this.wire.sendAction("close-popup-menu",{...this.identity}).then((()=>{}))}async dispatchPopupResult(e){this.wire.sendAction("window-dispatch-popup-result",this.identity).catch((e=>{})),await this.wire.sendAction("dispatch-popup-result",{data:e,...this.identity})}async print(e={content:"self"}){switch(e.content){case void 0:case"self":return super.print(e);case"screenshot":return this.wire.sendAction("print-screenshot",this.identity).then((()=>{}));case"views":return this.wire.sendAction("print-views",{...this.identity,options:e}).then((()=>{}));default:return}}}return _._Window=o,_}function Pe(){return xe||(xe=1,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(function(){if(Ee)return M;Ee=1,Object.defineProperty(M,"__esModule",{value:!0}),M._WindowModule=void 0;const e=c,t=O,n=Ae();class i extends e.Base{async wrap(e){this.wire.sendAction("window-wrap").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n._Window(this.wire,e)}wrapSync(e){this.wire.sendAction("window-wrap-sync").catch((e=>{}));const i=(0,t.validateIdentity)(e);if(i)throw new Error(i);return new n._Window(this.wire,e)}create(e){return this.wire.sendAction("create-window").catch((e=>{})),new n._Window(this.wire,{uuid:this.me.uuid,name:e.name}).createWindow(e)}getCurrent(){if(this.wire.sendAction("get-current-window").catch((e=>{})),!this.wire.me.isWindow)throw new Error("You are not in a Window context");const{uuid:e,name:t}=this.wire.me;return this.wrap({uuid:e,name:t})}getCurrentSync(){if(this.wire.sendAction("get-current-window-sync").catch((e=>{})),!this.wire.me.isWindow)throw new Error("You are not in a Window context");const{uuid:e,name:t}=this.wire.me;return this.wrapSync({uuid:e,name:t})}}return M._WindowModule=i,M}(),e),n(Ae(),e)}(P)),P}be.promisifySubscription=async(e,t,n=(()=>!0),i)=>{let r,o,s;const a=new Promise(((e,t)=>{r=e,o=t})),c=e=>{n(e)&&(clearTimeout(s),r(e))};return await e.on(t,c),i&&(s=setTimeout((()=>o(new Error("event timed out"))),i)),a.finally((()=>{e.removeListener(t,c).catch((()=>null))})),{getValue:()=>a}},Object.defineProperty(a,"__esModule",{value:!0}),a.System=void 0;const Me=c,Oe=f,_e=Pe(),Se=t;class Re extends Me.EmitterBase{constructor(e){super(e,"system")}sendExternalProcessRequest(e,t){return new Promise(((n,i)=>{const r="external-process-exited";let o,s,a,c;"function"==typeof t.listener&&(a=e=>{const n=e||{};s={topic:"exited",uuid:n.processUuid||"",exitCode:n.exitCode||0},o===e.processUuid&&(t.listener(s),c.removeListener(r,a))},this.wire.me.name||(this.wire.me.name=this.wire.me.uuid),c=new _e._Window(this.wire,this.wire.me),c.on(r,a)),this.wire.sendAction(e,t).then((({payload:e})=>{o=e.data.uuid,n(e.data),s&&o===s.uuid&&(t.listener(s),c.removeListener(r,a))})).catch((e=>{c&&c.removeListener(r,a),i(e)}))}))}getVersion(){return this.wire.sendAction("get-version").then((({payload:e})=>e.data))}clearCache(e){return this.wire.sendAction("clear-cache",e).then((()=>{}))}deleteCacheOnExit(){return this.wire.sendAction("delete-cache-request").then((()=>{}))}exit(){return this.wire.sendAction("exit-desktop").then((()=>{}))}async fetchManifest(e){const{payload:{data:t}}=await this.wire.sendAction("fetch-manifest",{manifestUrl:e});return t}flushCookieStore(){return this.wire.sendAction("flush-cookie-store").then((()=>{}))}getAllWindows(){return this.wire.sendAction("get-all-windows").then((({payload:e})=>e.data))}getAllApplications(){return this.wire.sendAction("get-all-applications").then((({payload:e})=>e.data))}getCommandLineArguments(){return this.wire.sendAction("get-command-line-arguments").then((({payload:e})=>e.data))}async getCrashReporterState(){const{payload:{data:{diagnosticMode:e,isRunning:t}}}=await this.wire.sendAction("get-crash-reporter-state");return console.warn("diagnosticMode property is deprecated. It will be removed in a future version"),{diagnosticMode:e,diagnosticsMode:e,isRunning:t}}async startCrashReporter(e){const t=e,n={...t,diagnosticMode:t.diagnosticsMode||t.diagnosticMode},{payload:{data:{diagnosticMode:i,isRunning:r}}}=await this.wire.sendAction("start-crash-reporter",n);return{diagnosticMode:i,diagnosticsMode:i,isRunning:r}}getUniqueUserId(){return this.wire.sendAction("get-unique-user-id").then((({payload:e})=>e.data))}getEntityInfo(e,t){return this.wire.sendAction("get-entity-info",{uuid:e,name:t}).then((({payload:e})=>e.data))}getEnvironmentVariable(e){return this.wire.sendAction("get-environment-variable",{environmentVariables:e}).then((({payload:e})=>e.data))}getFocusedWindow(){return this.wire.sendAction("get-focused-window").then((({payload:e})=>e.data))}async isAppCertified(e){const{payload:{data:{certifiedInfo:t}}}=await this.wire.sendAction("is-app-certified",{manifestUrl:e});return t}getInstalledRuntimes(){return this.wire.sendAction("get-installed-runtimes").then((({payload:e})=>e.data.runtimes))}async getInstalledApps(){const{payload:{data:{installedApps:e}}}=await this.wire.sendAction("get-installed-apps");return e}getLog(e){return this.wire.sendAction("view-log",e).then((({payload:e})=>e.data))}getMachineId(){return this.wire.sendAction("get-machine-id").then((({payload:e})=>e.data))}getMinLogLevel(){return this.wire.sendAction("get-min-log-level").then((({payload:e})=>e.data))}getLogList(){return this.wire.sendAction("list-logs").then((({payload:e})=>e.data))}getMonitorInfo(){return this.wire.sendAction("get-monitor-info").then((({payload:e})=>e.data))}getMousePosition(){return this.wire.sendAction("get-mouse-position").then((({payload:e})=>e.data))}getProcessList(){return console.warn("System.getProcessList has been deprecated. Please consider using our new process APIs: Window.getProcessInfo, View.getProcessInfo, Application.getProcessInfo, System.getAllProcessInfo"),this.wire.sendAction("process-snapshot").then((({payload:e})=>e.data))}async getAllProcessInfo(){const{payload:{data:e}}=await this.wire.sendAction("get-all-process-info",this.identity);return e}getProxySettings(){return this.wire.sendAction("get-proxy-settings").then((({payload:e})=>e.data))}getRuntimeInfo(){return this.wire.sendAction("get-runtime-info").then((({payload:e})=>e.data))}getRvmInfo(){return this.wire.sendAction("get-rvm-info").then((({payload:e})=>e.data))}getHostSpecs(){return this.wire.sendAction("get-host-specs").then((({payload:e})=>e.data))}launchExternalProcess(e){return this.sendExternalProcessRequest("launch-external-process",e)}monitorExternalProcess(e){return this.sendExternalProcessRequest("monitor-external-process",e)}log(e,t){return this.wire.sendAction("write-to-log",{level:e,message:t}).then((()=>{}))}openUrlWithBrowser(e){return this.wire.sendAction("open-url-with-browser",{url:e}).then((()=>{}))}async registerCustomProtocol(e){if("object"!=typeof e)throw new Error("Must provide an object with a `protocolName` property having a string value.");await this.wire.sendAction("register-custom-protocol",e)}async unregisterCustomProtocol(e){await this.wire.sendAction("unregister-custom-protocol",{protocolName:e})}async getCustomProtocolState(e){return this.wire.sendAction("get-custom-protocol-state",{protocolName:e}).then((({payload:e})=>e.data))}releaseExternalProcess(e){return this.wire.sendAction("release-external-process",{uuid:e}).then((()=>{}))}showDeveloperTools(e){return this.wire.sendAction("show-developer-tools",e).then((()=>{}))}terminateExternalProcess(e){return this.wire.sendAction("terminate-external-process",e).then((()=>{}))}updateProxySettings(e){return this.wire.sendAction("update-proxy",e).then((()=>{}))}async downloadAsset(e,t){const n=()=>{};let i=n,r=n;const o=new Promise(((e,t)=>{i=e,r=t}));if("openfin"!==this.wire.environment.type)throw new Oe.NotSupportedError("downloadAsset only supported in an OpenFin Render process");const s=Oe.RuntimeError.getCallSite(),a=this.wire.environment.getNextMessageId().toString(),c=`asset-download-progress-${a}`,d=`asset-download-error-${a}`,h=`asset-download-complete-${a}`,l=e=>{const n={downloadedBytes:e.downloadedBytes,totalBytes:e.totalBytes};t(n)},u=()=>{this.removeListener(c,l)};await Promise.all([this.on(c,l),this.once(d,(e=>{u();const{reason:t,err:n}=e;r(new Oe.RuntimeError({reason:t,error:n},s))})),this.once(h,(()=>{u(),i()}))]);const p=Object.assign(e,{downloadId:a});return await this.wire.sendAction("download-asset",p).catch((e=>{throw u(),e})),o}downloadRuntime(e,t){const n=Oe.RuntimeError.getCallSite();return new Promise(((i,r)=>{if("openfin"!==this.wire.environment.type)return void r(new Oe.NotSupportedError("downloadRuntime only supported in an OpenFin Render process"));const o=this.wire.environment.getNextMessageId().toString(),s=`runtime-download-progress-${o}`,a=`runtime-download-error-${o}`,c=`runtime-download-complete-${o}`,d=e=>{const n={downloadedBytes:e.downloadedBytes,totalBytes:e.totalBytes};t(n)},h=()=>{this.removeListener(s,d)};this.on(s,d),this.once(a,(e=>{h();const{reason:t,err:i}=e;r(new Oe.RuntimeError({reason:t,error:i},n))})),this.once(c,(()=>{h(),i()}));const l=Object.assign(e,{downloadId:o});this.wire.sendAction("download-runtime",l).catch((e=>{h(),r(e)}))}))}downloadPreloadScripts(e){return this.wire.sendAction("download-preload-scripts",{scripts:e}).then((({payload:e})=>e.data))}getAllExternalApplications(){return this.wire.sendAction("get-all-external-applications").then((({payload:e})=>e.data))}getAppAssetInfo(e){return this.wire.sendAction("get-app-asset-info",e).then((({payload:e})=>e.data))}getCookies(e){const t=this.wire.environment.getUrl(),n=Object.assign(e,{url:t});return this.wire.sendAction("get-cookies",n).then((({payload:e})=>e.data))}setMinLogLevel(e){return this.wire.sendAction("set-min-log-level",{level:e}).then((()=>{}))}resolveUuid(e){return this.wire.sendAction("resolve-uuid",{entityKey:e}).then((({payload:e})=>e.data))}executeOnRemote(e,t){return t.requestingIdentity=e,this.wire.ferryAction(t)}readRegistryValue(e,t,n){return this.wire.sendAction("read-registry-value",{rootKey:e,subkey:t,value:n}).then((({payload:e})=>e.data))}registerExternalConnection(e){return this.wire.sendAction("register-external-connection",{uuid:e}).then((({payload:e})=>e.data))}async getServiceConfiguration(e){if("string"!=typeof e.name)throw new Error("Must provide an object with a `name` property having a string value");const{name:t}=e;return this.wire.sendAction("get-service-configuration",{name:t}).then((({payload:e})=>e.data))}async getSystemAppConfig(e){if("string"!=typeof e)throw new Error("Must provide a string value for name of system app");return this.wire.sendAction("get-system-app-configuration",{name:e}).then((({payload:e})=>e.data))}async registerShutdownHandler(e){this.wire.sendAction("system-register-shutdown-handler").catch((e=>{}));const{uuid:t,name:n}=this.wire.me;this.on("system-shutdown",(i=>{e({proceed:()=>{this.wire.environment.raiseEvent("application/system-shutdown-handled",{uuid:t,name:n,topic:"application"})}})}))}runRvmHealthCheck(){return this.wire.sendAction("run-rvm-health-check").then((({payload:e})=>e.data))}async launchManifest(e,t={}){const{subscribe:n,...i}=t,r=i;if(n){const e=new Se.EventEmitter;n(e);const t="app-version-progress",i="runtime-status",o="app-version-complete",s="app-version-error",a=this.wire.environment.getNextMessageId().toString();r.appVersionId=a;const c=[o,t,i,s],d=e=>{const{appVersionId:t,topic:n,type:i,...r}=e;return{...r,type:c.find((e=>i.includes(e)))}},h=t=>{const n=d(t);e.emit(n.type,n)},l=()=>{this.removeListener(`${t}.${a}`,h),this.removeListener(`${i}.${a}`,h),this.removeListener(`${o}.${a}`,h),this.removeListener(`${s}.${a}`,h),this.removeListener(`${o}.${a}`,l),this.removeListener(`${s}.${a}`,l)};await Promise.all([this.on(`${t}.${a}`,h),this.on(`${i}.${a}`,h),this.once(`${o}.${a}`,h),this.once(`${s}.${a}`,h),this.once(`${o}.${a}`,l),this.once(`${s}.${a}`,l)])}return(await this.wire.sendAction("launch-manifest",{manifestUrl:e,opts:r})).payload.data.manifest}async queryPermissionForCurrentContext(e){const t={uuid:this.wire.me.uuid,name:this.wire.me.name};return(await this.wire.sendAction("query-permission-for-current-context",{apiName:e,identity:t})).payload.data}async enableNativeWindowIntegrationProvider(e){const{payload:t}=await this.wire.sendAction("enable-native-window-integration-provider",{permissions:e});return t.data}async registerUsage({data:e,type:t}){await this.wire.sendAction("register-usage",{data:e,type:t})}async getPrinters(){const{payload:e}=await this.wire.sendAction("system-get-printers");return e.data}async updateProcessLoggingOptions(e){await this.wire.sendAction("system-update-process-logging-options",{options:e})}async getDomainSettings(){const{payload:{data:e}}=await this.wire.sendAction("get-domain-settings",this.identity);return e}async setDomainSettings(e){await this.wire.sendAction("set-domain-settings",{domainSettings:e,...this.identity})}}a.System=Re;var Fe={},je={};Object.defineProperty(je,"__esModule",{value:!0}),je.RefCounter=void 0;je.RefCounter=class{constructor(){this.topicRefMap=new Map}incRefCount(e){const t=this.topicRefMap.get(e);let n;if(t){const i=t+1;n=i,this.topicRefMap.set(e,i)}else this.topicRefMap.set(e,1),n=1;return n}decRefCount(e){const t=this.topicRefMap.get(e);let n;if(t){const i=t-1;this.topicRefMap.set(e,i),n=i}else n=-1;return n}actOnFirst(e,t,n){return 1===this.incRefCount(e)?t():n()}actOnLast(e,t,n){return 0===this.decRefCount(e)?t():n()}};var ke={},Le={},Te={};Object.defineProperty(Te,"__esModule",{value:!0}),Te.ChannelBase=Te.ProtectedItems=void 0;const $e=e=>async(t,n,i)=>{const r=await e(t,n,i);return void 0===r?n:r};Te.ProtectedItems=class{constructor(e,t){this.providerIdentity=e,this.close=t}};class Be{static defaultAction(e){throw new Error(`No action registered at target for ${e}`)}constructor(){this.subscriptions=new Map}async processAction(e,t,n){try{const i=this.subscriptions.has(e)?this.subscriptions.get(e):(t,n)=>(this.defaultAction??Be.defaultAction)(e,t,n),r=this.preAction?await this.preAction(e,t,n):t,o=await i(r,n);return this.postAction?await this.postAction(e,o,n):o}catch(t){if(this.errorMiddleware)return this.errorMiddleware(e,t,n);throw t}}beforeAction(e){if(this.preAction)throw new Error("Already registered beforeAction middleware");this.preAction=$e(e)}onError(e){if(this.errorMiddleware)throw new Error("Already registered error middleware");this.errorMiddleware=e}afterAction(e){if(this.postAction)throw new Error("Already registered afterAction middleware");this.postAction=$e(e)}remove(e){this.subscriptions.delete(e)}setDefaultAction(e){if(this.defaultAction)throw new Error("default action can only be set once");this.defaultAction=e}register(e,t){if(this.subscriptions.has(e))throw new Error(`Subscription already registered for action: ${e}. Unsubscribe before adding new subscription`);return this.subscriptions.set(e,t),!0}}Te.ChannelBase=Be;var Ge,We,He,Ne=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},De=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(Le,"__esModule",{value:!0}),Le.ChannelClient=void 0;const Ue=Te,Ve=new Map;class ze extends Ue.ChannelBase{static closeChannelByEndpointId(e){const t=Ve.get(e);t&&Ne(t,He,"f").call(t)}static handleProviderDisconnect(e){for(const t of Ve.values())t.providerIdentity.channelId===e.channelId&&(t.disconnectListener(e),Ne(t,He,"f").call(t))}constructor(e,t,n){super(),Ge.set(this,void 0),We.set(this,void 0),this.processAction=(e,t,n)=>super.processAction(e,t,n),He.set(this,(()=>{Ve.delete(this.endpointId),Ne(this,We,"f").close()})),De(this,Ge,new Ue.ProtectedItems(e,t),"f"),this.disconnectListener=()=>{},this.endpointId=e.endpointId,De(this,We,n,"f"),Ve.set(this.endpointId,this),n.receive(this.processAction)}get providerIdentity(){return Ne(this,Ge,"f").providerIdentity}async dispatch(e,t){if(Ne(this,We,"f").isEndpointConnected(this.providerIdentity.channelId))return Ne(this,We,"f").send(this.providerIdentity.channelId,e,t);throw new Error("The client you are trying to dispatch from is disconnected from the target provider.")}onDisconnection(e){this.disconnectListener=t=>{try{e(t)}catch(e){throw new Error(`Error while calling the onDisconnection callback: ${e.message}`)}finally{this.disconnectListener=()=>{}}}}async disconnect(){await this.sendDisconnectAction(),Ne(this,He,"f").call(this)}async sendDisconnectAction(){const e=Ne(this,Ge,"f");await e.close()}static async wireClose(e,t,n){const{channelName:i,uuid:r,name:o}=t;await e.sendAction("disconnect-from-channel",{channelName:i,uuid:r,name:o,endpointId:n})}}Le.ChannelClient=ze,Ge=new WeakMap,We=new WeakMap,He=new WeakMap;var Ke={},qe={};Object.defineProperty(qe,"__esModule",{value:!0}),qe.exhaustiveCheck=void 0,qe.exhaustiveCheck=function(e,t){throw new Error(`Unsupported value: ${e}${t?`\n Supported values are: ${t.join("")}`:""}`)};var Ye,Je,Ze,Qe={},Xe=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},et=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Qe,"__esModule",{value:!0}),Qe.ClassicInfo=Qe.ClassicStrategy=void 0;Qe.ClassicStrategy=class{constructor(e,t,n,i){this.messageReceiver=t,this.endpointId=n,this.providerIdentity=i,Ye.set(this,void 0),Je.set(this,new Map),Ze.set(this,new Map),this.send=async(e,t,n)=>{const i=et(this,Je,"f").get(e);if(!i)throw new Error(`Could not locate routing info for endpoint ${e}`);const r={...i};r.isLocalEndpointId&&delete r.endpointId,delete r.isLocalEndpointId;const o=et(this,Ye,"f").sendAction("send-channel-message",{...r,providerIdentity:this.providerIdentity,action:t,payload:n});et(this,Ze,"f").get(e)?.add(o);return(await o.catch((e=>{throw new Error(e.message)})).finally((()=>{et(this,Ze,"f").get(e)?.delete(o)}))).payload.data.result},this.close=async()=>{this.messageReceiver.removeEndpoint(this.providerIdentity.channelId,this.endpointId),[...et(this,Je,"f").keys()].forEach((e=>this.closeEndpoint(e))),Xe(this,Je,new Map,"f")},Xe(this,Ye,e,"f")}onEndpointDisconnect(e,t){}receive(e){this.messageReceiver.addEndpoint(e,this.providerIdentity.channelId,this.endpointId)}async closeEndpoint(e){const t=et(this,Je,"f").get(e);et(this,Je,"f").delete(e);const n=et(this,Ze,"f").get(e);n?.forEach((n=>{const i=`Channel connection with identity uuid: ${t?.uuid} / name: ${t?.name} / endpointId: ${e} no longer connected.`;n.cancel(new Error(i))}))}isEndpointConnected(e){return et(this,Je,"f").has(e)}addEndpoint(e,t){et(this,Je,"f").set(e,t.endpointIdentity),et(this,Ze,"f").set(e,new Set)}isValidEndpointPayload(e){return"string"==typeof e?.endpointIdentity?.endpointId||"string"==typeof e?.endpointIdentity?.channelId}},Ye=new WeakMap,Je=new WeakMap,Ze=new WeakMap,Qe.ClassicInfo={version:5,minimumVersion:0,type:"classic"};var tt={},nt={},it={};Object.defineProperty(it,"__esModule",{value:!0}),it.errorToPOJO=void 0,it.errorToPOJO=function(e){return{stack:e.stack,name:e.name,message:e.message,toString:()=>e.stack||e.toString()}};var rt,ot,st=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},at=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(nt,"__esModule",{value:!0}),nt.RTCEndpoint=void 0;const ct=it;nt.RTCEndpoint=class{static isValidEndpointPayload(e){const t=e=>"object"==typeof e&&null!==e;return t(e)&&t(e.endpointIdentity)&&t(e.rtc)&&"string"==typeof e.endpointIdentity.endpointId}constructor({rtc:e,endpointIdentity:t}){this.responseMap=new Map,rt.set(this,null),ot.set(this,void 0),this.connectionStateChangeHandler=e=>{"connected"!==this.rtc.rtcClient.connectionState&&(this.rtc.rtcClient.removeEventListener("connectionstatechange",this.connectionStateChangeHandler),this.close(),st(this,ot,"f")&&st(this,ot,"f").call(this))},this.send=async(e,t)=>{const n=`message-${Math.random()}`,i=new Promise(((e,t)=>{this.responseMap.set(n,{resolve:e,reject:t})}));return this.rtc.channels.request.send(JSON.stringify({action:e,payload:t,messageId:n})),i},this.close=()=>{this.responseMap.forEach((e=>e.reject("Connection has closed."))),this.responseMap=new Map,this.rtc.channels.request.close(),this.rtc.channels.response.close(),this.rtc.rtcClient.close()},this.rtc=e,this.endpointIdentity=t,this.rtc.channels.response.addEventListener("message",(e=>{let{data:t}=e;e.data instanceof ArrayBuffer&&(t=(new TextDecoder).decode(e.data));const{messageId:n,payload:i,success:r,error:o}=JSON.parse(t),{resolve:s,reject:a}=this.responseMap.get(n)??{};s&&a?(this.responseMap.delete(n),r?s(i):a(o)):(console.log("Could not find id in responseMap."),console.log(e))})),this.rtc.channels.request.addEventListener("message",(async e=>{let{data:n}=e;e.data instanceof ArrayBuffer&&(n=(new TextDecoder).decode(e.data));const{messageId:i,action:r,payload:o}=JSON.parse(n);if(st(this,rt,"f"))try{const e=await st(this,rt,"f").call(this,r,o,t);this.rtc.channels.response.send(JSON.stringify({messageId:i,payload:e,success:!0}))}catch(e){"open"===this.rtc.channels.response.readyState&&this.rtc.channels.response.send(JSON.stringify({messageId:i,error:(0,ct.errorToPOJO)(e),success:!1}))}else"open"===this.rtc.channels.response.readyState&&this.rtc.channels.response.send(JSON.stringify({messageId:i,success:!1,error:"Connection not ready."}))})),this.rtc.rtcClient.addEventListener("connectionstatechange",this.connectionStateChangeHandler),Object.values(this.rtc.channels).forEach((e=>{e.onclose=e=>{[...this.responseMap.values()].forEach((e=>e.reject(new Error("RTCDataChannel closed unexpectedly, this is most commonly caused by message size. Note: RTC Channels have a message size limit of ~255kB.")))),this.close(),st(this,ot,"f")&&st(this,ot,"f").call(this)}}))}onDisconnect(e){if(st(this,ot,"f"))throw new Error("RTCEndpoint disconnectListener cannot be set twice.");at(this,ot,e,"f")}receive(e){if(st(this,rt,"f"))throw new Error("You have already set a listener for this RTC Endpoint.");at(this,rt,e,"f")}get connected(){return"connected"===this.rtc.rtcClient.connectionState}},rt=new WeakMap,ot=new WeakMap;var dt,ht,lt,ut={},pt=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},wt=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(ut,"__esModule",{value:!0}),ut.EndpointStrategy=void 0;ut.EndpointStrategy=class{constructor(e,t,n){this.EndpointType=e,this.StrategyName=n,dt.set(this,null),ht.set(this,new Map),lt.set(this,!0),this.send=async(e,t,n)=>this.getEndpointById(e).send(t,n),this.close=async()=>{pt(this,lt,"f")&&(pt(this,ht,"f").forEach((e=>e.close())),wt(this,ht,new Map,"f")),wt(this,lt,!1,"f")},this.isValidEndpointPayload=t}onEndpointDisconnect(e,t){this.getEndpointById(e).onDisconnect(t)}receive(e){if(pt(this,dt,"f"))throw new Error(`You have already set a listener for this ${this.StrategyName} Strategy`);wt(this,dt,e,"f"),pt(this,ht,"f").forEach((e=>e.receive(pt(this,dt,"f"))))}getEndpointById(e){const t=pt(this,ht,"f").get(e);if(!t)throw new Error(`Client with endpoint id ${e} is not connected`);return t}get connected(){return pt(this,lt,"f")}isEndpointConnected(e){return pt(this,ht,"f").has(e)}addEndpoint(e,t){if(!pt(this,lt,"f"))return void console.warn(`Adding endpoint to disconnected ${this.StrategyName} Strategy`);const n=new this.EndpointType(t);pt(this,dt,"f")&&n.receive(pt(this,dt,"f")),pt(this,ht,"f").set(e,n)}async closeEndpoint(e){pt(this,ht,"f").delete(e)}},dt=new WeakMap,ht=new WeakMap,lt=new WeakMap,Object.defineProperty(tt,"__esModule",{value:!0}),tt.RTCInfo=tt.RTCStrategy=void 0;const yt=nt,ft=ut;class gt extends ft.EndpointStrategy{constructor(){super(yt.RTCEndpoint,yt.RTCEndpoint.isValidEndpointPayload,"RTC")}}tt.RTCStrategy=gt,tt.RTCInfo={version:2,minimumVersion:0,type:"rtc"};var mt={};Object.defineProperty(mt,"__esModule",{value:!0}),mt.RTCICEManager=void 0;const vt=c;class Ct extends vt.EmitterBase{constructor(e){super(e,"channel"),this.ensureChannelOpened=e=>new Promise(((t,n)=>{if("open"===e.readyState)t();else if("connecting"===e.readyState){const n=()=>{e.removeEventListener("open",n),t()};e.addEventListener("open",n)}else n(new Error("This Channel has already closed"))}))}static createDataChannelPromise(e,t){let n;const i=new Promise((e=>{n=e})),r=i=>{const o=()=>{i.channel.removeEventListener("open",o),n(i.channel)};i.channel.label===e&&(i.channel.addEventListener("open",o),t.removeEventListener("datachannel",r))};return t.addEventListener("datachannel",r),i}async listenForProviderIce(e,t){await this.on(this.createProviderEventName(e),t,{timestamp:Date.now()})}async raiseProviderIce(e,t){await this.wire.environment.raiseEvent(this.createRouteString(this.createProviderEventName(e)),t)}async listenForClientIce(e,t){await this.on(this.createClientEventName(e),t,{timestamp:Date.now()})}async raiseClientIce(e,t){await this.wire.environment.raiseEvent(this.createRouteString(this.createClientEventName(e)),t)}cleanupIceListeners(e){this.removeAllListeners(this.createClientEventName(e)),this.removeAllListeners(this.createProviderEventName(e))}createClientEventName(e){return`ice-client-${e}`}createProviderEventName(e){return`ice-provider-${e}`}createRouteString(e){return`channel/${e}`}createRtcPeer(){return this.wire.environment.getRtcPeer()}async startClientOffer(){const e=Math.random().toString(),t=this.createRtcPeer();t.addEventListener("icecandidate",(async t=>{t.candidate&&await this.raiseClientIce(e,{candidate:t.candidate?.toJSON()})})),await this.listenForProviderIce(e,(async e=>{await t.addIceCandidate(e.candidate)}));const n={request:t.createDataChannel("request"),response:t.createDataChannel("response")},i=await t.createOffer();await t.setLocalDescription(i);const r=Promise.all([n.request,n.response].map(this.ensureChannelOpened)).then((()=>{}));return{rtcClient:t,channels:n,offer:i,rtcConnectionId:e,channelsOpened:r}}async finishClientOffer(e,t,n){return await e.setRemoteDescription(t),await n,!0}async createProviderAnswer(e,t){const n=this.createRtcPeer(),i=Ct.createDataChannelPromise("request",n),r=Ct.createDataChannelPromise("response",n);n.addEventListener("icecandidate",(async t=>{t.candidate&&await this.raiseProviderIce(e,{candidate:t.candidate?.toJSON()})})),await this.listenForClientIce(e,(async e=>{await n.addIceCandidate(e.candidate)})),await n.setRemoteDescription(t);const o=await n.createAnswer();await n.setLocalDescription(o);const s=Promise.all([i,r]).then((([t,n])=>(this.cleanupIceListeners(e),{request:t,response:n})));return{rtcClient:n,answer:o,channels:s}}}mt.RTCICEManager=Ct;var bt={},It={};function Et(e){return[...e.split(".").reverse().entries()].reduce(((e,[t,n])=>e+ +n*1e4**t),0)}function xt(e,t){return Et(e)>=Et(t)}function At(e){return e.split("/")[0]}Object.defineProperty(It,"__esModule",{value:!0}),It.runtimeUuidMeetsMinimumRuntimeVersion=It.parseRuntimeUuid=It.meetsMinimumRuntimeVersion=void 0,It.meetsMinimumRuntimeVersion=xt,It.parseRuntimeUuid=At,It.runtimeUuidMeetsMinimumRuntimeVersion=function(e,t){return xt(At(e),t)};var Pt,Mt,Ot,_t,St,Rt=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},Ft=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(bt,"__esModule",{value:!0}),bt.ChannelProvider=void 0;const jt=Te,kt=It;class Lt extends jt.ChannelBase{get connections(){return[...Rt(this,Pt,"f")]}static handleClientDisconnection(e,t){const n=e.connections.find((e=>e.endpointId===t.endpointId));if(n)Rt(e,_t,"f").call(e,n);else{e.connections.filter((e=>e.uuid===t.uuid&&e.name===t.name)).forEach(Rt(e,_t,"f"))}e.disconnectListener(t)}static setProviderRemoval(e,t){Lt.removalMap.set(e,t)}constructor(e,t,n){super(),Pt.set(this,void 0),Mt.set(this,void 0),Ot.set(this,void 0),_t.set(this,(e=>{const t=this.connections.filter((t=>t.endpointId!==e.endpointId));Rt(this,Ot,"f").closeEndpoint(e.endpointId),Ft(this,Pt,t,"f")})),this.processAction=async(e,t,n)=>(Lt.clientIsMultiRuntime(n)&&!(0,kt.runtimeUuidMeetsMinimumRuntimeVersion)(n.runtimeUuid,"18.87.56.0")?this.handleMultiRuntimeLegacyClient(n):this.checkForClientConnection(n),super.processAction(e,t,n)),St.set(this,(()=>{Rt(this,Ot,"f").close();const e=Lt.removalMap.get(this);e&&e()})),Ft(this,Mt,new jt.ProtectedItems(e,t),"f"),this.connectListener=()=>{},this.disconnectListener=()=>{},Ft(this,Pt,[],"f"),Ft(this,Ot,n,"f"),n.receive(this.processAction)}dispatch(e,t,n){const i=e.endpointId??this.getEndpointIdForOpenFinId(e,t);return i&&Rt(this,Ot,"f").isEndpointConnected(i)?Rt(this,Ot,"f").send(i,t,n):Promise.reject(new Error(`Client connection with identity uuid: ${e.uuid} / name: ${e.name} / endpointId: ${i} no longer connected.`))}async processConnection(e,t){return Rt(this,Pt,"f").push(e),this.connectListener(e,t)}publish(e,t){return this.connections.map((n=>Rt(this,Ot,"f").send(n.endpointId,e,t)))}onConnection(e){this.connectListener=e}onDisconnection(e){this.disconnectListener=e}async destroy(){const e=Rt(this,Mt,"f");e.providerIdentity,Ft(this,Pt,[],"f"),await e.close(),Rt(this,St,"f").call(this)}async getAllClientInfo(){return this.connections.map((e=>{const{uuid:t,name:n,endpointId:i,entityType:r,connectionUrl:o}=e;return{uuid:t,name:n,endpointId:i,entityType:r,connectionUrl:o}}))}checkForClientConnection(e){if(!this.isClientConnected(e))throw new Error(`This action was sent from a client that is not connected to the provider.\n                    Client Identity: {uuid: ${e.uuid}, name: ${e.name}, endpointId: ${e.endpointId}}`)}isClientConnected(e){return Lt.clientIdentityIncludesEndpointId(e)?this.connections.some((t=>t.endpointId===e.endpointId&&t.uuid===e.uuid&&t.name===e.name)):this.isLegacyClientConnected(e)}isLegacyClientConnected(e){return this.connections.some((t=>t.uuid===e.uuid&&t.name===e.name))}handleMultiRuntimeLegacyClient(e){if(!this.isLegacyClientConnected(e))throw new Error(`This action was sent from a client that is not connected to the provider. Client Identity:\n                    {uuid: ${e.uuid}, name: ${e.name}, endpointId: ${e.endpointId}}`)}getEndpointIdForOpenFinId(e,t){const n=this.connections.filter((t=>t.name===e.name&&t.uuid===e.uuid));if(n.length>=2){const n=Rt(this,Mt,"f"),{uuid:i,name:r}=e,o=n?.providerIdentity.uuid,s=n?.providerIdentity.name;console.warn(`WARNING: Dispatch call may have unintended results. The "to" argument of your dispatch call is missing the\n                "endpointId" parameter. The identity you are dispatching to ({uuid: ${i}, name: ${r}})\n                has multiple channelClients for this channel. Your dispatched action: (${t}) from the provider:\n                ({uuid: ${o}, name: ${s}}) will only be processed by the most recently-created client.`)}return n.pop()?.endpointId}static clientIdentityIncludesEndpointId(e){return void 0!==e.endpointId}static clientIsMultiRuntime(e){return void 0!==e.runtimeUuid}static async wireClose(e,t){await e.sendAction("destroy-channel",{channelName:t})}}bt.ChannelProvider=Lt,Pt=new WeakMap,Mt=new WeakMap,Ot=new WeakMap,_t=new WeakMap,St=new WeakMap,Lt.removalMap=new WeakMap;var Tt={};Object.defineProperty(Tt,"__esModule",{value:!0}),Tt.MessageReceiver=void 0;const $t=Le,Bt=c;class Gt extends Bt.Base{constructor(e){super(e),this.onmessage=e=>"process-channel-message"===e.action&&(this.processChannelMessage(e),!0),this.endpointMap=new Map,this.latestEndpointIdByChannelId=new Map,e.registerMessageHandler(this.onmessage.bind(this))}async processChannelMessage(e){const{senderIdentity:t,providerIdentity:n,action:i,ackToSender:r,payload:o,intendedTargetIdentity:s}=e.payload,a=s.channelId??s.endpointId??this.latestEndpointIdByChannelId.get(n.channelId),c=this.endpointMap.get(a);if(!c)return r.payload.success=!1,r.payload.reason=`Client connection with identity uuid: ${this.wire.me.uuid} / name: ${this.wire.me.name} / endpointId: ${a} no longer connected.`,this.wire.sendRaw(r);try{const e=await c(i,o,t);return r.payload.payload=r.payload.payload||{},r.payload.payload.result=e,this.wire.sendRaw(r)}catch(e){return r.payload.success=!1,r.payload.reason=e.message,this.wire.sendRaw(r)}}addEndpoint(e,t,n){this.endpointMap.set(n,e),t!==n&&this.latestEndpointIdByChannelId.set(t,n)}removeEndpoint(e,t){this.endpointMap.delete(t),this.latestEndpointIdByChannelId.get(e)===t&&this.latestEndpointIdByChannelId.delete(e)}checkForPreviousClientConnection(e){const t=this.latestEndpointIdByChannelId.get(e);t&&($t.ChannelClient.closeChannelByEndpointId(t),console.warn("You have created a second connection to an older provider. First connection has been removed from the clientMap"),console.warn("If the provider calls publish(), you may receive multiple messages."))}}Tt.MessageReceiver=Gt;var Wt={};Object.defineProperty(Wt,"__esModule",{value:!0}),Wt.ProtocolManager=void 0;Wt.ProtocolManager=class{constructor(e){this.ProtocolsInPreferenceOrder=e,this.DefaultClientProtocols=["classic"],this.DefaultProviderProtocols=["classic"],this.getClientProtocols=e=>{const t=e?this.ProtocolsInPreferenceOrder.filter((t=>e.includes(t))):this.DefaultClientProtocols;if(!t.length)throw new Error(`No valid protocols were passed in. Accepted values are: ${this.ProtocolsInPreferenceOrder.join(", ")}.`);return t},this.getProviderProtocols=e=>{const t=e?this.ProtocolsInPreferenceOrder.filter((t=>e.includes(t))):this.DefaultProviderProtocols;if(!t.length)throw new Error(`No valid protocols were passed in. Accepted values are: ${this.ProtocolsInPreferenceOrder.join(", ")}.`);return t},this.getCompatibleProtocols=(e,t)=>t.supportedProtocols.filter((t=>e.some((e=>e.type===t.type&&t.version>=e.minimumVersion&&e.version>=(t.minimumVersion??0))))).slice(0,t.maxProtocols)}};var Ht={};Object.defineProperty(Ht,"__esModule",{value:!0});class Nt{static combine(e,t){return new Nt(e,t)}constructor(e,t){this.primary=e,this.secondary=t}onEndpointDisconnect(e,t){this.primary.onEndpointDisconnect(e,(()=>{this.secondary.isEndpointConnected(e)||t()})),this.secondary.onEndpointDisconnect(e,(()=>{this.primary.isEndpointConnected(e)||t()}))}isValidEndpointPayload(e){return this.primary.isValidEndpointPayload(e)||this.secondary.isValidEndpointPayload(e)}async closeEndpoint(e){await this.primary.closeEndpoint(e),await this.secondary.closeEndpoint(e)}isEndpointConnected(e){return this.primary.isEndpointConnected(e)||this.secondary.isEndpointConnected(e)}async addEndpoint(e,t){this.primary.isValidEndpointPayload(t)&&await this.primary.addEndpoint(e,t),this.secondary.isValidEndpointPayload(t)&&await this.secondary.addEndpoint(e,t)}receive(e){this.primary.receive(e),this.secondary.receive(e)}send(e,t,n){return this.primary.isEndpointConnected(e)?this.primary.send(e,t,n):this.secondary.send(e,t,n)}async close(){await Promise.all([this.primary.close(),this.secondary.close()])}}Ht.default=Nt;var Dt,Ut,Vt=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},zt=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Ke,"__esModule",{value:!0}),Ke.ConnectionManager=void 0;const Kt=qe,qt=c,Yt=Qe,Jt=tt,Zt=mt,Qt=bt,Xt=Tt,en=Wt,tn=Ht;class nn extends qt.Base{static getProtocolOptionsFromStrings(e){return e.map((e=>{switch(e){case"rtc":return Jt.RTCInfo;case"classic":return Yt.ClassicInfo;default:return(0,Kt.exhaustiveCheck)(e,["rtc","classic"])}}))}constructor(e){super(e),Dt.set(this,void 0),Ut.set(this,void 0),this.removeChannelFromProviderMap=e=>{this.providerMap.delete(e)},this.onmessage=e=>"process-channel-connection"===e.action&&(this.processChannelConnection(e),!0),this.providerMap=new Map,this.protocolManager=new en.ProtocolManager("node"===this.wire.environment.type?["classic"]:["rtc","classic"]),Vt(this,Dt,new Xt.MessageReceiver(e),"f"),Vt(this,Ut,new Zt.RTCICEManager(e),"f"),e.registerMessageHandler(this.onmessage.bind(this))}createProvider(e,t){const n=Object.assign(this.wire.environment.getDefaultChannelOptions().create,e||{}),i=this.protocolManager.getProviderProtocols(n?.protocols),r=i.map((e=>{switch(e){case"rtc":return new Jt.RTCStrategy;case"classic":return new Yt.ClassicStrategy(this.wire,zt(this,Dt,"f"),t.channelId,t);default:return(0,Kt.exhaustiveCheck)(e,["rtc","classic"])}}));let o;if(2===r.length){const[e,t]=r;o=tn.default.combine(e,t)}else{if(1!==r.length)throw new Error("failed to combine strategies");[o]=r}const s=new Qt.ChannelProvider(t,(()=>Qt.ChannelProvider.wireClose(this.wire,t.channelName)),o),a=t.channelId;return this.providerMap.set(a,{provider:s,strategy:o,supportedProtocols:nn.getProtocolOptionsFromStrings(i)}),Qt.ChannelProvider.setProviderRemoval(s,this.removeChannelFromProviderMap.bind(this)),s}async createClientOffer(e){const t=this.protocolManager.getClientProtocols(e?.protocols);let n;return{offer:{supportedProtocols:await Promise.all(t.map((async e=>{switch(e){case"rtc":{const{rtcClient:e,channels:t,offer:i,rtcConnectionId:r,channelsOpened:o}=await zt(this,Ut,"f").startClientOffer();return n={rtcClient:e,channels:t,channelsOpened:o},{type:"rtc",version:Jt.RTCInfo.version,payload:{offer:i,rtcConnectionId:r}}}case"classic":return{type:"classic",version:Yt.ClassicInfo.version};default:return(0,Kt.exhaustiveCheck)(e,["rtc","classic"])}}))),maxProtocols:2},rtc:n}}async createClientStrategy(e,t){t.endpointId||(t.endpointId=this.wire.environment.getNextMessageId(),zt(this,Dt,"f").checkForPreviousClientConnection(t.channelId));const n=t.answer??{supportedProtocols:[{type:"classic",version:1}]},i=(await Promise.all(n.supportedProtocols.map((async n=>"rtc"===n.type&&e?(await zt(this,Ut,"f").finishClientOffer(e.rtcClient,n.payload.answer,e.channelsOpened),new Jt.RTCStrategy):"classic"===n.type?new Yt.ClassicStrategy(this.wire,zt(this,Dt,"f"),t.endpointId,t):null)))).filter((e=>null!==e));let r;if(e&&!i.some((e=>e instanceof Jt.RTCStrategy))&&e&&e.rtcClient.close(),i.length>=2)r=tn.default.combine(i[0],i[1]);else{if(!i.length)throw new Error("No compatible protocols");[r]=i}const o={endpointIdentity:t,rtc:e};return r.addEndpoint(t.channelId,o),r}async processChannelConnection(e){const{clientIdentity:t,providerIdentity:n,ackToSender:i,payload:r,offer:o}=e.payload;t.endpointId?t.isLocalEndpointId=!1:(t.endpointId=this.wire.environment.getNextMessageId(),t.isLocalEndpointId=!0);const s=n.channelId,a=this.providerMap.get(s);if(!a)return i.payload.success=!1,i.payload.reason=`Channel "${n.channelName}" has been destroyed.`,this.wire.sendRaw(i);const{provider:c,strategy:d,supportedProtocols:h}=a;try{if(!(c instanceof Qt.ChannelProvider))throw Error("Cannot connect to a channel client");const e=o??{supportedProtocols:[{type:"classic",version:1}],maxProtocols:1},n=this.protocolManager.getCompatibleProtocols(h,e);if(!n.length)throw new Error("This provider does not support any of the offered protocols.");const s=await c.processConnection(t,r);i.payload.payload=i.payload.payload||{};let a={supportedProtocols:[],endpointPayloadPromise:Promise.resolve({endpointIdentity:t})};return a=await n.reduce((async(e,t)=>{const n=await e;if("rtc"===t.type){const{answer:e,rtcClient:i,channels:r}=await zt(this,Ut,"f").createProviderAnswer(t.payload.rtcConnectionId,t.payload.offer);n.supportedProtocols.push({type:"rtc",version:Jt.RTCInfo.version,payload:{answer:e}}),n.endpointPayloadPromise=n.endpointPayloadPromise.then((e=>r.then((t=>({...e,rtc:{rtcClient:i,channels:t}})))))}else n.supportedProtocols.push({type:"classic",version:Yt.ClassicInfo.version});return n}),Promise.resolve(a)),a.endpointPayloadPromise.then((e=>d.addEndpoint(t.endpointId,e))),i.payload.payload.result=s,i.payload.payload.answer=a,this.wire.sendRaw(i)}catch(e){return i.payload.success=!1,i.payload.reason=e.message,this.wire.sendRaw(i)}}}Ke.ConnectionManager=nn,Dt=new WeakMap,Ut=new WeakMap;var rn,on,sn,an=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},cn=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(ke,"__esModule",{value:!0}),ke.Channel=void 0;const dn=t,hn=B,ln=c,un=Le,pn=Ke,wn=bt;function yn(e){const t=Math.floor(e/10),n=Math.min(3e4,500*2**t);return new Promise((e=>{setTimeout((()=>{e(!1)}),n)}))}class fn extends ln.EmitterBase{constructor(e){super(e,"channel"),rn.set(this,void 0),on.set(this,new dn.EventEmitter),sn.set(this,new hn.AsyncRetryableLazy((async()=>{await Promise.all([this.on("disconnected",(e=>{un.ChannelClient.handleProviderDisconnect(e)})),this.on("connected",((...e)=>{cn(this,on,"f").emit("connected",...e)}))]).catch((()=>new Error("error setting up channel connection listeners")))}))),an(this,rn,new pn.ConnectionManager(e),"f")}async getAllChannels(){return this.wire.sendAction("get-all-channels").then((({payload:e})=>e.data))}async onChannelConnect(e){await this.on("connected",e)}async onChannelDisconnect(e){await this.on("disconnected",e)}async safeConnect(e,t,n){const i={count:0};do{let r=()=>{};const o=new Promise((t=>{r=n=>{e===n.channelName&&t(!0)},cn(this,on,"f").on("connected",r)}));try{if(i.count>0){i.gotConnectedEvent=await Promise.race([yn(i.count),o]);const t=await this.wire.sendAction("connect-to-channel",{...n,retryInfo:i});return console.log(`Successfully connected to channelName: ${e}`),t.payload.data}const t=this.wire.sendAction("connect-to-channel",n);i.originalMessageId=t.messageId;return(await t).payload.data}catch(n){if(!n.message.includes("internal-nack"))throw n;t&&0===i.count&&console.warn(`No channel found for channelName: ${e}. Waiting for connection...`)}finally{i.count+=1,cn(this,on,"f").removeListener("connected",r)}}while(t);throw new Error(`No channel found for channelName: ${e}.`)}async connect(e,t={}){if(await cn(this,sn,"f").getValue(),!e||"string"!=typeof e)throw new Error("Please provide a channelName string to connect to a channel.");const n={wait:!0,...this.wire.environment.getDefaultChannelOptions().connect,...t},{offer:i,rtc:r}=await cn(this,rn,"f").createClientOffer(n);let o;(this.fin.me.isFrame||this.fin.me.isView||this.fin.me.isWindow)&&(o=(await this.fin.me.getInfo()).url);const s={channelName:e,...n,offer:i,connectionUrl:o},a=await this.safeConnect(e,n.wait,s),c=await cn(this,rn,"f").createClientStrategy(r,a),d=new un.ChannelClient(a,(()=>un.ChannelClient.wireClose(this.wire,a,a.endpointId)),c);return c.onEndpointDisconnect(a.channelId,(async()=>{try{await d.sendDisconnectAction()}catch(e){console.warn(`Something went wrong during disconnect for client with uuid: ${a.uuid} / name: ${a.name} / endpointId: ${a.endpointId}.`)}finally{un.ChannelClient.handleProviderDisconnect(a)}})),d}async create(e,t){if(!e)throw new Error("Please provide a channelName to create a channel");const{payload:{data:n}}=await this.wire.sendAction("create-channel",{channelName:e}),i=cn(this,rn,"f").createProvider(t,n);return this.on("client-disconnected",(t=>{t.channelName===e&&wn.ChannelProvider.handleClientDisconnection(i,t)})),i}}ke.Channel=fn,rn=new WeakMap,on=new WeakMap,sn=new WeakMap,Object.defineProperty(Fe,"__esModule",{value:!0}),Fe.InterAppPayload=Fe.InterApplicationBus=void 0;const gn=t,mn=c,vn=je,Cn=ke,bn=O;class In extends mn.Base{constructor(e){super(e),this.events={subscriberAdded:"subscriber-added",subscriberRemoved:"subscriber-removed"},this.refCounter=new vn.RefCounter,this.Channel=new Cn.Channel(e),this.emitter=new gn.EventEmitter,e.registerMessageHandler(this.onmessage.bind(this)),this.on=this.emitter.on.bind(this.emitter),this.removeAllListeners=this.emitter.removeAllListeners.bind(this.emitter)}async publish(e,t){await this.wire.sendAction("publish-message",{topic:e,message:t,sourceWindowName:this.me.name})}async send(e,t,n){const i=(0,bn.validateIdentity)(e);if(i)throw new Error(i);await this.wire.sendAction("send-message",{destinationUuid:e.uuid,destinationWindowName:e.name,topic:t,message:n,sourceWindowName:this.me.name})}subscribe(e,t,n){const i=this.createSubscriptionKey(e.uuid,e.name||"*",t);return this.emitter.on(i,n),this.refCounter.actOnFirst(i,(async()=>{await this.wire.sendAction("subscribe",{sourceUuid:e.uuid,sourceWindowName:e.name||"*",topic:t,destinationWindowName:this.me.name})}),(()=>Promise.resolve()))}unsubscribe(e,t,n){const i=e.name||"*",r=this.createSubscriptionKey(e.uuid,i,t);return this.emitter.removeListener(r,n),this.refCounter.actOnLast(r,(async()=>{await this.wire.sendAction("unsubscribe",{sourceUuid:e.uuid,sourceWindowName:i,topic:t,destinationWindowName:this.me.name})}),(()=>new Promise((e=>e)).then((()=>{}))))}processMessage(e){const{payload:{message:t,sourceWindowName:n,sourceUuid:i,topic:r}}=e,o=[this.createSubscriptionKey(i,n,r),this.createSubscriptionKey(i,"*",r),this.createSubscriptionKey("*","*",r)],s={uuid:i,name:n};o.forEach((e=>{this.emitter.emit(e,t,s)}))}emitSubscriverEvent(e,t){const{payload:{targetName:n,uuid:i,topic:r}}=t,o={name:n,uuid:i,topic:r};this.emitter.emit(e,o)}createSubscriptionKey(e,t,n){const i=t||"*";if(!(e&&i&&n))throw new Error("Missing uuid, name, or topic string");return function(...e){return e.map((e=>Buffer.from(`${e}`).toString("base64"))).join("/")}(e,i,n)}onmessage(e){const{action:t}=e;switch(t){case"process-message":this.processMessage(e);break;case this.events.subscriberAdded:this.emitSubscriverEvent(this.events.subscriberAdded,e);break;case this.events.subscriberRemoved:this.emitSubscriverEvent(this.events.subscriberRemoved,e)}return!0}}Fe.InterApplicationBus=In;Fe.InterAppPayload=class{};var En={};Object.defineProperty(En,"__esModule",{value:!0}),En.Clipboard=void 0;const xn=c;class An extends xn.Base{async writeText(e){await this.wire.sendAction("clipboard-write-text",e)}async readText(e){const{payload:t}=await this.wire.sendAction("clipboard-read-text",{type:e});return t.data}async writeImage(e){await this.wire.sendAction("clipboard-write-image",e)}async readImage(e={format:"dataURL"}){const{payload:t}=await this.wire.sendAction("clipboard-read-image",e);return t.data}async writeHtml(e){await this.wire.sendAction("clipboard-write-html",e)}async readHtml(e){const{payload:t}=await this.wire.sendAction("clipboard-read-html",{type:e});return t.data}async writeRtf(e){await this.wire.sendAction("clipboard-write-rtf",e)}async readRtf(e){const{payload:t}=await this.wire.sendAction("clipboard-read-rtf",{type:e});return t.data}async write(e){await this.wire.sendAction("clipboard-write",e)}async getAvailableFormats(e){const{payload:t}=await this.wire.sendAction("clipboard-read-formats",{type:e});return t.data}}En.Clipboard=An;var Pn={},Mn={},On={};Object.defineProperty(On,"__esModule",{value:!0}),On.ExternalApplication=void 0;const _n=c;class Sn extends _n.EmitterBase{constructor(e,t){super(e,"external-application",t.uuid),this.identity=t}getInfo(){return this.wire.sendAction("get-external-application-info",this.identity).then((({payload:e})=>e.data))}}On.ExternalApplication=Sn,Object.defineProperty(Mn,"__esModule",{value:!0}),Mn.ExternalApplicationModule=void 0;const Rn=c,Fn=On;class jn extends Rn.Base{wrap(e){return this.wire.sendAction("external-application-wrap").catch((e=>{})),Promise.resolve(new Fn.ExternalApplication(this.wire,{uuid:e}))}wrapSync(e){return this.wire.sendAction("external-application-wrap-sync").catch((e=>{})),new Fn.ExternalApplication(this.wire,{uuid:e})}}Mn.ExternalApplicationModule=jn,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(Mn,e),n(On,e)}(Pn);var kn={},Ln={},Tn={};Object.defineProperty(Tn,"__esModule",{value:!0}),Tn._Frame=void 0;const $n=c;class Bn extends $n.EmitterBase{constructor(e,t){super(e,"frame",t.uuid,t.name),this.identity=t}getInfo(){return this.wire.sendAction("get-frame-info",this.identity).then((({payload:e})=>e.data))}getParentWindow(){return this.wire.sendAction("get-parent-window",this.identity).then((({payload:e})=>e.data))}}Tn._Frame=Bn,Object.defineProperty(Ln,"__esModule",{value:!0}),Ln._FrameModule=void 0;const Gn=c,Wn=O,Hn=Tn;class Nn extends Gn.Base{async wrap(e){this.wire.sendAction("frame-wrap").catch((e=>{}));const t=(0,Wn.validateIdentity)(e);if(t)throw new Error(t);return new Hn._Frame(this.wire,e)}wrapSync(e){this.wire.sendAction("frame-wrap-sync").catch((e=>{}));const t=(0,Wn.validateIdentity)(e);if(t)throw new Error(t);return new Hn._Frame(this.wire,e)}getCurrent(){return this.wire.sendAction("frame-get-current").catch((e=>{})),Promise.resolve(new Hn._Frame(this.wire,this.wire.environment.getCurrentEntityIdentity()))}getCurrentSync(){return this.wire.sendAction("frame-get-current-sync").catch((e=>{})),new Hn._Frame(this.wire,this.wire.environment.getCurrentEntityIdentity())}}Ln._FrameModule=Nn,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(Ln,e),n(Tn,e)}(kn);var Dn={};Object.defineProperty(Dn,"__esModule",{value:!0}),Dn.GlobalHotkey=void 0;const Un=c;class Vn extends Un.EmitterBase{constructor(e){super(e,"global-hotkey")}async register(e,t){await this.on(e,t),await this.wire.sendAction("global-hotkey-register",{hotkey:e})}async unregister(e){await this.removeAllListeners(e),await this.wire.sendAction("global-hotkey-unregister",{hotkey:e})}async unregisterAll(){await Promise.all(this.eventNames().filter((e=>!("registered"===e||"unregistered"===e))).map((e=>this.removeAllListeners(e)))),await this.wire.sendAction("global-hotkey-unregister-all",{})}async isRegistered(e){const{payload:{data:t}}=await this.wire.sendAction("global-hotkey-is-registered",{hotkey:e});return t}}Dn.GlobalHotkey=Vn;var zn,Kn={},qn={},Yn={},Jn=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Yn,"__esModule",{value:!0}),Yn.Platform=void 0;const Zn=c,Qn=O,Xn=new Map;class ei extends Zn.EmitterBase{constructor(e,t){super(t.wire,"application",e.uuid),this.getClient=e=>{this.wire.sendAction("platform-get-client",this.identity).catch((e=>{}));const t=e||this.identity,{uuid:n}=t;if(!Xn.has(n)){const e=Jn(this,zn,"f").call(this,n);Xn.set(n,e)}return Xn.get(n)},zn.set(this,(async e=>{try{const t=`custom-frame-${e}`,n=await this._channel.connect(t,{wait:!1});return n.onDisconnection((()=>{Xn.delete(e)})),n}catch(t){throw Xn.delete(e),new Error("The targeted Platform is not currently running. Listen for application-started event for the given Uuid.")}})),this.launchLegacyManifest=this.launchContentManifest;const n=(0,Qn.validateIdentity)(e);if(n)throw new Error(n);this._channel=t,this.identity={uuid:e.uuid},this.Layout=this.fin.Platform.Layout,this.Application=this.fin.Application.wrapSync(this.identity)}async createView(e,t,n){this.wire.sendAction("platform-create-view",this.identity).catch((e=>{}));const i=await this.getClient(),r=await i.dispatch("create-view",{target:t,opts:e,targetView:n});if(!r||(0,Qn.validateIdentity)(r.identity))throw new Error(`When overwriting the createView call, please return an object that has a valid 'identity' property: ${JSON.stringify(r)}`);return this.fin.View.wrapSync(r.identity)}async createWindow(e){this.wire.sendAction("platform-create-window",this.identity).catch((e=>{}));const t=await this.getClient();e.reason||(e.reason="api-call");const n=await t.dispatch("create-view-container",e);if(!n||(0,Qn.validateIdentity)(n.identity))throw new Error(`When overwriting the createWindow call, please return an object that has a valid 'identity' property: ${JSON.stringify(n)}`);const{identity:i}=n,r=this.fin.Window.wrapSync(i);return r.name=i.name,r.uuid=i.uuid,r}async quit(){this.wire.sendAction("platform-quit",this.identity).catch((e=>{}));return(await this.getClient()).dispatch("quit")}async closeView(e){this.wire.sendAction("platform-close-view",this.identity).catch((e=>{}));const t=await this.getClient();await t.dispatch("close-view",{view:e})}async reparentView(e,t){console.warn("Platform.reparentView has been deprecated, please use Platform.createView"),this.wire.sendAction("platform-reparent-view",this.identity).catch((e=>{}));const n={...e,uuid:e.uuid??this.identity.uuid},i=await this.fin.View.wrap(n),r=await i.getOptions();return this.createView(r,t)}async getSnapshot(){this.wire.sendAction("platform-get-snapshot",this.identity).catch((e=>{}));return(await this.getClient()).dispatch("get-snapshot")}async getViewSnapshot(e){return(await this.getClient()).dispatch("get-view-snapshot",{viewIdentity:e})}async applySnapshot(e,t){this.wire.sendAction("platform-apply-snapshot",this.identity).catch((e=>{}));const n="Requested snapshot must be a valid Snapshot object, or a url or filepath to such an object.";let i;if("string"==typeof e)try{i=(await this._channel.wire.sendAction("get-application-manifest",{manifestUrl:e})).payload.data}catch(e){throw new Error(`${n}: ${e}`)}else i=e;if(!i.windows)throw new Error(n);const r=await this.getClient();return await r.dispatch("apply-snapshot",{snapshot:i,options:t}),this}async fetchManifest(e){return(await this.getClient()).dispatch("platform-fetch-manifest",{manifestUrl:e})}async launchContentManifest(e){this.wire.sendAction("platform-launch-content-manifest",this.identity).catch((()=>{}));const t=await this.getClient(),n=await this.fetchManifest(e);return t.dispatch("launch-into-platform",{manifest:n,manifestUrl:e}),this}async setWindowContext(e={},t){if(this.wire.sendAction("platform-set-window-context",this.identity).catch((e=>{})),!e)throw new Error("Please provide a serializable object or string to set the context.");const n=await this.getClient(),{entityType:i}=t?await this.fin.System.getEntityInfo(t.uuid,t.name):this.fin.me;await n.dispatch("set-window-context",{context:e,entityType:i,target:t||{uuid:this.fin.me.uuid,name:this.fin.me.name}})}async getWindowContext(e){this.wire.sendAction("platform-get-window-context",this.identity).catch((e=>{}));const t=await this.getClient(),{entityType:n}=e?await this.fin.System.getEntityInfo(e.uuid,e.name):this.fin.me;return t.dispatch("get-window-context",{target:e||{uuid:this.fin.me.uuid,name:this.fin.me.name},entityType:n})}async closeWindow(e,t={skipBeforeUnload:!1}){this.wire.sendAction("platform-close-window",this.identity).catch((e=>{}));return(await this.getClient()).dispatch("close-window",{windowId:e,options:t})}}Yn.Platform=ei,zn=new WeakMap;var ti={},ni={},ii={},ri={};function oi(e){switch(e){case"columns":case"grid":case"rows":case"tabs":return!0;default:return!1}}Object.defineProperty(ri,"__esModule",{value:!0}),ri.overrideFromComposables=ri.isValidPresetType=void 0,ri.isValidPresetType=oi,ri.overrideFromComposables=function(...e){return t=>e.reduceRight(((e,t)=>n=>t(e(n))),(e=>e))(t)},ri.default={isValidPresetType:oi};var si,ai=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(ii,"__esModule",{value:!0}),ii.Layout=void 0;const ci=B,di=O,hi=c,li=ri,ui=W,pi=de;class wi extends hi.Base{constructor(e,t){super(t),si.set(this,new ci.Lazy((async()=>ui.LayoutNode.newLayoutEntitiesClient(await this.platform.getClient(),pi.LAYOUT_CONTROLLER_ID,this.identity)))),this.replace=async e=>{this.wire.sendAction("layout-replace").catch((e=>{}));const t=await this.platform.getClient();await t.dispatch("replace-layout",{target:this.identity,opts:{layout:e}})},this.replaceView=async(e,t)=>{this.wire.sendAction("layout-replace-view").catch((e=>{}));const n=await this.platform.getClient();await n.dispatch("replace-view",{target:this.identity,opts:{viewToReplace:e,newView:t}})},this.applyPreset=async e=>{this.wire.sendAction("layout-apply-preset").catch((e=>{}));const t=await this.platform.getClient(),{presetType:n}=e;if(!n||!(0,li.isValidPresetType)(n))throw new Error("Cannot apply preset layout, please include an applicable presetType property in the PresetLayoutOptions.");await t.dispatch("apply-preset-layout",{target:this.identity,opts:{presetType:n}})};const n=(0,di.validateIdentity)(e);if(n)throw new Error(n);this.identity=e,this.platform=this.fin.Platform.wrapSync({uuid:e.uuid}),e.uuid===this.fin.me.uuid&&e.name===this.fin.me.name&&(this.init=this.fin.Platform.Layout.init)}async getConfig(){this.wire.sendAction("layout-get-config").catch((e=>{}));return(await this.platform.getClient()).dispatch("get-frame-snapshot",{target:this.identity})}async getCurrentViews(){this.wire.sendAction("layout-get-views").catch((e=>{}));const e=await this.platform.getClient();return(await e.dispatch("get-layout-views",{target:this.identity})).map((e=>this.fin.View.wrapSync(e)))}async getRootItem(){this.wire.sendAction("layout-get-root-item").catch((()=>{}));const e=await ai(this,si,"f").getValue(),t=await e.getRoot("layoutName"in this.identity?this.identity:void 0);return ui.LayoutNode.getEntity(t,e)}}ii.Layout=wi,si=new WeakMap;var yi,fi,gi,mi,vi,Ci=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},bi=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(ni,"__esModule",{value:!0}),ni.LayoutModule=void 0;const Ii=c,Ei=ii,xi=de;class Ai extends Ii.Base{constructor(){super(...arguments),yi.add(this),fi.set(this,!1),gi.set(this,null),this.init=async(e={})=>{if(this.wire.sendAction("layout-init").catch((e=>{})),!this.wire.environment.layoutAllowedInContext(this.fin))throw new Error("Layout.init can only be called from a Window context.");if(Ci(this,fi,"f"))throw new Error("Layout.init was already called, please use Layout.create to add additional layouts.");bi(this,fi,!0,"f"),bi(this,gi,await this.wire.environment.initLayoutManager(this.fin,this.wire,e),"f"),await this.wire.environment.applyLayoutSnapshot(this.fin,Ci(this,gi,"f"),e);const t={name:this.fin.me.name,uuid:this.fin.me.uuid};if(!e.layoutManagerOverride){const e={layoutName:xi.DEFAULT_LAYOUT_KEY,...t};return Ci(this,mi,"f").call(this,e)}return this.wrapSync(t)},mi.set(this,(e=>{const t="[Layout] You are using a deprecated property `layoutManager` - it will throw if you access it starting in v37.",n=new Proxy({},{get(e,n){throw console.warn(`[Layout-mgr-proxy] accessing ${n.toString()}`),new Error(t)}}),i=Object.assign(this.wrapSync(e),{layoutManager:n});return new Proxy(i,{get(e,n){if("layoutManager"===n)throw console.warn(`[Layout-proxy] accessing ${n.toString()}`),new Error(t);return e[n]}})})),this.getCurrentLayoutManagerSync=()=>Ci(this,yi,"m",vi).call(this,"fin.Platform.Layout.getCurrentLayoutManagerSync()"),this.create=async e=>this.wire.environment.createLayout(Ci(this,yi,"m",vi).call(this,"fin.Platform.Layout.create()"),e),this.destroy=async e=>this.wire.environment.destroyLayout(Ci(this,yi,"m",vi).call(this,"fin.Platform.Layout.destroy()"),e)}async wrap(e){return this.wire.sendAction("layout-wrap").catch((e=>{})),new Ei.Layout(e,this.wire)}wrapSync(e){return this.wire.sendAction("layout-wrap-sync").catch((e=>{})),new Ei.Layout(e,this.wire)}async getCurrent(){if(this.wire.sendAction("layout-get-current").catch((e=>{})),!this.fin.me.isWindow)throw new Error("You are not in a Window context.  Only Windows can have a Layout.");const{uuid:e,name:t}=this.fin.me;return this.wrap({uuid:e,name:t})}getCurrentSync(){if(this.wire.sendAction("layout-get-current-sync").catch((e=>{})),!this.fin.me.isWindow)throw new Error("You are not in a Window context.  Only Windows can have a Layout.");const{uuid:e,name:t}=this.fin.me;return this.wrapSync({uuid:e,name:t})}}ni.LayoutModule=Ai,fi=new WeakMap,gi=new WeakMap,mi=new WeakMap,yi=new WeakSet,vi=function(e){if(!Ci(this,gi,"f"))throw new Error(`You must call init before using the API ${e}`);return Ci(this,gi,"f")},function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(ni,e),n(ii,e)}(ti),Object.defineProperty(qn,"__esModule",{value:!0}),qn.PlatformModule=void 0;const Pi=c,Mi=Yn,Oi=ti;class _i extends Pi.Base{constructor(e,t){super(e),this._channel=t,this.Layout=new Oi.LayoutModule(this.wire)}async init(e){if(!fin.__internal_.isPlatform||fin.me.name!==fin.me.uuid)throw new Error("fin.Platform.init should only be called from a custom platform provider running in the main window of the application.");return this.wire.environment.initPlatform(this.fin,e)}async wrap(e){return this.wire.sendAction("platform-wrap").catch((e=>{})),new Mi.Platform({uuid:e.uuid},this._channel)}wrapSync(e){return this.wire.sendAction("platform-wrap-sync").catch((e=>{})),new Mi.Platform({uuid:e.uuid},this._channel)}async getCurrent(){return this.wire.sendAction("platform-get-current").catch((e=>{})),this.wrap({uuid:this.wire.me.uuid})}getCurrentSync(){return this.wire.sendAction("platform-get-current-sync").catch((e=>{})),this.wrapSync({uuid:this.wire.me.uuid})}start(e){return this.wire.sendAction("platform-start").catch((e=>{})),new Promise((async(t,n)=>{try{const{uuid:n}=e,i=await this.fin.Application._create({...e,isPlatformController:!0});i.once("platform-api-ready",(()=>t(this.wrapSync({uuid:n})))),i._run({uuid:n})}catch(e){n(e)}}))}startFromManifest(e,t){return this.wire.sendAction("platform-start-from-manifest").catch((e=>{})),new Promise((async(n,i)=>{try{const i=await this.fin.Application._createFromManifest(e);i.once("platform-api-ready",(()=>n(this.wrapSync({uuid:i.identity.uuid})))),i._run(t)}catch(e){i(e)}}))}}qn.PlatformModule=_i,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(qn,e),n(Yn,e)}(Kn);var Si={};!function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.getMe=e.getBaseMe=e.environmentUnsupportedMessage=void 0;const t=me(),n=kn,i=Pe(),r=Pn;function o(e,t,n){return{...{isView:"view"===e,isWindow:"window"===e,isFrame:"iframe"===e,isExternal:"external connection"===e},uuid:t,name:n,entityType:e}}e.environmentUnsupportedMessage="You are not running in OpenFin.",e.getBaseMe=o,e.getMe=function(s){const{uuid:a,name:c,entityType:d}=s.me,h={setContext(){throw new Error(e.environmentUnsupportedMessage)},addContextHandler(){throw new Error(e.environmentUnsupportedMessage)},getContextGroups(){throw new Error(e.environmentUnsupportedMessage)},joinContextGroup(){throw new Error(e.environmentUnsupportedMessage)},removeFromContextGroup(){throw new Error(e.environmentUnsupportedMessage)},getAllClientsInContextGroup(){throw new Error(e.environmentUnsupportedMessage)},getInfoForContextGroup(){throw new Error(e.environmentUnsupportedMessage)}},l="Interop API has not been instantiated. Either connection has failed or you have not declared interop in your config.",u={setContext(){throw new Error(l)},addContextHandler(){throw new Error(l)},getContextGroups(){throw new Error(l)},joinContextGroup(){throw new Error(l)},removeFromContextGroup(){throw new Error(l)},getAllClientsInContextGroup(){throw new Error(l)},getInfoForContextGroup(){throw new Error(l)}},p={eventNames:()=>{throw new Error(e.environmentUnsupportedMessage)},emit:()=>{throw new Error(e.environmentUnsupportedMessage)},listeners:()=>{throw new Error(e.environmentUnsupportedMessage)},listenerCount:()=>{throw new Error(e.environmentUnsupportedMessage)},on:()=>{throw new Error(e.environmentUnsupportedMessage)},addListener:()=>{throw new Error(e.environmentUnsupportedMessage)},once:()=>{throw new Error(e.environmentUnsupportedMessage)},prependListener:()=>{throw new Error(e.environmentUnsupportedMessage)},prependOnceListener:()=>{throw new Error(e.environmentUnsupportedMessage)},removeListener:()=>{throw new Error(e.environmentUnsupportedMessage)},removeAllListeners:()=>{throw new Error(e.environmentUnsupportedMessage)}};switch(d){case"view":return Object.assign(new t.View(s,{uuid:a,name:c}),o(d,a,c),{interop:u,isOpenFin:!0});case"window":return Object.assign(new i._Window(s,{uuid:a,name:c}),o(d,a,c),{interop:u,isOpenFin:!0});case"iframe":return Object.assign(new n._Frame(s,{uuid:a,name:c}),o(d,a,c),{interop:u,isOpenFin:!0});case"external connection":return Object.assign(new r.ExternalApplication(s,{uuid:a}),o(d,a,c),{interop:u,isOpenFin:!1});default:return{...o(d,a,c),...p,interop:h,isOpenFin:!1}}}}(Si);var Ri={},Fi={},ji={};Object.defineProperty(ji,"__esModule",{value:!0}),ji.createWarningObject=ji.createUnusableObject=void 0,ji.createUnusableObject=function(e){const t=()=>{throw new Error(e)};return new Proxy({},{apply:t,construct:t,defineProperty:t,deleteProperty:t,get:t,getOwnPropertyDescriptor:t,getPrototypeOf:t,has:t,isExtensible:t,ownKeys:t,preventExtensions:t,set:t,setPrototypeOf:t})},ji.createWarningObject=function(e,t){return new Proxy(t,{get:(...t)=>(console.warn(e),Reflect.get(...t)),set:(...t)=>(console.warn(e),Reflect.set(...t)),getOwnPropertyDescriptor:(...t)=>(console.warn(e),Reflect.getOwnPropertyDescriptor(...t)),ownKeys:(...t)=>(console.warn(e),Reflect.ownKeys(...t))})};var ki,Li={},Ti={};var $i={};!function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.wrapIntentHandler=e.BROKER_ERRORS=e.generateOverrideWarning=e.generateOverrideError=e.wrapContextHandler=e.wrapInTryCatch=e.generateId=void 0;e.generateId=()=>`${Math.random()}${Date.now()}`;e.wrapInTryCatch=(e,t)=>(...n)=>{try{return e(...n)}catch(e){throw new Error((t||"")+e)}};e.wrapContextHandler=(e,t)=>async n=>{try{await e(n)}catch(e){throw console.error(`Error thrown by handler ${t} for context type ${n.type}: ${e}`),e}};e.generateOverrideError=(e,t)=>`You have tried to to use ${e} but ${t} has not been overridden in the Interop Broker. Please override this function. Refer to our documentation for more info.`;e.generateOverrideWarning=(e,t,n,i)=>{const{uuid:r,name:o}=n;return i?`Entity with identity: ${r}/${o} has called ${i} or ${e} but ${t} has not been overridden.`:`Entity with identity: ${r}/${o} has called ${e} but ${t} has not been overridden.`},e.BROKER_ERRORS={fireIntent:(0,e.generateOverrideError)("fireIntent","handleFiredIntent"),fireIntentForContext:(0,e.generateOverrideError)("fireIntentForContext","handleFiredIntentForContext"),getInfoForIntent:(0,e.generateOverrideError)("getInfoForIntent","handleInfoForIntent"),getInfoForIntentsByContext:(0,e.generateOverrideError)("getInfoForIntentsByContext","handleInfoForIntentsByContext"),joinSessionContextGroupWithJoinContextGroup:"The Context Group you have tried to join is a Session Context Group. Custom Context Groups can only be defined by the Interop Broker through code or manifest configuration. Please use joinSessionContextGroup.",fdc3Open:(0,e.generateOverrideError)("fdc3.open","fdc3HandleOpen"),fdc3FindInstances:(0,e.generateOverrideError)("fdc3.findInstances","fdc3HandleFindInstances"),fdc3GetAppMetadata:(0,e.generateOverrideError)("fdc3.getAppMetadata","fdc3HandleGetAppMetadata"),fdc3GetInfo:(0,e.generateOverrideError)("fdc3.getInfo","fdc3HandleGetInfo")};e.wrapIntentHandler=(e,t)=>async n=>{try{return e(n)}catch(e){throw console.error(`Error thrown by handler ${t}: ${e}`),e}}}($i);var Bi,Gi,Wi={};function Hi(){if(Gi)return Li;Gi=1;var e,t,i,r=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},s=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Li,"__esModule",{value:!0}),Li.InteropBroker=void 0;const a=c,d=function(){if(ki)return Ti;ki=1,Object.defineProperty(Ti,"__esModule",{value:!0});const e=pr();return Ti.default=class{constructor(e,t){this.provider=e,this.id=t,this.lastContext=void 0,this.contextGroupMap=new Map,this.clients=new Map,this.registerListeners()}registerListeners(){this.provider.register(`sessionContextGroup:getContext-${this.id}`,this.getCurrentContext.bind(this)),this.provider.register(`sessionContextGroup:setContext-${this.id}`,this.setContext.bind(this)),this.provider.register(`sessionContextGroup:handlerAdded-${this.id}`,this.handlerAdded.bind(this)),this.provider.register(`sessionContextGroup:handlerRemoved-${this.id}`,this.handlerRemoved.bind(this))}getCurrentContext(e){return e.type?this.contextGroupMap.get(e.type):this.lastContext}setContext(t,n){const{context:i}=t,r=e.InteropBroker.checkContextIntegrity(i);if(!1===r.isValid)throw new Error(`Failed to set Context - bad Context. Reason: ${r.reason}. Context: ${JSON.stringify(i)}`);if(!this.getClientState(n))throw new Error(`Client with Identity: ${n.uuid} ${n.name} not in Session Client State Map`);this.contextGroupMap.set(i.type,i),this.lastContext=i,Array.from(this.clients.values()).forEach((e=>{e.contextHandlers.get(i.type)?.forEach((t=>{this.provider.dispatch(e.clientIdentity,t,i)})),e.globalHandler&&this.provider.dispatch(e.clientIdentity,e.globalHandler,i)}))}getClientState(e){return this.clients.get(e.endpointId)}async handlerAdded(e,t){const{handlerId:n,contextType:i}=e,r=this.getClientState(t);if(!r)throw new Error(`Client with Identity: ${t.uuid} ${t.name} not in Client State Map`);if(i){const e=r.contextHandlers.get(i)||[];r.contextHandlers.set(i,[...e,n]);const o=this.contextGroupMap.get(i);o&&await this.provider.dispatch(t,n,o)}else{r.globalHandler=n;const e=[...this.contextGroupMap.keys()].map((async e=>{const i=this.contextGroupMap.get(e);i&&await this.provider.dispatch(t,n,i)}));await Promise.all(e)}}handlerRemoved(e,t){const{handlerId:n}=e,i=this.clients.get(t.endpointId);i?(Array.from(i.contextHandlers).forEach((([,e])=>{const t=e.indexOf(n);t>-1&&e.splice(t,1)})),i.globalHandler===n&&(i.globalHandler=void 0)):console.warn(`Trying to remove a handler from a client that isn't mapped. handlerId: ${n}. clientIdentity: ${t}`)}registerNewClient(e){if(!this.clients.has(e.endpointId)){const t={contextHandlers:new Map,clientIdentity:e,globalHandler:void 0};this.clients.set(e.endpointId,t)}}onDisconnection(e){this.clients.delete(e.endpointId)}},Ti}(),h=$i,l=n,u=function(){if(Bi)return Wi;Bi=1,Object.defineProperty(Wi,"__esModule",{value:!0}),Wi.PrivateChannelProvider=void 0;const e=Hi();return Wi.PrivateChannelProvider=class t{constructor(e,t){this.provider=e,this.id=t,this.clients=new Map,this.registerListeners(),this.contextByContextType=new Map,this.lastContext=void 0,this.provider.onConnection((e=>this.registerNewClient(e))),this.provider.onDisconnection((async e=>{const{endpointId:t}=e;this.clients.has(t)&&await this.handleClientDisconnecting(e),0===(await this.provider.getAllClientInfo()).length&&this.provider.destroy()}))}getClientState(e){return this.clients.get(e.endpointId)}registerListeners(){this.provider.register("broadcast",this.broadcast.bind(this)),this.provider.register("getCurrentContext",this.getCurrentContext.bind(this)),this.provider.register("contextHandlerAdded",this.contextHandlerAdded.bind(this)),this.provider.register("contextHandlerRemoved",this.contextHandlerRemoved.bind(this)),this.provider.register("nonStandardHandlerRemoved",this.nonStandardHandlerRemoved.bind(this)),this.provider.register("onAddContextHandlerAdded",this.onAddContextHandlerAdded.bind(this)),this.provider.register("onDisconnectHandlerAdded",this.onDisconnectHandlerAdded.bind(this)),this.provider.register("onUnsubscribeHandlerAdded",this.onUnsubscribeHandlerAdded.bind(this)),this.provider.register("clientDisconnecting",((e,t)=>{this.handleClientDisconnecting(t)}))}broadcast(t,n){const{context:i}=t;if(!this.getClientState(n))throw new Error(`Client with Identity: ${n.uuid} ${n.name}, tried to call broadcast, is not connected to this Private Channel`);const r=e.InteropBroker.checkContextIntegrity(i);if(!1===r.isValid)throw new Error(`Failed to broadcast - bad Context. Reason: ${r.reason}. Context: ${JSON.stringify(i)}`);this.contextByContextType.set(i.type,i),this.lastContext=i,Array.from(this.clients.values()).forEach((e=>{const t=e.handlerIdsByContextTypes.get(i.type);t&&t.forEach((t=>{this.provider.dispatch(e.clientIdentity,t,i)})),e.globalHandler&&this.provider.dispatch(e.clientIdentity,e.globalHandler,i)}))}getCurrentContext(e,t){const{contextType:n}=e;if(!this.getClientState(t))throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call getCurrentContext, is not connected to this Private Channel`);if(void 0!==n){return this.contextByContextType.get(n)||null}return this.lastContext?this.lastContext:null}contextHandlerAdded(e,t){const{handlerId:n,contextType:i}=e,r=this.getClientState(t);if(!r)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call addContextListener, is not connected to this Private Channel`);if(i){const e=r.handlerIdsByContextTypes.get(i)||[];r.handlerIdsByContextTypes.set(i,[...e,n])}else r.globalHandler=n;Array.from(this.clients.values()).forEach((e=>{e.clientIdentity.endpointId!==t.endpointId&&e.onAddContextListenerHandlerId&&this.provider.dispatch(e.clientIdentity,e.onAddContextListenerHandlerId,i)}))}async contextHandlerRemoved(e,t){const{handlerId:n}=e,i=this.getClientState(t);if(i){let e;if(i.globalHandler===n)i.globalHandler=void 0;else for(const[t,r]of i.handlerIdsByContextTypes){const i=r.indexOf(n);i>-1&&(r.splice(i,1),e=t)}const r=(await this.getConnectedClients()).map((async n=>{const{clientIdentity:i,clientIdentity:{endpointId:r},onUnsubscribeHandlerId:o}=n;r!==t.endpointId&&o&&await this.provider.dispatch(i,o,e)}));try{await Promise.all(r)}catch(e){throw console.error(`Problem when attempting to dispatch to onUnsubscribeHandlers. Error: ${e} Removing Client: ${n}. uuid: ${t.uuid}. name: ${t.name}. endpointId: ${t.endpointId}`),new Error(e)}}else console.warn(`Trying to remove a handler from a client that isn't mapped. handlerId: ${n}. uuid: ${t.uuid}. name: ${t.name}. endpointId: ${t.endpointId}.`)}nonStandardHandlerRemoved(e,t){const{handlerId:n}=e,i=this.getClientState(t);i?i.onDisconnectHandlerId===n?i.onDisconnectHandlerId=void 0:i.onAddContextListenerHandlerId===n?i.onAddContextListenerHandlerId=void 0:i.onUnsubscribeHandlerId===n&&(i.onUnsubscribeHandlerId=void 0):console.warn(`Trying to remove a handler from a client that isn't mapped. handlerId: ${n}. clientIdentity: ${t}`)}onAddContextHandlerAdded(e,t){const n=this.getClientState(t),{handlerId:i}=e;if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call onAddContextListener, is not connected to this Private Channel`);n.onAddContextListenerHandlerId=i,Array.from(this.clients.values()).forEach((e=>{e.clientIdentity.endpointId!==t.endpointId&&Array.from(e.handlerIdsByContextTypes.keys()).forEach((e=>{this.provider.dispatch(t,i,e)}))}))}onDisconnectHandlerAdded(e,t){const n=this.getClientState(t),{handlerId:i}=e;if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call onDisconnect, is not connected to this Private Channel`);n.onDisconnectHandlerId=i}onUnsubscribeHandlerAdded(e,t){const n=this.getClientState(t),{handlerId:i}=e;if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name}, tried to call onUnsubscribe, is not connected to this Private Channel`);n.onUnsubscribeHandlerId=i}removeClient(e){const t=this.getClientState(e);if(!t)throw new Error(`Client with Identity: ${e.uuid} ${e.name}, tried to call disconnect, is not connected to this Private Channel`);t.handlerIdsByContextTypes.clear(),this.clients.delete(e.endpointId)}async fireOnDisconnectForOtherClients(e){const{endpointId:t}=e,n=(await this.getConnectedClients()).map((async e=>{const{clientIdentity:{endpointId:n},onDisconnectHandlerId:i}=e;n!==t&&i&&await this.provider.dispatch(e.clientIdentity,i)}));try{await Promise.all(n)}catch(t){throw console.error(`Problem when attempting to dispatch to onDisconnectHandlers. Error: ${t} Disconnecting Client: uuid: ${e.uuid}. name: ${e.name}. endpointId: ${e.endpointId}`),new Error(t)}}async unsubscribeAll(e){const{endpointId:t}=e,n=this.clients.get(t);if(n){const t=Array.from(n.handlerIdsByContextTypes.values()).flat(),i=n.globalHandler;if(t.length>0){const n=t.map((async t=>this.contextHandlerRemoved({handlerId:t},e)));try{await Promise.all(n)}catch(e){console.error(e.message)}}if(i)try{await this.contextHandlerRemoved({handlerId:i},e)}catch(e){console.error(e.message)}}}async handleClientDisconnecting(e){await this.unsubscribeAll(e),this.removeClient(e),await this.fireOnDisconnectForOtherClients(e)}registerNewClient(e){if(!this.clients.has(e.endpointId)){const t={clientIdentity:e,handlerIdsByContextTypes:new Map,globalHandler:void 0,onAddContextListenerHandlerId:void 0,onUnsubscribeHandlerId:void 0,onDisconnectHandlerId:void 0};this.clients.set(e.endpointId,t)}}async getConnectedClients(){const e=await this.provider.getAllClientInfo();return Array.from(this.clients.values()).filter((t=>{const{uuid:n,name:i}=t.clientIdentity;return e.some((e=>i===e.name&&n===e.uuid))}))}static init(e,n){return new t(e,n)}},Wi}(),p=B,w=[{id:"green",displayMetadata:{color:"#00CC88",name:"green"}},{id:"purple",displayMetadata:{color:"#8C61FF",name:"purple"}},{id:"orange",displayMetadata:{color:"#FF8C4C",name:"orange"}},{id:"red",displayMetadata:{color:"#FF5E60",name:"red"}},{id:"pink",displayMetadata:{color:"#FF8FB8",name:"pink"}},{id:"yellow",displayMetadata:{color:"#E9FF8F",name:"yellow"}}];let y=class n extends a.Base{constructor(n,o,a){super(n),e.set(this,void 0),t.set(this,void 0),i.set(this,void 0),this.getProvider=()=>s(this,i,"f").getValue(),this.interopClients=new Map,this.contextGroupsById=new Map,r(this,t,a.contextGroups??[...w],"f"),r(this,e,a.fdc3Info,"f"),a?.logging&&(this.logging=a.logging),this.intentClientMap=new Map,this.lastContextMap=new Map,this.sessionContextGroupMap=new Map,r(this,i,new p.Lazy(o),"f"),this.setContextGroupMap(),this.setupChannelProvider()}static createClosedConstructor(...e){return class extends n{constructor(...t){if(t.length){const[n,i,r]=t;if(r&&"object"==typeof r&&!(0,l.isEqual)(r,e[2]))return console.warn("You have modified the parameters of the InteropOverride constructor. This behavior is deprecated and will be removed in a future version. You can modify these options in your manifest. Please consult our Interop docs for guidance on migrating to the new override scheme."),void super(e[0],e[1],r);console.warn("You are attempting to pass arguments to the InteropOverride constructor. This is not necessary, and these passed arguments will be ignored. You are likely using an older InteropBroker override scheme. Please consult our Interop docs for guidance on migrating to the new override scheme.")}super(...e)}}}setContext({context:e},t){this.wire.sendAction("interop-broker-set-context").catch((e=>{}));const n=this.getClientState(t);if(!n||!n.contextGroupId)throw n?new Error("You must join a context group before you can set context."):new Error(`Client with Identity: ${t.uuid} ${t.name} not in Client State Map`);{const{contextGroupId:t}=n;this.setContextForGroup({context:e},t)}}setContextForGroup({context:e},t){this.wire.sendAction("interop-broker-set-context-for-group").catch((e=>{}));const i=this.contextGroupsById.get(t);if(!i)throw new Error(`Unable to set context for context group that isn't in the context group mapping: ${t}.`);const r=n.checkContextIntegrity(e);if(!1===r.isValid)throw new Error(`Failed to set Context - bad Context. Reason: ${r.reason}. Context: ${JSON.stringify(e)}`);const o=e.type;i.set(o,e),this.lastContextMap.set(t,o);Array.from(this.interopClients.values()).filter((e=>e.contextGroupId===t)).forEach((t=>{for(const[,i]of t.contextHandlers)n.isContextTypeCompatible(o,i.contextType)&&this.invokeContextHandler(t.clientIdentity,i.handlerId,e)}))}getCurrentContext(e,t){this.wire.sendAction("interop-broker-get-current-context").catch((e=>{}));const n=this.getClientState(t);if(!n?.contextGroupId)throw new Error("You must be a member of a context group to call getCurrentContext");const{contextGroupId:i}=n,r=this.contextGroupsById.get(i),o=this.lastContextMap.get(i),s=e?.contextType??o;return r&&s?r.get(s):void 0}async joinContextGroup({contextGroupId:e,target:t},i){if(this.wire.sendAction("interop-broker-join-context-group").catch((e=>{})),this.sessionContextGroupMap.has(e))throw new Error(h.BROKER_ERRORS.joinSessionContextGroupWithJoinContextGroup);if(t){n.hasEndpointId(t)&&await this.addClientToContextGroup({contextGroupId:e},t);try{const n=this.channel.connections.filter((e=>e.uuid===t.uuid&&e.name===t.name));if(!n.length)throw new Error(`Given Identity ${t.uuid} ${t.name} is not connected to the Interop Broker.`);n.length>1&&console.warn(`More than one connection found for identity ${t.uuid} ${t.name}`);const i=[];for(const t of n)i.push(this.addClientToContextGroup({contextGroupId:e},t));await Promise.all(i)}catch(e){throw new Error(e)}}else await this.addClientToContextGroup({contextGroupId:e},i)}async addClientToContextGroup({contextGroupId:e},t){this.wire.sendAction("interop-broker-add-client-to-context-group").catch((e=>{}));const n=this.getClientState(t);if(!n)throw new Error(`Client with Identity: ${t.uuid} ${t.name} not in Client State Map`);if(!this.getContextGroups().find((t=>t.id===e)))throw new Error(`Attempting to join a context group that does not exist: ${e}. You may only join existing context groups.`);if(n.contextGroupId!==e){n.contextGroupId=e,await this.setCurrentContextGroupInClientOptions(t,e);const i=this.contextGroupsById.get(e);for(const[,e]of n.contextHandlers){const{contextType:n,handlerId:r}=e;if(void 0===n)i.forEach(((e,n)=>{this.invokeContextHandler(t,r,e)}));else if(i.has(n)){const e=i.get(n);e&&this.invokeContextHandler(t,r,e)}}}}async removeFromContextGroup({target:e},t){if(this.wire.sendAction("interop-broker-remove-from-context-group").catch((e=>{})),e){n.hasEndpointId(e)&&await this.removeClientFromContextGroup(e);try{const t=this.channel.connections.filter((t=>t.uuid===e.uuid&&t.name===e.name));if(!t.length)throw new Error(`No connection found for given Identity ${e.uuid} ${e.name}`);t.length>1&&console.warn(`More than one connection found for identity ${e.uuid} ${e.name}`);const n=[];for(const e of t)n.push(this.removeClientFromContextGroup(e));await Promise.all(n)}catch(e){throw new Error(e)}}else await this.removeClientFromContextGroup(t)}async removeClientFromContextGroup(e){this.wire.sendAction("interop-broker-remove-client-from-context-group").catch((e=>{}));const t=this.getClientState(e);t&&(t.contextGroupId=void 0),await this.setCurrentContextGroupInClientOptions(e,null)}getContextGroups(){return this.wire.sendAction("interop-broker-get-context-groups").catch((e=>{})),s(this,t,"f").map((e=>({...e})))}getInfoForContextGroup({contextGroupId:e}){return this.wire.sendAction("interop-broker-get-info-for-context-group").catch((e=>{})),this.getContextGroups().find((t=>t.id===e))}getAllClientsInContextGroup({contextGroupId:e}){this.wire.sendAction("interop-broker-get-all-clients-in-context-group").catch((e=>{}));return Array.from(this.interopClients.values()).filter((t=>t.contextGroupId===e)).map((e=>e.clientIdentity))}async handleFiredIntent(e,t){const n=(0,h.generateOverrideWarning)("fdc3.raiseIntent","InteropBroker.handleFiredIntent",t,"interopClient.fireIntent");throw console.warn(n),new Error(h.BROKER_ERRORS.fireIntent)}async setIntentTarget(e,t){this.wire.sendAction("interop-broker-set-intent-target").catch((e=>{}));const n=this.intentClientMap.get(t.name),i=`intent-handler-${e.name}`;if(n){const t=n.get(i);if(t){if(t.pendingIntents.push(e),t.clientIdentity&&t.isReady){const{clientIdentity:e,pendingIntents:n}=t;try{const r=n[n.length-1];await this.invokeIntentHandler(e,i,r),t.pendingIntents=[]}catch(n){console.error(`Error invoking intent handler for client ${e.uuid}/${e.name}/${e.endpointId}`),t.isReady=!1}}}else n.set(i,{isReady:!1,pendingIntents:[e]})}else{this.intentClientMap.set(t.name,new Map);const n=this.intentClientMap.get(t.name);n&&n.set(i,{isReady:!1,pendingIntents:[e]})}}async handleInfoForIntent(e,t){const n=(0,h.generateOverrideWarning)("fdc3.findIntent","InteropBroker.handleInfoForIntent",t,"interopClient.getInfoForIntent");throw console.warn(n),new Error(h.BROKER_ERRORS.getInfoForIntent)}async handleInfoForIntentsByContext(e,t){const n=(0,h.generateOverrideWarning)("fdc3.findIntentsByContext","InteropBroker.handleInfoForIntentsByContext",t,"interopClient.getInfoForIntentsByContext");throw console.warn(n),new Error(h.BROKER_ERRORS.getInfoForIntentsByContext)}async handleFiredIntentForContext(e,t){const n=(0,h.generateOverrideWarning)("fdc3.raiseIntentForContext","InteropBroker.handleFiredIntentForContext",t,"interopClient.fireIntentForContext");throw console.warn(n),new Error(h.BROKER_ERRORS.fireIntentForContext)}async clientDisconnected(e){}async fdc3HandleOpen({app:e,context:t},n){const i=(0,h.generateOverrideWarning)("fdc3.open","InteropBroker.fdc3HandleOpen",n);throw console.warn(i),new Error(h.BROKER_ERRORS.fdc3Open)}async fdc3HandleFindInstances(e,t){const n=(0,h.generateOverrideWarning)("fdc3.open","InteropBroker.fdc3HandleFindInstances",t);throw console.warn(n),new Error(h.BROKER_ERRORS.fdc3FindInstances)}async fdc3HandleGetAppMetadata(e,t){const n=(0,h.generateOverrideWarning)("fdc3.getAppMetadata","InteropBroker.fdc3HandleGetAppMetadata",t);throw console.warn(n),new Error(h.BROKER_ERRORS.fdc3GetAppMetadata)}async invokeContextHandler(e,t,n){const i=await this.getProvider();try{await i.dispatch(e,t,n)}catch(i){console.error(`Error invoking context handler ${t} for context type ${n.type} in client ${e.uuid}/${e.name}/${e.endpointId}`,i)}}async invokeIntentHandler(e,t,n){const i=await this.getProvider();await i.dispatch(e,t,n)}async fdc3HandleGetInfo(t,n){const{fdc3Version:i}=t;return{fdc3Version:i,...s(this,e,"f"),optionalFeatures:{OriginatingAppMetadata:!1,UserChannelMembershipAPIs:!0},appMetadata:{appId:"",instanceId:""}}}async getAllClientInfo(){return(await this.getProvider()).getAllClientInfo()}decorateSnapshot(e){return{...e,interopSnapshotDetails:{contextGroupStates:this.getContextGroupStates()}}}applySnapshot(e,t){const n=e?.interopSnapshotDetails?.contextGroupStates;n&&(t?.closeExistingWindows||this.updateExistingClients(n),this.rehydrateContextGroupStates(n))}updateExistingClients(e){this.interopClients.forEach((t=>{const{clientIdentity:i,contextGroupId:r,contextHandlers:o}=t;if(r){const t=e[r];for(const[,e]of Object.entries(t))o.forEach((t=>{const{handlerId:r,contextType:o}=t;n.isContextTypeCompatible(e.type,o)&&this.invokeContextHandler(i,r,e)}))}}))}getContextGroupStates(){return n.toObject(this.contextGroupsById)}rehydrateContextGroupStates(e){const t=Object.entries(e);for(const[e,n]of t){const t=Object.entries(n);for(const[n,i]of t)if(this.contextGroupsById.has(e)){this.contextGroupsById.get(e).set(n,i)}else console.warn(`Attempting to set a context group that isn't in the context group mapping. Skipping context group rehydration for: ${e}`)}}contextHandlerRegistered({contextType:e,handlerId:t},n){const i={contextType:e,handlerId:t},r=this.getClientState(n);if(r?.contextHandlers.set(t,i),r&&r.contextGroupId){const{contextGroupId:i}=r,o=this.contextGroupsById.get(i);if(void 0===e)o.forEach(((e,i)=>{this.invokeContextHandler(n,t,e)}));else if(o.has(e)){const i=o.get(e);i&&this.invokeContextHandler(n,t,i)}}}async intentHandlerRegistered(e,t){const{handlerId:n}=e,i=this.intentClientMap.get(t.name),r=i?.get(n);if(i)if(r){const{pendingIntents:e}=r;r.clientIdentity=t,r.isReady=!0;try{if(e.length>0){const i=e[e.length-1];await this.invokeIntentHandler(t,n,i),r.pendingIntents=[]}}catch(e){console.error(`Error invoking intent handler: ${n} for client ${t.uuid}/${t.name}/${t.endpointId}`)}}else i.set(n,{isReady:!0,pendingIntents:[],clientIdentity:t});else{this.intentClientMap.set(t.name,new Map);const e=this.intentClientMap.get(t.name);e&&e.set(n,{isReady:!0,pendingIntents:[],clientIdentity:t})}}removeContextHandler({handlerId:e},t){const n=this.getClientState(t);n&&n.contextHandlers.delete(e)}handleJoinSessionContextGroup({sessionContextGroupId:e},t){try{if(!e)throw new Error("Failed to join session context group: must specify group id.");const n=this.sessionContextGroupMap.get(e);if(n)n.registerNewClient(t);else{const n=new d.default(this.channel,e);n.registerNewClient(t),this.sessionContextGroupMap.set(e,n)}return{hasConflict:this.contextGroupsById.has(e)}}catch(e){throw new Error(e)}}getClientState(e){return this.interopClients.get(e.endpointId)}static toObject(e){const t=Object.fromEntries(e),n={};return Object.entries(t).forEach((([e,t])=>{const i=Object.fromEntries(t);n[e]=i})),n}static checkContextIntegrity(e){if(!e)return{isValid:!1,reason:"No context supplied"};if("object"!=typeof e)return{isValid:!1,reason:"Context must be an Object"};if(!e.type)return{isValid:!1,reason:"Context must have a type property"};if(e.id&&"object"!=typeof e.id)return{isValid:!1,reason:"Context id must be an Object populated with key-value identifiers (if set)"};if(e.id){const{id:t}=e,n=Object.keys(t);let i=!1;if(!n.length)return{isValid:!1,reason:"Context id must have at least one key-value identifier"};if(n.forEach((e=>{"string"==typeof e&&"string"==typeof t[e]||(i=!0)})),i)return{isValid:!1,reason:"Context id key-value identifiers must be of type string"}}return e.name&&"string"!=typeof e.name?{isValid:!1,reason:"Context name must be of string type (if set)"}:{isValid:!0}}static hasEndpointId(e){return void 0!==e.endpointId}static isContextTypeCompatible(e,t){return void 0===t||e===t}setContextGroupMap(){for(const e of this.getContextGroups())this.contextGroupsById.set(e.id,new Map)}async setCurrentContextGroupInClientOptions(e,t){try{const n=await this.fin.System.getEntityInfo(e.uuid,e.name);let i;"view"===n.entityType?i=await this.fin.View.wrap(e):"window"===n.entityType&&(i=await this.fin.Window.wrap(e)),i&&await i.updateOptions({interop:{currentContextGroup:t}})}catch(e){}}async setupChannelProvider(){try{const e=await this.getProvider();this.channel=e,this.wireChannel(e)}catch(e){throw new Error(`Error setting up Interop Broker Channel Provider: ${e}`)}}wireChannel(e){e.onConnection((async(e,t)=>{if(!await this.isConnectionAuthorized(e,t))throw new Error(`Connection not authorized for ${e.uuid}, ${e.name}`);if(!e.endpointId)throw new Error("Version too old to be compatible with Interop. Please upgrade your runtime to a more recent version.");const n={contextGroupId:void 0,contextHandlers:new Map,clientIdentity:e};t?.currentContextGroup&&this.contextGroupsById.has(t.currentContextGroup)&&(n.contextGroupId=t?.currentContextGroup),this.interopClients.set(e.endpointId,n)})),e.onDisconnection((e=>{this.interopClients.delete(e.endpointId);const t=this.intentClientMap.get(e.name);t&&e.uuid===this.fin.me.uuid&&t.forEach((e=>{e.isReady=!1})),this.sessionContextGroupMap.forEach((t=>{t.onDisconnection(e)})),this.clientDisconnected(e)})),e.beforeAction((async(e,t,n)=>{if(!await this.isActionAuthorized(e,t,n))throw new Error(`Action (${e}) not authorized for ${n.uuid}, ${n.name}`);this.logging?.beforeAction?.enabled&&console.log(e,t,n)})),e.afterAction(((e,t,n)=>{this.logging?.afterAction?.enabled&&console.log(e,t,n)})),e.register("setContext",this.setContext.bind(this)),e.register("fireIntent",this.handleFiredIntent.bind(this)),e.register("getCurrentContext",this.getCurrentContext.bind(this)),e.register("getInfoForIntent",this.handleInfoForIntent.bind(this)),e.register("getInfoForIntentsByContext",this.handleInfoForIntentsByContext.bind(this)),e.register("fireIntentForContext",this.handleFiredIntentForContext.bind(this)),e.register("getContextGroups",this.getContextGroups.bind(this)),e.register("joinContextGroup",this.joinContextGroup.bind(this)),e.register("removeFromContextGroup",this.removeFromContextGroup.bind(this)),e.register("getAllClientsInContextGroup",this.getAllClientsInContextGroup.bind(this)),e.register("getInfoForContextGroup",this.getInfoForContextGroup.bind(this)),e.register("contextHandlerRegistered",this.contextHandlerRegistered.bind(this)),e.register("intentHandlerRegistered",this.intentHandlerRegistered.bind(this)),e.register("removeContextHandler",this.removeContextHandler.bind(this)),e.register("sessionContextGroup:createIfNeeded",this.handleJoinSessionContextGroup.bind(this)),e.register("fdc3Open",this.fdc3HandleOpen.bind(this)),e.register("fdc3v2FindIntentsByContext",this.handleInfoForIntentsByContext.bind(this)),e.register("fdc3FindInstances",this.fdc3HandleFindInstances.bind(this)),e.register("fdc3GetAppMetadata",this.fdc3HandleGetAppMetadata.bind(this)),e.register("fdc3v2GetInfo",(async(e,t)=>this.fdc3HandleGetInfo.bind(this)(e,t))),e.register("createPrivateChannelProvider",(async e=>{const{channelId:t}=e,n=await this.fin.InterApplicationBus.Channel.create(t);u.PrivateChannelProvider.init(n,t)}))}isConnectionAuthorized(e,t){return this.wire.sendAction("interop-broker-is-connection-authorized").catch((e=>{})),Promise.resolve(!0)}isActionAuthorized(e,t,n){return this.wire.sendAction("interop-broker-is-action-authorized").catch((e=>{})),Promise.resolve(!0)}};return Li.InteropBroker=y,e=new WeakMap,t=new WeakMap,i=new WeakMap,Li}var Ni,Di={},Ui={},Vi=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},zi=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Ui,"__esModule",{value:!0});const Ki=c,qi=$i;class Yi extends Ki.Base{constructor(e,t,n){super(e),Ni.set(this,void 0),this.id=n,Vi(this,Ni,t,"f")}async setContext(e){this.wire.sendAction("interop-session-context-group-set-context").catch((e=>{}));return(await zi(this,Ni,"f")).dispatch(`sessionContextGroup:setContext-${this.id}`,{sessionContextGroupId:this.id,context:e})}async getCurrentContext(e){this.wire.sendAction("interop-session-context-group-get-context").catch((e=>{}));return(await zi(this,Ni,"f")).dispatch(`sessionContextGroup:getContext-${this.id}`,{sessionContextGroupId:this.id,type:e})}async addContextHandler(e,t){if(this.wire.sendAction("interop-session-context-group-add-handler").catch((e=>{})),"function"!=typeof e)throw new Error("Non-function argument passed to the first parameter 'handler'. Be aware that the argument order does not match the FDC3 standard.");const n=await zi(this,Ni,"f");let i;return i=t?`sessionContextHandler:invoke-${this.id}-${t}-${(0,qi.generateId)()}`:`sessionContextHandler:invoke-${this.id}`,n.register(i,(0,qi.wrapContextHandler)(e,i)),await n.dispatch(`sessionContextGroup:handlerAdded-${this.id}`,{handlerId:i,contextType:t}),{unsubscribe:await this.createUnsubscribeCb(i)}}async createUnsubscribeCb(e){const t=await zi(this,Ni,"f");return async()=>{t.remove(e),await t.dispatch(`sessionContextGroup:handlerRemoved-${this.id}`,{handlerId:e})}}getUserInstance(){return{id:this.id,setContext:(0,qi.wrapInTryCatch)(this.setContext.bind(this),"Failed to set context: "),getCurrentContext:(0,qi.wrapInTryCatch)(this.getCurrentContext.bind(this),"Failed to get context: "),addContextHandler:(0,qi.wrapInTryCatch)(this.addContextHandler.bind(this),"Failed to add context handler: ")}}}Ui.default=Yi,Ni=new WeakMap;var Ji={},Zi={},Qi={},Xi={};Object.defineProperty(Xi,"__esModule",{value:!0}),Xi.PrivateChannelClient=void 0;const er=$i;var tr,nr;function ir(){if(tr)return Zi;tr=1;var e,t=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)},i=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n};Object.defineProperty(Zi,"__esModule",{value:!0}),Zi.FDC3ModuleBase=void 0;const r=Qi,s=$i,a=ar(),c=n;return Zi.FDC3ModuleBase=class{get client(){return t(this,e,"f").call(this)}get fin(){return this.wire.getFin()}constructor(t,n){this.wire=n,e.set(this,void 0),i(this,e,t,"f")}async broadcast(e){return this.wire.sendAction("fdc3-broadcast").catch((e=>{})),this.client.setContext(e)}async _open(e,t){this.wire.sendAction("fdc3-open").catch((e=>{}));try{return await a.InteropClient.ferryFdc3Call(this.client,"fdc3Open",{app:e,context:t})}catch(e){const t=e.message===s.BROKER_ERRORS.fdc3Open?"ResolverUnavailable":e.message;throw new Error(t)}}async _getChannels(){return(await this.client.getContextGroups()).map((e=>({...e,type:"system",...(0,r.getUnsupportedChannelApis)()})))}async getOrCreateChannel(e){this.wire.sendAction("fdc3-get-or-create-channel").catch((e=>{}));const t=(await this._getChannels()).find((t=>t.id===e));if(t)return{...t,type:"system",...(0,r.getUnsupportedChannelApis)()};try{const t=await this.client.joinSessionContextGroup(e);return(0,r.buildAppChannelObject)(t)}catch(e){throw console.error(e.message),new Error(r.ChannelError.CreationFailed)}}async getSystemChannels(){return this.wire.sendAction("fdc3-get-system-channels").catch((e=>{})),this._getChannels()}async joinChannel(e){this.wire.sendAction("fdc3-join-channel").catch((e=>{}));try{return await this.client.joinContextGroup(e)}catch(e){if(e.message===s.BROKER_ERRORS.joinSessionContextGroupWithJoinContextGroup?console.error("The Channel you have tried to join is an App Channel. Custom Channels can only be defined by the Interop Broker through code or manifest configuration. Please use getOrCreateChannel."):console.error(e.message),e.message.startsWith("Attempting to join a context group that does not exist"))throw new Error(r.ChannelError.NoChannelFound);throw new Error(r.ChannelError.AccessDenied)}}async getCurrentChannel(){this.wire.sendAction("fdc3-get-current-channel").catch((e=>{}));const e=await this.getCurrentContextGroupInfo();return e?this.buildChannelObject(e):null}async leaveCurrentChannel(){return this.wire.sendAction("fdc3-leave-current-channel").catch((e=>{})),this.client.removeFromContextGroup()}async getCurrentContextGroupInfo(){const e=await this.client.getContextGroups(),t=e.map((async e=>this.client.getAllClientsInContextGroup(e.id))),n=(await Promise.all(t)).findIndex((e=>e.some((e=>{const{uuid:t,name:n}=e;return this.wire.me.uuid===t&&this.wire.me.name===n}))));return e[n]}async buildChannelObject(e){return{...e,type:"system",addContextListener:(...[e,t])=>{let n,i;"function"==typeof e?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),n=e):(n=t,"string"==typeof e&&(i=e));const r=(async()=>{let e=!0;const t=await this.client.getCurrentContext(i);return this.client.addContextHandler(((i,r)=>{if(!e||(e=!1,!(0,c.isEqual)(t,i)))return n(i,r)}),i)})();return{...r,unsubscribe:()=>r.then((e=>e.unsubscribe()))}},broadcast:this.broadcast.bind(this),getCurrentContext:async e=>{const t=await this.client.getCurrentContext(e);return void 0===t?null:t}}}},e=new WeakMap,Zi}Xi.PrivateChannelClient=class{constructor(e,t){this.id=t,this.client=e,this.listeners=new Map}async broadcast(e){return this.client.dispatch("broadcast",{context:e})}async getCurrentContext(e){return this.client.dispatch("getCurrentContext",{contextType:e})}async addContextListener(e,t){if("function"!=typeof t)throw new Error("Non-function argument passed to the second parameter 'handler'. Be aware that the argument order does not match the FDC3 standard.");let n;n=e?`contextHandler:invoke-${this.id}-${e}-${er.generateId()}`:`contextHandler:invoke-${this.id}-${er.generateId()}`,this.client.register(n,er.wrapContextHandler(t,n));const i={unsubscribe:await this.createContextUnsubscribeCb(n)};return this.listeners.set(n,i),await this.client.dispatch("contextHandlerAdded",{handlerId:n,contextType:e}),i}createNonStandardUnsubscribeCb(e){return async()=>{this.client.remove(e),this.listeners.delete(e),await this.client.dispatch("nonStandardHandlerRemoved",{handlerId:e})}}createContextUnsubscribeCb(e){return async()=>{this.client.remove(e),this.listeners.delete(e),await this.client.dispatch("contextHandlerRemoved",{handlerId:e})}}onAddContextListener(e){const t=`onContextHandlerAdded:invoke-${this.id}-${er.generateId()}`;this.client.register(t,e);const n={unsubscribe:this.createNonStandardUnsubscribeCb(t)};return this.listeners.set(t,n),this.client.dispatch("onAddContextHandlerAdded",{handlerId:t}),n}onDisconnect(e){const t=`onDisconnect:invoke-${this.id}-${er.generateId()}`;this.client.register(t,e);const n={unsubscribe:this.createNonStandardUnsubscribeCb(t)};return this.listeners.set(t,n),this.client.dispatch("onDisconnectHandlerAdded",{handlerId:t}),n}onUnsubscribe(e){const t=`onUnsubscribe:invoke-${this.id}-${er.generateId()}`;this.client.register(t,e);const n={unsubscribe:this.createNonStandardUnsubscribeCb(t)};return this.listeners.set(t,n),this.client.dispatch("onUnsubscribeHandlerAdded",{handlerId:t}),n}async cleanUpAllSubs(){Array.from(this.listeners.keys()).forEach((e=>{this.client.remove(e),this.listeners.delete(e)}))}async disconnect(){try{await this.client.dispatch("clientDisconnecting"),await this.cleanUpAllSubs(),await this.client.disconnect()}catch(e){throw new Error(e.message)}}},function(e){Object.defineProperty(e,"__esModule",{value:!0}),e.getIntentResolution=e.isChannel=e.isContext=e.connectPrivateChannel=e.buildAppChannelObject=e.buildPrivateChannelObject=e.ChannelError=e.ResultError=e.UnsupportedChannelApiError=e.getUnsupportedChannelApis=void 0;const t=$i,i=Xi,r=n;e.getUnsupportedChannelApis=e=>({addContextListener:()=>{throw new o("Channel.addContextListener",e)},broadcast:()=>{throw new o("Channel.broadcast",e)},getCurrentContext:()=>{throw new o("Channel.getCurrentContext",e)}});class o extends Error{constructor(e,t="System"){super(e),this.message=`Calling ${e} on an instance of a ${t} Channel returned by fdc3.get${t}Channels is not supported. If you would like to use a ${t} Channel, please use fdc3.joinChannel, fdc3.addContextListener, and fdc3.broadcast instead.`}}var s,a;e.UnsupportedChannelApiError=o,function(e){e.NoResultReturned="NoResultReturned",e.IntentHandlerRejected="IntentHandlerRejected"}(s=e.ResultError||(e.ResultError={})),(a=e.ChannelError||(e.ChannelError={})).NoChannelFound="NoChannelFound",a.AccessDenied="AccessDenied",a.CreationFailed="CreationFailed";e.buildPrivateChannelObject=e=>{let t=!1;const n=()=>{if(t)throw new Error("Private Channel Client has been disconnected from the Private Channel")};return{id:e.id,type:"private",broadcast:async t=>(n(),e.broadcast(t)),getCurrentContext:async t=>(n(),e.getCurrentContext(t)),addContextListener:async(t,i)=>{n();let r=i,o=t;"function"==typeof t&&(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),r=t,o=null);return e.addContextListener(o,r)},onAddContextListener:t=>(n(),e.onAddContextListener(t)),disconnect:async()=>(n(),t=!0,e.disconnect()),onDisconnect:t=>(n(),e.onDisconnect(t)),onUnsubscribe:t=>(n(),e.onUnsubscribe(t))}};e.buildAppChannelObject=e=>({id:e.id,type:"app",broadcast:e.setContext,getCurrentContext:async t=>{const n=await e.getCurrentContext(t);return void 0===n?null:n},addContextListener:(t,n)=>{let i,o;"function"==typeof t?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),i=t):(i=n,"string"==typeof t&&(o=t));const s=(async()=>{let t=!0;const n=await e.getCurrentContext(o);return e.addContextHandler(((e,o)=>{if(!t||(t=!1,!(0,r.isEqual)(n,e)))return i(e,o)}),o)})();return{...s,unsubscribe:()=>s.then((e=>e.unsubscribe()))}}});e.connectPrivateChannel=async t=>{try{const n=await fin.InterApplicationBus.Channel.connect(t),r=new i.PrivateChannelClient(n,t);return(0,e.buildPrivateChannelObject)(r)}catch(e){throw new Error(`Private Channel with id: ${t} doesn't exist`)}};e.isContext=e=>{if(e&&"object"==typeof e&&"type"in e){const{type:t}=e;return"string"==typeof t}return!1};e.isChannel=e=>{if(e&&"object"==typeof e&&"type"in e&&"id"in e){const{type:t,id:n}=e;return"string"==typeof t&&"string"==typeof n&&("app"===t||"private"===t)}return!1};e.getIntentResolution=async(n,i,r,o)=>{const a=(0,t.generateId)(),c=new Promise(((e,t)=>{fin.InterApplicationBus.subscribe({uuid:"*"},a,(t=>{e(t)})).catch((()=>t(new Error("getResult is not supported in this environment"))))})),d=r?{target:r,intentResolutionResultId:a}:{intentResolutionResultId:a},h=o?{name:o,context:i,metadata:d}:{...i,metadata:d},l=async()=>{let t=await c;if(!t||"object"!=typeof t)throw new Error(s.NoResultReturned);const{error:i}=t;if(i)throw new Error(s.IntentHandlerRejected);if((0,e.isChannel)(t)){const{id:i,type:r}=t;switch(r){case"private":t=await(0,e.connectPrivateChannel)(i);break;case"app":{const r=await n.joinSessionContextGroup(i);t=(0,e.buildAppChannelObject)(r);break}}}else if(!(0,e.isContext)(t))throw new Error(s.NoResultReturned);return t},u=o?await n.fireIntent(h):await n.fireIntentForContext(h);return"object"!=typeof u?{source:{appId:"",instanceId:""},intent:"",version:"2.0",getResult:l}:{...u,getResult:l}}}(Qi);var rr,or,sr={};function ar(){if(or)return Di;or=1;var e,t,n=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},i=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Di,"__esModule",{value:!0}),Di.InteropClient=void 0;const r=c,s=Ui,a=function(){if(nr)return Ji;nr=1,Object.defineProperty(Ji,"__esModule",{value:!0}),Ji.Fdc3Module=void 0;const e=$i,t=ir();class n extends t.FDC3ModuleBase{async open(e,t){await super._open(e,t)}addContextListener(e,t){let n;return this.wire.sendAction("fdc3-add-context-listener").catch((e=>{})),"function"==typeof e?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),n=this.client.addContextHandler(e)):n=this.client.addContextHandler(t,null===e?void 0:e),{...n,unsubscribe:()=>n.then((e=>e.unsubscribe()))}}addIntentListener(e,t){this.wire.sendAction("fdc3-add-intent-listener").catch((e=>{}));const n=this.client.registerIntentHandler((e=>{const{context:n,metadata:i}=e,{metadata:r}=n,o=i?.intentResolutionResultId||r?.intentResolutionResultId;o&&this.fin.InterApplicationBus.publish(o,null).catch((()=>null)),t(e.context)}),e,{fdc3Version:"1.2"});return{...n,unsubscribe:()=>n.then((e=>e.unsubscribe()))}}async raiseIntent(t,n,i){this.wire.sendAction("fdc3-raise-intent").catch((e=>{}));const r=i?{name:t,context:n,metadata:{target:i}}:{name:t,context:n};try{return await this.client.fireIntent(r)}catch(t){const n=t.message===e.BROKER_ERRORS.fireIntent?"ResolverUnavailable":t.message;throw new Error(n)}}async findIntent(t,n){this.wire.sendAction("fdc3-find-intent").catch((e=>{}));try{return await this.client.getInfoForIntent({name:t,context:n})}catch(t){const n=t.message===e.BROKER_ERRORS.getInfoForIntent?"ResolverUnavailable":t.message;throw new Error(n)}}async findIntentsByContext(t){this.wire.sendAction("fdc3-find-intents-by-context").catch((e=>{}));try{return await this.client.getInfoForIntentsByContext(t)}catch(t){const n=t.message===e.BROKER_ERRORS.getInfoForIntentsByContext?"ResolverUnavailable":t.message;throw new Error(n)}}async raiseIntentForContext(t,n){this.wire.sendAction("fdc3-raise-intent-for-context").catch((e=>{}));try{return await this.client.fireIntentForContext({...t,metadata:{target:n}})}catch(t){const n=t.message===e.BROKER_ERRORS.fireIntentForContext?"ResolverUnavailable":t.message;throw new Error(n)}}async getOrCreateChannel(e){return super.getOrCreateChannel(e)}getInfo(){this.wire.sendAction("fdc3-get-info").catch((e=>{}));const{uuid:e,fdc3InteropApi:t}=fin.__internal_.initialOptions;return{fdc3Version:t,provider:`openfin-${e}`,providerVersion:fin.desktop.getVersion()}}}return Ji.Fdc3Module=n,Ji}(),d=function(){if(rr)return sr;rr=1,Object.defineProperty(sr,"__esModule",{value:!0}),sr.Fdc3Module2=void 0;const e=ir(),t=$i,n=ar(),i=Qi,r=Xi;class o extends e.FDC3ModuleBase{async open(e,t){return"string"==typeof e&&console.warn("Passing a string as the app parameter is deprecated, please use an AppIdentifier ({ appId: string; instanceId?: string })."),super._open(e,t)}async findInstances(e){this.wire.sendAction("fdc3-find-instances").catch((e=>{}));try{return await n.InteropClient.ferryFdc3Call(this.client,"fdc3FindInstances",e)}catch(e){const n=e.message===t.BROKER_ERRORS.fdc3FindInstances?"ResolverUnavailable":e.message;throw new Error(n)}}async getAppMetadata(e){this.wire.sendAction("fdc3-get-app-metadata").catch((e=>{}));try{return await n.InteropClient.ferryFdc3Call(this.client,"fdc3GetAppMetadata",e)}catch(e){const n=e.message===t.BROKER_ERRORS.fdc3GetAppMetadata?"ResolverUnavailable":e.message;throw new Error(n)}}async addContextListener(e,t){this.wire.sendAction("fdc3-add-context-listener").catch((e=>{}));const n=e=>t=>{const{contextMetadata:n,...i}=t,r=n?[{...i},n]:[t,null];e(...r)};let i=t,r=n(i);return"function"==typeof e?(console.warn("addContextListener(handler) has been deprecated. Please use addContextListener(null, handler)"),i=e,r=n(i),this.client.addContextHandler(r)):this.client.addContextHandler(r,null===e?void 0:e)}async findIntent(e,n,i){this.wire.sendAction("fdc3-find-intent").catch((e=>{}));try{return await this.client.getInfoForIntent({name:e,context:n,metadata:{resultType:i}})}catch(e){const n=e.message===t.BROKER_ERRORS.getInfoForIntent?"ResolverUnavailable":e.message;throw new Error(n)}}async findIntentsByContext(e,i){this.wire.sendAction("fdc3-find-intents-by-context").catch((e=>{}));const r=i?{context:e,metadata:{resultType:i}}:e;try{return await n.InteropClient.ferryFdc3Call(this.client,"fdc3v2FindIntentsByContext",r)}catch(e){const n=e.message===t.BROKER_ERRORS.getInfoForIntentsByContext?"ResolverUnavailable":e.message;throw new Error(n)}}async raiseIntent(e,n,r){this.wire.sendAction("fdc3-raise-intent").catch((e=>{}));try{return"string"==typeof r&&console.warn("Passing a string as the app parameter is deprecated, please use an AppIdentifier ({ appId: string; instanceId?: string })."),(0,i.getIntentResolution)(this.client,n,r,e)}catch(e){const n=e.message===t.BROKER_ERRORS.fireIntent?"ResolverUnavailable":e.message;throw new Error(n)}}async raiseIntentForContext(e,n){this.wire.sendAction("fdc3-raise-intent-for-context").catch((e=>{}));try{return"string"==typeof n&&console.warn("Passing a string as the app parameter is deprecated, please use an AppIdentifier ({ appId: string; instanceId?: string })."),(0,i.getIntentResolution)(this.client,e,n)}catch(e){const n=e.message===t.BROKER_ERRORS.fireIntent?"ResolverUnavailable":e.message;throw new Error(n)}}async addIntentListener(e,t){if(this.wire.sendAction("fdc3-add-intent-listener").catch((e=>{})),"string"!=typeof e)throw new Error("First argument must be an Intent name");return this.client.registerIntentHandler((async e=>{let n,i;const{context:r,metadata:o}=e,{contextMetadata:s,metadata:a,...c}=r,d=o?.intentResolutionResultId||a?.intentResolutionResultId;try{const e=a?{metadata:a,...c}:{...c};n=await t(e,s),i=n}catch(e){n=e,i={error:!0}}if(d&&this.fin.InterApplicationBus.publish(d,i).catch((()=>null)),n instanceof Error)throw new Error(n.message);return n}),e,{fdc3Version:"2.0"})}async getOrCreateChannel(e){return super.getOrCreateChannel(e)}async createPrivateChannel(){const e=(0,t.generateId)();await n.InteropClient.ferryFdc3Call(this.client,"createPrivateChannelProvider",{channelId:e});const o=await this.fin.InterApplicationBus.Channel.connect(e),s=new r.PrivateChannelClient(o,e);return(0,i.buildPrivateChannelObject)(s)}async getUserChannels(){return(await this.client.getContextGroups()).map((e=>({...e,type:"user",...(0,i.getUnsupportedChannelApis)("User")})))}async getSystemChannels(){return console.warn("This API has been deprecated. Please use fdc3.getUserChannels instead."),super.getSystemChannels()}async joinUserChannel(e){return super.joinChannel(e)}async joinChannel(e){return console.warn("This API has been deprecated. Please use fdc3.joinUserChannel instead."),super.joinChannel(e)}async getCurrentChannel(){const e=await super.getCurrentChannel();return e?{...e,type:"user",broadcast:this.broadcast.bind(this)}:null}async getInfo(){return n.InteropClient.ferryFdc3Call(this.client,"fdc3v2GetInfo",{fdc3Version:"2.0"})}}return sr.Fdc3Module2=o,sr}(),h=$i;let l=class extends r.Base{constructor(i,r){super(i),e.set(this,void 0),t.set(this,void 0),n(this,t,new Map,"f"),n(this,e,r,"f")}async setContext(t){this.wire.sendAction("interop-client-set-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("setContext",{context:t})}async addContextHandler(t,n){if(this.wire.sendAction("interop-client-add-context-handler").catch((e=>{})),"function"!=typeof t)throw new Error("Non-function argument passed to the first parameter 'handler'. Be aware that the argument order does not match the FDC3 standard.");const r=await i(this,e,"f");let o;o=n?`invokeContextHandler-${n}-${(0,h.generateId)()}`:"invokeContextHandler";const s=(0,h.wrapContextHandler)(t,o);return r.register(o,s),await r.dispatch("contextHandlerRegistered",{handlerId:o,contextType:n}),{unsubscribe:async()=>{r.remove(o),await r.dispatch("removeContextHandler",{handlerId:o})}}}async getContextGroups(){this.wire.sendAction("interop-client-get-context-groups").catch((e=>{}));return(await i(this,e,"f")).dispatch("getContextGroups")}async joinContextGroup(t,n){this.wire.sendAction("interop-client-join-context-group").catch((e=>{}));const r=await i(this,e,"f");if(!t)throw new Error("No contextGroupId specified for joinContextGroup.");return r.dispatch("joinContextGroup",{contextGroupId:t,target:n})}async removeFromContextGroup(t){this.wire.sendAction("interop-client-remove-from-context-group").catch((e=>{}));return(await i(this,e,"f")).dispatch("removeFromContextGroup",{target:t})}async getAllClientsInContextGroup(t){this.wire.sendAction("interop-client-get-all-clients-in-context-group").catch((e=>{}));const n=await i(this,e,"f");if(!t)throw new Error("No contextGroupId specified for getAllClientsInContextGroup.");return n.dispatch("getAllClientsInContextGroup",{contextGroupId:t})}async getInfoForContextGroup(t){this.wire.sendAction("interop-client-get-info-for-context-group").catch((e=>{}));const n=await i(this,e,"f");if(!t)throw new Error("No contextGroupId specified for getInfoForContextGroup.");return n.dispatch("getInfoForContextGroup",{contextGroupId:t})}async fireIntent(t){this.wire.sendAction("interop-client-fire-intent").catch((e=>{}));return(await i(this,e,"f")).dispatch("fireIntent",t)}async registerIntentHandler(t,n,r){this.wire.sendAction("interop-client-register-intent-handler").catch((e=>{}));const o=await i(this,e,"f"),s=`intent-handler-${n}`,a=(0,h.wrapIntentHandler)(t,s);try{await o.register(s,a),await o.dispatch("intentHandlerRegistered",{handlerId:s,...r})}catch(e){throw new Error("Unable to register intent handler")}return{unsubscribe:async()=>{o.remove(s)}}}async getCurrentContext(t){this.wire.sendAction("interop-client-get-current-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("getCurrentContext",{contextType:t})}async getInfoForIntent(t){this.wire.sendAction("interop-client-get-info-for-intent").catch((e=>{}));return(await i(this,e,"f")).dispatch("getInfoForIntent",t)}async getInfoForIntentsByContext(t){this.wire.sendAction("interop-client-get-info-for-intents-by-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("getInfoForIntentsByContext",t)}async fireIntentForContext(t){this.wire.sendAction("interop-client-fire-intent-for-context").catch((e=>{}));return(await i(this,e,"f")).dispatch("fireIntentForContext",t)}async joinSessionContextGroup(n){try{const r=i(this,t,"f").get(n);if(r)return r.getUserInstance();const o=await i(this,e,"f"),{hasConflict:a}=await o.dispatch("sessionContextGroup:createIfNeeded",{sessionContextGroupId:n});a&&console.warn(`A (non-session) context group with the name "${n}" already exists. If you are trying to join a Context Group, call joinContextGroup instead.`);const c=new s.default(this.wire,i(this,e,"f"),n);return i(this,t,"f").set(n,c),c.getUserInstance()}catch(e){throw console.error(`Error thrown trying to create Session Context Group with id "${n}": ${e}`),e}}async onDisconnection(t){this.wire.sendAction("interop-client-add-ondisconnection-listener").catch((e=>{}));return(await i(this,e,"f")).onDisconnection((e=>{const{uuid:n}=e;t({type:"interop-broker",topic:"disconnected",brokerName:n})}))}getFDC3Sync(e){switch(e){case"1.2":return new a.Fdc3Module((()=>this),this.wire);case"2.0":return new d.Fdc3Module2((()=>this),this.wire);default:throw new Error(`Invalid FDC3 version provided: ${e}. Must be '1.2' or '2.0'`)}}async getFDC3(e){return this.getFDC3Sync(e)}static async ferryFdc3Call(t,n,r){return(await i(t,e,"f")).dispatch(n,r||null)}};return Di.InteropClient=l,e=new WeakMap,t=new WeakMap,Di}var cr,dr,hr,lr={};function ur(){if(cr)return lr;cr=1,Object.defineProperty(lr,"__esModule",{value:!0}),lr.overrideCheck=lr.checkFDC32Overrides=lr.getDefaultViewFdc3VersionFromAppInfo=void 0;const e=Hi();function t(t){return["fdc3HandleFindInstances","handleInfoForIntent","handleInfoForIntentsByContext","fdc3HandleGetAppMetadata","fdc3HandleGetInfo","fdc3HandleOpen","handleFiredIntent","handleFiredIntentForContext"].filter((n=>t[n]===e.InteropBroker.prototype[n]))}return lr.getDefaultViewFdc3VersionFromAppInfo=function({manifest:e,initialOptions:t}){const n=e?.platform?.defaultViewOptions?.fdc3InteropApi??t.defaultViewOptions?.fdc3InteropApi;return["1.2","2.0"].includes(n??"")?n:void 0},lr.checkFDC32Overrides=t,lr.overrideCheck=function(e,n){if(n&&"2.0"===n){const n=t(e);n.length>0&&console.warn(`WARNING: FDC3 2.0 has been set as a default option for Views in this Platform, but the required InteropBroker APIs for FDC3 2.0 compliance have not all been overridden.\nThe following APIs need to be overridden:\n${n.join("\n")}`)}},lr}function pr(){return hr||(hr=1,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),i=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),i(function(){if(dr)return Fi;dr=1,Object.defineProperty(Fi,"__esModule",{value:!0}),Fi.InteropModule=void 0;const e=n,t=ji,i=c,r=Hi(),o=ar(),s=ur(),a=ri,d=e=>new e,h="You have attempted to use or modify InteropBroker parameters, which is not allowed. You are likely using an older InteropBroker override scheme. Please consult our Interop docs for guidance on migrating to the new override scheme.";class l extends i.Base{async init(n,i=d){this.wire.sendAction("interop-init").catch((()=>{}));const o=await this.wire.environment.getInteropInfo(this.wire.getFin()),c=(0,t.createUnusableObject)(h),l=(0,t.createWarningObject)(h,(0,e.cloneDeep)(o)),u=async()=>{throw new Error(h)},p=r.InteropBroker.createClosedConstructor(this.wire,(()=>this.fin.InterApplicationBus.Channel.create(`interop-broker-${n}`)),o);let w;return w=Array.isArray(i)?new((0,a.overrideFromComposables)(...i)(p))(c,u,l):await i(p,c,u,l),(0,s.overrideCheck)(w,o.fdc3Version),w}connectSync(e,t){return this.wire.sendAction("interop-connect-sync").catch((()=>{})),new o.InteropClient(this.wire,this.wire.environment.whenReady().then((()=>this.fin.InterApplicationBus.Channel.connect(`interop-broker-${e}`,{payload:t}))))}}return Fi.InteropModule=l,Fi}(),e),i(ar(),e),i(Hi(),e)}(Ri)),Ri}var wr={},yr={},fr={},gr={};Object.defineProperty(gr,"__esModule",{value:!0}),gr.getSnapshotSourceChannelName=void 0;gr.getSnapshotSourceChannelName=e=>`snapshot-source-provider-${e.uuid}`;var mr,vr,Cr,br,Ir,Er=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},xr=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(fr,"__esModule",{value:!0}),fr.SnapshotSource=void 0;const Ar=c,Pr=gr,Mr=new Map;class Or extends Ar.Base{constructor(e,t){super(e),mr.set(this,void 0),vr.set(this,(()=>(Mr.has(this.identity.uuid)||Mr.set(this.identity.uuid,{eventFired:null,clientPromise:null}),Mr.get(this.identity.uuid)))),Cr.set(this,(()=>(xr(this,vr,"f").call(this).clientPromise||(xr(this,vr,"f").call(this).clientPromise=xr(this,br,"f").call(this)),xr(this,vr,"f").call(this).clientPromise))),br.set(this,(async()=>{const e=(0,Pr.getSnapshotSourceChannelName)(this.identity);try{xr(this,vr,"f").call(this).eventFired||await xr(this,Ir,"f").call(this);const t=await this.fin.InterApplicationBus.Channel.connect(e,{wait:!1});return t.onDisconnection((()=>{xr(this,vr,"f").call(this).clientPromise=null,xr(this,vr,"f").call(this).eventFired=null})),t}catch(e){throw xr(this,vr,"f").call(this).clientPromise=null,new Error("The targeted SnapshotSource is not currently initialized. Await this object's ready() method.")}})),Ir.set(this,(async()=>{const e=(0,Pr.getSnapshotSourceChannelName)(this.identity);let t,n;const i=new Promise(((e,i)=>{t=e,n=i}));xr(this,vr,"f").call(this).eventFired=i;const r=async i=>{try{i.channelName===e&&(t(),await this.fin.InterApplicationBus.Channel.removeListener("connected",r))}catch(e){n(e)}};await this.fin.InterApplicationBus.Channel.on("connected",r)})),Er(this,mr,t,"f")}get identity(){return xr(this,mr,"f")}async ready(){this.wire.sendAction("snapshot-source-ready").catch((e=>{}));try{await xr(this,Cr,"f").call(this)}catch(e){await xr(this,vr,"f").call(this).eventFired}}async getSnapshot(){this.wire.sendAction("snapshot-source-get-snapshot").catch((e=>{}));const e=await xr(this,Cr,"f").call(this),t=await e.dispatch("get-snapshot");return(await t).snapshot}async applySnapshot(e){this.wire.sendAction("snapshot-source-apply-snapshot").catch((e=>{}));return(await xr(this,Cr,"f").call(this)).dispatch("apply-snapshot",{snapshot:e})}}fr.SnapshotSource=Or,mr=new WeakMap,vr=new WeakMap,Cr=new WeakMap,br=new WeakMap,Ir=new WeakMap,Object.defineProperty(yr,"__esModule",{value:!0}),yr.SnapshotSourceModule=void 0;const _r=c,Sr=fr,Rr=gr;class Fr extends _r.Base{async init(e){if(this.wire.sendAction("snapshot-source-init").catch((e=>{})),"object"!=typeof e||"function"!=typeof e.getSnapshot||"function"!=typeof e.applySnapshot)throw new Error("you must pass in a valid SnapshotProvider");const t=await this.fin.InterApplicationBus.Channel.create((0,Rr.getSnapshotSourceChannelName)(this.fin.me));t.register("get-snapshot",(async()=>({snapshot:await e.getSnapshot()}))),t.register("apply-snapshot",(({snapshot:t})=>e.applySnapshot(t)))}wrapSync(e){return this.wire.sendAction("snapshot-source-wrap-sync").catch((e=>{})),new Sr.SnapshotSource(this.wire,e)}async wrap(e){return this.wire.sendAction("snapshot-source-wrap").catch((e=>{})),this.wrapSync(e)}}yr.SnapshotSourceModule=Fr,function(e){var t=o&&o.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var r=Object.getOwnPropertyDescriptor(t,n);r&&!("get"in r?!t.__esModule:r.writable||r.configurable)||(r={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,r)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),n=o&&o.__exportStar||function(e,n){for(var i in e)"default"===i||Object.prototype.hasOwnProperty.call(n,i)||t(n,e,i)};Object.defineProperty(e,"__esModule",{value:!0}),n(yr,e),n(fr,e)}(wr),Object.defineProperty(s,"__esModule",{value:!0});var jr=s.Fin=void 0;const kr=t,Lr=a,Tr=Pe(),$r=Ce(),Br=Fe,Gr=En,Wr=Pn,Hr=kn,Nr=Dn,Dr=me(),Ur=Kn,Vr=Si,zr=pr(),Kr=wr;class qr extends kr.EventEmitter{constructor(e){super(),this.wire=e,this.System=new Lr.System(e),this.Window=new Tr._WindowModule(e),this.Application=new $r.ApplicationModule(e),this.InterApplicationBus=new Br.InterApplicationBus(e),this.Clipboard=new Gr.Clipboard(e),this.ExternalApplication=new Wr.ExternalApplicationModule(e),this.Frame=new Hr._FrameModule(e),this.GlobalHotkey=new Nr.GlobalHotkey(e),this.Platform=new Ur.PlatformModule(e,this.InterApplicationBus.Channel),this.View=new Dr.ViewModule(e),this.Interop=new zr.InteropModule(e),this.SnapshotSource=new Kr.SnapshotSourceModule(e),e.registerFin(this),this.me=(0,Vr.getMe)(e),e.on("disconnected",(()=>{this.emit("disconnected")}))}}jr=s.Fin=qr;var Yr={},Jr={};function Zr(e){return"string"==typeof e.manifestUrl}function Qr(e){return eo(e)&&"string"==typeof e.address}function Xr(e){return Qr(e)&&"string"==typeof e.token}function eo(e){return"string"==typeof e.uuid}function to(e){return e.runtime&&"string"==typeof e.runtime.version}function no(e){return eo(e)&&to(e)}Object.defineProperty(Jr,"__esModule",{value:!0}),Jr.isInternalConnectConfig=Jr.isPortDiscoveryConfig=Jr.isNewConnectConfig=Jr.isConfigWithReceiver=Jr.isRemoteConfig=Jr.isExistingConnectConfig=Jr.isExternalConfig=void 0,Jr.isExternalConfig=Zr,Jr.isExistingConnectConfig=Qr,Jr.isRemoteConfig=Xr,Jr.isConfigWithReceiver=function(e){return"object"==typeof e.receiver&&Xr({...e,address:""})},Jr.isNewConnectConfig=no,Jr.isPortDiscoveryConfig=function(e){return Zr(e)&&to(e)||no(e)},Jr.isInternalConnectConfig=function(e){return Qr(e)||no(e)};var io={},ro={};Object.defineProperty(ro,"__esModule",{value:!0}),ro.EmitterMap=void 0;const oo=t;function so(e){return Buffer.from(e).toString("base64")}ro.EmitterMap=class{constructor(){this.storage=new Map}hashKeys(e){return e.map(so).join("/")}getOrCreate(e){const t=this.hashKeys(e);return this.storage.has(t)||this.storage.set(t,new oo.EventEmitter),this.storage.get(t)}has(e){return this.storage.has(this.hashKeys(e))}delete(e){const t=this.hashKeys(e);return this.storage.delete(t)}},Object.defineProperty(io,"__esModule",{value:!0});const ao=ro;class co extends ao.EmitterMap{constructor(){super(...arguments),this.dispatchEvent=e=>{if(function(e){return"process-desktop-event"===e.action}(e)){const{payload:t}=e,n=function(e){const{topic:t}=e;if("frame"===t||"window"===t||"view"===t){const{uuid:n,name:i}=e;return[t,n,i]}if("application"===t){const{uuid:n}=e;return[t,n]}return[t]}(t);if(this.has(n))return this.getOrCreate(n).emit(t.type,t),!0}return!1}}}io.default=co;var ho,lo,uo=o&&o.__classPrivateFieldSet||function(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n},po=o&&o.__classPrivateFieldGet||function(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)};Object.defineProperty(Yr,"__esModule",{value:!0});var wo=Yr.Transport=void 0;const yo=t,fo=Jr,go=f,mo=io,vo=Si,Co=it;class bo extends yo.EventEmitter{constructor(e,t,n){super(),this.wireListeners=new Map,this.topicRefMap=new Map,this.eventAggregator=new mo.default,this.messageHandlers=[this.eventAggregator.dispatchEvent],ho.set(this,void 0),lo.set(this,void 0),this.connectSync=()=>{po(this,ho,"f").connectSync()},this.getPort=()=>po(this,ho,"f").getPort(),uo(this,ho,new e(this.onmessage.bind(this)),"f"),this.environment=t,this.sendRaw=po(this,ho,"f").send.bind(po(this,ho,"f")),this.registerMessageHandler(this.handleMessage.bind(this)),po(this,ho,"f").on("disconnected",(()=>{for(const[,{handleNack:e}]of this.wireListeners)e({reason:"Remote connection has closed"});this.wireListeners.clear(),this.emit("disconnected")}));const{uuid:i,name:r}=n,o=this.environment.getCurrentEntityType();this.me=(0,vo.getBaseMe)(o,i,r)}getFin(){if(!po(this,lo,"f"))throw new Error("No Fin object registered for this transport");return po(this,lo,"f")}registerFin(e){if(po(this,lo,"f"))throw new Error("Fin object has already been registered for this transport");uo(this,lo,e,"f")}shutdown(){return po(this,ho,"f").shutdown()}async connect(e){if((0,fo.isConfigWithReceiver)(e))return await po(this,ho,"f").connect(e.receiver),this.authorize(e);if((0,fo.isRemoteConfig)(e))return this.connectRemote(e);if((0,fo.isExistingConnectConfig)(e))return this.connectByPort(e);if((0,fo.isNewConnectConfig)(e)){const t=await this.environment.retrievePort(e);return this.connectByPort({...e,address:`ws://localhost:${t}`})}}async connectRemote(e){return await po(this,ho,"f").connect(new(this.environment.getWsConstructor())(e.address)),this.authorize(e)}async connectByPort(e){const{address:t,uuid:n}=e,i={...e,type:"file-token"},r=po(this,ho,"f");await r.connect(new(this.environment.getWsConstructor())(e.address));const o=await this.sendAction("request-external-authorization",{uuid:n,type:"file-token"},!0);if("external-authorization-response"!==o.action)throw new go.UnexpectedActionError(o.action);return await this.environment.writeToken(o.payload.file,o.payload.token),this.authorize(i)}async authorize(e){const t=await this.sendAction("request-authorization",e,!0);if("authorization-response"!==t.action)throw new go.UnexpectedActionError(t.action);if(!0!==t.payload.success)throw new go.RuntimeError(t.payload)}sendAction(e,t={},n=!1){let i=()=>{};const r=go.RuntimeError.getCallSite(1),o=this.environment.getNextMessageId(),s=new Promise(((s,a)=>{i=a;const c={action:e,payload:t,messageId:o},d=po(this,ho,"f");return this.addWireListener(o,s,(e=>this.nackHandler(e,a,r)),n),d.send(c).catch(a)}));return Object.assign(s,{cancel:i,messageId:o})}nackHandler(e,t,n){t("string"==typeof e?e:new go.RuntimeError(e,n))}ferryAction(e){return new Promise(((t,n)=>{const i=this.environment.getNextMessageId();e.messageId=i;const r=e=>{t(e.payload)};return po(this,ho,"f").send(e).then((()=>this.addWireListener(i,r,(e=>this.nackHandler(e,n)),!1))).catch(n)}))}registerMessageHandler(e){this.messageHandlers.push(e)}addWireListener(e,t,n,i){i?this.uncorrelatedListener=t:this.wireListeners.has(e)?n({reason:"Duplicate handler id",error:(0,Co.errorToPOJO)(new go.DuplicateCorrelationError(String(e)))}):this.wireListeners.set(e,{resolve:t,handleNack:n})}onmessage(e){for(const t of this.messageHandlers)t.call(null,e)}handleMessage(e){const t=e.correlationId||NaN;if("correlationId"in e){if(!this.wireListeners.has(t))return!1;{const{resolve:n,handleNack:i}=this.wireListeners.get(t);"ack"!==e.action?i({reason:"Did not receive ack action",error:(0,Co.errorToPOJO)(new go.NoAckError(e.action))}):"payload"in e?e.payload.success?n.call(null,e):i(e.payload):"string"==typeof e.reason?i(e):(console.warn("Received invalid response from core",e),i({reason:"invalid response shape"})),this.wireListeners.delete(t)}}else this.uncorrelatedListener&&this.uncorrelatedListener.call(null,e),this.uncorrelatedListener=()=>{};return!0}}wo=Yr.Transport=bo,ho=new WeakMap,lo=new WeakMap;const Io=(...e)=>({log:(...t)=>console.log(`[${(new Date).toISOString()}]`,...(e=>e.map((e=>`[${e}]`)))(e),...t),getLogger:(...t)=>Io(...e,...t)}),Eo=Io("[@openfin/core-web/client");function xo(e,t){if(!function(e){return"string"==typeof e}(e))throw new Error(`Property ${t} has invalid type. Expected string, got ${typeof e}.`)}const Ao="web-broker-ports-ready",Po=Eo.getLogger("get-web-interop-ports");function Mo(e,t,n,i){if("a"===n&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof t?e!==t||!i:!t.has(e))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===n?i:"a"===n?i.call(e):i?i.value:t.get(e)}function Oo(e,t,n,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof t?e!==t||!r:!t.has(e))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(e,n):r?r.value=n:t.set(e,n),n}"function"==typeof SuppressedError&&SuppressedError;const _o=e=>{var n,i,r;return r=class extends t.EventEmitter{constructor(t){super(),n.set(this,void 0),i.set(this,!1),this.connectSync=()=>{Mo(this,i,"f")||(e.addEventListener("message",(e=>{e.data?.topic?.startsWith("wire-message")&&e.data.message&&Mo(this,n,"f").call(this,{...JSON.parse(e.data.message),ports:e.ports})})),e.start())},this.connect=async()=>{this.connectSync()},this.send=t=>(e.postMessage({topic:"wire-message",message:JSON.stringify(t)}),Promise.resolve()),this.shutdown=async()=>{e.close()},Oo(this,n,t,"f")}getPort(){return e}},n=new WeakMap,i=new WeakMap,r};var So={},Ro={};Object.defineProperty(Ro,"__esModule",{value:!0}),Ro.BaseEnvironment=void 0;const Fo=ur();Ro.BaseEnvironment=class{async getInteropInfo(e){const t=await e.Application.getCurrentSync().getInfo().catch((()=>null)),n=t?.initialOptions?.interopBrokerConfiguration??{};return{fdc3Version:t?(0,Fo.getDefaultViewFdc3VersionFromAppInfo)(t):void 0,...n,fdc3Info:{providerVersion:await e.System.getVersion(),provider:"OpenFin"}}}},Object.defineProperty(So,"__esModule",{value:!0});var jo=So.BrowserEnvironment=void 0;const ko=Ro;class Lo extends ko.BaseEnvironment{constructor(){super(...arguments),this.type="other",this.getRandomId=()=>{const e=new Uint32Array(1);return window.crypto.getRandomValues(e)[0].toString(32)}}observeBounds(e,t){throw new Error("Method not implemented.")}layoutAllowedInContext(e){return!1}initLayoutManager(e,t,n){throw new Error("Method not implemented.")}applyLayoutSnapshot(e,t,n){throw new Error("Method not implemented.")}createLayout(e,t){throw new Error("Method not implemented.")}destroyLayout(e,t){throw new Error("Method not implemented.")}resolveLayout(e,t){throw new Error("Method not implemented.")}initPlatform(...e){throw new Error("Method not implemented.")}writeToken(e,t){return Promise.resolve("")}retrievePort(e){throw new Error("Method not implemented.")}getNextMessageId(){return this.getRandomId()}createChildContent(e){throw new Error("Method not implemented.")}getWebWindow(e){throw new Error("Method not implemented.")}getCurrentEntityIdentity(){throw new Error("Method not implemented.")}getCurrentEntityType(){return"external connection"}raiseEvent(e,t){throw new Error("Method not implemented.")}getUrl(){return location.href}getDefaultChannelOptions(){return{create:{},connect:{}}}getRtcPeer(){return new RTCPeerConnection}getWsConstructor(){return WebSocket}whenReady(){return Promise.resolve()}}jo=So.BrowserEnvironment=Lo;const To=e=>"platform"in e&&void 0!==e.platform;var $o,Bo;class Go extends jo{constructor(e){super(),this.connectConfig=e,$o.set(this,void 0),Bo.set(this,new G((async()=>Promise.resolve().then((function(){return __webpack_require__(/*! ./main-92c82377.js */ "../../node_modules/@openfin/core-web/out/main-92c82377.js")}))))),To(e)&&this.validatePlatformOptions(e)}validatePlatformOptions({platform:e}){if(!("layoutSnapshot"in e))throw new Error("Platform options are missing layoutSnapshot. Please provide a layoutSnapshot in the platform options.");if("windows"in e||"windows"in e.layoutSnapshot)throw new Error("It appears you tried to call connect() with a snapshot object from an OpenFin desktop environment. Note that connect() expects to be called with a platform property with this structure: { platform: { layoutSnapshot } }. To get a layoutSnapshot of the expected structure, use fin.Platform.Layout.getCurrentLayoutManagerSync().getLayoutSnapshot() in v34+ in your desktop environment.");const{layouts:t}=e.layoutSnapshot;Object.entries(t).map((([e,t])=>{if("object"!=typeof t||null===t)throw new Error(`Invalid layout detected: layoutSnapshot.layouts.${e} must be an object.`);if(!("content"in t))throw new Error(`Invalid layout detected: layoutSnapshot.layouts.${e} must contain a 'content' property.`)}))}async getInteropInfo(e){return{...{contextGroups:void 0,logging:{beforeAction:{enabled:!1},afterAction:{enabled:!1}}},fdc3Version:void 0,fdc3Info:{providerVersion:"0.38.49",provider:"OpenFin Web"}}}layoutAllowedInContext(e){return!0}async initLayoutManager(e,t,n){if(Mo(this,$o,"f"))throw new Error("Layout already initialized.");if(!To(this.connectConfig))throw new Error("Platform options are missing from connection config.");const{createWebLayoutModule:i}=await Mo(this,Bo,"f").getValue();return Oo(this,$o,i(this.connectConfig),"f"),await Mo(this,$o,"f").init(n),Mo(this,$o,"f").getCurrentLayoutManagerSync()}async applyLayoutSnapshot(e,t,n){}async createLayout(e,t){return Mo(this,$o,"f").create(t)}async destroyLayout(e,t){return Mo(this,$o,"f").destroy(t)}}$o=new WeakMap,Bo=new WeakMap;const Wo=()=>{const e=((e,t)=>{const n=new RegExp(`^${t}<(?<meta>.*)>$`).exec(e)?.groups?.meta;if(n)try{return JSON.parse(atob(n))}catch(e){throw new Error(`Failed to decode JSON from ${n}.`)}})(window.name,"of-frame");if(e)try{const{name:t,uuid:n,brokerUrl:i,providerId:r,contextGroup:o}=e;return xo(i,"brokerUrl"),xo(n,"uuid"),xo(t,"name"),{identity:{name:t,uuid:n},brokerUrl:i,interopConfig:{providerId:r,currentContextGroup:o}}}catch(e){throw new Error(`Unexpected error occurred when inferring platform information: ${e.stack}`)}},Ho=()=>{const e=i.v4();return{uuid:e,name:e}},No=async e=>{if("enabled"===e.connectionInheritance){const t=await(async e=>{const t=Wo();if(t){const{validateOptions:n=(()=>!0)}=e,{identity:i,...r}=t;if(!await n(r))throw new Error("Parent options were rejected by validateOptions.");return t}})(e);if(t)return t}if(!e.options){const t="enabled"===e.connectionInheritance?"Broker URL was not specified nor provided by a platform container.":"Connection inheritance is disabled but no options were provided.";throw new Error(t)}return{...e.options,identity:Ho()}};exports.__classPrivateFieldGet=Mo,exports.__classPrivateFieldSet=Oo,exports.commonjsGlobal=o,exports.connect=async t=>{try{Eo.log("Establishing connection",t);const{brokerUrl:n,identity:i,timeout:o,interopConfig:s}=await No(t),{workerPort:a,iframeBrokerPort:c}=await(async(e,t,n)=>{const{origin:i}=new URL(e),o=document.createElement("IFRAME");let s;o.style.display="none";try{return await new Promise(((a,c)=>{const d=e=>{if(e.source===o.contentWindow&&e.data?.topic===`ack-${Ao}`){if(e.origin!==i)c(new Error(`Broker redirected to unexpected origin ${e.origin}, expected ${i}.`));else if(e.data.success){const[t,n]=e.ports;a({iframeBrokerPort:t,workerPort:n})}else c(new g(e.data));window.removeEventListener("message",d),clearTimeout(s)}};window.addEventListener("message",d),Po.log(`Connecting to broker ${e}`),o.setAttribute("src",e),o.setAttribute("name",r(t,"of-broker")),document.body.appendChild(o),Po.log("Iframe loaded, awaiting init message from iframe"),n&&(s=setTimeout((()=>{window.removeEventListener("message",d),document.body.removeChild(o),c(new Error("Worker did not initialize in time"))}),n))}))}catch(e){throw new Error(`Failed to initialise Fin Web Client. ${e.message}`,{cause:e})}})(n,i,o);Eo.log("Successfully established connection to shared worker");const d={entityType:"external connection",...i};a.start(),c.start();const h=((t,n,i)=>{const r=_o(n),o=new Go(t),s=new wo(r,o,i);return s.connectSync(),window.Buffer=e.Buffer,new jr(s)})(t,a,d);return s?.providerId&&(h.me.interop=h.Interop.connectSync(s.providerId),s?.currentContextGroup&&h.me.interop.joinContextGroup(s.currentContextGroup).catch((e=>{console.warn(`Error joining specified context group: ${s?.currentContextGroup}, continuing`,e)}))),{...h,me:{...h.me,identity:{uuid:h.me.uuid,name:h.me.name}}}}catch(e){throw new Error(`An error occured during web-interop connection: ${e.message}`)}},exports.encodeOptions=r;
+
+
+/***/ }),
+
+/***/ "../../node_modules/@openfin/core-web/out/main-92c82377.js":
+/*!*****************************************************************!*\
+  !*** ../../node_modules/@openfin/core-web/out/main-92c82377.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+var t=__webpack_require__(/*! ./main-48131439.js */ "../../node_modules/@openfin/core-web/out/main-48131439.js"),e=__webpack_require__(/*! uuid */ "../../node_modules/uuid/dist/esm-browser/index.js"),o=__webpack_require__(/*! golden-layout */ "../../node_modules/golden-layout/dist/esm/index.js");__webpack_require__(/*! buffer/ */ "../../node_modules/buffer/index.js"),__webpack_require__(/*! events */ "../../node_modules/events/events.js"),__webpack_require__(/*! lodash */ "../../node_modules/lodash/lodash.js");var i={},r={};Object.defineProperty(r,"__esModule",{value:!0}),r.mapValuesAsync=r.mapEntriesAsync=void 0;const a=(t,[e,o])=>({...t,[e]:o});async function n(t,e){return(await Promise.all(e.map((async([e,o])=>[e,await t(o,e)])))).reduce(a,{})}r.mapEntriesAsync=n,r.mapValuesAsync=async function(t,e){let o;return o=e instanceof Map?[...e.entries()]:Object.entries(e),n(t,o)};var s,c,l,u,d=t.commonjsGlobal&&t.commonjsGlobal.__classPrivateFieldSet||function(t,e,o,i,r){if("m"===i)throw new TypeError("Private method is not writable");if("a"===i&&!r)throw new TypeError("Private accessor was defined without a setter");if("function"==typeof e?t!==e||!r:!e.has(t))throw new TypeError("Cannot write private member to an object whose class did not declare it");return"a"===i?r.call(t,o):r?r.value=o:e.set(t,o),o},h=t.commonjsGlobal&&t.commonjsGlobal.__classPrivateFieldGet||function(t,e,o,i){if("a"===o&&!i)throw new TypeError("Private accessor was defined without a getter");if("function"==typeof e?t!==e||!i:!e.has(t))throw new TypeError("Cannot read private member from an object whose class did not declare it");return"m"===o?i:"a"===o?i.call(t):i?i.value:e.get(t)};Object.defineProperty(i,"__esModule",{value:!0});var m=i.DefaultLayoutManager=void 0;const y=r;class f{constructor(t){c.set(this,void 0),l.set(this,new Map),d(this,c,t,"f")}size(){return h(this,l,"f").size}async applyLayoutSnapshot({layouts:t}){if(Object.keys(t).length>1)throw new Error("[LayoutManager] Tried to call applyLayoutSnapshot with more than 1 layout. When implementing multiple layouts via overridden LayoutManager class, you must override and fully implement the applyLayoutSnapshot method without calling super.applyLayoutSnapshot().");const[[e,o]]=Object.entries(t);await f.createLayout(this,{layoutName:e,layout:o})}async showLayout({layoutName:t}){}async getLayoutSnapshot(){return{layouts:await(0,y.mapValuesAsync)((t=>t.getFrameSnapshot()),h(this,l,"f"))}}async removeLayout({layoutName:t}){}getLayoutIdentityForView(t){const e=[...h(this,l,"f").values()].find((e=>e.getCurrentViews().some((e=>e.name===t.name&&e.uuid===t.uuid))));return e?.identity??void 0}isLayoutVisible({layoutName:t}){return h(f,s,"m",u).call(f,this,t).isVisible()}resolveLayoutIdentity(t){if(t&&"layoutName"in t)return t;const e=[...h(this,l,"f").values()];if(1===e.length)return e[0].identity;const o=e.find((t=>t.isVisible()));return o?.identity??void 0}static async resolveLayout(t,e){const o=t.resolveLayoutIdentity(e);if(void 0===o||!("layoutName"in o))throw new Error("[layout-manager] resolveLayout: Could not resolve the layout identity. Make sure you include 'layoutName' in the identity object.");return h(f,s,"m",u).call(f,t,o.layoutName)}static async handleSharedView(t,e,o){await(0,y.mapValuesAsync)((async t=>{if(t.identity.layoutName!==e.layoutName){const e=t.getCurrentViews().find((t=>t.name===o.name));e&&await t.onViewDetached({viewIdentity:e,target:null}).catch(console.error)}}),h(t,l,"f"))}static async handleLastViewRemoved(t,e){await t.removeLayout(e),await h(t,c,"f").handleLastViewRemoved(t)}static async destroyLayout(t,{layoutName:e}){await h(f,s,"m",u).call(f,t,e).destroy(),h(t,l,"f").delete(e)}static async createLayout(t,e){const{layoutName:o}=e;if(h(t,l,"f").has(o))throw new Error(`Layout name ${o} already exists`);await h(t,c,"f").createLayout(e,t)}static registerLayout(t,e,o){h(t,l,"f").set(e,o)}static getAllLayouts(t){return[...h(t,l,"f").values()]}static setInitialSnapshot(t,e){h(t,c,"f").setInitialSnapshot(e)}static createClosedConstructor(...t){return class extends f{constructor(){super(...t)}}}}m=i.DefaultLayoutManager=f,s=f,c=new WeakMap,l=new WeakMap,u=function(t,e){const o=h(t,l,"f").get(e);if(!o)throw new Error(`[layout-manager] getLayoutByName: Could not locate layout with name '${e}'`);return o};var p={};Object.defineProperty(p,"__esModule",{value:!0});var w=p.BaseLayout=void 0;w=p.BaseLayout=class{};var v={};Object.defineProperty(v,"__esModule",{value:!0});var b=v.DOMEmitter=void 0;b=v.DOMEmitter=class{constructor(t){this.container=t}dispatchLocalEvent(t,e){const o={...e,type:t,tabSelector:`tab-${e.name}`,containerSelector:`container-${e.name}`,topic:"openfin-DOM-event"};this.container.dispatchEvent(new CustomEvent(t,{detail:o}))}};var g={};Object.defineProperty(g,"__esModule",{value:!0});var L=g.isVisible=void 0;L=g.isVisible=t=>(0!==t.offsetWidth||0!==t.offsetHeight)&&"hidden"!==window.getComputedStyle(t).visibility&&t.offsetTop>=0&&t.offsetLeft>=0&&t.offsetTop<=window.innerHeight&&t.offsetLeft<=window.innerWidth;const E={show:"top",popout:!1,maximise:!1,close:!1},_={headerHeight:31},C={hasHeaders:!0},M={reorderEnabled:!1,popoutWholeStack:!1,constrainDragToContainer:!1,constrainDragToHeaders:!1,preventDragout:!1,showMaximiseIcon:!1,showPopoutIcon:!1,showCloseIcon:!1,blockedPopoutsThrowError:!0,closePopoutsOnUnload:!0,selectionEnabled:!1};function A(t=[],e){for(const o of t)"component"===o.type?Object.keys(e).forEach((t=>o[t]=e[t])):A(o.content,e)}const P=e=>class extends e{connectedCallback(){if(!this.name||!this.uuid)throw new Error("<of-view> Name or uuid attribute missing");if(!this.src)throw new Error("<of-view> missing 'src' attribute.");this.#t||(this.#t=document.createElement("iframe"),this.#t.src=this.src,this.#t.style.height="100%",this.#t.style.width="100%",this.#t.style.border="none",this.forceFrameName?this.#t.setAttribute("name",this.forceFrameName):this.#t.setAttribute("name",t.encodeOptions({brokerUrl:this.brokerUrl,name:this.name,uuid:this.uuid,providerId:this.providerId,contextGroup:this.contextGroup},"of-frame")),this.#t.setAttribute("id",this.name),this.appendChild(this.#t))}#t;get brokerUrl(){return this.getAttribute("of-broker")}set brokerUrl(t){t&&this.setAttribute("of-broker",t)}get name(){return this.getAttribute("of-name")}set name(t){t&&this.setAttribute("of-name",t)}get forceFrameName(){return this.getAttribute("forceFrameName")}set forceFrameName(t){t&&this.setAttribute("forceFrameName",t)}get uuid(){return this.getAttribute("of-uuid")}set uuid(t){t&&this.setAttribute("of-uuid",t)}get src(){return this.getAttribute("src")}set src(t){t&&this.setAttribute("src",t)}get providerId(){return this.getAttribute("of-provider-id")}set providerId(t){t&&this.setAttribute("of-provider-id",t)}get contextGroup(){return this.getAttribute("of-context-group")}set contextGroup(t){t&&this.setAttribute("of-context-group",t)}static get observedAttributes(){return["name"]}};class N{static create(t){const e=document.createElement("of-view");return Object.entries(t).forEach((([t,o])=>{e.setAttribute(t,o)})),e}}customElements.define("of-view",P(HTMLElement));class S{constructor(t,o,i,{brokerUrl:r,interopConfig:a}){this.container=t;const{url:n,web:s,name:c=e.v4(),interop:l}=o||{};if(this.container.element.setAttribute("of-name",c),this.container.element.id=`container-${c}`,void 0===n)return void this.handleUrlMissing();const u=this.updateTitleIfNotSet(n),d={"of-broker":r,"of-uuid":i,"of-name":c,src:n};s?.frameName&&(d.forceFrameName=s.frameName);const h=l?.currentContextGroup??a?.currentContextGroup;h&&(d["of-context-group"]=h),a?.providerId&&(d["of-provider-id"]=a?.providerId);const m=N.create(d);m.title=u??`Iframe: ${n}`,this.container.element.appendChild(m)}updateTitleIfNotSet(t){return"view"===this.container.parent.title&&this.container.parent.setTitle(t),this.container.parent.title}handleUrlMissing(){const t=document.createElement("div");t.setAttribute("style","padding: 20px");t.innerText="No URL provided",this.container.element.appendChild(t)}}class F extends w{static overrideConfig(t){return A(t.content,{isClosable:!1}),{dimensions:_,...t,settings:{...C,...t.settings,...M},header:{...E,show:!1!==t.settings?.hasHeaders&&E.show}}}constructor(t,e,i,{options:r}){super(),this.identity=t,this.container=e,this.domEmitter=new b(e),this.layout=new o.GoldenLayout(this.container),this.layout.resizeWithContainerAutomatically=!0,this.layout.registerComponent("view",((e,o)=>new S(e,o,t.uuid,r))),this.setupListeners(),this.layout.loadLayout(F.overrideConfig(i))}addView(t){throw new Error("Method not implemented.")}replaceView({viewToReplace:t,newView:e}){throw new Error("Method not implemented.")}replaceLayout(t){throw new Error("Method not implemented.")}closeView(t){throw new Error("Method not implemented.")}applyPreset(t){throw new Error("Method not implemented.")}getCurrentViews(){throw new Error("Method not implemented.")}async getFrameSnapshot(){return function(t){if(t.root){t.root.content&&A(t.root.content,{componentName:"view"});const e=t.root;t.content=[e],delete t.root}return t}(o.LayoutConfig.fromResolved(this.layout.toConfig()))}isVisible(){return L(this.container)}async onViewDetached(){throw new Error("Method not implemented.")}async destroy(){this.layout.destroy()}setupListeners(){this.layout.on("tabCreated",(t=>{const o=t.componentItem.container.element.getAttribute("of-name")??e.v4(),i={name:o,uuid:o};t.element.id=`tab-${o}`,this.domEmitter.dispatchLocalEvent("tab-created",i)})),this.layout.on("itemCreated",(({target:t})=>{const o=t;if(!o.isComponent)return;const i=o.element.querySelector("[of-name]")?.getAttribute("of-name")??e.v4(),r={name:i,uuid:i};this.domEmitter.dispatchLocalEvent("container-created",r),setTimeout((()=>{document.querySelectorAll(".lm_splitter").forEach((t=>{t.style.pointerEvents="none"}))}),1)}))}}class k{constructor(t,e,o){this.windowIdentity=t,this.connectConfig=e,this.fallbackContainer=o}async createLayout(t,e){if(!("container"in t)&&!this.fallbackContainer)throw new Error("Container property is not optional in web");const{layout:o,layoutName:i}=t,r=t.container??this.fallbackContainer,a={...this.windowIdentity,layoutName:i},n=new F(a,r,o,this.connectConfig);m.registerLayout(e,i,n),this.fallbackContainer=null}async getLayoutSnapshot(t){return t.getLayoutSnapshot()}async handleLastViewRemoved(t){throw new Error("Method not implemented.")}}var V,G,I,j,x;const T=t=>t;class O{constructor(o){V.add(this),G.set(this,void 0),I.set(this,void 0),j.set(this,void 0),this.init=async({container:e,layoutManagerOverride:o})=>{const i=o??T,r=new k(t.__classPrivateFieldGet(this,j,"f"),t.__classPrivateFieldGet(this,G,"f"),e);t.__classPrivateFieldSet(this,I,new(i(m.createClosedConstructor(r))),"f"),await t.__classPrivateFieldGet(this,I,"f").applyLayoutSnapshot(t.__classPrivateFieldGet(this,G,"f").platform.layoutSnapshot)},this.getCurrentLayoutManagerSync=()=>(t.__classPrivateFieldGet(this,V,"m",x).call(this),t.__classPrivateFieldGet(this,I,"f")),this.create=async e=>(t.__classPrivateFieldGet(this,V,"m",x).call(this),m.createLayout(t.__classPrivateFieldGet(this,I,"f"),e)),this.destroy=async e=>(t.__classPrivateFieldGet(this,V,"m",x).call(this),m.destroyLayout(t.__classPrivateFieldGet(this,I,"f"),e)),t.__classPrivateFieldSet(this,G,o,"f");const i=e.v4();t.__classPrivateFieldSet(this,j,{name:i,uuid:i},"f")}}G=new WeakMap,I=new WeakMap,j=new WeakMap,V=new WeakSet,x=function(){if(!t.__classPrivateFieldGet(this,I,"f"))throw new Error("You must call init before using this API")};exports.createWebLayoutModule=t=>new O(t);
 
 
 /***/ }),
@@ -2796,6 +2820,9788 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
   }
 }
 
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/index.js":
+/*!**********************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/index.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ApiError: () => (/* reexport safe */ _ts_errors_external_error__WEBPACK_IMPORTED_MODULE_7__.ApiError),
+/* harmony export */   BindError: () => (/* reexport safe */ _ts_errors_external_error__WEBPACK_IMPORTED_MODULE_7__.BindError),
+/* harmony export */   BrowserPopout: () => (/* reexport safe */ _ts_controls_browser_popout__WEBPACK_IMPORTED_MODULE_3__.BrowserPopout),
+/* harmony export */   ComponentContainer: () => (/* reexport safe */ _ts_container_component_container__WEBPACK_IMPORTED_MODULE_2__.ComponentContainer),
+/* harmony export */   ComponentItem: () => (/* reexport safe */ _ts_items_component_item__WEBPACK_IMPORTED_MODULE_9__.ComponentItem),
+/* harmony export */   ComponentItemConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.ComponentItemConfig),
+/* harmony export */   ConfigurationError: () => (/* reexport safe */ _ts_errors_external_error__WEBPACK_IMPORTED_MODULE_7__.ConfigurationError),
+/* harmony export */   ContentItem: () => (/* reexport safe */ _ts_items_content_item__WEBPACK_IMPORTED_MODULE_10__.ContentItem),
+/* harmony export */   DragSource: () => (/* reexport safe */ _ts_controls_drag_source__WEBPACK_IMPORTED_MODULE_4__.DragSource),
+/* harmony export */   EventEmitter: () => (/* reexport safe */ _ts_utils_event_emitter__WEBPACK_IMPORTED_MODULE_14__.EventEmitter),
+/* harmony export */   EventHub: () => (/* reexport safe */ _ts_utils_event_hub__WEBPACK_IMPORTED_MODULE_15__.EventHub),
+/* harmony export */   ExternalError: () => (/* reexport safe */ _ts_errors_external_error__WEBPACK_IMPORTED_MODULE_7__.ExternalError),
+/* harmony export */   GoldenLayout: () => (/* reexport safe */ _ts_golden_layout__WEBPACK_IMPORTED_MODULE_8__.GoldenLayout),
+/* harmony export */   Header: () => (/* reexport safe */ _ts_controls_header__WEBPACK_IMPORTED_MODULE_5__.Header),
+/* harmony export */   HeaderedItemConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.HeaderedItemConfig),
+/* harmony export */   I18nStrings: () => (/* reexport safe */ _ts_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_16__.I18nStrings),
+/* harmony export */   ItemConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.ItemConfig),
+/* harmony export */   ItemType: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.ItemType),
+/* harmony export */   JsonValue: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.JsonValue),
+/* harmony export */   LayoutConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.LayoutConfig),
+/* harmony export */   LayoutManager: () => (/* reexport safe */ _ts_layout_manager__WEBPACK_IMPORTED_MODULE_13__.LayoutManager),
+/* harmony export */   LogicalZIndex: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.LogicalZIndex),
+/* harmony export */   LogicalZIndexToDefaultMap: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.LogicalZIndexToDefaultMap),
+/* harmony export */   PopoutBlockedError: () => (/* reexport safe */ _ts_errors_external_error__WEBPACK_IMPORTED_MODULE_7__.PopoutBlockedError),
+/* harmony export */   PopoutLayoutConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.PopoutLayoutConfig),
+/* harmony export */   ResolvedComponentItemConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedComponentItemConfig),
+/* harmony export */   ResolvedGroundItemConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedGroundItemConfig),
+/* harmony export */   ResolvedHeaderedItemConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedHeaderedItemConfig),
+/* harmony export */   ResolvedItemConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedItemConfig),
+/* harmony export */   ResolvedLayoutConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedLayoutConfig),
+/* harmony export */   ResolvedPopoutLayoutConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedPopoutLayoutConfig),
+/* harmony export */   ResolvedRootItemConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedRootItemConfig),
+/* harmony export */   ResolvedRowOrColumnItemConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedRowOrColumnItemConfig),
+/* harmony export */   ResolvedStackItemConfig: () => (/* reexport safe */ _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedStackItemConfig),
+/* harmony export */   ResponsiveMode: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.ResponsiveMode),
+/* harmony export */   RootItemConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.RootItemConfig),
+/* harmony export */   RowOrColumn: () => (/* reexport safe */ _ts_items_row_or_column__WEBPACK_IMPORTED_MODULE_11__.RowOrColumn),
+/* harmony export */   RowOrColumnItemConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.RowOrColumnItemConfig),
+/* harmony export */   Side: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.Side),
+/* harmony export */   SizeUnitEnum: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.SizeUnitEnum),
+/* harmony export */   Stack: () => (/* reexport safe */ _ts_items_stack__WEBPACK_IMPORTED_MODULE_12__.Stack),
+/* harmony export */   StackItemConfig: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.StackItemConfig),
+/* harmony export */   StyleConstants: () => (/* reexport safe */ _ts_utils_style_constants__WEBPACK_IMPORTED_MODULE_17__.StyleConstants),
+/* harmony export */   Tab: () => (/* reexport safe */ _ts_controls_tab__WEBPACK_IMPORTED_MODULE_6__.Tab),
+/* harmony export */   VirtualLayout: () => (/* reexport safe */ _ts_virtual_layout__WEBPACK_IMPORTED_MODULE_19__.VirtualLayout),
+/* harmony export */   WidthOrHeightPropertyName: () => (/* reexport safe */ _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__.WidthOrHeightPropertyName),
+/* harmony export */   formatSize: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.formatSize),
+/* harmony export */   formatUndefinableSize: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.formatUndefinableSize),
+/* harmony export */   i18nStrings: () => (/* reexport safe */ _ts_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_16__.i18nStrings),
+/* harmony export */   parseSize: () => (/* reexport safe */ _ts_config_config__WEBPACK_IMPORTED_MODULE_0__.parseSize)
+/* harmony export */ });
+/* harmony import */ var _ts_config_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ts/config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _ts_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ts/config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _ts_container_component_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ts/container/component-container */ "../../node_modules/golden-layout/dist/esm/ts/container/component-container.js");
+/* harmony import */ var _ts_controls_browser_popout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ts/controls/browser-popout */ "../../node_modules/golden-layout/dist/esm/ts/controls/browser-popout.js");
+/* harmony import */ var _ts_controls_drag_source__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ts/controls/drag-source */ "../../node_modules/golden-layout/dist/esm/ts/controls/drag-source.js");
+/* harmony import */ var _ts_controls_header__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ts/controls/header */ "../../node_modules/golden-layout/dist/esm/ts/controls/header.js");
+/* harmony import */ var _ts_controls_tab__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ts/controls/tab */ "../../node_modules/golden-layout/dist/esm/ts/controls/tab.js");
+/* harmony import */ var _ts_errors_external_error__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ts/errors/external-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js");
+/* harmony import */ var _ts_golden_layout__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ts/golden-layout */ "../../node_modules/golden-layout/dist/esm/ts/golden-layout.js");
+/* harmony import */ var _ts_items_component_item__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ts/items/component-item */ "../../node_modules/golden-layout/dist/esm/ts/items/component-item.js");
+/* harmony import */ var _ts_items_content_item__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ts/items/content-item */ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js");
+/* harmony import */ var _ts_items_row_or_column__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./ts/items/row-or-column */ "../../node_modules/golden-layout/dist/esm/ts/items/row-or-column.js");
+/* harmony import */ var _ts_items_stack__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./ts/items/stack */ "../../node_modules/golden-layout/dist/esm/ts/items/stack.js");
+/* harmony import */ var _ts_layout_manager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./ts/layout-manager */ "../../node_modules/golden-layout/dist/esm/ts/layout-manager.js");
+/* harmony import */ var _ts_utils_event_emitter__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./ts/utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _ts_utils_event_hub__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./ts/utils/event-hub */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-hub.js");
+/* harmony import */ var _ts_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./ts/utils/i18n-strings */ "../../node_modules/golden-layout/dist/esm/ts/utils/i18n-strings.js");
+/* harmony import */ var _ts_utils_style_constants__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./ts/utils/style-constants */ "../../node_modules/golden-layout/dist/esm/ts/utils/style-constants.js");
+/* harmony import */ var _ts_utils_types__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./ts/utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _ts_virtual_layout__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./ts/virtual-layout */ "../../node_modules/golden-layout/dist/esm/ts/virtual-layout.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/config/config.js":
+/*!*********************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/config/config.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ComponentItemConfig: () => (/* binding */ ComponentItemConfig),
+/* harmony export */   HeaderedItemConfig: () => (/* binding */ HeaderedItemConfig),
+/* harmony export */   ItemConfig: () => (/* binding */ ItemConfig),
+/* harmony export */   LayoutConfig: () => (/* binding */ LayoutConfig),
+/* harmony export */   PopoutLayoutConfig: () => (/* binding */ PopoutLayoutConfig),
+/* harmony export */   RootItemConfig: () => (/* binding */ RootItemConfig),
+/* harmony export */   RowOrColumnItemConfig: () => (/* binding */ RowOrColumnItemConfig),
+/* harmony export */   StackItemConfig: () => (/* binding */ StackItemConfig),
+/* harmony export */   formatSize: () => (/* binding */ formatSize),
+/* harmony export */   formatUndefinableSize: () => (/* binding */ formatUndefinableSize),
+/* harmony export */   parseSize: () => (/* binding */ parseSize)
+/* harmony export */ });
+/* harmony import */ var _errors_external_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/external-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_i18n_strings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/i18n-strings */ "../../node_modules/golden-layout/dist/esm/ts/utils/i18n-strings.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _resolved_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+
+
+
+
+
+
+/** @public */
+var ItemConfig;
+(function (ItemConfig) {
+    /** @internal */
+    function resolve(itemConfig, rowAndColumnChildLegacySizeDefault) {
+        switch (itemConfig.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground:
+                throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.ConfigurationError('ItemConfig cannot specify type ground', JSON.stringify(itemConfig));
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+                return RowOrColumnItemConfig.resolve(itemConfig, rowAndColumnChildLegacySizeDefault);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+                return StackItemConfig.resolve(itemConfig, rowAndColumnChildLegacySizeDefault);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                return ComponentItemConfig.resolve(itemConfig, rowAndColumnChildLegacySizeDefault);
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnreachableCaseError('UCUICR55499', itemConfig.type);
+        }
+    }
+    ItemConfig.resolve = resolve;
+    /** @internal */
+    function resolveContent(content) {
+        if (content === undefined) {
+            return [];
+        }
+        else {
+            const count = content.length;
+            const result = new Array(count);
+            for (let i = 0; i < count; i++) {
+                result[i] = ItemConfig.resolve(content[i], false);
+            }
+            return result;
+        }
+    }
+    ItemConfig.resolveContent = resolveContent;
+    /** @internal */
+    function resolveId(id) {
+        if (id === undefined) {
+            return _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.id;
+        }
+        else {
+            if (Array.isArray(id)) {
+                if (id.length === 0) {
+                    return _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.id;
+                }
+                else {
+                    return id[0];
+                }
+            }
+            else {
+                return id;
+            }
+        }
+    }
+    ItemConfig.resolveId = resolveId;
+    /** @internal */
+    function resolveSize(size, width, height, rowAndColumnChildLegacySizeDefault) {
+        // Remove support for rowAndColumnChildLegacySizeDefault in a major version release
+        if (size !== undefined) {
+            return parseSize(size, [_utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Percent, _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Fractional]);
+        }
+        else {
+            if (width !== undefined || height !== undefined) {
+                if (width !== undefined) {
+                    return { size: width, sizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Percent };
+                }
+                else {
+                    if (height !== undefined) {
+                        return { size: height, sizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Percent };
+                    }
+                    else {
+                        throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnexpectedUndefinedError('CRS33390');
+                    }
+                }
+            }
+            else {
+                if (rowAndColumnChildLegacySizeDefault) {
+                    return { size: 50, sizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Percent };
+                }
+                else {
+                    return { size: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.size, sizeUnit: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.sizeUnit };
+                }
+            }
+        }
+    }
+    ItemConfig.resolveSize = resolveSize;
+    /** @internal */
+    function resolveMinSize(minSize, minWidth, minHeight) {
+        if (minSize !== undefined) {
+            return parseSize(minSize, [_utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel]);
+        }
+        else {
+            const minWidthDefined = minWidth !== undefined;
+            const minHeightDefined = minHeight !== undefined;
+            if (minWidthDefined || minHeightDefined) {
+                if (minWidthDefined) {
+                    return { size: minWidth, sizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel };
+                }
+                else {
+                    return { size: minHeight, sizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel };
+                }
+            }
+            else {
+                return { size: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.minSize, sizeUnit: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.minSizeUnit };
+            }
+        }
+    }
+    ItemConfig.resolveMinSize = resolveMinSize;
+    /** @internal */
+    function calculateSizeWidthHeightSpecificationType(config) {
+        if (config.size !== undefined) {
+            return 1 /* Size */;
+        }
+        else {
+            if (config.width !== undefined || config.height !== undefined) {
+                return 2 /* WidthOrHeight */;
+            }
+            else {
+                return 0 /* None */;
+            }
+        }
+    }
+    ItemConfig.calculateSizeWidthHeightSpecificationType = calculateSizeWidthHeightSpecificationType;
+    function isGround(config) {
+        return config.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground;
+    }
+    ItemConfig.isGround = isGround;
+    function isRow(config) {
+        return config.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row;
+    }
+    ItemConfig.isRow = isRow;
+    function isColumn(config) {
+        return config.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column;
+    }
+    ItemConfig.isColumn = isColumn;
+    function isStack(config) {
+        return config.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack;
+    }
+    ItemConfig.isStack = isStack;
+    function isComponent(config) {
+        return config.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component;
+    }
+    ItemConfig.isComponent = isComponent;
+})(ItemConfig || (ItemConfig = {}));
+/** @public */
+var HeaderedItemConfig;
+(function (HeaderedItemConfig) {
+    const legacyMaximisedId = '__glMaximised';
+    let Header;
+    (function (Header) {
+        function resolve(header, hasHeaders) {
+            var _a;
+            if (header === undefined && hasHeaders === undefined) {
+                return undefined;
+            }
+            else {
+                const result = {
+                    show: (_a = header === null || header === void 0 ? void 0 : header.show) !== null && _a !== void 0 ? _a : (hasHeaders === undefined ? undefined : hasHeaders ? _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.show : false),
+                    popout: header === null || header === void 0 ? void 0 : header.popout,
+                    maximise: header === null || header === void 0 ? void 0 : header.maximise,
+                    close: header === null || header === void 0 ? void 0 : header.close,
+                    minimise: header === null || header === void 0 ? void 0 : header.minimise,
+                    tabDropdown: header === null || header === void 0 ? void 0 : header.tabDropdown,
+                };
+                return result;
+            }
+        }
+        Header.resolve = resolve;
+    })(Header = HeaderedItemConfig.Header || (HeaderedItemConfig.Header = {}));
+    /** @internal */
+    function resolveIdAndMaximised(config) {
+        let id;
+        // To support legacy configs with Id saved as an array of string, assign config.id to a type which includes string array
+        let legacyId = config.id;
+        let legacyMaximised = false;
+        if (legacyId === undefined) {
+            id = _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.id;
+        }
+        else {
+            if (Array.isArray(legacyId)) {
+                const idx = legacyId.findIndex((id) => id === legacyMaximisedId);
+                if (idx > 0) {
+                    legacyMaximised = true;
+                    legacyId = legacyId.splice(idx, 1);
+                }
+                if (legacyId.length > 0) {
+                    id = legacyId[0];
+                }
+                else {
+                    id = _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.id;
+                }
+            }
+            else {
+                id = legacyId;
+            }
+        }
+        let maximised;
+        if (config.maximised !== undefined) {
+            maximised = config.maximised;
+        }
+        else {
+            maximised = legacyMaximised;
+        }
+        return { id, maximised };
+    }
+    HeaderedItemConfig.resolveIdAndMaximised = resolveIdAndMaximised;
+})(HeaderedItemConfig || (HeaderedItemConfig = {}));
+/** @public */
+var StackItemConfig;
+(function (StackItemConfig) {
+    /** @internal */
+    function resolve(itemConfig, rowAndColumnChildLegacySizeDefault) {
+        var _a, _b;
+        const { id, maximised } = HeaderedItemConfig.resolveIdAndMaximised(itemConfig);
+        const { size, sizeUnit } = ItemConfig.resolveSize(itemConfig.size, itemConfig.width, itemConfig.height, rowAndColumnChildLegacySizeDefault);
+        const { size: minSize, sizeUnit: minSizeUnit } = ItemConfig.resolveMinSize(itemConfig.minSize, itemConfig.minWidth, itemConfig.minHeight);
+        const result = {
+            type: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack,
+            content: resolveContent(itemConfig.content),
+            size,
+            sizeUnit,
+            minSize,
+            minSizeUnit,
+            id,
+            maximised,
+            isClosable: (_a = itemConfig.isClosable) !== null && _a !== void 0 ? _a : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.isClosable,
+            activeItemIndex: (_b = itemConfig.activeItemIndex) !== null && _b !== void 0 ? _b : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedStackItemConfig.defaultActiveItemIndex,
+            header: HeaderedItemConfig.Header.resolve(itemConfig.header, itemConfig.hasHeaders),
+        };
+        return result;
+    }
+    StackItemConfig.resolve = resolve;
+    /** @internal */
+    function fromResolved(resolvedConfig) {
+        const result = {
+            type: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack,
+            content: fromResolvedContent(resolvedConfig.content),
+            size: formatSize(resolvedConfig.size, resolvedConfig.sizeUnit),
+            minSize: formatUndefinableSize(resolvedConfig.minSize, resolvedConfig.minSizeUnit),
+            id: resolvedConfig.id,
+            maximised: resolvedConfig.maximised,
+            isClosable: resolvedConfig.isClosable,
+            activeItemIndex: resolvedConfig.activeItemIndex,
+            header: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedHeaderedItemConfig.Header.createCopy(resolvedConfig.header),
+        };
+        return result;
+    }
+    StackItemConfig.fromResolved = fromResolved;
+    /** @internal */
+    function resolveContent(content) {
+        if (content === undefined) {
+            return [];
+        }
+        else {
+            const count = content.length;
+            const result = new Array(count);
+            for (let i = 0; i < count; i++) {
+                const childItemConfig = content[i];
+                const itemConfig = ItemConfig.resolve(childItemConfig, false);
+                if (!_resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.isComponentItem(itemConfig)) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('UCUSICRC91114', JSON.stringify(itemConfig));
+                }
+                else {
+                    result[i] = itemConfig;
+                }
+            }
+            return result;
+        }
+    }
+    /** @internal */
+    function fromResolvedContent(resolvedContent) {
+        const count = resolvedContent.length;
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            const resolvedContentConfig = resolvedContent[i];
+            result[i] = ComponentItemConfig.fromResolved(resolvedContentConfig);
+        }
+        return result;
+    }
+})(StackItemConfig || (StackItemConfig = {}));
+/** @public */
+var ComponentItemConfig;
+(function (ComponentItemConfig) {
+    /** @internal */
+    function resolve(itemConfig, rowAndColumnChildLegacySizeDefault) {
+        var _a, _b, _c;
+        let componentType = itemConfig.componentType;
+        if (componentType === undefined) {
+            componentType = itemConfig.componentName;
+        }
+        if (componentType === undefined) {
+            throw new Error('ComponentItemConfig.componentType is undefined');
+        }
+        else {
+            const { id, maximised } = HeaderedItemConfig.resolveIdAndMaximised(itemConfig);
+            let title;
+            if (itemConfig.title === undefined || itemConfig.title === '') {
+                title = ComponentItemConfig.componentTypeToTitle(componentType);
+            }
+            else {
+                title = itemConfig.title;
+            }
+            const { size, sizeUnit } = ItemConfig.resolveSize(itemConfig.size, itemConfig.width, itemConfig.height, rowAndColumnChildLegacySizeDefault);
+            const { size: minSize, sizeUnit: minSizeUnit } = ItemConfig.resolveMinSize(itemConfig.minSize, itemConfig.minWidth, itemConfig.minHeight);
+            const result = {
+                type: itemConfig.type,
+                content: [],
+                size,
+                sizeUnit,
+                minSize,
+                minSizeUnit,
+                id,
+                maximised,
+                isClosable: (_a = itemConfig.isClosable) !== null && _a !== void 0 ? _a : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.isClosable,
+                reorderEnabled: (_b = itemConfig.reorderEnabled) !== null && _b !== void 0 ? _b : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedComponentItemConfig.defaultReorderEnabled,
+                title,
+                header: HeaderedItemConfig.Header.resolve(itemConfig.header, itemConfig.hasHeaders),
+                componentType,
+                componentState: (_c = itemConfig.componentState) !== null && _c !== void 0 ? _c : {},
+            };
+            return result;
+        }
+    }
+    ComponentItemConfig.resolve = resolve;
+    /** @internal */
+    function fromResolved(resolvedConfig) {
+        const result = {
+            type: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component,
+            size: formatSize(resolvedConfig.size, resolvedConfig.sizeUnit),
+            minSize: formatUndefinableSize(resolvedConfig.minSize, resolvedConfig.minSizeUnit),
+            id: resolvedConfig.id,
+            maximised: resolvedConfig.maximised,
+            isClosable: resolvedConfig.isClosable,
+            reorderEnabled: resolvedConfig.reorderEnabled,
+            title: resolvedConfig.title,
+            header: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedHeaderedItemConfig.Header.createCopy(resolvedConfig.header),
+            componentType: resolvedConfig.componentType,
+            componentState: (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.deepExtendValue)(undefined, resolvedConfig.componentState),
+        };
+        return result;
+    }
+    ComponentItemConfig.fromResolved = fromResolved;
+    function componentTypeToTitle(componentType) {
+        const componentTypeType = typeof componentType;
+        switch (componentTypeType) {
+            case 'string': return componentType;
+            case 'number': return componentType.toString();
+            case 'boolean': return componentType.toString();
+            default: return '';
+        }
+    }
+    ComponentItemConfig.componentTypeToTitle = componentTypeToTitle;
+})(ComponentItemConfig || (ComponentItemConfig = {}));
+/** @public */
+var RowOrColumnItemConfig;
+(function (RowOrColumnItemConfig) {
+    function isChildItemConfig(itemConfig) {
+        switch (itemConfig.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                return true;
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground:
+                return false;
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnreachableCaseError('UROCOSPCICIC13687', itemConfig.type);
+        }
+    }
+    RowOrColumnItemConfig.isChildItemConfig = isChildItemConfig;
+    /** @internal */
+    function resolve(itemConfig, rowAndColumnChildLegacySizeDefault) {
+        var _a;
+        const { size, sizeUnit } = ItemConfig.resolveSize(itemConfig.size, itemConfig.width, itemConfig.height, rowAndColumnChildLegacySizeDefault);
+        const { size: minSize, sizeUnit: minSizeUnit } = ItemConfig.resolveMinSize(itemConfig.minSize, itemConfig.minWidth, itemConfig.minHeight);
+        const result = {
+            type: itemConfig.type,
+            content: RowOrColumnItemConfig.resolveContent(itemConfig.content),
+            size,
+            sizeUnit,
+            minSize,
+            minSizeUnit,
+            id: ItemConfig.resolveId(itemConfig.id),
+            isClosable: (_a = itemConfig.isClosable) !== null && _a !== void 0 ? _a : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedItemConfig.defaults.isClosable,
+        };
+        return result;
+    }
+    RowOrColumnItemConfig.resolve = resolve;
+    /** @internal */
+    function fromResolved(resolvedConfig) {
+        const result = {
+            type: resolvedConfig.type,
+            content: fromResolvedContent(resolvedConfig.content),
+            size: formatSize(resolvedConfig.size, resolvedConfig.sizeUnit),
+            minSize: formatUndefinableSize(resolvedConfig.minSize, resolvedConfig.minSizeUnit),
+            id: resolvedConfig.id,
+            isClosable: resolvedConfig.isClosable,
+        };
+        return result;
+    }
+    RowOrColumnItemConfig.fromResolved = fromResolved;
+    /** @internal */
+    function resolveContent(content) {
+        if (content === undefined) {
+            return [];
+        }
+        else {
+            const count = content.length;
+            const childItemConfigs = new Array(count);
+            let widthOrHeightSpecifiedAtLeastOnce = false;
+            let sizeSpecifiedAtLeastOnce = false;
+            for (let i = 0; i < count; i++) {
+                const childItemConfig = content[i];
+                if (!RowOrColumnItemConfig.isChildItemConfig(childItemConfig)) {
+                    throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.ConfigurationError('ItemConfig is not Row, Column or Stack', childItemConfig);
+                }
+                else {
+                    if (!sizeSpecifiedAtLeastOnce) {
+                        const sizeWidthHeightSpecificationType = ItemConfig.calculateSizeWidthHeightSpecificationType(childItemConfig);
+                        switch (sizeWidthHeightSpecificationType) {
+                            case 0 /* None */:
+                                break;
+                            case 2 /* WidthOrHeight */:
+                                widthOrHeightSpecifiedAtLeastOnce = true;
+                                break;
+                            case 1 /* Size */:
+                                sizeSpecifiedAtLeastOnce = true;
+                                break;
+                            default:
+                                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnreachableCaseError('ROCICRC87556', sizeWidthHeightSpecificationType);
+                        }
+                    }
+                    childItemConfigs[i] = childItemConfig;
+                }
+            }
+            let legacySizeDefault;
+            if (sizeSpecifiedAtLeastOnce) {
+                legacySizeDefault = false;
+            }
+            else {
+                if (widthOrHeightSpecifiedAtLeastOnce) {
+                    legacySizeDefault = true;
+                }
+                else {
+                    legacySizeDefault = false;
+                }
+            }
+            const result = new Array(count);
+            for (let i = 0; i < count; i++) {
+                const childItemConfig = childItemConfigs[i];
+                const resolvedChildItemConfig = ItemConfig.resolve(childItemConfig, legacySizeDefault);
+                if (!_resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedRowOrColumnItemConfig.isChildItemConfig(resolvedChildItemConfig)) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('UROCOSPIC99512', JSON.stringify(resolvedChildItemConfig));
+                }
+                else {
+                    result[i] = resolvedChildItemConfig;
+                }
+            }
+            return result;
+        }
+    }
+    RowOrColumnItemConfig.resolveContent = resolveContent;
+    /** @internal */
+    function fromResolvedContent(resolvedContent) {
+        const count = resolvedContent.length;
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            const resolvedContentConfig = resolvedContent[i];
+            const type = resolvedContentConfig.type;
+            let contentConfig;
+            switch (type) {
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+                    contentConfig = RowOrColumnItemConfig.fromResolved(resolvedContentConfig);
+                    break;
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+                    contentConfig = StackItemConfig.fromResolved(resolvedContentConfig);
+                    break;
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                    contentConfig = ComponentItemConfig.fromResolved(resolvedContentConfig);
+                    break;
+                default:
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnreachableCaseError('ROCICFRC44797', type);
+            }
+            result[i] = contentConfig;
+        }
+        return result;
+    }
+})(RowOrColumnItemConfig || (RowOrColumnItemConfig = {}));
+/** @public */
+var RootItemConfig;
+(function (RootItemConfig) {
+    function isRootItemConfig(itemConfig) {
+        switch (itemConfig.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                return true;
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground:
+                return false;
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnreachableCaseError('URICIR23687', itemConfig.type);
+        }
+    }
+    RootItemConfig.isRootItemConfig = isRootItemConfig;
+    /** @internal */
+    function resolve(itemConfig) {
+        if (itemConfig === undefined) {
+            return undefined;
+        }
+        else {
+            const result = ItemConfig.resolve(itemConfig, false);
+            if (!_resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedRootItemConfig.isRootItemConfig(result)) {
+                throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.ConfigurationError('ItemConfig is not Row, Column or Stack', JSON.stringify(itemConfig));
+            }
+            else {
+                return result;
+            }
+        }
+    }
+    RootItemConfig.resolve = resolve;
+    /** @internal */
+    function fromResolvedOrUndefined(resolvedItemConfig) {
+        if (resolvedItemConfig === undefined) {
+            return undefined;
+        }
+        else {
+            const type = resolvedItemConfig.type;
+            switch (type) {
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+                    return RowOrColumnItemConfig.fromResolved(resolvedItemConfig);
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+                    return StackItemConfig.fromResolved(resolvedItemConfig);
+                case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                    return ComponentItemConfig.fromResolved(resolvedItemConfig);
+                default:
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnreachableCaseError('RICFROU89921', type);
+            }
+        }
+    }
+    RootItemConfig.fromResolvedOrUndefined = fromResolvedOrUndefined;
+})(RootItemConfig || (RootItemConfig = {}));
+/** Use to specify LayoutConfig with defaults or deserialise a LayoutConfig.
+ * Deserialisation will handle backwards compatibility.
+ * Note that LayoutConfig should be used for serialisation (not LayoutConfig)
+ * @public
+ */
+var LayoutConfig;
+(function (LayoutConfig) {
+    let Settings;
+    (function (Settings) {
+        function resolve(settings) {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+            const result = {
+                constrainDragToContainer: (_a = settings === null || settings === void 0 ? void 0 : settings.constrainDragToContainer) !== null && _a !== void 0 ? _a : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.constrainDragToContainer,
+                reorderEnabled: (_b = settings === null || settings === void 0 ? void 0 : settings.reorderEnabled) !== null && _b !== void 0 ? _b : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.reorderEnabled,
+                popoutWholeStack: (_c = settings === null || settings === void 0 ? void 0 : settings.popoutWholeStack) !== null && _c !== void 0 ? _c : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.popoutWholeStack,
+                blockedPopoutsThrowError: (_d = settings === null || settings === void 0 ? void 0 : settings.blockedPopoutsThrowError) !== null && _d !== void 0 ? _d : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.blockedPopoutsThrowError,
+                closePopoutsOnUnload: (_e = settings === null || settings === void 0 ? void 0 : settings.closePopoutsOnUnload) !== null && _e !== void 0 ? _e : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.closePopoutsOnUnload,
+                responsiveMode: (_f = settings === null || settings === void 0 ? void 0 : settings.responsiveMode) !== null && _f !== void 0 ? _f : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.responsiveMode,
+                tabOverlapAllowance: (_g = settings === null || settings === void 0 ? void 0 : settings.tabOverlapAllowance) !== null && _g !== void 0 ? _g : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.tabOverlapAllowance,
+                reorderOnTabMenuClick: (_h = settings === null || settings === void 0 ? void 0 : settings.reorderOnTabMenuClick) !== null && _h !== void 0 ? _h : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.reorderOnTabMenuClick,
+                tabControlOffset: (_j = settings === null || settings === void 0 ? void 0 : settings.tabControlOffset) !== null && _j !== void 0 ? _j : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.tabControlOffset,
+                popInOnClose: (_k = settings === null || settings === void 0 ? void 0 : settings.popInOnClose) !== null && _k !== void 0 ? _k : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.defaults.popInOnClose,
+            };
+            return result;
+        }
+        Settings.resolve = resolve;
+    })(Settings = LayoutConfig.Settings || (LayoutConfig.Settings = {}));
+    let Dimensions;
+    (function (Dimensions) {
+        /** @internal */
+        function resolve(dimensions) {
+            var _a, _b, _c, _d, _e;
+            const { size: defaultMinItemHeight, sizeUnit: defaultMinItemHeightUnit } = Dimensions.resolveDefaultMinItemHeight(dimensions);
+            const { size: defaultMinItemWidth, sizeUnit: defaultMinItemWidthUnit } = Dimensions.resolveDefaultMinItemWidth(dimensions);
+            const result = {
+                borderWidth: (_a = dimensions === null || dimensions === void 0 ? void 0 : dimensions.borderWidth) !== null && _a !== void 0 ? _a : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.borderWidth,
+                borderGrabWidth: (_b = dimensions === null || dimensions === void 0 ? void 0 : dimensions.borderGrabWidth) !== null && _b !== void 0 ? _b : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.borderGrabWidth,
+                defaultMinItemHeight,
+                defaultMinItemHeightUnit,
+                defaultMinItemWidth,
+                defaultMinItemWidthUnit,
+                headerHeight: (_c = dimensions === null || dimensions === void 0 ? void 0 : dimensions.headerHeight) !== null && _c !== void 0 ? _c : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.headerHeight,
+                dragProxyWidth: (_d = dimensions === null || dimensions === void 0 ? void 0 : dimensions.dragProxyWidth) !== null && _d !== void 0 ? _d : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.dragProxyWidth,
+                dragProxyHeight: (_e = dimensions === null || dimensions === void 0 ? void 0 : dimensions.dragProxyHeight) !== null && _e !== void 0 ? _e : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.dragProxyHeight,
+            };
+            return result;
+        }
+        Dimensions.resolve = resolve;
+        /** @internal */
+        function fromResolved(resolvedDimensions) {
+            const result = {
+                borderWidth: resolvedDimensions.borderWidth,
+                borderGrabWidth: resolvedDimensions.borderGrabWidth,
+                defaultMinItemHeight: formatSize(resolvedDimensions.defaultMinItemHeight, resolvedDimensions.defaultMinItemHeightUnit),
+                defaultMinItemWidth: formatSize(resolvedDimensions.defaultMinItemWidth, resolvedDimensions.defaultMinItemWidthUnit),
+                headerHeight: resolvedDimensions.headerHeight,
+                dragProxyWidth: resolvedDimensions.dragProxyWidth,
+                dragProxyHeight: resolvedDimensions.dragProxyHeight,
+            };
+            return result;
+        }
+        Dimensions.fromResolved = fromResolved;
+        /** @internal */
+        function resolveDefaultMinItemHeight(dimensions) {
+            const height = dimensions === null || dimensions === void 0 ? void 0 : dimensions.defaultMinItemHeight;
+            if (height === undefined) {
+                return { size: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.defaultMinItemHeight, sizeUnit: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.defaultMinItemHeightUnit };
+            }
+            else {
+                return parseSize(height, [_utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel]);
+            }
+        }
+        Dimensions.resolveDefaultMinItemHeight = resolveDefaultMinItemHeight;
+        /** @internal */
+        function resolveDefaultMinItemWidth(dimensions) {
+            const width = dimensions === null || dimensions === void 0 ? void 0 : dimensions.defaultMinItemWidth;
+            if (width === undefined) {
+                return { size: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.defaultMinItemWidth, sizeUnit: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Dimensions.defaults.defaultMinItemWidthUnit };
+            }
+            else {
+                return parseSize(width, [_utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel]);
+            }
+        }
+        Dimensions.resolveDefaultMinItemWidth = resolveDefaultMinItemWidth;
+    })(Dimensions = LayoutConfig.Dimensions || (LayoutConfig.Dimensions = {}));
+    let Header;
+    (function (Header) {
+        /** @internal */
+        function resolve(header, settings, labels) {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+            let show;
+            if ((header === null || header === void 0 ? void 0 : header.show) !== undefined) {
+                show = header.show;
+            }
+            else {
+                if (settings !== undefined && settings.hasHeaders !== undefined) {
+                    show = settings.hasHeaders ? _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.show : false;
+                }
+                else {
+                    show = _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.show;
+                }
+            }
+            const result = {
+                show,
+                popout: (_b = (_a = header === null || header === void 0 ? void 0 : header.popout) !== null && _a !== void 0 ? _a : labels === null || labels === void 0 ? void 0 : labels.popout) !== null && _b !== void 0 ? _b : ((settings === null || settings === void 0 ? void 0 : settings.showPopoutIcon) === false ? false : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.popout),
+                dock: (_d = (_c = header === null || header === void 0 ? void 0 : header.popin) !== null && _c !== void 0 ? _c : labels === null || labels === void 0 ? void 0 : labels.popin) !== null && _d !== void 0 ? _d : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.dock,
+                maximise: (_f = (_e = header === null || header === void 0 ? void 0 : header.maximise) !== null && _e !== void 0 ? _e : labels === null || labels === void 0 ? void 0 : labels.maximise) !== null && _f !== void 0 ? _f : ((settings === null || settings === void 0 ? void 0 : settings.showMaximiseIcon) === false ? false : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.maximise),
+                close: (_h = (_g = header === null || header === void 0 ? void 0 : header.close) !== null && _g !== void 0 ? _g : labels === null || labels === void 0 ? void 0 : labels.close) !== null && _h !== void 0 ? _h : ((settings === null || settings === void 0 ? void 0 : settings.showCloseIcon) === false ? false : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.close),
+                minimise: (_k = (_j = header === null || header === void 0 ? void 0 : header.minimise) !== null && _j !== void 0 ? _j : labels === null || labels === void 0 ? void 0 : labels.minimise) !== null && _k !== void 0 ? _k : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.minimise,
+                tabDropdown: (_m = (_l = header === null || header === void 0 ? void 0 : header.tabDropdown) !== null && _l !== void 0 ? _l : labels === null || labels === void 0 ? void 0 : labels.tabDropdown) !== null && _m !== void 0 ? _m : _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.defaults.tabDropdown,
+            };
+            return result;
+        }
+        Header.resolve = resolve;
+    })(Header = LayoutConfig.Header || (LayoutConfig.Header = {}));
+    function isPopout(config) {
+        return 'parentId' in config || 'indexInParent' in config || 'window' in config;
+    }
+    LayoutConfig.isPopout = isPopout;
+    /** @internal */
+    function resolve(layoutConfig) {
+        if (isPopout(layoutConfig)) {
+            return PopoutLayoutConfig.resolve(layoutConfig);
+        }
+        else {
+            let root;
+            if (layoutConfig.root !== undefined) {
+                root = layoutConfig.root;
+            }
+            else {
+                if (layoutConfig.content !== undefined && layoutConfig.content.length > 0) {
+                    root = layoutConfig.content[0];
+                }
+                else {
+                    root = undefined;
+                }
+            }
+            const config = {
+                resolved: true,
+                root: RootItemConfig.resolve(root),
+                openPopouts: LayoutConfig.resolveOpenPopouts(layoutConfig.openPopouts),
+                dimensions: LayoutConfig.Dimensions.resolve(layoutConfig.dimensions),
+                settings: LayoutConfig.Settings.resolve(layoutConfig.settings),
+                header: LayoutConfig.Header.resolve(layoutConfig.header, layoutConfig.settings, layoutConfig.labels),
+            };
+            return config;
+        }
+    }
+    LayoutConfig.resolve = resolve;
+    function fromResolved(config) {
+        const result = {
+            root: RootItemConfig.fromResolvedOrUndefined(config.root),
+            openPopouts: PopoutLayoutConfig.fromResolvedArray(config.openPopouts),
+            settings: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.createCopy(config.settings),
+            dimensions: LayoutConfig.Dimensions.fromResolved(config.dimensions),
+            header: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.createCopy(config.header),
+        };
+        return result;
+    }
+    LayoutConfig.fromResolved = fromResolved;
+    function isResolved(configOrResolvedConfig) {
+        const config = configOrResolvedConfig;
+        return config.resolved !== undefined && (config.resolved === true);
+    }
+    LayoutConfig.isResolved = isResolved;
+    /** @internal */
+    function resolveOpenPopouts(popoutConfigs) {
+        if (popoutConfigs === undefined) {
+            return [];
+        }
+        else {
+            const count = popoutConfigs.length;
+            const result = new Array(count);
+            for (let i = 0; i < count; i++) {
+                result[i] = PopoutLayoutConfig.resolve(popoutConfigs[i]);
+            }
+            return result;
+        }
+    }
+    LayoutConfig.resolveOpenPopouts = resolveOpenPopouts;
+})(LayoutConfig || (LayoutConfig = {}));
+/** @public */
+var PopoutLayoutConfig;
+(function (PopoutLayoutConfig) {
+    let Window;
+    (function (Window) {
+        /** @internal */
+        function resolve(window, dimensions) {
+            var _a, _b, _c, _d, _e, _f, _g, _h;
+            let result;
+            const defaults = _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedPopoutLayoutConfig.Window.defaults;
+            if (window !== undefined) {
+                result = {
+                    width: (_a = window.width) !== null && _a !== void 0 ? _a : defaults.width,
+                    height: (_b = window.height) !== null && _b !== void 0 ? _b : defaults.height,
+                    left: (_c = window.left) !== null && _c !== void 0 ? _c : defaults.left,
+                    top: (_d = window.top) !== null && _d !== void 0 ? _d : defaults.top,
+                };
+            }
+            else {
+                result = {
+                    width: (_e = dimensions === null || dimensions === void 0 ? void 0 : dimensions.width) !== null && _e !== void 0 ? _e : defaults.width,
+                    height: (_f = dimensions === null || dimensions === void 0 ? void 0 : dimensions.height) !== null && _f !== void 0 ? _f : defaults.height,
+                    left: (_g = dimensions === null || dimensions === void 0 ? void 0 : dimensions.left) !== null && _g !== void 0 ? _g : defaults.left,
+                    top: (_h = dimensions === null || dimensions === void 0 ? void 0 : dimensions.top) !== null && _h !== void 0 ? _h : defaults.top,
+                };
+            }
+            return result;
+        }
+        Window.resolve = resolve;
+        /** @internal */
+        function fromResolved(resolvedWindow) {
+            const result = {
+                width: resolvedWindow.width === null ? undefined : resolvedWindow.width,
+                height: resolvedWindow.height === null ? undefined : resolvedWindow.height,
+                left: resolvedWindow.left === null ? undefined : resolvedWindow.left,
+                top: resolvedWindow.top === null ? undefined : resolvedWindow.top,
+            };
+            return result;
+        }
+        Window.fromResolved = fromResolved;
+    })(Window = PopoutLayoutConfig.Window || (PopoutLayoutConfig.Window = {}));
+    /** @internal */
+    function resolve(popoutConfig) {
+        var _a, _b;
+        let root;
+        if (popoutConfig.root !== undefined) {
+            root = popoutConfig.root;
+        }
+        else {
+            if (popoutConfig.content !== undefined && popoutConfig.content.length > 0) {
+                root = popoutConfig.content[0];
+            }
+            else {
+                root = undefined;
+            }
+        }
+        const config = {
+            root: RootItemConfig.resolve(root),
+            openPopouts: LayoutConfig.resolveOpenPopouts(popoutConfig.openPopouts),
+            dimensions: LayoutConfig.Dimensions.resolve(popoutConfig.dimensions),
+            settings: LayoutConfig.Settings.resolve(popoutConfig.settings),
+            header: LayoutConfig.Header.resolve(popoutConfig.header, popoutConfig.settings, popoutConfig.labels),
+            parentId: (_a = popoutConfig.parentId) !== null && _a !== void 0 ? _a : null,
+            indexInParent: (_b = popoutConfig.indexInParent) !== null && _b !== void 0 ? _b : null,
+            window: PopoutLayoutConfig.Window.resolve(popoutConfig.window, popoutConfig.dimensions),
+            resolved: true,
+        };
+        return config;
+    }
+    PopoutLayoutConfig.resolve = resolve;
+    /** @internal */
+    function fromResolved(resolvedConfig) {
+        const result = {
+            root: RootItemConfig.fromResolvedOrUndefined(resolvedConfig.root),
+            openPopouts: fromResolvedArray(resolvedConfig.openPopouts),
+            dimensions: LayoutConfig.Dimensions.fromResolved(resolvedConfig.dimensions),
+            settings: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Settings.createCopy(resolvedConfig.settings),
+            header: _resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedLayoutConfig.Header.createCopy(resolvedConfig.header),
+            parentId: resolvedConfig.parentId,
+            indexInParent: resolvedConfig.indexInParent,
+            window: PopoutLayoutConfig.Window.fromResolved(resolvedConfig.window),
+        };
+        return result;
+    }
+    PopoutLayoutConfig.fromResolved = fromResolved;
+    /** @internal */
+    function fromResolvedArray(resolvedArray) {
+        const resolvedOpenPopoutCount = resolvedArray.length;
+        const result = new Array(resolvedOpenPopoutCount);
+        for (let i = 0; i < resolvedOpenPopoutCount; i++) {
+            const resolvedOpenPopout = resolvedArray[i];
+            result[i] = PopoutLayoutConfig.fromResolved(resolvedOpenPopout);
+        }
+        return result;
+    }
+    PopoutLayoutConfig.fromResolvedArray = fromResolvedArray;
+})(PopoutLayoutConfig || (PopoutLayoutConfig = {}));
+/** @internal */
+function parseSize(sizeString, allowableSizeUnits) {
+    const { numericPart: digitsPart, firstNonNumericCharPart: firstNonDigitPart } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.splitStringAtFirstNonNumericChar)(sizeString);
+    const size = Number.parseInt(digitsPart, 10);
+    if (isNaN(size)) {
+        throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.ConfigurationError(`${_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_5__.i18nStrings[7 /* InvalidNumberPartInSizeString */]}: ${sizeString}`);
+    }
+    else {
+        const sizeUnit = _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.tryParse(firstNonDigitPart);
+        if (sizeUnit === undefined) {
+            throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.ConfigurationError(`${_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_5__.i18nStrings[8 /* UnknownUnitInSizeString */]}: ${sizeString}`);
+        }
+        else {
+            if (!allowableSizeUnits.includes(sizeUnit)) {
+                throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.ConfigurationError(`${_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_5__.i18nStrings[9 /* UnsupportedUnitInSizeString */]}: ${sizeString}`);
+            }
+            else {
+                return { size, sizeUnit };
+            }
+        }
+    }
+}
+/** @internal */
+function formatSize(size, sizeUnit) {
+    return size.toString(10) + _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.format(sizeUnit);
+}
+/** @internal */
+function formatUndefinableSize(size, sizeUnit) {
+    if (size === undefined) {
+        return undefined;
+    }
+    else {
+        return size.toString(10) + _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.format(sizeUnit);
+    }
+}
+//# sourceMappingURL=config.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js":
+/*!******************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ResolvedComponentItemConfig: () => (/* binding */ ResolvedComponentItemConfig),
+/* harmony export */   ResolvedGroundItemConfig: () => (/* binding */ ResolvedGroundItemConfig),
+/* harmony export */   ResolvedHeaderedItemConfig: () => (/* binding */ ResolvedHeaderedItemConfig),
+/* harmony export */   ResolvedItemConfig: () => (/* binding */ ResolvedItemConfig),
+/* harmony export */   ResolvedLayoutConfig: () => (/* binding */ ResolvedLayoutConfig),
+/* harmony export */   ResolvedPopoutLayoutConfig: () => (/* binding */ ResolvedPopoutLayoutConfig),
+/* harmony export */   ResolvedRootItemConfig: () => (/* binding */ ResolvedRootItemConfig),
+/* harmony export */   ResolvedRowOrColumnItemConfig: () => (/* binding */ ResolvedRowOrColumnItemConfig),
+/* harmony export */   ResolvedStackItemConfig: () => (/* binding */ ResolvedStackItemConfig)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_config_minifier__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/config-minifier */ "../../node_modules/golden-layout/dist/esm/ts/utils/config-minifier.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+
+
+
+/** @public */
+var ResolvedItemConfig;
+(function (ResolvedItemConfig) {
+    ResolvedItemConfig.defaults = {
+        type: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground,
+        content: [],
+        size: 1,
+        sizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Fractional,
+        minSize: undefined,
+        minSizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel,
+        id: '',
+        isClosable: true,
+    };
+    /** Creates a copy of the original ResolvedItemConfig using an alternative content if specified */
+    function createCopy(original, content) {
+        switch (original.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+                return ResolvedRowOrColumnItemConfig.createCopy(original, content);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+                return ResolvedStackItemConfig.createCopy(original, content);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                return ResolvedComponentItemConfig.createCopy(original);
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnreachableCaseError('CICC91354', original.type, 'Invalid Config Item type specified');
+        }
+    }
+    ResolvedItemConfig.createCopy = createCopy;
+    function createDefault(type) {
+        switch (type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.AssertError('CICCDR91562'); // Get default root from LayoutConfig
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+                return ResolvedRowOrColumnItemConfig.createDefault(type);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+                return ResolvedStackItemConfig.createDefault();
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                return ResolvedComponentItemConfig.createDefault();
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnreachableCaseError('CICCDD91563', type, 'Invalid Config Item type specified');
+        }
+    }
+    ResolvedItemConfig.createDefault = createDefault;
+    function isComponentItem(itemConfig) {
+        return itemConfig.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component;
+    }
+    ResolvedItemConfig.isComponentItem = isComponentItem;
+    function isStackItem(itemConfig) {
+        return itemConfig.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack;
+    }
+    ResolvedItemConfig.isStackItem = isStackItem;
+    /** @internal */
+    function isGroundItem(itemConfig) {
+        return itemConfig.type === _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground;
+    }
+    ResolvedItemConfig.isGroundItem = isGroundItem;
+})(ResolvedItemConfig || (ResolvedItemConfig = {}));
+/** @public */
+var ResolvedHeaderedItemConfig;
+(function (ResolvedHeaderedItemConfig) {
+    ResolvedHeaderedItemConfig.defaultMaximised = false;
+    let Header;
+    (function (Header) {
+        function createCopy(original, show) {
+            if (original === undefined) {
+                return undefined;
+            }
+            else {
+                return {
+                    show: show !== null && show !== void 0 ? show : original.show,
+                    popout: original.popout,
+                    close: original.close,
+                    maximise: original.maximise,
+                    minimise: original.minimise,
+                    tabDropdown: original.tabDropdown,
+                };
+            }
+        }
+        Header.createCopy = createCopy;
+    })(Header = ResolvedHeaderedItemConfig.Header || (ResolvedHeaderedItemConfig.Header = {}));
+})(ResolvedHeaderedItemConfig || (ResolvedHeaderedItemConfig = {}));
+/** @public */
+var ResolvedStackItemConfig;
+(function (ResolvedStackItemConfig) {
+    ResolvedStackItemConfig.defaultActiveItemIndex = 0;
+    function createCopy(original, content) {
+        const result = {
+            type: original.type,
+            content: content !== undefined ? copyContent(content) : copyContent(original.content),
+            size: original.size,
+            sizeUnit: original.sizeUnit,
+            minSize: original.minSize,
+            minSizeUnit: original.minSizeUnit,
+            id: original.id,
+            maximised: original.maximised,
+            isClosable: original.isClosable,
+            activeItemIndex: original.activeItemIndex,
+            header: ResolvedHeaderedItemConfig.Header.createCopy(original.header),
+        };
+        return result;
+    }
+    ResolvedStackItemConfig.createCopy = createCopy;
+    function copyContent(original) {
+        const count = original.length;
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            result[i] = ResolvedItemConfig.createCopy(original[i]);
+        }
+        return result;
+    }
+    ResolvedStackItemConfig.copyContent = copyContent;
+    function createDefault() {
+        const result = {
+            type: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack,
+            content: [],
+            size: ResolvedItemConfig.defaults.size,
+            sizeUnit: ResolvedItemConfig.defaults.sizeUnit,
+            minSize: ResolvedItemConfig.defaults.minSize,
+            minSizeUnit: ResolvedItemConfig.defaults.minSizeUnit,
+            id: ResolvedItemConfig.defaults.id,
+            maximised: ResolvedHeaderedItemConfig.defaultMaximised,
+            isClosable: ResolvedItemConfig.defaults.isClosable,
+            activeItemIndex: ResolvedStackItemConfig.defaultActiveItemIndex,
+            header: undefined,
+        };
+        return result;
+    }
+    ResolvedStackItemConfig.createDefault = createDefault;
+})(ResolvedStackItemConfig || (ResolvedStackItemConfig = {}));
+/** @public */
+var ResolvedComponentItemConfig;
+(function (ResolvedComponentItemConfig) {
+    ResolvedComponentItemConfig.defaultReorderEnabled = true;
+    function resolveComponentTypeName(itemConfig) {
+        const componentType = itemConfig.componentType;
+        if (typeof componentType === 'string') {
+            return componentType;
+        }
+        else {
+            return undefined;
+        }
+    }
+    ResolvedComponentItemConfig.resolveComponentTypeName = resolveComponentTypeName;
+    function createCopy(original) {
+        const result = {
+            type: original.type,
+            content: [],
+            size: original.size,
+            sizeUnit: original.sizeUnit,
+            minSize: original.minSize,
+            minSizeUnit: original.minSizeUnit,
+            id: original.id,
+            maximised: original.maximised,
+            isClosable: original.isClosable,
+            reorderEnabled: original.reorderEnabled,
+            title: original.title,
+            header: ResolvedHeaderedItemConfig.Header.createCopy(original.header),
+            componentType: original.componentType,
+            componentState: (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.deepExtendValue)(undefined, original.componentState),
+        };
+        return result;
+    }
+    ResolvedComponentItemConfig.createCopy = createCopy;
+    function createDefault(componentType = '', componentState, title = '') {
+        const result = {
+            type: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component,
+            content: [],
+            size: ResolvedItemConfig.defaults.size,
+            sizeUnit: ResolvedItemConfig.defaults.sizeUnit,
+            minSize: ResolvedItemConfig.defaults.minSize,
+            minSizeUnit: ResolvedItemConfig.defaults.minSizeUnit,
+            id: ResolvedItemConfig.defaults.id,
+            maximised: ResolvedHeaderedItemConfig.defaultMaximised,
+            isClosable: ResolvedItemConfig.defaults.isClosable,
+            reorderEnabled: ResolvedComponentItemConfig.defaultReorderEnabled,
+            title,
+            header: undefined,
+            componentType,
+            componentState,
+        };
+        return result;
+    }
+    ResolvedComponentItemConfig.createDefault = createDefault;
+    function copyComponentType(componentType) {
+        return (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.deepExtendValue)({}, componentType);
+    }
+    ResolvedComponentItemConfig.copyComponentType = copyComponentType;
+})(ResolvedComponentItemConfig || (ResolvedComponentItemConfig = {}));
+/** @public */
+var ResolvedRowOrColumnItemConfig;
+(function (ResolvedRowOrColumnItemConfig) {
+    function isChildItemConfig(itemConfig) {
+        switch (itemConfig.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                return true;
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground:
+                return false;
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnreachableCaseError('CROCOSPCICIC13687', itemConfig.type);
+        }
+    }
+    ResolvedRowOrColumnItemConfig.isChildItemConfig = isChildItemConfig;
+    function createCopy(original, content) {
+        const result = {
+            type: original.type,
+            content: content !== undefined ? copyContent(content) : copyContent(original.content),
+            size: original.size,
+            sizeUnit: original.sizeUnit,
+            minSize: original.minSize,
+            minSizeUnit: original.minSizeUnit,
+            id: original.id,
+            isClosable: original.isClosable,
+        };
+        return result;
+    }
+    ResolvedRowOrColumnItemConfig.createCopy = createCopy;
+    function copyContent(original) {
+        const count = original.length;
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            result[i] = ResolvedItemConfig.createCopy(original[i]);
+        }
+        return result;
+    }
+    ResolvedRowOrColumnItemConfig.copyContent = copyContent;
+    function createDefault(type) {
+        const result = {
+            type,
+            content: [],
+            size: ResolvedItemConfig.defaults.size,
+            sizeUnit: ResolvedItemConfig.defaults.sizeUnit,
+            minSize: ResolvedItemConfig.defaults.minSize,
+            minSizeUnit: ResolvedItemConfig.defaults.minSizeUnit,
+            id: ResolvedItemConfig.defaults.id,
+            isClosable: ResolvedItemConfig.defaults.isClosable,
+        };
+        return result;
+    }
+    ResolvedRowOrColumnItemConfig.createDefault = createDefault;
+})(ResolvedRowOrColumnItemConfig || (ResolvedRowOrColumnItemConfig = {}));
+/** @public */
+var ResolvedRootItemConfig;
+(function (ResolvedRootItemConfig) {
+    function createCopy(config) {
+        return ResolvedItemConfig.createCopy(config);
+    }
+    ResolvedRootItemConfig.createCopy = createCopy;
+    function isRootItemConfig(itemConfig) {
+        switch (itemConfig.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.column:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.stack:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.component:
+                return true;
+            case _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground:
+                return false;
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnreachableCaseError('CROCOSPCICIC13687', itemConfig.type);
+        }
+    }
+    ResolvedRootItemConfig.isRootItemConfig = isRootItemConfig;
+})(ResolvedRootItemConfig || (ResolvedRootItemConfig = {}));
+/** @internal */
+var ResolvedGroundItemConfig;
+(function (ResolvedGroundItemConfig) {
+    function create(rootItemConfig) {
+        const content = rootItemConfig === undefined ? [] : [rootItemConfig];
+        return {
+            type: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ItemType.ground,
+            content,
+            size: 100,
+            sizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Percent,
+            minSize: 0,
+            minSizeUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel,
+            id: '',
+            isClosable: false,
+            title: '',
+            reorderEnabled: false,
+        };
+    }
+    ResolvedGroundItemConfig.create = create;
+})(ResolvedGroundItemConfig || (ResolvedGroundItemConfig = {}));
+/** @public */
+var ResolvedLayoutConfig;
+(function (ResolvedLayoutConfig) {
+    let Settings;
+    (function (Settings) {
+        Settings.defaults = {
+            constrainDragToContainer: true,
+            reorderEnabled: true,
+            popoutWholeStack: false,
+            blockedPopoutsThrowError: true,
+            closePopoutsOnUnload: true,
+            responsiveMode: _utils_types__WEBPACK_IMPORTED_MODULE_0__.ResponsiveMode.none,
+            tabOverlapAllowance: 0,
+            reorderOnTabMenuClick: true,
+            tabControlOffset: 10,
+            popInOnClose: false,
+        };
+        function createCopy(original) {
+            return {
+                constrainDragToContainer: original.constrainDragToContainer,
+                reorderEnabled: original.reorderEnabled,
+                popoutWholeStack: original.popoutWholeStack,
+                blockedPopoutsThrowError: original.blockedPopoutsThrowError,
+                closePopoutsOnUnload: original.closePopoutsOnUnload,
+                responsiveMode: original.responsiveMode,
+                tabOverlapAllowance: original.tabOverlapAllowance,
+                reorderOnTabMenuClick: original.reorderOnTabMenuClick,
+                tabControlOffset: original.tabControlOffset,
+                popInOnClose: original.popInOnClose,
+            };
+        }
+        Settings.createCopy = createCopy;
+    })(Settings = ResolvedLayoutConfig.Settings || (ResolvedLayoutConfig.Settings = {}));
+    let Dimensions;
+    (function (Dimensions) {
+        function createCopy(original) {
+            return {
+                borderWidth: original.borderWidth,
+                borderGrabWidth: original.borderGrabWidth,
+                defaultMinItemHeight: original.defaultMinItemHeight,
+                defaultMinItemHeightUnit: original.defaultMinItemHeightUnit,
+                defaultMinItemWidth: original.defaultMinItemWidth,
+                defaultMinItemWidthUnit: original.defaultMinItemWidthUnit,
+                headerHeight: original.headerHeight,
+                dragProxyWidth: original.dragProxyWidth,
+                dragProxyHeight: original.dragProxyHeight,
+            };
+        }
+        Dimensions.createCopy = createCopy;
+        Dimensions.defaults = {
+            borderWidth: 5,
+            borderGrabWidth: 5,
+            defaultMinItemHeight: 0,
+            defaultMinItemHeightUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel,
+            defaultMinItemWidth: 10,
+            defaultMinItemWidthUnit: _utils_types__WEBPACK_IMPORTED_MODULE_0__.SizeUnitEnum.Pixel,
+            headerHeight: 20,
+            dragProxyWidth: 300,
+            dragProxyHeight: 200
+        };
+    })(Dimensions = ResolvedLayoutConfig.Dimensions || (ResolvedLayoutConfig.Dimensions = {}));
+    let Header;
+    (function (Header) {
+        function createCopy(original) {
+            return {
+                show: original.show,
+                popout: original.popout,
+                dock: original.dock,
+                close: original.close,
+                maximise: original.maximise,
+                minimise: original.minimise,
+                tabDropdown: original.tabDropdown,
+            };
+        }
+        Header.createCopy = createCopy;
+        Header.defaults = {
+            show: _utils_types__WEBPACK_IMPORTED_MODULE_0__.Side.top,
+            popout: 'open in new window',
+            dock: 'dock',
+            maximise: 'maximise',
+            minimise: 'minimise',
+            close: 'close',
+            tabDropdown: 'additional tabs'
+        };
+    })(Header = ResolvedLayoutConfig.Header || (ResolvedLayoutConfig.Header = {}));
+    function isPopout(config) {
+        return 'parentId' in config;
+    }
+    ResolvedLayoutConfig.isPopout = isPopout;
+    function createDefault() {
+        const result = {
+            root: undefined,
+            openPopouts: [],
+            dimensions: ResolvedLayoutConfig.Dimensions.defaults,
+            settings: ResolvedLayoutConfig.Settings.defaults,
+            header: ResolvedLayoutConfig.Header.defaults,
+            resolved: true,
+        };
+        return result;
+    }
+    ResolvedLayoutConfig.createDefault = createDefault;
+    function createCopy(config) {
+        if (isPopout(config)) {
+            return ResolvedPopoutLayoutConfig.createCopy(config);
+        }
+        else {
+            const result = {
+                root: config.root === undefined ? undefined : ResolvedRootItemConfig.createCopy(config.root),
+                openPopouts: ResolvedLayoutConfig.copyOpenPopouts(config.openPopouts),
+                settings: ResolvedLayoutConfig.Settings.createCopy(config.settings),
+                dimensions: ResolvedLayoutConfig.Dimensions.createCopy(config.dimensions),
+                header: ResolvedLayoutConfig.Header.createCopy(config.header),
+                resolved: config.resolved,
+            };
+            return result;
+        }
+    }
+    ResolvedLayoutConfig.createCopy = createCopy;
+    function copyOpenPopouts(original) {
+        const count = original.length;
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            result[i] = ResolvedPopoutLayoutConfig.createCopy(original[i]);
+        }
+        return result;
+    }
+    ResolvedLayoutConfig.copyOpenPopouts = copyOpenPopouts;
+    /**
+     * Takes a GoldenLayout configuration object and
+     * replaces its keys and values recursively with
+     * one letter counterparts
+     */
+    function minifyConfig(layoutConfig) {
+        return _utils_config_minifier__WEBPACK_IMPORTED_MODULE_3__.ConfigMinifier.translateObject(layoutConfig, true);
+    }
+    ResolvedLayoutConfig.minifyConfig = minifyConfig;
+    /**
+     * Takes a configuration Object that was previously minified
+     * using minifyConfig and returns its original version
+     */
+    function unminifyConfig(minifiedConfig) {
+        return _utils_config_minifier__WEBPACK_IMPORTED_MODULE_3__.ConfigMinifier.translateObject(minifiedConfig, false);
+    }
+    ResolvedLayoutConfig.unminifyConfig = unminifyConfig;
+})(ResolvedLayoutConfig || (ResolvedLayoutConfig = {}));
+/** @public */
+var ResolvedPopoutLayoutConfig;
+(function (ResolvedPopoutLayoutConfig) {
+    let Window;
+    (function (Window) {
+        function createCopy(original) {
+            return {
+                width: original.width,
+                height: original.height,
+                left: original.left,
+                top: original.top,
+            };
+        }
+        Window.createCopy = createCopy;
+        Window.defaults = {
+            width: null,
+            height: null,
+            left: null,
+            top: null,
+        };
+    })(Window = ResolvedPopoutLayoutConfig.Window || (ResolvedPopoutLayoutConfig.Window = {}));
+    function createCopy(original) {
+        const result = {
+            root: original.root === undefined ? undefined : ResolvedRootItemConfig.createCopy(original.root),
+            openPopouts: ResolvedLayoutConfig.copyOpenPopouts(original.openPopouts),
+            settings: ResolvedLayoutConfig.Settings.createCopy(original.settings),
+            dimensions: ResolvedLayoutConfig.Dimensions.createCopy(original.dimensions),
+            header: ResolvedLayoutConfig.Header.createCopy(original.header),
+            parentId: original.parentId,
+            indexInParent: original.indexInParent,
+            window: ResolvedPopoutLayoutConfig.Window.createCopy(original.window),
+            resolved: original.resolved,
+        };
+        return result;
+    }
+    ResolvedPopoutLayoutConfig.createCopy = createCopy;
+})(ResolvedPopoutLayoutConfig || (ResolvedPopoutLayoutConfig = {}));
+//# sourceMappingURL=resolved-config.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/container/component-container.js":
+/*!*************************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/container/component-container.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ComponentContainer: () => (/* binding */ ComponentContainer)
+/* harmony export */ });
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+
+
+
+
+/** @public */
+class ComponentContainer extends _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    /** @internal */
+    constructor(
+    /** @internal */
+    _config, 
+    /** @internal */
+    _parent, 
+    /** @internal */
+    _layoutManager, 
+    /** @internal */
+    _element, 
+    /** @internal */
+    _updateItemConfigEvent, 
+    /** @internal */
+    _showEvent, 
+    /** @internal */
+    _hideEvent, 
+    /** @internal */
+    _focusEvent, 
+    /** @internal */
+    _blurEvent) {
+        super();
+        this._config = _config;
+        this._parent = _parent;
+        this._layoutManager = _layoutManager;
+        this._element = _element;
+        this._updateItemConfigEvent = _updateItemConfigEvent;
+        this._showEvent = _showEvent;
+        this._hideEvent = _hideEvent;
+        this._focusEvent = _focusEvent;
+        this._blurEvent = _blurEvent;
+        /** @internal */
+        this._stackMaximised = false;
+        this._width = 0;
+        this._height = 0;
+        this._visible = true;
+        this._isShownWithZeroDimensions = true;
+        this._componentType = _config.componentType;
+        this._isClosable = _config.isClosable;
+        this._initialState = _config.componentState;
+        this._state = this._initialState;
+        this._boundComponent = this.layoutManager.bindComponent(this, _config);
+        this.updateElementPositionPropertyFromBoundComponent();
+    }
+    get width() { return this._width; }
+    get height() { return this._height; }
+    get parent() { return this._parent; }
+    /** @internal @deprecated use {@link (ComponentContainer:class).componentType} */
+    get componentName() { return this._componentType; }
+    get componentType() { return this._componentType; }
+    get virtual() { return this._boundComponent.virtual; }
+    get component() { return this._boundComponent.component; }
+    get tab() { return this._tab; }
+    get title() { return this._parent.title; }
+    get layoutManager() { return this._layoutManager; }
+    get isHidden() { return !this._visible; }
+    get visible() { return this._visible; }
+    get state() { return this._state; }
+    /** Return the initial component state */
+    get initialState() { return this._initialState; }
+    /** The inner DOM element where the container's content is intended to live in */
+    get element() { return this._element; }
+    /** @internal */
+    destroy() {
+        this.releaseComponent();
+        this.stateRequestEvent = undefined;
+        this.emit('destroy');
+    }
+    /** @deprecated use {@link (ComponentContainer:class).element } */
+    getElement() {
+        return this._element;
+    }
+    /**
+     * Hides the container's component item (and hence, the container) if not already hidden.
+     * Emits hide event prior to hiding the container.
+     */
+    hide() {
+        this._hideEvent();
+    }
+    /**
+     * Shows the container's component item (and hence, the container) if not visible.
+     * Emits show event prior to hiding the container.
+     */
+    show() {
+        this._showEvent();
+    }
+    /**
+     * Focus this component in Layout.
+     */
+    focus(suppressEvent = false) {
+        this._focusEvent(suppressEvent);
+    }
+    /**
+     * Remove focus from this component in Layout.
+     */
+    blur(suppressEvent = false) {
+        this._blurEvent(suppressEvent);
+    }
+    /**
+     * Set the size from within the container. Traverses up
+     * the item tree until it finds a row or column element
+     * and resizes its items accordingly.
+     *
+     * If this container isn't a descendant of a row or column
+     * it returns false
+     * @param width - The new width in pixel
+     * @param height - The new height in pixel
+     *
+     * @returns resizeSuccesful
+     *
+     * @internal
+     */
+    setSize(width, height) {
+        let ancestorItem = this._parent;
+        if (ancestorItem.isColumn || ancestorItem.isRow || ancestorItem.parent === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.AssertError('ICSSPRC', 'ComponentContainer cannot have RowColumn Parent');
+        }
+        else {
+            let ancestorChildItem;
+            do {
+                ancestorChildItem = ancestorItem;
+                ancestorItem = ancestorItem.parent;
+            } while (ancestorItem !== null && !ancestorItem.isColumn && !ancestorItem.isRow);
+            if (ancestorItem === null) {
+                // no Row or Column found
+                return false;
+            }
+            else {
+                // ancestorItem is Row or Column
+                const direction = ancestorItem.isColumn ? 'height' : 'width';
+                const currentSize = this[direction];
+                if (currentSize === null) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('ICSSCS11194');
+                }
+                else {
+                    const newSize = direction === 'height' ? height : width;
+                    const totalPixel = currentSize * (1 / (ancestorChildItem.size / 100));
+                    const percentage = (newSize / totalPixel) * 100;
+                    const delta = (ancestorChildItem.size - percentage) / (ancestorItem.contentItems.length - 1);
+                    for (let i = 0; i < ancestorItem.contentItems.length; i++) {
+                        const ancestorItemContentItem = ancestorItem.contentItems[i];
+                        if (ancestorItemContentItem === ancestorChildItem) {
+                            ancestorItemContentItem.size = percentage;
+                        }
+                        else {
+                            ancestorItemContentItem.size += delta;
+                        }
+                    }
+                    ancestorItem.updateSize(false);
+                    return true;
+                }
+            }
+        }
+    }
+    /**
+     * Closes the container if it is closable. Can be called by
+     * both the component within at as well as the contentItem containing
+     * it. Emits a close event before the container itself is closed.
+     */
+    close() {
+        if (this._isClosable) {
+            this.emit('close');
+            this._parent.close();
+        }
+    }
+    /** Replaces component without affecting layout */
+    replaceComponent(itemConfig) {
+        this.releaseComponent();
+        if (!_config_config__WEBPACK_IMPORTED_MODULE_2__.ItemConfig.isComponent(itemConfig)) {
+            throw new Error('ReplaceComponent not passed a component ItemConfig');
+        }
+        else {
+            const config = _config_config__WEBPACK_IMPORTED_MODULE_2__.ComponentItemConfig.resolve(itemConfig, false);
+            this._initialState = config.componentState;
+            this._state = this._initialState;
+            this._componentType = config.componentType;
+            this._updateItemConfigEvent(config);
+            this._boundComponent = this.layoutManager.bindComponent(this, config);
+            this.updateElementPositionPropertyFromBoundComponent();
+            if (this._boundComponent.virtual) {
+                if (this.virtualVisibilityChangeRequiredEvent !== undefined) {
+                    this.virtualVisibilityChangeRequiredEvent(this, this._visible);
+                }
+                if (this.virtualRectingRequiredEvent !== undefined) {
+                    this._layoutManager.fireBeforeVirtualRectingEvent(1);
+                    try {
+                        this.virtualRectingRequiredEvent(this, this._width, this._height);
+                    }
+                    finally {
+                        this._layoutManager.fireAfterVirtualRectingEvent();
+                    }
+                }
+                this.setBaseLogicalZIndex();
+            }
+            this.emit('stateChanged');
+        }
+    }
+    /**
+     * Returns the initial component state or the latest passed in setState()
+     * @returns state
+     * @deprecated Use {@link (ComponentContainer:class).initialState}
+     */
+    getState() {
+        return this._state;
+    }
+    /**
+     * Merges the provided state into the current one
+     * @deprecated Use {@link (ComponentContainer:class).stateRequestEvent}
+     */
+    extendState(state) {
+        const extendedState = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_3__.deepExtend)(this._state, state);
+        this.setState(extendedState);
+    }
+    /**
+     * Sets the component state
+     * @deprecated Use {@link (ComponentContainer:class).stateRequestEvent}
+     */
+    setState(state) {
+        this._state = state;
+        this._parent.emitBaseBubblingEvent('stateChanged');
+    }
+    /**
+     * Set's the components title
+     */
+    setTitle(title) {
+        this._parent.setTitle(title);
+    }
+    /** @internal */
+    setTab(tab) {
+        this._tab = tab;
+        this.emit('tab', tab);
+    }
+    /** @internal */
+    setVisibility(value) {
+        if (this._boundComponent.virtual) {
+            if (this.virtualVisibilityChangeRequiredEvent !== undefined) {
+                this.virtualVisibilityChangeRequiredEvent(this, value);
+            }
+        }
+        if (value) {
+            if (!this._visible) {
+                this._visible = true;
+                if (this._height === 0 && this._width === 0) {
+                    this._isShownWithZeroDimensions = true;
+                }
+                else {
+                    this._isShownWithZeroDimensions = false;
+                    this.setSizeToNodeSize(this._width, this._height, true);
+                    this.emitShow();
+                }
+            }
+            else {
+                if (this._isShownWithZeroDimensions && (this._height !== 0 || this._width !== 0)) {
+                    this._isShownWithZeroDimensions = false;
+                    this.setSizeToNodeSize(this._width, this._height, true);
+                    this.emitShow();
+                }
+            }
+        }
+        else {
+            if (this._visible) {
+                this._visible = false;
+                this._isShownWithZeroDimensions = false;
+                this.emitHide();
+            }
+        }
+    }
+    setBaseLogicalZIndex() {
+        this.setLogicalZIndex(_utils_types__WEBPACK_IMPORTED_MODULE_4__.LogicalZIndex.base);
+    }
+    setLogicalZIndex(logicalZIndex) {
+        if (logicalZIndex !== this._logicalZIndex) {
+            this._logicalZIndex = logicalZIndex;
+            this.notifyVirtualZIndexChangeRequired();
+        }
+    }
+    /**
+     * Set the container's size, but considered temporary (for dragging)
+     * so don't emit any events.
+     * @internal
+     */
+    enterDragMode(width, height) {
+        this._width = width;
+        this._height = height;
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_3__.setElementWidth)(this._element, width);
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_3__.setElementHeight)(this._element, height);
+        this.setLogicalZIndex(_utils_types__WEBPACK_IMPORTED_MODULE_4__.LogicalZIndex.drag);
+        this.drag();
+    }
+    /** @internal */
+    exitDragMode() {
+        this.setBaseLogicalZIndex();
+    }
+    /** @internal */
+    enterStackMaximised() {
+        this._stackMaximised = true;
+        this.setLogicalZIndex(_utils_types__WEBPACK_IMPORTED_MODULE_4__.LogicalZIndex.stackMaximised);
+    }
+    /** @internal */
+    exitStackMaximised() {
+        this.setBaseLogicalZIndex();
+        this._stackMaximised = false;
+    }
+    /** @internal */
+    drag() {
+        if (this._boundComponent.virtual) {
+            if (this.virtualRectingRequiredEvent !== undefined) {
+                this._layoutManager.fireBeforeVirtualRectingEvent(1);
+                try {
+                    this.virtualRectingRequiredEvent(this, this._width, this._height);
+                }
+                finally {
+                    this._layoutManager.fireAfterVirtualRectingEvent();
+                }
+            }
+        }
+    }
+    /**
+     * Sets the container's size. Called by the container's component item.
+     * To instead set the size programmatically from within the component itself,
+     * use the public setSize method
+     * @param width - in px
+     * @param height - in px
+     * @param force - set even if no change
+     * @internal
+     */
+    setSizeToNodeSize(width, height, force) {
+        if (width !== this._width || height !== this._height || force) {
+            this._width = width;
+            this._height = height;
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_3__.setElementWidth)(this._element, width);
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_3__.setElementHeight)(this._element, height);
+            if (this._boundComponent.virtual) {
+                this.addVirtualSizedContainerToLayoutManager();
+            }
+            else {
+                this.emit('resize');
+                this.checkShownFromZeroDimensions();
+            }
+        }
+    }
+    /** @internal */
+    notifyVirtualRectingRequired() {
+        if (this.virtualRectingRequiredEvent !== undefined) {
+            this.virtualRectingRequiredEvent(this, this._width, this._height);
+            this.emit('resize');
+            this.checkShownFromZeroDimensions();
+        }
+    }
+    /** @internal */
+    notifyVirtualZIndexChangeRequired() {
+        if (this.virtualZIndexChangeRequiredEvent !== undefined) {
+            const logicalZIndex = this._logicalZIndex;
+            const defaultZIndex = _utils_types__WEBPACK_IMPORTED_MODULE_4__.LogicalZIndexToDefaultMap[logicalZIndex];
+            this.virtualZIndexChangeRequiredEvent(this, logicalZIndex, defaultZIndex);
+        }
+    }
+    /** @internal */
+    updateElementPositionPropertyFromBoundComponent() {
+        if (this._boundComponent.virtual) {
+            this._element.style.position = 'static';
+        }
+        else {
+            this._element.style.position = ''; // set it back to attribute value
+        }
+    }
+    /** @internal */
+    addVirtualSizedContainerToLayoutManager() {
+        this._layoutManager.beginVirtualSizedContainerAdding();
+        try {
+            this._layoutManager.addVirtualSizedContainer(this);
+        }
+        finally {
+            this._layoutManager.endVirtualSizedContainerAdding();
+        }
+    }
+    /** @internal */
+    checkShownFromZeroDimensions() {
+        if (this._isShownWithZeroDimensions && (this._height !== 0 || this._width !== 0)) {
+            this._isShownWithZeroDimensions = false;
+            this.emitShow();
+        }
+    }
+    /** @internal */
+    emitShow() {
+        this.emit('shown');
+        this.emit('show');
+    }
+    /** @internal */
+    emitHide() {
+        this.emit('hide');
+    }
+    /** @internal */
+    releaseComponent() {
+        if (this._stackMaximised) {
+            this.exitStackMaximised();
+        }
+        this.emit('beforeComponentRelease', this._boundComponent.component);
+        this.layoutManager.unbindComponent(this, this._boundComponent.virtual, this._boundComponent.component);
+    }
+}
+//# sourceMappingURL=component-container.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/browser-popout.js":
+/*!*******************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/browser-popout.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BrowserPopout: () => (/* binding */ BrowserPopout)
+/* harmony export */ });
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _errors_external_error__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../errors/external-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+
+
+
+
+/**
+ * Pops a content item out into a new browser window.
+ * This is achieved by
+ *
+ *    - Creating a new configuration with the content item as root element
+ *    - Serializing and minifying the configuration
+ *    - Opening the current window's URL with the configuration as a GET parameter
+ *    - GoldenLayout when opened in the new window will look for the GET parameter
+ *      and use it instead of the provided configuration
+ * @public
+ */
+class BrowserPopout extends _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    /**
+     * @param _config - GoldenLayout item config
+     * @param _initialWindowSize - A map with width, height, top and left
+     * @internal
+     */
+    constructor(
+    /** @internal */
+    _config, 
+    /** @internal */
+    _initialWindowSize, 
+    /** @internal */
+    _layoutManager) {
+        super();
+        this._config = _config;
+        this._initialWindowSize = _initialWindowSize;
+        this._layoutManager = _layoutManager;
+        this._isInitialised = false;
+        this._popoutWindow = null;
+        this.createWindow();
+    }
+    toConfig() {
+        var _a, _b;
+        if (this._isInitialised === false) {
+            throw new Error('Can\'t create config, layout not yet initialised');
+        }
+        const glInstance = this.getGlInstance();
+        const glInstanceConfig = glInstance.saveLayout();
+        let left;
+        let top;
+        if (this._popoutWindow === null) {
+            left = null;
+            top = null;
+        }
+        else {
+            left = (_a = this._popoutWindow.screenX) !== null && _a !== void 0 ? _a : this._popoutWindow.screenLeft;
+            top = (_b = this._popoutWindow.screenY) !== null && _b !== void 0 ? _b : this._popoutWindow.screenTop;
+        }
+        const window = {
+            width: this.getGlInstance().width,
+            height: this.getGlInstance().height,
+            left,
+            top,
+        };
+        const config = {
+            root: glInstanceConfig.root,
+            openPopouts: glInstanceConfig.openPopouts,
+            settings: glInstanceConfig.settings,
+            dimensions: glInstanceConfig.dimensions,
+            header: glInstanceConfig.header,
+            window,
+            parentId: this._config.parentId,
+            indexInParent: this._config.indexInParent,
+            resolved: true,
+        };
+        return config;
+    }
+    getGlInstance() {
+        if (this._popoutWindow === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('BPGGI24693');
+        }
+        return this._popoutWindow.__glInstance;
+    }
+    /**
+     * Retrieves the native BrowserWindow backing this popout.
+     * Might throw an UnexpectedNullError exception when the window is not initialized yet.
+     * @public
+     */
+    getWindow() {
+        if (this._popoutWindow === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('BPGW087215');
+        }
+        return this._popoutWindow;
+    }
+    close() {
+        if (this.getGlInstance()) {
+            this.getGlInstance().closeWindow();
+        }
+        else {
+            try {
+                this.getWindow().close();
+            }
+            catch (e) {
+                //
+            }
+        }
+    }
+    /**
+     * Returns the popped out item to its original position. If the original
+     * parent isn't available anymore it falls back to the layout's topmost element
+     */
+    popIn() {
+        let parentItem;
+        let index = this._config.indexInParent;
+        if (!this._config.parentId) {
+            return;
+        }
+        /*
+        * The deepExtend call seems a bit pointless, but it's crucial to
+        * copy the config returned by this.getGlInstance().toConfig()
+        * onto a new object. Internet Explorer keeps the references
+        * to objects on the child window, resulting in the following error
+        * once the child window is closed:
+        *
+        * The callee (server [not server application]) is not available and disappeared
+        */
+        const glInstanceLayoutConfig = this.getGlInstance().saveLayout();
+        const copiedGlInstanceLayoutConfig = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.deepExtend)({}, glInstanceLayoutConfig);
+        const copiedRoot = copiedGlInstanceLayoutConfig.root;
+        if (copiedRoot === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedUndefinedError('BPPIR19998');
+        }
+        const groundItem = this._layoutManager.groundItem;
+        if (groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedUndefinedError('BPPIG34972');
+        }
+        parentItem = groundItem.getItemsByPopInParentId(this._config.parentId)[0];
+        /*
+        * Fallback if parentItem is not available. Either add it to the topmost
+        * item or make it the topmost item if the layout is empty
+        */
+        if (!parentItem) {
+            if (groundItem.contentItems.length > 0) {
+                parentItem = groundItem.contentItems[0];
+            }
+            else {
+                parentItem = groundItem;
+            }
+            index = 0;
+        }
+        const newContentItem = this._layoutManager.createAndInitContentItem(copiedRoot, parentItem);
+        parentItem.addChild(newContentItem, index);
+        if (this._layoutManager.layoutConfig.settings.popInOnClose) {
+            this._onClose();
+        }
+        else {
+            this.close();
+        }
+    }
+    /**
+     * Creates the URL and window parameter
+     * and opens a new window
+     * @internal
+     */
+    createWindow() {
+        const url = this.createUrl();
+        /**
+         * Bogus title to prevent re-usage of existing window with the
+         * same title. The actual title will be set by the new window's
+         * GoldenLayout instance if it detects that it is in subWindowMode
+         */
+        const target = Math.floor(Math.random() * 1000000).toString(36);
+        /**
+         * The options as used in the window.open string
+         */
+        const features = this.serializeWindowFeatures({
+            width: this._initialWindowSize.width,
+            height: this._initialWindowSize.height,
+            innerWidth: this._initialWindowSize.width,
+            innerHeight: this._initialWindowSize.height,
+            menubar: 'no',
+            toolbar: 'no',
+            location: 'no',
+            personalbar: 'no',
+            resizable: 'yes',
+            scrollbars: 'no',
+            status: 'no'
+        });
+        this._popoutWindow = globalThis.open(url, target, features);
+        if (!this._popoutWindow) {
+            if (this._layoutManager.layoutConfig.settings.blockedPopoutsThrowError === true) {
+                const error = new _errors_external_error__WEBPACK_IMPORTED_MODULE_3__.PopoutBlockedError('Popout blocked');
+                throw error;
+            }
+            else {
+                return;
+            }
+        }
+        this._popoutWindow.addEventListener('load', () => this.positionWindow(), { passive: true });
+        this._popoutWindow.addEventListener('beforeunload', () => {
+            if (this._layoutManager.layoutConfig.settings.popInOnClose) {
+                this.popIn();
+            }
+            else {
+                this._onClose();
+            }
+        }, { passive: true });
+        /**
+         * Polling the childwindow to find out if GoldenLayout has been initialised
+         * doesn't seem optimal, but the alternatives - adding a callback to the parent
+         * window or raising an event on the window object - both would introduce knowledge
+         * about the parent to the child window which we'd rather avoid
+         */
+        this._checkReadyInterval = setInterval(() => this.checkReady(), 10);
+    }
+    /** @internal */
+    checkReady() {
+        if (this._popoutWindow === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('BPCR01844');
+        }
+        else {
+            if (this._popoutWindow.__glInstance && this._popoutWindow.__glInstance.isInitialised) {
+                this.onInitialised();
+                if (this._checkReadyInterval !== undefined) {
+                    clearInterval(this._checkReadyInterval);
+                    this._checkReadyInterval = undefined;
+                }
+            }
+        }
+    }
+    /**
+     * Serialises a map of key:values to a window options string
+     *
+     * @param windowOptions -
+     *
+     * @returns serialised window options
+     * @internal
+     */
+    serializeWindowFeatures(windowOptions) {
+        const windowOptionsString = [];
+        for (const key in windowOptions) {
+            windowOptionsString.push(key + '=' + windowOptions[key].toString());
+        }
+        return windowOptionsString.join(',');
+    }
+    /**
+     * Creates the URL for the new window, including the
+     * config GET parameter
+     *
+     * @returns URL
+     * @internal
+     */
+    createUrl() {
+        const storageKey = 'gl-window-config-' + (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.getUniqueId)();
+        const config = _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedLayoutConfig.minifyConfig(this._config);
+        try {
+            localStorage.setItem(storageKey, JSON.stringify(config));
+        }
+        catch (e) {
+            throw new Error('Error while writing to localStorage ' + (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.getErrorMessage)(e));
+        }
+        const url = new URL(location.href);
+        url.searchParams.set('gl-window', storageKey);
+        return url.toString();
+    }
+    /**
+     * Move the newly created window roughly to
+     * where the component used to be.
+     * @internal
+     */
+    positionWindow() {
+        if (this._popoutWindow === null) {
+            throw new Error('BrowserPopout.positionWindow: null popoutWindow');
+        }
+        else {
+            this._popoutWindow.moveTo(this._initialWindowSize.left, this._initialWindowSize.top);
+            this._popoutWindow.focus();
+        }
+    }
+    /**
+     * Callback when the new window is opened and the GoldenLayout instance
+     * within it is initialised
+     * @internal
+     */
+    onInitialised() {
+        this._isInitialised = true;
+        this.getGlInstance().on('popIn', () => this.popIn());
+        this.emit('initialised');
+    }
+    /**
+     * Invoked 50ms after the window unload event
+     * @internal
+     */
+    _onClose() {
+        setTimeout(() => this.emit('closed'), 50);
+    }
+}
+//# sourceMappingURL=browser-popout.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/drag-proxy.js":
+/*!***************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/drag-proxy.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DragProxy: () => (/* binding */ DragProxy)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _items_stack__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../items/stack */ "../../node_modules/golden-layout/dist/esm/ts/items/stack.js");
+/* harmony import */ var _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+
+
+
+
+/**
+ * This class creates a temporary container
+ * for the component whilst it is being dragged
+ * and handles drag events
+ * @internal
+ */
+class DragProxy extends _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    /**
+     * @param x - The initial x position
+     * @param y - The initial y position
+     * @internal
+     */
+    constructor(x, y, _dragListener, _layoutManager, _componentItem, _originalParent) {
+        super();
+        this._dragListener = _dragListener;
+        this._layoutManager = _layoutManager;
+        this._componentItem = _componentItem;
+        this._originalParent = _originalParent;
+        this._area = null;
+        this._lastValidArea = null;
+        this._dragListener.on('drag', (offsetX, offsetY, event) => this.onDrag(offsetX, offsetY, event));
+        this._dragListener.on('dragStop', () => this.onDrop());
+        this.createDragProxyElements(x, y);
+        if (this._componentItem.parent === null) {
+            // Note that _contentItem will have dummy GroundItem as parent if initiated by a external drag source
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('DPC10097');
+        }
+        this._componentItemFocused = this._componentItem.focused;
+        if (this._componentItemFocused) {
+            this._componentItem.blur();
+        }
+        this._componentItem.parent.removeChild(this._componentItem, true);
+        this.setDimensions();
+        document.body.appendChild(this._element);
+        this.determineMinMaxXY();
+        this._layoutManager.calculateItemAreas();
+        this.setDropPosition(x, y);
+    }
+    get element() { return this._element; }
+    /** Create Stack-like structure to contain the dragged component */
+    createDragProxyElements(initialX, initialY) {
+        this._element = document.createElement('div');
+        this._element.classList.add("lm_dragProxy" /* DragProxy */);
+        const headerElement = document.createElement('div');
+        headerElement.classList.add("lm_header" /* Header */);
+        const tabsElement = document.createElement('div');
+        tabsElement.classList.add("lm_tabs" /* Tabs */);
+        const tabElement = document.createElement('div');
+        tabElement.classList.add("lm_tab" /* Tab */);
+        const titleElement = document.createElement('span');
+        titleElement.classList.add("lm_title" /* Title */);
+        tabElement.appendChild(titleElement);
+        tabsElement.appendChild(tabElement);
+        headerElement.appendChild(tabsElement);
+        this._proxyContainerElement = document.createElement('div');
+        this._proxyContainerElement.classList.add("lm_content" /* Content */);
+        this._element.appendChild(headerElement);
+        this._element.appendChild(this._proxyContainerElement);
+        if (this._originalParent instanceof _items_stack__WEBPACK_IMPORTED_MODULE_2__.Stack && this._originalParent.headerShow) {
+            this._sided = this._originalParent.headerLeftRightSided;
+            this._element.classList.add('lm_' + this._originalParent.headerSide);
+            if ([_utils_types__WEBPACK_IMPORTED_MODULE_3__.Side.right, _utils_types__WEBPACK_IMPORTED_MODULE_3__.Side.bottom].indexOf(this._originalParent.headerSide) >= 0) {
+                this._proxyContainerElement.insertAdjacentElement('afterend', headerElement);
+            }
+        }
+        this._element.style.left = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(initialX);
+        this._element.style.top = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(initialY);
+        tabElement.setAttribute('title', this._componentItem.title);
+        titleElement.insertAdjacentText('afterbegin', this._componentItem.title);
+        this._proxyContainerElement.appendChild(this._componentItem.element);
+    }
+    determineMinMaxXY() {
+        const groundItem = this._layoutManager.groundItem;
+        if (groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedUndefinedError('DPDMMXY73109');
+        }
+        else {
+            const groundElement = groundItem.element;
+            const rect = groundElement.getBoundingClientRect();
+            this._minX = rect.left + document.body.scrollLeft;
+            this._minY = rect.top + document.body.scrollTop;
+            this._maxX = this._minX + rect.width;
+            this._maxY = this._minY + rect.height;
+        }
+    }
+    /**
+     * Callback on every mouseMove event during a drag. Determines if the drag is
+     * still within the valid drag area and calls the layoutManager to highlight the
+     * current drop area
+     *
+     * @param offsetX - The difference from the original x position in px
+     * @param offsetY - The difference from the original y position in px
+     * @param event -
+     * @internal
+     */
+    onDrag(offsetX, offsetY, event) {
+        const x = event.pageX;
+        const y = event.pageY;
+        this.setDropPosition(x, y);
+        this._componentItem.drag();
+    }
+    /**
+     * Sets the target position, highlighting the appropriate area
+     *
+     * @param x - The x position in px
+     * @param y - The y position in px
+     *
+     * @internal
+     */
+    setDropPosition(x, y) {
+        if (this._layoutManager.layoutConfig.settings.constrainDragToContainer) {
+            if (x <= this._minX) {
+                x = Math.ceil(this._minX);
+            }
+            else if (x >= this._maxX) {
+                x = Math.floor(this._maxX);
+            }
+            if (y <= this._minY) {
+                y = Math.ceil(this._minY);
+            }
+            else if (y >= this._maxY) {
+                y = Math.floor(this._maxY);
+            }
+        }
+        this._element.style.left = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(x);
+        this._element.style.top = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(y);
+        this._area = this._layoutManager.getArea(x, y);
+        if (this._area !== null) {
+            this._lastValidArea = this._area;
+            this._area.contentItem.highlightDropZone(x, y, this._area);
+        }
+    }
+    /**
+     * Callback when the drag has finished. Determines the drop area
+     * and adds the child to it
+     * @internal
+     */
+    onDrop() {
+        const dropTargetIndicator = this._layoutManager.dropTargetIndicator;
+        if (dropTargetIndicator === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('DPOD30011');
+        }
+        else {
+            dropTargetIndicator.hide();
+        }
+        this._componentItem.exitDragMode();
+        /*
+         * Valid drop area found
+         */
+        let droppedComponentItem;
+        if (this._area !== null) {
+            droppedComponentItem = this._componentItem;
+            this._area.contentItem.onDrop(droppedComponentItem, this._area);
+            /**
+             * No valid drop area available at present, but one has been found before.
+             * Use it
+             */
+        }
+        else if (this._lastValidArea !== null) {
+            droppedComponentItem = this._componentItem;
+            const newParentContentItem = this._lastValidArea.contentItem;
+            newParentContentItem.onDrop(droppedComponentItem, this._lastValidArea);
+            /**
+             * No valid drop area found during the duration of the drag. Return
+             * content item to its original position if a original parent is provided.
+             * (Which is not the case if the drag had been initiated by createDragSource)
+             */
+        }
+        else if (this._originalParent) {
+            droppedComponentItem = this._componentItem;
+            this._originalParent.addChild(droppedComponentItem);
+            /**
+             * The drag didn't ultimately end up with adding the content item to
+             * any container. In order to ensure clean up happens, destroy the
+             * content item.
+             */
+        }
+        else {
+            this._componentItem.destroy(); // contentItem children are now destroyed as well
+        }
+        this._element.remove();
+        this._layoutManager.emit('itemDropped', this._componentItem);
+        if (this._componentItemFocused && droppedComponentItem !== undefined) {
+            droppedComponentItem.focus();
+        }
+    }
+    /**
+     * Updates the Drag Proxy's dimensions
+     * @internal
+     */
+    setDimensions() {
+        const dimensions = this._layoutManager.layoutConfig.dimensions;
+        if (dimensions === undefined) {
+            throw new Error('DragProxy.setDimensions: dimensions undefined');
+        }
+        let width = dimensions.dragProxyWidth;
+        let height = dimensions.dragProxyHeight;
+        if (width === undefined || height === undefined) {
+            throw new Error('DragProxy.setDimensions: width and/or height undefined');
+        }
+        const headerHeight = this._layoutManager.layoutConfig.header.show === false ? 0 : dimensions.headerHeight;
+        this._element.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(width);
+        this._element.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(height);
+        width -= (this._sided ? headerHeight : 0);
+        height -= (!this._sided ? headerHeight : 0);
+        this._proxyContainerElement.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(width);
+        this._proxyContainerElement.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(height);
+        this._componentItem.enterDragMode(width, height);
+        this._componentItem.show();
+    }
+}
+//# sourceMappingURL=drag-proxy.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/drag-source.js":
+/*!****************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/drag-source.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DragSource: () => (/* binding */ DragSource)
+/* harmony export */ });
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _items_component_item__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../items/component-item */ "../../node_modules/golden-layout/dist/esm/ts/items/component-item.js");
+/* harmony import */ var _items_ground_item__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../items/ground-item */ "../../node_modules/golden-layout/dist/esm/ts/items/ground-item.js");
+/* harmony import */ var _utils_drag_listener__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/drag-listener */ "../../node_modules/golden-layout/dist/esm/ts/utils/drag-listener.js");
+/* harmony import */ var _drag_proxy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./drag-proxy */ "../../node_modules/golden-layout/dist/esm/ts/controls/drag-proxy.js");
+ // remove alias in version 3
+
+
+
+
+
+
+/**
+ * Allows for any DOM item to create a component on drag
+ * start to be dragged into the Layout
+ * @public
+ */
+class DragSource {
+    /** @internal */
+    constructor(
+    /** @internal */
+    _layoutManager, 
+    /** @internal */
+    _element, 
+    /** @internal */
+    _extraAllowableChildTargets, 
+    /** @internal @deprecated replace with componentItemConfigOrFtn in version 3 */
+    _componentTypeOrFtn, 
+    /** @internal @deprecated remove in version 3 */
+    _componentState, 
+    /** @internal @deprecated remove in version 3 */
+    _title, 
+    /** @internal @deprecated remove in version 3 */
+    _id) {
+        this._layoutManager = _layoutManager;
+        this._element = _element;
+        this._extraAllowableChildTargets = _extraAllowableChildTargets;
+        this._componentTypeOrFtn = _componentTypeOrFtn;
+        this._componentState = _componentState;
+        this._title = _title;
+        this._id = _id;
+        this._dragListener = null;
+        this._dummyGroundContainer = document.createElement('div');
+        const dummyRootItemConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_0__.ResolvedRowOrColumnItemConfig.createDefault('row');
+        this._dummyGroundContentItem = new _items_ground_item__WEBPACK_IMPORTED_MODULE_1__.GroundItem(this._layoutManager, dummyRootItemConfig, this._dummyGroundContainer);
+        this.createDragListener();
+    }
+    /**
+     * Disposes of the drag listeners so the drag source is not usable any more.
+     * @internal
+     */
+    destroy() {
+        this.removeDragListener();
+    }
+    /**
+     * Called initially and after every drag
+     * @internal
+     */
+    createDragListener() {
+        this.removeDragListener();
+        this._dragListener = new _utils_drag_listener__WEBPACK_IMPORTED_MODULE_2__.DragListener(this._element, this._extraAllowableChildTargets);
+        this._dragListener.on('dragStart', (x, y) => this.onDragStart(x, y));
+        this._dragListener.on('dragStop', () => this.onDragStop());
+    }
+    /**
+     * Callback for the DragListener's dragStart event
+     *
+     * @param x - The x position of the mouse on dragStart
+     * @param y - The x position of the mouse on dragStart
+     * @internal
+     */
+    onDragStart(x, y) {
+        var _a;
+        const type = 'component';
+        let dragSourceItemConfig;
+        if (typeof this._componentTypeOrFtn === "function") {
+            const ftnDragSourceItemConfig = this._componentTypeOrFtn();
+            // If the componentType property exists, then it is already a ComponentItemConfig so nothing to do
+            if (DragSource.isDragSourceComponentItemConfig(ftnDragSourceItemConfig)) {
+                dragSourceItemConfig = {
+                    type,
+                    componentState: ftnDragSourceItemConfig.state,
+                    componentType: ftnDragSourceItemConfig.type,
+                    title: (_a = ftnDragSourceItemConfig.title) !== null && _a !== void 0 ? _a : this._title,
+                };
+            }
+            else {
+                dragSourceItemConfig = ftnDragSourceItemConfig;
+            }
+        }
+        else {
+            dragSourceItemConfig = {
+                type,
+                componentState: this._componentState,
+                componentType: this._componentTypeOrFtn,
+                title: this._title,
+                id: this._id,
+            };
+        }
+        // Create a dummy ContentItem only for drag purposes
+        // All ContentItems (except for GroundItem) need a parent.  When dragging, the parent is not used.
+        // Instead of allowing null parents (as Javascript version did), use a temporary dummy GroundItem parent and add ContentItem to that
+        // If this does not work, need to create alternative GroundItem class
+        const resolvedItemConfig = _config_config__WEBPACK_IMPORTED_MODULE_3__.ComponentItemConfig.resolve(dragSourceItemConfig, false);
+        const componentItem = new _items_component_item__WEBPACK_IMPORTED_MODULE_4__.ComponentItem(this._layoutManager, resolvedItemConfig, this._dummyGroundContentItem);
+        this._dummyGroundContentItem.contentItems.push(componentItem);
+        if (this._dragListener === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedNullError('DSODSD66746');
+        }
+        else {
+            const dragProxy = new _drag_proxy__WEBPACK_IMPORTED_MODULE_6__.DragProxy(x, y, this._dragListener, this._layoutManager, componentItem, this._dummyGroundContentItem);
+            const transitionIndicator = this._layoutManager.transitionIndicator;
+            if (transitionIndicator === null) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedNullError('DSODST66746');
+            }
+            else {
+                transitionIndicator.transitionElements(this._element, dragProxy.element);
+            }
+        }
+    }
+    /** @internal */
+    onDragStop() {
+        // if (this._dummyGroundContentItem === undefined) {
+        //     throw new UnexpectedUndefinedError('DSODSDRU08116');
+        // } else {
+        //     this._dummyGroundContentItem._$destroy
+        //     this._dummyGroundContentItem = undefined;
+        // }
+        this.createDragListener();
+    }
+    /**
+     * Called after every drag and when the drag source is being disposed of.
+     * @internal
+     */
+    removeDragListener() {
+        if (this._dragListener !== null) {
+            this._dragListener.destroy();
+            this._dragListener = null;
+        }
+    }
+}
+/** @public */
+(function (DragSource) {
+    /** @deprecated remove in version 3 */
+    function isDragSourceComponentItemConfig(config) {
+        return !("componentType" in config);
+    }
+    DragSource.isDragSourceComponentItemConfig = isDragSourceComponentItemConfig;
+})(DragSource || (DragSource = {}));
+//# sourceMappingURL=drag-source.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/drop-target-indicator.js":
+/*!**************************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/drop-target-indicator.js ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DropTargetIndicator: () => (/* binding */ DropTargetIndicator)
+/* harmony export */ });
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+/** @internal */
+class DropTargetIndicator {
+    constructor() {
+        // Maybe use container instead of Document Body?
+        this._element = document.createElement('div');
+        this._element.classList.add("lm_dropTargetIndicator" /* DropTargetIndicator */);
+        const innerElement = document.createElement('div');
+        innerElement.classList.add("lm_inner" /* Inner */);
+        this._element.appendChild(innerElement);
+        document.body.appendChild(this._element);
+    }
+    destroy() {
+        this._element.remove();
+    }
+    highlightArea(area, margin) {
+        this._element.style.left = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(area.x1 + margin);
+        this._element.style.top = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(area.y1 + margin);
+        this._element.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(area.x2 - area.x1 - margin);
+        this._element.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(area.y2 - area.y1 - margin);
+        this._element.style.display = 'block';
+    }
+    hide() {
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.setElementDisplayVisibility)(this._element, false);
+    }
+}
+//# sourceMappingURL=drop-target-indicator.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/header-button.js":
+/*!******************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/header-button.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   HeaderButton: () => (/* binding */ HeaderButton)
+/* harmony export */ });
+/** @internal */
+class HeaderButton {
+    constructor(_header, label, cssClass, _pushEvent) {
+        this._header = _header;
+        this._pushEvent = _pushEvent;
+        this._clickEventListener = (ev) => this.onClick(ev);
+        this._touchStartEventListener = (ev) => this.onTouchStart(ev);
+        this._element = document.createElement('div');
+        this._element.classList.add(cssClass);
+        this._element.title = label;
+        this._header.on('destroy', () => this.destroy());
+        this._element.addEventListener('click', this._clickEventListener, { passive: true });
+        this._element.addEventListener('touchstart', this._touchStartEventListener, { passive: true });
+        this._header.controlsContainerElement.appendChild(this._element);
+    }
+    get element() { return this._element; }
+    destroy() {
+        var _a;
+        this._element.removeEventListener('click', this._clickEventListener);
+        this._element.removeEventListener('touchstart', this._touchStartEventListener);
+        (_a = this._element.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(this._element);
+    }
+    onClick(ev) {
+        this._pushEvent(ev);
+    }
+    onTouchStart(ev) {
+        this._pushEvent(ev);
+    }
+}
+//# sourceMappingURL=header-button.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/header.js":
+/*!***********************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/header.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Header: () => (/* binding */ Header)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _header_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./header-button */ "../../node_modules/golden-layout/dist/esm/ts/controls/header-button.js");
+/* harmony import */ var _tabs_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tabs-container */ "../../node_modules/golden-layout/dist/esm/ts/controls/tabs-container.js");
+
+
+
+
+
+
+/**
+ * This class represents a header above a Stack ContentItem.
+ * @public
+ */
+class Header extends _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    /** @internal */
+    constructor(
+    /** @internal */
+    _layoutManager, 
+    /** @internal */
+    _parent, settings, 
+    /** @internal */
+    _configClosable, 
+    /** @internal */
+    _getActiveComponentItemEvent, closeEvent, 
+    /** @internal */
+    _popoutEvent, 
+    /** @internal */
+    _maximiseToggleEvent, 
+    /** @internal */
+    _clickEvent, 
+    /** @internal */
+    _touchStartEvent, 
+    /** @internal */
+    _componentRemoveEvent, 
+    /** @internal */
+    _componentFocusEvent, 
+    /** @internal */
+    _componentDragStartEvent) {
+        super();
+        this._layoutManager = _layoutManager;
+        this._parent = _parent;
+        this._configClosable = _configClosable;
+        this._getActiveComponentItemEvent = _getActiveComponentItemEvent;
+        this._popoutEvent = _popoutEvent;
+        this._maximiseToggleEvent = _maximiseToggleEvent;
+        this._clickEvent = _clickEvent;
+        this._touchStartEvent = _touchStartEvent;
+        this._componentRemoveEvent = _componentRemoveEvent;
+        this._componentFocusEvent = _componentFocusEvent;
+        this._componentDragStartEvent = _componentDragStartEvent;
+        /** @internal */
+        this._clickListener = (ev) => this.onClick(ev);
+        /** @internal */
+        this._touchStartListener = (ev) => this.onTouchStart(ev);
+        /** @internal */
+        this._rowColumnClosable = true;
+        /** @internal */
+        this._closeButton = null;
+        /** @internal */
+        this._popoutButton = null;
+        this._tabsContainer = new _tabs_container__WEBPACK_IMPORTED_MODULE_1__.TabsContainer(this._layoutManager, (item) => this.handleTabInitiatedComponentRemoveEvent(item), (item) => this.handleTabInitiatedComponentFocusEvent(item), (x, y, dragListener, item) => this.handleTabInitiatedDragStartEvent(x, y, dragListener, item), () => this.processTabDropdownActiveChanged());
+        this._show = settings.show;
+        this._popoutEnabled = settings.popoutEnabled;
+        this._popoutLabel = settings.popoutLabel;
+        this._maximiseEnabled = settings.maximiseEnabled;
+        this._maximiseLabel = settings.maximiseLabel;
+        this._minimiseEnabled = settings.minimiseEnabled;
+        this._minimiseLabel = settings.minimiseLabel;
+        this._closeEnabled = settings.closeEnabled;
+        this._closeLabel = settings.closeLabel;
+        this._tabDropdownEnabled = settings.tabDropdownEnabled;
+        this._tabDropdownLabel = settings.tabDropdownLabel;
+        this.setSide(settings.side);
+        this._canRemoveComponent = this._configClosable;
+        this._element = document.createElement('section');
+        this._element.classList.add("lm_header" /* Header */);
+        this._controlsContainerElement = document.createElement('section');
+        this._controlsContainerElement.classList.add("lm_controls" /* Controls */);
+        this._element.appendChild(this._tabsContainer.element);
+        this._element.appendChild(this._controlsContainerElement);
+        this._element.appendChild(this._tabsContainer.dropdownElement);
+        this._element.addEventListener('click', this._clickListener, { passive: true });
+        this._element.addEventListener('touchstart', this._touchStartListener, { passive: true });
+        this._documentMouseUpListener = () => this._tabsContainer.hideAdditionalTabsDropdown();
+        globalThis.document.addEventListener('mouseup', this._documentMouseUpListener, { passive: true });
+        this._tabControlOffset = this._layoutManager.layoutConfig.settings.tabControlOffset;
+        if (this._tabDropdownEnabled) {
+            this._tabDropdownButton = new _header_button__WEBPACK_IMPORTED_MODULE_2__.HeaderButton(this, this._tabDropdownLabel, "lm_tabdropdown" /* TabDropdown */, () => this._tabsContainer.showAdditionalTabsDropdown());
+        }
+        if (this._popoutEnabled) {
+            this._popoutButton = new _header_button__WEBPACK_IMPORTED_MODULE_2__.HeaderButton(this, this._popoutLabel, "lm_popout" /* Popout */, () => this.handleButtonPopoutEvent());
+        }
+        /**
+         * Maximise control - set the component to the full size of the layout
+         */
+        if (this._maximiseEnabled) {
+            this._maximiseButton = new _header_button__WEBPACK_IMPORTED_MODULE_2__.HeaderButton(this, this._maximiseLabel, "lm_maximise" /* Maximise */, (ev) => this.handleButtonMaximiseToggleEvent(ev));
+        }
+        /**
+         * Close button
+         */
+        if (this._configClosable) {
+            this._closeButton = new _header_button__WEBPACK_IMPORTED_MODULE_2__.HeaderButton(this, this._closeLabel, "lm_close" /* Close */, () => closeEvent());
+        }
+        this.processTabDropdownActiveChanged();
+    }
+    // /** @internal */
+    // private _activeComponentItem: ComponentItem | null = null; // only used to identify active tab
+    get show() { return this._show; }
+    get side() { return this._side; }
+    get leftRightSided() { return this._leftRightSided; }
+    get layoutManager() { return this._layoutManager; }
+    get parent() { return this._parent; }
+    get tabs() { return this._tabsContainer.tabs; }
+    get lastVisibleTabIndex() { return this._tabsContainer.lastVisibleTabIndex; }
+    get element() { return this._element; }
+    get tabsContainerElement() { return this._tabsContainer.element; }
+    get controlsContainerElement() { return this._controlsContainerElement; }
+    /**
+     * Destroys the entire header
+     * @internal
+     */
+    destroy() {
+        this.emit('destroy');
+        this._popoutEvent = undefined;
+        this._maximiseToggleEvent = undefined;
+        this._clickEvent = undefined;
+        this._touchStartEvent = undefined;
+        this._componentRemoveEvent = undefined;
+        this._componentFocusEvent = undefined;
+        this._componentDragStartEvent = undefined;
+        this._tabsContainer.destroy();
+        globalThis.document.removeEventListener('mouseup', this._documentMouseUpListener);
+        this._element.remove();
+    }
+    /**
+     * Creates a new tab and associates it with a contentItem
+     * @param index - The position of the tab
+     * @internal
+     */
+    createTab(componentItem, index) {
+        this._tabsContainer.createTab(componentItem, index);
+    }
+    /**
+     * Finds a tab based on the contentItem its associated with and removes it.
+     * Cannot remove tab if it has the active ComponentItem
+     * @internal
+     */
+    removeTab(componentItem) {
+        this._tabsContainer.removeTab(componentItem);
+    }
+    /** @internal */
+    processActiveComponentChanged(newActiveComponentItem) {
+        this._tabsContainer.processActiveComponentChanged(newActiveComponentItem);
+        this.updateTabSizes();
+    }
+    /** @internal */
+    setSide(value) {
+        this._side = value;
+        this._leftRightSided = [_utils_types__WEBPACK_IMPORTED_MODULE_3__.Side.right, _utils_types__WEBPACK_IMPORTED_MODULE_3__.Side.left].includes(this._side);
+    }
+    /**
+     * Programmatically set closability.
+     * @param value - Whether to enable/disable closability.
+     * @returns Whether the action was successful
+     * @internal
+     */
+    setRowColumnClosable(value) {
+        this._rowColumnClosable = value;
+        this.updateClosability();
+    }
+    /**
+     * Updates the header's closability. If a stack/header is able
+     * to close, but has a non closable component added to it, the stack is no
+     * longer closable until all components are closable.
+     * @internal
+     */
+    updateClosability() {
+        let isClosable;
+        if (!this._configClosable) {
+            isClosable = false;
+        }
+        else {
+            if (!this._rowColumnClosable) {
+                isClosable = false;
+            }
+            else {
+                isClosable = true;
+                const len = this.tabs.length;
+                for (let i = 0; i < len; i++) {
+                    const tab = this._tabsContainer.tabs[i];
+                    const item = tab.componentItem;
+                    if (!item.isClosable) {
+                        isClosable = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (this._closeButton !== null) {
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementDisplayVisibility)(this._closeButton.element, isClosable);
+        }
+        if (this._popoutButton !== null) {
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementDisplayVisibility)(this._popoutButton.element, isClosable);
+        }
+        this._canRemoveComponent = isClosable || this._tabsContainer.tabCount > 1;
+    }
+    /** @internal */
+    applyFocusedValue(value) {
+        if (value) {
+            this._element.classList.add("lm_focused" /* Focused */);
+        }
+        else {
+            this._element.classList.remove("lm_focused" /* Focused */);
+        }
+    }
+    /** @internal */
+    processMaximised() {
+        if (this._maximiseButton === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HPMAX16997');
+        }
+        else {
+            this._maximiseButton.element.setAttribute('title', this._minimiseLabel);
+        }
+    }
+    /** @internal */
+    processMinimised() {
+        if (this._maximiseButton === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HPMIN16997');
+        }
+        else {
+            this._maximiseButton.element.setAttribute('title', this._maximiseLabel);
+        }
+    }
+    /**
+     * Pushes the tabs to the tab dropdown if the available space is not sufficient
+     * @internal
+     */
+    updateTabSizes() {
+        if (this._tabsContainer.tabCount > 0) {
+            const headerHeight = this._show ? this._layoutManager.layoutConfig.dimensions.headerHeight : 0;
+            if (this._leftRightSided) {
+                this._element.style.height = '';
+                this._element.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(headerHeight);
+            }
+            else {
+                this._element.style.width = '';
+                this._element.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(headerHeight);
+            }
+            let availableWidth;
+            if (this._leftRightSided) {
+                availableWidth = this._element.offsetHeight - this._controlsContainerElement.offsetHeight - this._tabControlOffset;
+            }
+            else {
+                availableWidth = this._element.offsetWidth - this._controlsContainerElement.offsetWidth - this._tabControlOffset;
+            }
+            this._tabsContainer.updateTabSizes(availableWidth, this._getActiveComponentItemEvent());
+        }
+    }
+    /** @internal */
+    handleTabInitiatedComponentRemoveEvent(componentItem) {
+        if (this._canRemoveComponent) {
+            if (this._componentRemoveEvent === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HHTCE22294');
+            }
+            else {
+                this._componentRemoveEvent(componentItem);
+            }
+        }
+    }
+    /** @internal */
+    handleTabInitiatedComponentFocusEvent(componentItem) {
+        if (this._componentFocusEvent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HHTAE22294');
+        }
+        else {
+            this._componentFocusEvent(componentItem);
+        }
+    }
+    /** @internal */
+    handleTabInitiatedDragStartEvent(x, y, dragListener, componentItem) {
+        if (!this._canRemoveComponent) {
+            dragListener.cancelDrag();
+        }
+        else {
+            if (this._componentDragStartEvent === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HHTDSE22294');
+            }
+            else {
+                this._componentDragStartEvent(x, y, dragListener, componentItem);
+            }
+        }
+    }
+    /** @internal */
+    processTabDropdownActiveChanged() {
+        if (this._tabDropdownButton !== undefined) {
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementDisplayVisibility)(this._tabDropdownButton.element, this._tabsContainer.dropdownActive);
+        }
+    }
+    /** @internal */
+    handleButtonPopoutEvent() {
+        if (this._layoutManager.layoutConfig.settings.popoutWholeStack) {
+            if (this._popoutEvent === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HHBPOE17834');
+            }
+            else {
+                this._popoutEvent();
+            }
+        }
+        else {
+            const activeComponentItem = this._getActiveComponentItemEvent();
+            if (activeComponentItem) {
+                activeComponentItem.popout();
+            }
+            // else: if the stack is empty there won't be an active item (and nothing to popout)
+        }
+    }
+    /** @internal */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    handleButtonMaximiseToggleEvent(ev) {
+        if (this._maximiseToggleEvent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HHBMTE16834');
+        }
+        else {
+            this._maximiseToggleEvent();
+        }
+    }
+    /**
+     * Invoked when the header's background is clicked (not it's tabs or controls)
+     * @internal
+     */
+    onClick(event) {
+        if (event.target === this._element) {
+            this.notifyClick(event);
+        }
+    }
+    /**
+     * Invoked when the header's background is touched (not it's tabs or controls)
+     * @internal
+     */
+    onTouchStart(event) {
+        if (event.target === this._element) {
+            this.notifyTouchStart(event);
+        }
+    }
+    /** @internal */
+    notifyClick(ev) {
+        if (this._clickEvent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HNHC46834');
+        }
+        else {
+            this._clickEvent(ev);
+        }
+    }
+    /** @internal */
+    notifyTouchStart(ev) {
+        if (this._touchStartEvent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('HNHTS46834');
+        }
+        else {
+            this._touchStartEvent(ev);
+        }
+    }
+}
+//# sourceMappingURL=header.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/splitter.js":
+/*!*************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/splitter.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Splitter: () => (/* binding */ Splitter)
+/* harmony export */ });
+/* harmony import */ var _utils_drag_listener__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/drag-listener */ "../../node_modules/golden-layout/dist/esm/ts/utils/drag-listener.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+
+/** @internal */
+class Splitter {
+    constructor(_isVertical, _size, grabSize) {
+        this._isVertical = _isVertical;
+        this._size = _size;
+        this._grabSize = grabSize < this._size ? this._size : grabSize;
+        this._element = document.createElement('div');
+        this._element.classList.add("lm_splitter" /* Splitter */);
+        const dragHandleElement = document.createElement('div');
+        dragHandleElement.classList.add("lm_drag_handle" /* DragHandle */);
+        const handleExcessSize = this._grabSize - this._size;
+        const handleExcessPos = handleExcessSize / 2;
+        if (this._isVertical) {
+            dragHandleElement.style.top = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(-handleExcessPos);
+            dragHandleElement.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(this._size + handleExcessSize);
+            this._element.classList.add("lm_vertical" /* Vertical */);
+            this._element.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(this._size);
+        }
+        else {
+            dragHandleElement.style.left = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(-handleExcessPos);
+            dragHandleElement.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(this._size + handleExcessSize);
+            this._element.classList.add("lm_horizontal" /* Horizontal */);
+            this._element.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.numberToPixels)(this._size);
+        }
+        this._element.appendChild(dragHandleElement);
+        this._dragListener = new _utils_drag_listener__WEBPACK_IMPORTED_MODULE_1__.DragListener(this._element, [dragHandleElement]);
+    }
+    get element() { return this._element; }
+    destroy() {
+        this._element.remove();
+    }
+    on(eventName, callback) {
+        this._dragListener.on(eventName, callback);
+    }
+}
+//# sourceMappingURL=splitter.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/tab.js":
+/*!********************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/tab.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Tab: () => (/* binding */ Tab)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_drag_listener__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/drag-listener */ "../../node_modules/golden-layout/dist/esm/ts/utils/drag-listener.js");
+
+
+/**
+ * Represents an individual tab within a Stack's header
+ * @public
+ */
+class Tab {
+    /** @internal */
+    constructor(
+    /** @internal */
+    _layoutManager, 
+    /** @internal */
+    _componentItem, 
+    /** @internal */
+    _closeEvent, 
+    /** @internal */
+    _focusEvent, 
+    /** @internal */
+    _dragStartEvent) {
+        var _a;
+        this._layoutManager = _layoutManager;
+        this._componentItem = _componentItem;
+        this._closeEvent = _closeEvent;
+        this._focusEvent = _focusEvent;
+        this._dragStartEvent = _dragStartEvent;
+        /** @internal */
+        this._isActive = false;
+        /** @internal */
+        this._tabClickListener = (ev) => this.onTabClickDown(ev);
+        /** @internal */
+        this._tabTouchStartListener = (ev) => this.onTabTouchStart(ev);
+        /** @internal */
+        this._closeClickListener = () => this.onCloseClick();
+        /** @internal */
+        this._closeTouchStartListener = () => this.onCloseTouchStart();
+        // /** @internal */
+        // private readonly _closeMouseDownListener = () => this.onCloseMousedown();
+        /** @internal */
+        this._dragStartListener = (x, y) => this.onDragStart(x, y);
+        /** @internal */
+        this._contentItemDestroyListener = () => this.onContentItemDestroy();
+        /** @internal */
+        this._tabTitleChangedListener = (title) => this.setTitle(title);
+        this._element = document.createElement('div');
+        this._element.classList.add("lm_tab" /* Tab */);
+        this._titleElement = document.createElement('span');
+        this._titleElement.classList.add("lm_title" /* Title */);
+        this._closeElement = document.createElement('div');
+        this._closeElement.classList.add("lm_close_tab" /* CloseTab */);
+        this._element.appendChild(this._titleElement);
+        this._element.appendChild(this._closeElement);
+        if (_componentItem.isClosable) {
+            this._closeElement.style.display = '';
+        }
+        else {
+            this._closeElement.style.display = 'none';
+        }
+        this.setTitle(_componentItem.title);
+        this._componentItem.on('titleChanged', this._tabTitleChangedListener);
+        const reorderEnabled = (_a = _componentItem.reorderEnabled) !== null && _a !== void 0 ? _a : this._layoutManager.layoutConfig.settings.reorderEnabled;
+        if (reorderEnabled) {
+            this.enableReorder();
+        }
+        this._element.addEventListener('click', this._tabClickListener, { passive: true });
+        this._element.addEventListener('touchstart', this._tabTouchStartListener, { passive: true });
+        if (this._componentItem.isClosable) {
+            this._closeElement.addEventListener('click', this._closeClickListener, { passive: true });
+            this._closeElement.addEventListener('touchstart', this._closeTouchStartListener, { passive: true });
+            // this._closeElement.addEventListener('mousedown', this._closeMouseDownListener, { passive: true });
+        }
+        else {
+            this._closeElement.remove();
+            this._closeElement = undefined;
+        }
+        this._componentItem.setTab(this);
+        this._layoutManager.emit('tabCreated', this);
+    }
+    get isActive() { return this._isActive; }
+    // get header(): Header { return this._header; }
+    get componentItem() { return this._componentItem; }
+    /** @deprecated use {@link (Tab:class).componentItem} */
+    get contentItem() { return this._componentItem; }
+    get element() { return this._element; }
+    get titleElement() { return this._titleElement; }
+    get closeElement() { return this._closeElement; }
+    get reorderEnabled() { return this._dragListener !== undefined; }
+    set reorderEnabled(value) {
+        if (value !== this.reorderEnabled) {
+            if (value) {
+                this.enableReorder();
+            }
+            else {
+                this.disableReorder();
+            }
+        }
+    }
+    /**
+     * Sets the tab's title to the provided string and sets
+     * its title attribute to a pure text representation (without
+     * html tags) of the same string.
+     */
+    setTitle(title) {
+        this._titleElement.innerText = title;
+        this._element.title = title;
+    }
+    /**
+     * Sets this tab's active state. To programmatically
+     * switch tabs, use Stack.setActiveComponentItem( item ) instead.
+     */
+    setActive(isActive) {
+        if (isActive === this._isActive) {
+            return;
+        }
+        this._isActive = isActive;
+        if (isActive) {
+            this._element.classList.add("lm_active" /* Active */);
+        }
+        else {
+            this._element.classList.remove("lm_active" /* Active */);
+        }
+    }
+    /**
+     * Destroys the tab
+     * @internal
+     */
+    destroy() {
+        var _a, _b;
+        this._closeEvent = undefined;
+        this._focusEvent = undefined;
+        this._dragStartEvent = undefined;
+        this._element.removeEventListener('click', this._tabClickListener);
+        this._element.removeEventListener('touchstart', this._tabTouchStartListener);
+        (_a = this._closeElement) === null || _a === void 0 ? void 0 : _a.removeEventListener('click', this._closeClickListener);
+        (_b = this._closeElement) === null || _b === void 0 ? void 0 : _b.removeEventListener('touchstart', this._closeTouchStartListener);
+        // this._closeElement?.removeEventListener('mousedown', this._closeMouseDownListener);
+        this._componentItem.off('titleChanged', this._tabTitleChangedListener);
+        if (this.reorderEnabled) {
+            this.disableReorder();
+        }
+        this._element.remove();
+    }
+    /** @internal */
+    setBlurred() {
+        this._element.classList.remove("lm_focused" /* Focused */);
+        this._titleElement.classList.remove("lm_focused" /* Focused */);
+    }
+    /** @internal */
+    setFocused() {
+        this._element.classList.add("lm_focused" /* Focused */);
+        this._titleElement.classList.add("lm_focused" /* Focused */);
+    }
+    /**
+     * Callback for the DragListener
+     * @param x - The tabs absolute x position
+     * @param y - The tabs absolute y position
+     * @internal
+     */
+    onDragStart(x, y) {
+        if (this._dragListener === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__.UnexpectedUndefinedError('TODSDLU10093');
+        }
+        else {
+            if (this._dragStartEvent === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__.UnexpectedUndefinedError('TODS23309');
+            }
+            else {
+                this._dragStartEvent(x, y, this._dragListener, this.componentItem);
+            }
+        }
+    }
+    /** @internal */
+    onContentItemDestroy() {
+        if (this._dragListener !== undefined) {
+            this._dragListener.destroy();
+            this._dragListener = undefined;
+        }
+    }
+    /**
+     * Callback when the tab is clicked
+     * @internal
+     */
+    onTabClickDown(event) {
+        const target = event.target;
+        if (target === this._element || target === this._titleElement) {
+            // left mouse button
+            if (event.button === 0) {
+                // event.stopPropagation();
+                this.notifyFocus();
+                // middle mouse button
+            }
+            else if (event.button === 1 && this._componentItem.isClosable) {
+                // event.stopPropagation();
+                this.notifyClose();
+            }
+        }
+    }
+    /** @internal */
+    onTabTouchStart(event) {
+        if (event.target === this._element) {
+            this.notifyFocus();
+        }
+    }
+    /**
+     * Callback when the tab's close button is clicked
+     * @internal
+     */
+    onCloseClick() {
+        this.notifyClose();
+    }
+    /** @internal */
+    onCloseTouchStart() {
+        this.notifyClose();
+    }
+    /**
+     * Callback to capture tab close button mousedown
+     * to prevent tab from activating.
+     * @internal
+     */
+    // private onCloseMousedown(): void {
+    //     // event.stopPropagation();
+    // }
+    /** @internal */
+    notifyClose() {
+        if (this._closeEvent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__.UnexpectedUndefinedError('TNC15007');
+        }
+        else {
+            this._closeEvent(this._componentItem);
+        }
+    }
+    /** @internal */
+    notifyFocus() {
+        if (this._focusEvent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__.UnexpectedUndefinedError('TNA15007');
+        }
+        else {
+            this._focusEvent(this._componentItem);
+        }
+    }
+    /** @internal */
+    enableReorder() {
+        this._dragListener = new _utils_drag_listener__WEBPACK_IMPORTED_MODULE_1__.DragListener(this._element, [this._titleElement]);
+        this._dragListener.on('dragStart', this._dragStartListener);
+        this._componentItem.on('destroy', this._contentItemDestroyListener);
+    }
+    /** @internal */
+    disableReorder() {
+        if (this._dragListener === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__.UnexpectedUndefinedError('TDR87745');
+        }
+        else {
+            this._componentItem.off('destroy', this._contentItemDestroyListener);
+            this._dragListener.off('dragStart', this._dragStartListener);
+            this._dragListener = undefined;
+        }
+    }
+}
+//# sourceMappingURL=tab.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/tabs-container.js":
+/*!*******************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/tabs-container.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   TabsContainer: () => (/* binding */ TabsContainer)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _tab__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tab */ "../../node_modules/golden-layout/dist/esm/ts/controls/tab.js");
+
+
+
+/** @internal */
+class TabsContainer {
+    constructor(_layoutManager, _componentRemoveEvent, _componentFocusEvent, _componentDragStartEvent, _dropdownActiveChangedEvent) {
+        this._layoutManager = _layoutManager;
+        this._componentRemoveEvent = _componentRemoveEvent;
+        this._componentFocusEvent = _componentFocusEvent;
+        this._componentDragStartEvent = _componentDragStartEvent;
+        this._dropdownActiveChangedEvent = _dropdownActiveChangedEvent;
+        // There is one tab per ComponentItem in stack.  However they may not be ordered the same
+        this._tabs = [];
+        this._lastVisibleTabIndex = -1;
+        this._dropdownActive = false;
+        this._element = document.createElement('section');
+        this._element.classList.add("lm_tabs" /* Tabs */);
+        this._dropdownElement = document.createElement('section');
+        this._dropdownElement.classList.add("lm_tabdropdown_list" /* TabDropdownList */);
+        this._dropdownElement.style.display = 'none';
+    }
+    get tabs() { return this._tabs; }
+    get tabCount() { return this._tabs.length; }
+    get lastVisibleTabIndex() { return this._lastVisibleTabIndex; }
+    get element() { return this._element; }
+    get dropdownElement() { return this._dropdownElement; }
+    get dropdownActive() { return this._dropdownActive; }
+    destroy() {
+        for (let i = 0; i < this._tabs.length; i++) {
+            this._tabs[i].destroy();
+        }
+    }
+    /**
+     * Creates a new tab and associates it with a contentItem
+     * @param index - The position of the tab
+     */
+    createTab(componentItem, index) {
+        //If there's already a tab relating to the
+        //content item, don't do anything
+        for (let i = 0; i < this._tabs.length; i++) {
+            if (this._tabs[i].componentItem === componentItem) {
+                return;
+            }
+        }
+        const tab = new _tab__WEBPACK_IMPORTED_MODULE_0__.Tab(this._layoutManager, componentItem, (item) => this.handleTabCloseEvent(item), (item) => this.handleTabFocusEvent(item), (x, y, dragListener, item) => this.handleTabDragStartEvent(x, y, dragListener, item));
+        if (index === undefined) {
+            index = this._tabs.length;
+        }
+        this._tabs.splice(index, 0, tab);
+        if (index < this._element.childNodes.length) {
+            this._element.insertBefore(tab.element, this._element.childNodes[index]);
+        }
+        else {
+            this._element.appendChild(tab.element);
+        }
+    }
+    removeTab(componentItem) {
+        // componentItem cannot be ActiveComponentItem
+        for (let i = 0; i < this._tabs.length; i++) {
+            if (this._tabs[i].componentItem === componentItem) {
+                const tab = this._tabs[i];
+                tab.destroy();
+                this._tabs.splice(i, 1);
+                return;
+            }
+        }
+        throw new Error('contentItem is not controlled by this header');
+    }
+    processActiveComponentChanged(newActiveComponentItem) {
+        let activeIndex = -1;
+        for (let i = 0; i < this._tabs.length; i++) {
+            const isActive = this._tabs[i].componentItem === newActiveComponentItem;
+            this._tabs[i].setActive(isActive);
+            if (isActive) {
+                activeIndex = i;
+            }
+        }
+        if (activeIndex < 0) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.AssertError('HSACI56632');
+        }
+        else {
+            if (this._layoutManager.layoutConfig.settings.reorderOnTabMenuClick) {
+                /**
+                 * If the tab selected was in the dropdown, move everything down one to make way for this one to be the first.
+                 * This will make sure the most used tabs stay visible.
+                 */
+                if (this._lastVisibleTabIndex !== -1 && activeIndex > this._lastVisibleTabIndex) {
+                    const activeTab = this._tabs[activeIndex];
+                    for (let j = activeIndex; j > 0; j--) {
+                        this._tabs[j] = this._tabs[j - 1];
+                    }
+                    this._tabs[0] = activeTab;
+                    // updateTabSizes will always be called after this and it will reposition tab elements
+                }
+            }
+        }
+    }
+    /**
+     * Pushes the tabs to the tab dropdown if the available space is not sufficient
+     */
+    updateTabSizes(availableWidth, activeComponentItem) {
+        let dropDownActive = false;
+        const success = this.tryUpdateTabSizes(dropDownActive, availableWidth, activeComponentItem);
+        if (!success) {
+            dropDownActive = true;
+            // this will always succeed
+            this.tryUpdateTabSizes(dropDownActive, availableWidth, activeComponentItem);
+        }
+        if (dropDownActive !== this._dropdownActive) {
+            this._dropdownActive = dropDownActive;
+            this._dropdownActiveChangedEvent();
+        }
+    }
+    tryUpdateTabSizes(dropdownActive, availableWidth, activeComponentItem) {
+        if (this._tabs.length > 0) {
+            if (activeComponentItem === undefined) {
+                throw new Error('non-empty tabs must have active component item');
+            }
+            let cumulativeTabWidth = 0;
+            let tabOverlapAllowanceExceeded = false;
+            const tabOverlapAllowance = this._layoutManager.layoutConfig.settings.tabOverlapAllowance;
+            const activeIndex = this._tabs.indexOf(activeComponentItem.tab);
+            const activeTab = this._tabs[activeIndex];
+            this._lastVisibleTabIndex = -1;
+            for (let i = 0; i < this._tabs.length; i++) {
+                const tabElement = this._tabs[i].element;
+                //Put the tab in the tabContainer so its true width can be checked
+                if (tabElement.parentElement !== this._element) {
+                    this._element.appendChild(tabElement);
+                }
+                const tabMarginRightPixels = getComputedStyle(activeTab.element).marginRight;
+                const tabMarginRight = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.pixelsToNumber)(tabMarginRightPixels);
+                const tabWidth = tabElement.offsetWidth + tabMarginRight;
+                cumulativeTabWidth += tabWidth;
+                //Include the active tab's width if it isn't already
+                //This is to ensure there is room to show the active tab
+                let visibleTabWidth = 0;
+                if (activeIndex <= i) {
+                    visibleTabWidth = cumulativeTabWidth;
+                }
+                else {
+                    const activeTabMarginRightPixels = getComputedStyle(activeTab.element).marginRight;
+                    const activeTabMarginRight = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.pixelsToNumber)(activeTabMarginRightPixels);
+                    visibleTabWidth = cumulativeTabWidth + activeTab.element.offsetWidth + activeTabMarginRight;
+                }
+                // If the tabs won't fit, check the overlap allowance.
+                if (visibleTabWidth > availableWidth) {
+                    //Once allowance is exceeded, all remaining tabs go to menu.
+                    if (!tabOverlapAllowanceExceeded) {
+                        //No overlap for first tab or active tab
+                        //Overlap spreads among non-active, non-first tabs
+                        let overlap;
+                        if (activeIndex > 0 && activeIndex <= i) {
+                            overlap = (visibleTabWidth - availableWidth) / (i - 1);
+                        }
+                        else {
+                            overlap = (visibleTabWidth - availableWidth) / i;
+                        }
+                        //Check overlap against allowance.
+                        if (overlap < tabOverlapAllowance) {
+                            for (let j = 0; j <= i; j++) {
+                                const marginLeft = (j !== activeIndex && j !== 0) ? '-' + (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.numberToPixels)(overlap) : '';
+                                this._tabs[j].element.style.zIndex = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.numberToPixels)(i - j);
+                                this._tabs[j].element.style.marginLeft = marginLeft;
+                            }
+                            this._lastVisibleTabIndex = i;
+                            if (tabElement.parentElement !== this._element) {
+                                this._element.appendChild(tabElement);
+                            }
+                        }
+                        else {
+                            tabOverlapAllowanceExceeded = true;
+                        }
+                    }
+                    else if (i === activeIndex) {
+                        //Active tab should show even if allowance exceeded. (We left room.)
+                        tabElement.style.zIndex = 'auto';
+                        tabElement.style.marginLeft = '';
+                        if (tabElement.parentElement !== this._element) {
+                            this._element.appendChild(tabElement);
+                        }
+                    }
+                    if (tabOverlapAllowanceExceeded && i !== activeIndex) {
+                        if (dropdownActive) {
+                            //Tab menu already shown, so we just add to it.
+                            tabElement.style.zIndex = 'auto';
+                            tabElement.style.marginLeft = '';
+                            if (tabElement.parentElement !== this._dropdownElement) {
+                                this._dropdownElement.appendChild(tabElement);
+                            }
+                        }
+                        else {
+                            //We now know the tab menu must be shown, so we have to recalculate everything.
+                            return false;
+                        }
+                    }
+                }
+                else {
+                    this._lastVisibleTabIndex = i;
+                    tabElement.style.zIndex = 'auto';
+                    tabElement.style.marginLeft = '';
+                    if (tabElement.parentElement !== this._element) {
+                        this._element.appendChild(tabElement);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    /**
+     * Shows drop down for additional tabs when there are too many to display.
+     */
+    showAdditionalTabsDropdown() {
+        this._dropdownElement.style.display = '';
+    }
+    /**
+     * Hides drop down for additional tabs when there are too many to display.
+     */
+    hideAdditionalTabsDropdown() {
+        this._dropdownElement.style.display = 'none';
+    }
+    handleTabCloseEvent(componentItem) {
+        this._componentRemoveEvent(componentItem);
+    }
+    handleTabFocusEvent(componentItem) {
+        this._componentFocusEvent(componentItem);
+    }
+    handleTabDragStartEvent(x, y, dragListener, componentItem) {
+        this._componentDragStartEvent(x, y, dragListener, componentItem);
+    }
+}
+//# sourceMappingURL=tabs-container.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/controls/transition-indicator.js":
+/*!*************************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/controls/transition-indicator.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   TransitionIndicator: () => (/* binding */ TransitionIndicator)
+/* harmony export */ });
+/** @internal @deprecated To be removed */
+class TransitionIndicator {
+    constructor() {
+        this._element = document.createElement('div');
+        this._element.classList.add("lm_transition_indicator" /* TransitionIndicator */);
+        document.body.appendChild(this._element);
+        this._toElement = null;
+        this._fromDimensions = null;
+        this._totalAnimationDuration = 200;
+        this._animationStartTime = null;
+    }
+    destroy() {
+        this._element.remove();
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    transitionElements(fromElement, toElement) {
+        /**
+         * TODO - This is not quite as cool as expected. Review.
+         */
+        return;
+        // this._toElement = toElement;
+        // this._animationStartTime = now();
+        // this._fromDimensions = this._measure(fromElement);
+        // this._fromDimensions.opacity = 0.8;
+        // this._element.show().css(this._fromDimensions);
+        // animFrame(fnBind(this._nextAnimationFrame, this));
+    }
+    nextAnimationFrame() {
+        // if (this._toElement === null || this._fromDimensions === null || this._animationStartTime === null) {
+        //     throw new UnexpectedNullError('TINAFTD97115');
+        // } else {
+        //     const toDimensions = this.measure(this._toElement);
+        //     const animationProgress = (now() - this._animationStartTime) / this._totalAnimationDuration;
+        //     const currentFrameStyles = {};
+        //     const cssProperty;
+        //     if (animationProgress >= 1) {
+        //         this._element.style.display = 'none';
+        //         return;
+        //     }
+        //     toDimensions.opacity = 0;
+        //     for (const cssProperty in this._fromDimensions) {
+        //         currentFrameStyles[cssProperty] = this._fromDimensions[cssProperty] +
+        //             (toDimensions[cssProperty] - this._fromDimensions[cssProperty]) *
+        //             animationProgress;
+        //     }
+        //     this._element.css(currentFrameStyles);
+        //     animFrame(fnBind(this._nextAnimationFrame, this));
+        // }
+    }
+    measure(element) {
+        const rect = element.getBoundingClientRect();
+        return {
+            left: rect.left,
+            top: rect.top,
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+        };
+    }
+}
+//# sourceMappingURL=transition-indicator.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js":
+/*!*****************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ApiError: () => (/* binding */ ApiError),
+/* harmony export */   BindError: () => (/* binding */ BindError),
+/* harmony export */   ConfigurationError: () => (/* binding */ ConfigurationError),
+/* harmony export */   ExternalError: () => (/* binding */ ExternalError),
+/* harmony export */   PopoutBlockedError: () => (/* binding */ PopoutBlockedError)
+/* harmony export */ });
+/** @public */
+class ExternalError extends Error {
+    /** @internal */
+    constructor(type, message) {
+        super(message);
+        this.type = type;
+    }
+}
+/** @public */
+class ConfigurationError extends ExternalError {
+    /** @internal */
+    constructor(message, node) {
+        super('Configuration', message);
+        this.node = node;
+    }
+}
+/** @public */
+class PopoutBlockedError extends ExternalError {
+    /** @internal */
+    constructor(message) {
+        super('PopoutBlocked', message);
+    }
+}
+/** @public */
+class ApiError extends ExternalError {
+    /** @internal */
+    constructor(message) {
+        super('API', message);
+    }
+}
+/** @public */
+class BindError extends ExternalError {
+    /** @internal */
+    constructor(message) {
+        super('Bind', message);
+    }
+}
+//# sourceMappingURL=external-error.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js":
+/*!*****************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AssertError: () => (/* binding */ AssertError),
+/* harmony export */   UnexpectedNullError: () => (/* binding */ UnexpectedNullError),
+/* harmony export */   UnexpectedUndefinedError: () => (/* binding */ UnexpectedUndefinedError),
+/* harmony export */   UnreachableCaseError: () => (/* binding */ UnreachableCaseError)
+/* harmony export */ });
+/** @internal */
+class InternalError extends Error {
+    constructor(type, code, message) {
+        super(`${type}: ${code}${message === undefined ? '' : ': ' + message}`);
+    }
+}
+/** @internal */
+class AssertError extends InternalError {
+    constructor(code, message) {
+        super('Assert', code, message);
+    }
+}
+/** @internal */
+class UnreachableCaseError extends InternalError {
+    constructor(code, variableValue, message) {
+        super('UnreachableCase', code, `${variableValue}${message === undefined ? '' : ': ' + message}`);
+    }
+}
+/** @internal */
+class UnexpectedNullError extends InternalError {
+    constructor(code, message) {
+        super('UnexpectedNull', code, message);
+    }
+}
+/** @internal */
+class UnexpectedUndefinedError extends InternalError {
+    constructor(code, message) {
+        super('UnexpectedUndefined', code, message);
+    }
+}
+//# sourceMappingURL=internal-error.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/golden-layout.js":
+/*!*********************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/golden-layout.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GoldenLayout: () => (/* binding */ GoldenLayout)
+/* harmony export */ });
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _errors_external_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./errors/external-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/i18n-strings */ "../../node_modules/golden-layout/dist/esm/ts/utils/i18n-strings.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _virtual_layout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./virtual-layout */ "../../node_modules/golden-layout/dist/esm/ts/virtual-layout.js");
+
+
+
+
+
+
+/** @public */
+class GoldenLayout extends _virtual_layout__WEBPACK_IMPORTED_MODULE_0__.VirtualLayout {
+    /** @internal */
+    constructor(configOrOptionalContainer, containerOrBindComponentEventHandler, unbindComponentEventHandler) {
+        super(configOrOptionalContainer, containerOrBindComponentEventHandler, unbindComponentEventHandler, true);
+        /** @internal */
+        this._componentTypesMap = new Map();
+        /** @internal */
+        this._registeredComponentMap = new Map();
+        /** @internal */
+        this._virtuableComponentMap = new Map();
+        /** @internal */
+        this._containerVirtualRectingRequiredEventListener = (container, width, height) => this.handleContainerVirtualRectingRequiredEvent(container, width, height);
+        /** @internal */
+        this._containerVirtualVisibilityChangeRequiredEventListener = (container, visible) => this.handleContainerVirtualVisibilityChangeRequiredEvent(container, visible);
+        /** @internal */
+        this._containerVirtualZIndexChangeRequiredEventListener = (container, logicalZIndex, defaultZIndex) => this.handleContainerVirtualZIndexChangeRequiredEvent(container, logicalZIndex, defaultZIndex);
+        // we told VirtualLayout to not call init() (skipInit set to true) so that Golden Layout can initialise its properties before init is called
+        if (!this.deprecatedConstructor) {
+            this.init();
+        }
+    }
+    /**
+     * Register a new component type with the layout manager.
+     *
+     * @deprecated See {@link https://stackoverflow.com/questions/40922531/how-to-check-if-a-javascript-function-is-a-constructor}
+     * instead use {@link (GoldenLayout:class).registerComponentConstructor}
+     * or {@link (GoldenLayout:class).registerComponentFactoryFunction}
+     */
+    registerComponent(name, componentConstructorOrFactoryFtn, virtual = false) {
+        if (typeof componentConstructorOrFactoryFtn !== 'function') {
+            throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.ApiError('registerComponent() componentConstructorOrFactoryFtn parameter is not a function');
+        }
+        else {
+            if (componentConstructorOrFactoryFtn.hasOwnProperty('prototype')) {
+                const componentConstructor = componentConstructorOrFactoryFtn;
+                this.registerComponentConstructor(name, componentConstructor, virtual);
+            }
+            else {
+                const componentFactoryFtn = componentConstructorOrFactoryFtn;
+                this.registerComponentFactoryFunction(name, componentFactoryFtn, virtual);
+            }
+        }
+    }
+    /**
+     * Register a new component type with the layout manager.
+     */
+    registerComponentConstructor(typeName, componentConstructor, virtual = false) {
+        if (typeof componentConstructor !== 'function') {
+            throw new Error(_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[1 /* PleaseRegisterAConstructorFunction */]);
+        }
+        const existingComponentType = this._componentTypesMap.get(typeName);
+        if (existingComponentType !== undefined) {
+            throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.BindError(`${_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[3 /* ComponentIsAlreadyRegistered */]}: ${typeName}`);
+        }
+        this._componentTypesMap.set(typeName, {
+            constructor: componentConstructor,
+            factoryFunction: undefined,
+            virtual,
+        });
+    }
+    /**
+     * Register a new component with the layout manager.
+     */
+    registerComponentFactoryFunction(typeName, componentFactoryFunction, virtual = false) {
+        if (typeof componentFactoryFunction !== 'function') {
+            throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.BindError('Please register a constructor function');
+        }
+        const existingComponentType = this._componentTypesMap.get(typeName);
+        if (existingComponentType !== undefined) {
+            throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.BindError(`${_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[3 /* ComponentIsAlreadyRegistered */]}: ${typeName}`);
+        }
+        this._componentTypesMap.set(typeName, {
+            constructor: undefined,
+            factoryFunction: componentFactoryFunction,
+            virtual,
+        });
+    }
+    /**
+     * Register a component function with the layout manager. This function should
+     * return a constructor for a component based on a config.
+     * This function will be called if a component type with the required name is not already registered.
+     * It is recommended that applications use the {@link (VirtualLayout:class).getComponentEvent} and
+     * {@link (VirtualLayout:class).releaseComponentEvent} instead of registering a constructor callback
+     * @deprecated use {@link (GoldenLayout:class).registerGetComponentConstructorCallback}
+     */
+    registerComponentFunction(callback) {
+        this.registerGetComponentConstructorCallback(callback);
+    }
+    /**
+     * Register a callback closure with the layout manager which supplies a Component Constructor.
+     * This callback should return a constructor for a component based on a config.
+     * This function will be called if a component type with the required name is not already registered.
+     * It is recommended that applications use the {@link (VirtualLayout:class).getComponentEvent} and
+     * {@link (VirtualLayout:class).releaseComponentEvent} instead of registering a constructor callback
+     */
+    registerGetComponentConstructorCallback(callback) {
+        if (typeof callback !== 'function') {
+            throw new Error('Please register a callback function');
+        }
+        if (this._getComponentConstructorFtn !== undefined) {
+            console.warn('Multiple component functions are being registered.  Only the final registered function will be used.');
+        }
+        this._getComponentConstructorFtn = callback;
+    }
+    getRegisteredComponentTypeNames() {
+        const typeNamesIterableIterator = this._componentTypesMap.keys();
+        return Array.from(typeNamesIterableIterator);
+    }
+    /**
+     * Returns a previously registered component instantiator.  Attempts to utilize registered
+     * component type by first, then falls back to the component constructor callback function (if registered).
+     * If neither gets an instantiator, then returns `undefined`.
+     * Note that `undefined` will return if config.componentType is not a string
+     *
+     * @param config - The item config
+     * @public
+     */
+    getComponentInstantiator(config) {
+        let instantiator;
+        const typeName = _config_resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedComponentItemConfig.resolveComponentTypeName(config);
+        if (typeName !== undefined) {
+            instantiator = this._componentTypesMap.get(typeName);
+        }
+        if (instantiator === undefined) {
+            if (this._getComponentConstructorFtn !== undefined) {
+                instantiator = {
+                    constructor: this._getComponentConstructorFtn(config),
+                    factoryFunction: undefined,
+                    virtual: false,
+                };
+            }
+        }
+        return instantiator;
+    }
+    /** @internal */
+    bindComponent(container, itemConfig) {
+        let instantiator;
+        const typeName = _config_resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedComponentItemConfig.resolveComponentTypeName(itemConfig);
+        if (typeName !== undefined) {
+            instantiator = this._componentTypesMap.get(typeName);
+        }
+        if (instantiator === undefined) {
+            if (this._getComponentConstructorFtn !== undefined) {
+                instantiator = {
+                    constructor: this._getComponentConstructorFtn(itemConfig),
+                    factoryFunction: undefined,
+                    virtual: false,
+                };
+            }
+        }
+        let result;
+        if (instantiator !== undefined) {
+            const virtual = instantiator.virtual;
+            // handle case where component is obtained by name or component constructor callback
+            let componentState;
+            if (itemConfig.componentState === undefined) {
+                componentState = undefined;
+            }
+            else {
+                // make copy
+                componentState = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.deepExtendValue)({}, itemConfig.componentState);
+            }
+            let component;
+            const componentConstructor = instantiator.constructor;
+            if (componentConstructor !== undefined) {
+                component = new componentConstructor(container, componentState, virtual);
+            }
+            else {
+                const factoryFunction = instantiator.factoryFunction;
+                if (factoryFunction !== undefined) {
+                    component = factoryFunction(container, componentState, virtual);
+                }
+                else {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.AssertError('LMBCFFU10008');
+                }
+            }
+            if (virtual) {
+                if (component === undefined) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('GLBCVCU988774');
+                }
+                else {
+                    const virtuableComponent = component;
+                    const componentRootElement = virtuableComponent.rootHtmlElement;
+                    if (componentRootElement === undefined) {
+                        throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.BindError(`${_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[5 /* VirtualComponentDoesNotHaveRootHtmlElement */]}: ${typeName}`);
+                    }
+                    else {
+                        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.ensureElementPositionAbsolute)(componentRootElement);
+                        this.container.appendChild(componentRootElement);
+                        this._virtuableComponentMap.set(container, virtuableComponent);
+                        container.virtualRectingRequiredEvent = this._containerVirtualRectingRequiredEventListener;
+                        container.virtualVisibilityChangeRequiredEvent = this._containerVirtualVisibilityChangeRequiredEventListener;
+                        container.virtualZIndexChangeRequiredEvent = this._containerVirtualZIndexChangeRequiredEventListener;
+                    }
+                }
+            }
+            this._registeredComponentMap.set(container, component);
+            result = {
+                virtual: instantiator.virtual,
+                component,
+            };
+        }
+        else {
+            // Use getComponentEvent
+            result = super.bindComponent(container, itemConfig);
+        }
+        return result;
+    }
+    /** @internal */
+    unbindComponent(container, virtual, component) {
+        const registeredComponent = this._registeredComponentMap.get(container);
+        if (registeredComponent === undefined) {
+            super.unbindComponent(container, virtual, component); // was not created from registration so use virtual unbind events
+        }
+        else {
+            const virtuableComponent = this._virtuableComponentMap.get(container);
+            if (virtuableComponent !== undefined) {
+                const componentRootElement = virtuableComponent.rootHtmlElement;
+                if (componentRootElement === undefined) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.AssertError('GLUC77743', container.title);
+                }
+                else {
+                    this.container.removeChild(componentRootElement);
+                    this._virtuableComponentMap.delete(container);
+                }
+            }
+        }
+    }
+    fireBeforeVirtualRectingEvent(count) {
+        this._goldenLayoutBoundingClientRect = this.container.getBoundingClientRect();
+        super.fireBeforeVirtualRectingEvent(count);
+    }
+    /** @internal */
+    handleContainerVirtualRectingRequiredEvent(container, width, height) {
+        const virtuableComponent = this._virtuableComponentMap.get(container);
+        if (virtuableComponent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('GLHCSCE55933');
+        }
+        else {
+            const rootElement = virtuableComponent.rootHtmlElement;
+            if (rootElement === undefined) {
+                throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.BindError(_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[4 /* ComponentIsNotVirtuable */] + ' ' + container.title);
+            }
+            else {
+                const containerBoundingClientRect = container.element.getBoundingClientRect();
+                const left = containerBoundingClientRect.left - this._goldenLayoutBoundingClientRect.left;
+                rootElement.style.left = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(left);
+                const top = containerBoundingClientRect.top - this._goldenLayoutBoundingClientRect.top;
+                rootElement.style.top = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(top);
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementWidth)(rootElement, width);
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementHeight)(rootElement, height);
+            }
+        }
+    }
+    /** @internal */
+    handleContainerVirtualVisibilityChangeRequiredEvent(container, visible) {
+        const virtuableComponent = this._virtuableComponentMap.get(container);
+        if (virtuableComponent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('GLHCVVCRE55934');
+        }
+        else {
+            const rootElement = virtuableComponent.rootHtmlElement;
+            if (rootElement === undefined) {
+                throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.BindError(_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[4 /* ComponentIsNotVirtuable */] + ' ' + container.title);
+            }
+            else {
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementDisplayVisibility)(rootElement, visible);
+            }
+        }
+    }
+    /** @internal */
+    handleContainerVirtualZIndexChangeRequiredEvent(container, logicalZIndex, defaultZIndex) {
+        const virtuableComponent = this._virtuableComponentMap.get(container);
+        if (virtuableComponent === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_5__.UnexpectedUndefinedError('GLHCVZICRE55935');
+        }
+        else {
+            const rootElement = virtuableComponent.rootHtmlElement;
+            if (rootElement === undefined) {
+                throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_1__.BindError(_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[4 /* ComponentIsNotVirtuable */] + ' ' + container.title);
+            }
+            else {
+                rootElement.style.zIndex = defaultZIndex;
+            }
+        }
+    }
+}
+//# sourceMappingURL=golden-layout.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/items/component-item.js":
+/*!****************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/items/component-item.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ComponentItem: () => (/* binding */ ComponentItem)
+/* harmony export */ });
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _container_component_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../container/component-container */ "../../node_modules/golden-layout/dist/esm/ts/container/component-container.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _content_item__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./content-item */ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js");
+
+
+
+
+
+
+/** @public */
+class ComponentItem extends _content_item__WEBPACK_IMPORTED_MODULE_0__.ContentItem {
+    /** @internal */
+    constructor(layoutManager, config, 
+    /** @internal */
+    _parentItem) {
+        super(layoutManager, config, _parentItem, document.createElement('div'));
+        this._parentItem = _parentItem;
+        /** @internal */
+        this._focused = false;
+        this.isComponent = true;
+        this._reorderEnabled = config.reorderEnabled;
+        this.applyUpdatableConfig(config);
+        this._initialWantMaximise = config.maximised;
+        const containerElement = document.createElement('div');
+        containerElement.classList.add("lm_content" /* Content */);
+        this.element.appendChild(containerElement);
+        this._container = new _container_component_container__WEBPACK_IMPORTED_MODULE_1__.ComponentContainer(config, this, layoutManager, containerElement, (itemConfig) => this.handleUpdateItemConfigEvent(itemConfig), () => this.show(), () => this.hide(), (suppressEvent) => this.focus(suppressEvent), (suppressEvent) => this.blur(suppressEvent));
+    }
+    /** @internal @deprecated use {@link (ComponentItem:class).componentType} */
+    get componentName() { return this._container.componentType; }
+    get componentType() { return this._container.componentType; }
+    get reorderEnabled() { return this._reorderEnabled; }
+    /** @internal */
+    get initialWantMaximise() { return this._initialWantMaximise; }
+    get component() { return this._container.component; }
+    get container() { return this._container; }
+    get parentItem() { return this._parentItem; }
+    get headerConfig() { return this._headerConfig; }
+    get title() { return this._title; }
+    get tab() { return this._tab; }
+    get focused() { return this._focused; }
+    /** @internal */
+    destroy() {
+        this._container.destroy();
+        super.destroy();
+    }
+    applyUpdatableConfig(config) {
+        this.setTitle(config.title);
+        this._headerConfig = config.header;
+    }
+    toConfig() {
+        const stateRequestEvent = this._container.stateRequestEvent;
+        const state = stateRequestEvent === undefined ? this._container.state : stateRequestEvent();
+        const result = {
+            type: _utils_types__WEBPACK_IMPORTED_MODULE_2__.ItemType.component,
+            content: [],
+            size: this.size,
+            sizeUnit: this.sizeUnit,
+            minSize: this.minSize,
+            minSizeUnit: this.minSizeUnit,
+            id: this.id,
+            maximised: false,
+            isClosable: this.isClosable,
+            reorderEnabled: this._reorderEnabled,
+            title: this._title,
+            header: _config_resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedHeaderedItemConfig.Header.createCopy(this._headerConfig),
+            componentType: _config_resolved_config__WEBPACK_IMPORTED_MODULE_3__.ResolvedComponentItemConfig.copyComponentType(this.componentType),
+            componentState: state,
+        };
+        return result;
+    }
+    close() {
+        if (this.parent === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_4__.UnexpectedNullError('CIC68883');
+        }
+        else {
+            this.parent.removeChild(this, false);
+        }
+    }
+    // Used by Drag Proxy
+    /** @internal */
+    enterDragMode(width, height) {
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementWidth)(this.element, width);
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementHeight)(this.element, height);
+        this._container.enterDragMode(width, height);
+    }
+    /** @internal */
+    exitDragMode() {
+        this._container.exitDragMode();
+    }
+    /** @internal */
+    enterStackMaximised() {
+        this._container.enterStackMaximised();
+    }
+    /** @internal */
+    exitStackMaximised() {
+        this._container.exitStackMaximised();
+    }
+    // Used by Drag Proxy
+    /** @internal */
+    drag() {
+        this._container.drag();
+    }
+    /** @internal */
+    updateSize(force) {
+        this.updateNodeSize(force);
+    }
+    /** @internal */
+    init() {
+        this.updateNodeSize(false);
+        super.init();
+        this._container.emit('open');
+        this.initContentItems();
+    }
+    /**
+     * Set this component's title
+     *
+     * @public
+     * @param title -
+     */
+    setTitle(title) {
+        this._title = title;
+        this.emit('titleChanged', title);
+        this.emit('stateChanged');
+    }
+    setTab(tab) {
+        this._tab = tab;
+        this.emit('tab', tab);
+        this._container.setTab(tab);
+    }
+    /** @internal */
+    hide() {
+        super.hide();
+        this._container.setVisibility(false);
+    }
+    /** @internal */
+    show() {
+        super.show();
+        this._container.setVisibility(true);
+    }
+    /**
+     * Focuses the item if it is not already focused
+     */
+    focus(suppressEvent = false) {
+        this.parentItem.setActiveComponentItem(this, true, suppressEvent);
+    }
+    /** @internal */
+    setFocused(suppressEvent) {
+        this._focused = true;
+        this.tab.setFocused();
+        if (!suppressEvent) {
+            this.emitBaseBubblingEvent('focus');
+        }
+    }
+    /**
+     * Blurs (defocuses) the item if it is focused
+     */
+    blur(suppressEvent = false) {
+        if (this._focused) {
+            this.layoutManager.setFocusedComponentItem(undefined, suppressEvent);
+        }
+    }
+    /** @internal */
+    setBlurred(suppressEvent) {
+        this._focused = false;
+        this.tab.setBlurred();
+        if (!suppressEvent) {
+            this.emitBaseBubblingEvent('blur');
+        }
+    }
+    /** @internal */
+    setParent(parent) {
+        this._parentItem = parent;
+        super.setParent(parent);
+    }
+    /** @internal */
+    handleUpdateItemConfigEvent(itemConfig) {
+        this.applyUpdatableConfig(itemConfig);
+    }
+    /** @internal */
+    updateNodeSize(force) {
+        if (this.element.style.display !== 'none') {
+            // Do not update size of hidden components to prevent unwanted reflows
+            const { width, height } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.getElementWidthAndHeight)(this.element);
+            this._container.setSizeToNodeSize(width, height, force);
+        }
+    }
+}
+//# sourceMappingURL=component-item.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/items/component-parentable-item.js":
+/*!***************************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/items/component-parentable-item.js ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ComponentParentableItem: () => (/* binding */ ComponentParentableItem)
+/* harmony export */ });
+/* harmony import */ var _content_item__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./content-item */ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js");
+
+class ComponentParentableItem extends _content_item__WEBPACK_IMPORTED_MODULE_0__.ContentItem {
+    constructor() {
+        super(...arguments);
+        /** @internal */
+        this._focused = false;
+    }
+    get focused() { return this._focused; }
+    /** @internal */
+    setFocusedValue(value) {
+        this._focused = value;
+    }
+}
+//# sourceMappingURL=component-parentable-item.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js":
+/*!**************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/items/content-item.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ContentItem: () => (/* binding */ ContentItem)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+
+
+/**
+ * This is the baseclass that all content items inherit from.
+ * Most methods provide a subset of what the sub-classes do.
+ *
+ * It also provides a number of functions for tree traversal
+ * @public
+ */
+class ContentItem extends _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    /** @internal */
+    constructor(layoutManager, config, 
+    /** @internal */
+    _parent, 
+    /** @internal */
+    _element) {
+        super();
+        this.layoutManager = layoutManager;
+        this._parent = _parent;
+        this._element = _element;
+        /** @internal */
+        this._popInParentIds = [];
+        this._type = config.type;
+        this._id = config.id;
+        this._isInitialised = false;
+        this.isGround = false;
+        this.isRow = false;
+        this.isColumn = false;
+        this.isStack = false;
+        this.isComponent = false;
+        this.size = config.size;
+        this.sizeUnit = config.sizeUnit;
+        this.minSize = config.minSize;
+        this.minSizeUnit = config.minSizeUnit;
+        this._isClosable = config.isClosable;
+        this._pendingEventPropagations = {};
+        this._throttledEvents = ['stateChanged'];
+        this._contentItems = this.createContentItems(config.content);
+    }
+    get type() { return this._type; }
+    get id() { return this._id; }
+    set id(value) { this._id = value; }
+    /** @internal */
+    get popInParentIds() { return this._popInParentIds; }
+    get parent() { return this._parent; }
+    get contentItems() { return this._contentItems; }
+    get isClosable() { return this._isClosable; }
+    get element() { return this._element; }
+    get isInitialised() { return this._isInitialised; }
+    static isStack(item) {
+        return item.isStack;
+    }
+    static isComponentItem(item) {
+        return item.isComponent;
+    }
+    static isComponentParentableItem(item) {
+        return item.isStack || item.isGround;
+    }
+    /**
+     * Removes a child node (and its children) from the tree
+     * @param contentItem - The child item to remove
+     * @param keepChild - Whether to destroy the removed item
+     */
+    removeChild(contentItem, keepChild = false) {
+        /*
+         * Get the position of the item that's to be removed within all content items this node contains
+         */
+        const index = this._contentItems.indexOf(contentItem);
+        /*
+         * Make sure the content item to be removed is actually a child of this item
+         */
+        if (index === -1) {
+            throw new Error('Can\'t remove child item. Unknown content item');
+        }
+        /**
+         * Call destroy on the content item.
+         * All children are destroyed as well
+         */
+        if (!keepChild) {
+            this._contentItems[index].destroy();
+        }
+        /**
+         * Remove the content item from this nodes array of children
+         */
+        this._contentItems.splice(index, 1);
+        /**
+         * If this node still contains other content items, adjust their size
+         */
+        if (this._contentItems.length > 0) {
+            this.updateSize(false);
+        }
+        else {
+            /**
+             * If this was the last content item, remove this node as well
+             */
+            if (!this.isGround && this._isClosable === true) {
+                if (this._parent === null) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('CIUC00874');
+                }
+                else {
+                    this._parent.removeChild(this);
+                }
+            }
+        }
+    }
+    /**
+     * Sets up the tree structure for the newly added child
+     * The responsibility for the actual DOM manipulations lies
+     * with the concrete item
+     *
+     * @param contentItem -
+     * @param index - If omitted item will be appended
+     * @param suspendResize - Used by descendent implementations
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    addChild(contentItem, index, suspendResize) {
+        index !== null && index !== void 0 ? index : (index = this._contentItems.length);
+        this._contentItems.splice(index, 0, contentItem);
+        contentItem.setParent(this);
+        if (this._isInitialised === true && contentItem._isInitialised === false) {
+            contentItem.init();
+        }
+        return index;
+    }
+    /**
+     * Replaces oldChild with newChild
+     * @param oldChild -
+     * @param newChild -
+     * @internal
+     */
+    replaceChild(oldChild, newChild, destroyOldChild = false) {
+        // Do not try to replace ComponentItem - will not work
+        const index = this._contentItems.indexOf(oldChild);
+        const parentNode = oldChild._element.parentNode;
+        if (index === -1) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.AssertError('CIRCI23232', 'Can\'t replace child. oldChild is not child of this');
+        }
+        if (parentNode === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('CIRCP23232');
+        }
+        else {
+            parentNode.replaceChild(newChild._element, oldChild._element);
+            /*
+            * Optionally destroy the old content item
+            */
+            if (destroyOldChild === true) {
+                oldChild._parent = null;
+                oldChild.destroy(); // will now also destroy all children of oldChild
+            }
+            /*
+            * Wire the new contentItem into the tree
+            */
+            this._contentItems[index] = newChild;
+            newChild.setParent(this);
+            // newChild inherits the sizes from the old child:
+            newChild.size = oldChild.size;
+            newChild.sizeUnit = oldChild.sizeUnit;
+            newChild.minSize = oldChild.minSize;
+            newChild.minSizeUnit = oldChild.minSizeUnit;
+            //TODO This doesn't update the config... refactor to leave item nodes untouched after creation
+            if (newChild._parent === null) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('CIRCNC45699');
+            }
+            else {
+                if (newChild._parent._isInitialised === true && newChild._isInitialised === false) {
+                    newChild.init();
+                }
+                this.updateSize(false);
+            }
+        }
+    }
+    /**
+     * Convenience method.
+     * Shorthand for this.parent.removeChild( this )
+     */
+    remove() {
+        if (this._parent === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('CIR11110');
+        }
+        else {
+            this._parent.removeChild(this);
+        }
+    }
+    /**
+     * Removes the component from the layout and creates a new
+     * browser window with the component and its children inside
+     */
+    popout() {
+        const parentId = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.getUniqueId)();
+        const browserPopout = this.layoutManager.createPopoutFromContentItem(this, undefined, parentId, undefined);
+        this.emitBaseBubblingEvent('stateChanged');
+        return browserPopout;
+    }
+    /** @internal */
+    calculateConfigContent() {
+        const contentItems = this._contentItems;
+        const count = contentItems.length;
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            const item = contentItems[i];
+            result[i] = item.toConfig();
+        }
+        return result;
+    }
+    /** @internal */
+    highlightDropZone(x, y, area) {
+        const dropTargetIndicator = this.layoutManager.dropTargetIndicator;
+        if (dropTargetIndicator === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('ACIHDZ5593');
+        }
+        else {
+            dropTargetIndicator.highlightArea(area, 1);
+        }
+    }
+    /** @internal */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onDrop(contentItem, area) {
+        this.addChild(contentItem);
+    }
+    /** @internal */
+    show() {
+        this.layoutManager.beginSizeInvalidation();
+        try {
+            // Not sure why showAllActiveContentItems() was called. GoldenLayout seems to work fine without it.  Left commented code
+            // in source in case a reason for it becomes apparent.
+            // this.layoutManager.showAllActiveContentItems();
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.setElementDisplayVisibility)(this._element, true);
+            // this.layoutManager.updateSizeFromContainer();
+            for (let i = 0; i < this._contentItems.length; i++) {
+                this._contentItems[i].show();
+            }
+        }
+        finally {
+            this.layoutManager.endSizeInvalidation();
+        }
+    }
+    /**
+     * Destroys this item ands its children
+     * @internal
+     */
+    destroy() {
+        for (let i = 0; i < this._contentItems.length; i++) {
+            this._contentItems[i].destroy();
+        }
+        this._contentItems = [];
+        this.emitBaseBubblingEvent('beforeItemDestroyed');
+        this._element.remove();
+        this.emitBaseBubblingEvent('itemDestroyed');
+    }
+    /**
+     * Returns the area the component currently occupies
+     * @internal
+     */
+    getElementArea(element) {
+        element = element !== null && element !== void 0 ? element : this._element;
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + document.body.scrollTop;
+        const left = rect.left + document.body.scrollLeft;
+        const width = rect.width;
+        const height = rect.height;
+        return {
+            x1: left,
+            y1: top,
+            x2: left + width,
+            y2: top + height,
+            surface: width * height,
+            contentItem: this
+        };
+    }
+    /**
+     * The tree of content items is created in two steps: First all content items are instantiated,
+     * then init is called recursively from top to bottem. This is the basic init function,
+     * it can be used, extended or overwritten by the content items
+     *
+     * Its behaviour depends on the content item
+     * @internal
+     */
+    init() {
+        this._isInitialised = true;
+        this.emitBaseBubblingEvent('itemCreated');
+        this.emitUnknownBubblingEvent(this.type + 'Created');
+    }
+    /** @internal */
+    setParent(parent) {
+        this._parent = parent;
+    }
+    /** @internal */
+    addPopInParentId(id) {
+        if (!this.popInParentIds.includes(id)) {
+            this.popInParentIds.push(id);
+        }
+    }
+    /** @internal */
+    initContentItems() {
+        for (let i = 0; i < this._contentItems.length; i++) {
+            this._contentItems[i].init();
+        }
+    }
+    /** @internal */
+    hide() {
+        this.layoutManager.beginSizeInvalidation();
+        try {
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.setElementDisplayVisibility)(this._element, false);
+            // this.layoutManager.updateSizeFromContainer();
+        }
+        finally {
+            this.layoutManager.endSizeInvalidation();
+        }
+    }
+    /** @internal */
+    updateContentItemsSize(force) {
+        for (let i = 0; i < this._contentItems.length; i++) {
+            this._contentItems[i].updateSize(force);
+        }
+    }
+    /**
+     * creates all content items for this node at initialisation time
+     * PLEASE NOTE, please see addChild for adding contentItems at runtime
+     * @internal
+     */
+    createContentItems(content) {
+        const count = content.length;
+        const result = new Array(count);
+        for (let i = 0; i < content.length; i++) {
+            result[i] = this.layoutManager.createContentItem(content[i], this);
+        }
+        return result;
+    }
+    /**
+     * Called for every event on the item tree. Decides whether the event is a bubbling
+     * event and propagates it to its parent
+     *
+     * @param name - The name of the event
+     * @param event -
+     * @internal
+     */
+    propagateEvent(name, args) {
+        if (args.length === 1) {
+            const event = args[0];
+            if (event instanceof _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter.BubblingEvent &&
+                event.isPropagationStopped === false &&
+                this._isInitialised === true) {
+                /**
+                 * In some cases (e.g. if an element is created from a DragSource) it
+                 * doesn't have a parent and is not a child of GroundItem. If that's the case
+                 * propagate the bubbling event from the top level of the substree directly
+                 * to the layoutManager
+                 */
+                if (this.isGround === false && this._parent) {
+                    this._parent.emitUnknown(name, event);
+                }
+                else {
+                    this.scheduleEventPropagationToLayoutManager(name, event);
+                }
+            }
+        }
+    }
+    tryBubbleEvent(name, args) {
+        if (args.length === 1) {
+            const event = args[0];
+            if (event instanceof _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter.BubblingEvent &&
+                event.isPropagationStopped === false &&
+                this._isInitialised === true) {
+                /**
+                 * In some cases (e.g. if an element is created from a DragSource) it
+                 * doesn't have a parent and is not a child of GroundItem. If that's the case
+                 * propagate the bubbling event from the top level of the substree directly
+                 * to the layoutManager
+                 */
+                if (this.isGround === false && this._parent) {
+                    this._parent.emitUnknown(name, event);
+                }
+                else {
+                    this.scheduleEventPropagationToLayoutManager(name, event);
+                }
+            }
+        }
+    }
+    /**
+     * All raw events bubble up to the Ground element. Some events that
+     * are propagated to - and emitted by - the layoutManager however are
+     * only string-based, batched and sanitized to make them more usable
+     *
+     * @param name - The name of the event
+     * @internal
+     */
+    scheduleEventPropagationToLayoutManager(name, event) {
+        if (this._throttledEvents.indexOf(name) === -1) {
+            this.layoutManager.emitUnknown(name, event);
+        }
+        else {
+            if (this._pendingEventPropagations[name] !== true) {
+                this._pendingEventPropagations[name] = true;
+                globalThis.requestAnimationFrame(() => this.propagateEventToLayoutManager(name, event));
+            }
+        }
+    }
+    /**
+     * Callback for events scheduled by _scheduleEventPropagationToLayoutManager
+     *
+     * @param name - The name of the event
+     * @internal
+     */
+    propagateEventToLayoutManager(name, event) {
+        this._pendingEventPropagations[name] = false;
+        this.layoutManager.emitUnknown(name, event);
+    }
+}
+//# sourceMappingURL=content-item.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/items/ground-item.js":
+/*!*************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/items/ground-item.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GroundItem: () => (/* binding */ GroundItem)
+/* harmony export */ });
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _component_item__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./component-item */ "../../node_modules/golden-layout/dist/esm/ts/items/component-item.js");
+/* harmony import */ var _component_parentable_item__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./component-parentable-item */ "../../node_modules/golden-layout/dist/esm/ts/items/component-parentable-item.js");
+/* harmony import */ var _content_item__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./content-item */ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js");
+/* harmony import */ var _row_or_column__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./row-or-column */ "../../node_modules/golden-layout/dist/esm/ts/items/row-or-column.js");
+
+
+
+
+
+
+
+
+
+/**
+ * GroundItem is the ContentItem whose one child is the root ContentItem (Root is planted in Ground).
+ * (Previously it was called root however this was incorrect as its child is the root item)
+ * There is only one instance of GroundItem and it is automatically created by the Layout Manager
+ * @internal
+ */
+class GroundItem extends _component_parentable_item__WEBPACK_IMPORTED_MODULE_0__.ComponentParentableItem {
+    constructor(layoutManager, rootItemConfig, containerElement) {
+        super(layoutManager, _config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedGroundItemConfig.create(rootItemConfig), null, GroundItem.createElement(document));
+        this.isGround = true;
+        this._childElementContainer = this.element;
+        this._containerElement = containerElement;
+        // insert before any pre-existing content elements
+        let before = null;
+        while (true) {
+            const prev = before ? before.previousSibling : this._containerElement.lastChild;
+            if (prev instanceof Element
+                && prev.classList.contains("lm_content" /* Content */)) {
+                before = prev;
+            }
+            else {
+                break;
+            }
+        }
+        this._containerElement.insertBefore(this.element, before);
+    }
+    init() {
+        if (this.isInitialised === true)
+            return;
+        this.updateNodeSize();
+        for (let i = 0; i < this.contentItems.length; i++) {
+            this._childElementContainer.appendChild(this.contentItems[i].element);
+        }
+        super.init();
+        this.initContentItems();
+    }
+    /**
+     * Loads a new Layout
+     * Internal only.  To load a new layout with API, use {@link (LayoutManager:class).loadLayout}
+     */
+    loadRoot(rootItemConfig) {
+        // Remove existing root if it exists
+        this.clearRoot();
+        if (rootItemConfig !== undefined) {
+            const rootContentItem = this.layoutManager.createAndInitContentItem(rootItemConfig, this);
+            this.addChild(rootContentItem, 0);
+        }
+    }
+    clearRoot() {
+        // Remove existing root if it exists
+        const contentItems = this.contentItems;
+        switch (contentItems.length) {
+            case 0: {
+                return;
+            }
+            case 1: {
+                const existingRootContentItem = contentItems[0];
+                existingRootContentItem.remove();
+                return;
+            }
+            default: {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('GILR07721');
+            }
+        }
+    }
+    /**
+     * Adds a ContentItem child to root ContentItem.
+     * Internal only.  To load a add with API, use {@link (LayoutManager:class).addItem}
+     * @returns -1 if added as root otherwise index in root ContentItem's content
+     */
+    addItem(itemConfig, index) {
+        this.layoutManager.checkMinimiseMaximisedStack();
+        const resolvedItemConfig = _config_config__WEBPACK_IMPORTED_MODULE_3__.ItemConfig.resolve(itemConfig, false);
+        let parent;
+        if (this.contentItems.length > 0) {
+            parent = this.contentItems[0];
+        }
+        else {
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            parent = this;
+        }
+        if (parent.isComponent) {
+            throw new Error('Cannot add item as child to ComponentItem');
+        }
+        else {
+            const contentItem = this.layoutManager.createAndInitContentItem(resolvedItemConfig, parent);
+            index = parent.addChild(contentItem, index);
+            return (parent === this) ? -1 : index;
+        }
+    }
+    loadComponentAsRoot(itemConfig) {
+        // Remove existing root if it exists
+        this.clearRoot();
+        const resolvedItemConfig = _config_config__WEBPACK_IMPORTED_MODULE_3__.ItemConfig.resolve(itemConfig, false);
+        if (resolvedItemConfig.maximised) {
+            throw new Error('Root Component cannot be maximised');
+        }
+        else {
+            const rootContentItem = new _component_item__WEBPACK_IMPORTED_MODULE_4__.ComponentItem(this.layoutManager, resolvedItemConfig, this);
+            rootContentItem.init();
+            this.addChild(rootContentItem, 0);
+        }
+    }
+    /**
+     * Adds a Root ContentItem.
+     * Internal only.  To replace Root ContentItem with API, use {@link (LayoutManager:class).loadLayout}
+     */
+    addChild(contentItem, index) {
+        if (this.contentItems.length > 0) {
+            throw new Error('Ground node can only have a single child');
+        }
+        else {
+            // contentItem = this.layoutManager._$normalizeContentItem(contentItem, this);
+            this._childElementContainer.appendChild(contentItem.element);
+            index = super.addChild(contentItem, index);
+            this.updateSize(false);
+            this.emitBaseBubblingEvent('stateChanged');
+            return index;
+        }
+    }
+    /** @internal */
+    calculateConfigContent() {
+        const contentItems = this.contentItems;
+        const count = contentItems.length;
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            const item = contentItems[i];
+            const itemConfig = item.toConfig();
+            if (_config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedRootItemConfig.isRootItemConfig(itemConfig)) {
+                result[i] = itemConfig;
+            }
+            else {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('RCCC66832');
+            }
+        }
+        return result;
+    }
+    /** @internal */
+    setSize(width, height) {
+        if (width === undefined || height === undefined) {
+            this.updateSize(false); // For backwards compatibility with v1.x API
+        }
+        else {
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementWidth)(this.element, width);
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementHeight)(this.element, height);
+            // GroundItem can be empty
+            if (this.contentItems.length > 0) {
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementWidth)(this.contentItems[0].element, width);
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementHeight)(this.contentItems[0].element, height);
+            }
+            this.updateContentItemsSize(false);
+        }
+    }
+    /**
+     * Adds a Root ContentItem.
+     * Internal only.  To replace Root ContentItem with API, use {@link (LayoutManager:class).updateRootSize}
+     */
+    updateSize(force) {
+        this.layoutManager.beginVirtualSizedContainerAdding();
+        try {
+            this.updateNodeSize();
+            this.updateContentItemsSize(force);
+        }
+        finally {
+            this.layoutManager.endVirtualSizedContainerAdding();
+        }
+    }
+    createSideAreas() {
+        const areaSize = 50;
+        const oppositeSides = GroundItem.Area.oppositeSides;
+        const result = new Array(Object.keys(oppositeSides).length);
+        let idx = 0;
+        for (const key in oppositeSides) {
+            const side = key;
+            const area = this.getElementArea();
+            if (area === null) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnexpectedNullError('RCSA77553');
+            }
+            else {
+                area.side = side;
+                if (oppositeSides[side][1] === '2')
+                    area[side] = area[oppositeSides[side]] - areaSize;
+                else
+                    area[side] = area[oppositeSides[side]] + areaSize;
+                area.surface = (area.x2 - area.x1) * (area.y2 - area.y1);
+                result[idx++] = area;
+            }
+        }
+        return result;
+    }
+    highlightDropZone(x, y, area) {
+        this.layoutManager.tabDropPlaceholder.remove();
+        super.highlightDropZone(x, y, area);
+    }
+    onDrop(contentItem, area) {
+        if (contentItem.isComponent) {
+            const itemConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedStackItemConfig.createDefault();
+            // since ResolvedItemConfig.contentItems not set up, we need to add header from Component
+            const component = contentItem;
+            itemConfig.header = _config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedHeaderedItemConfig.Header.createCopy(component.headerConfig);
+            const stack = this.layoutManager.createAndInitContentItem(itemConfig, this);
+            stack.addChild(contentItem);
+            contentItem = stack;
+        }
+        if (this.contentItems.length === 0) {
+            this.addChild(contentItem);
+        }
+        else {
+            /*
+             * If the contentItem that's being dropped is not dropped on a Stack (cases which just passed above and
+             * which would wrap the contentItem in a Stack) we need to check whether contentItem is a RowOrColumn.
+             * If it is, we need to re-wrap it in a Stack like it was when it was dragged by its Tab (it was dragged!).
+             */
+            if (contentItem.type === _utils_types__WEBPACK_IMPORTED_MODULE_6__.ItemType.row || contentItem.type === _utils_types__WEBPACK_IMPORTED_MODULE_6__.ItemType.column) {
+                const itemConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedStackItemConfig.createDefault();
+                const stack = this.layoutManager.createContentItem(itemConfig, this);
+                stack.addChild(contentItem);
+                contentItem = stack;
+            }
+            const type = area.side[0] == 'x' ? _utils_types__WEBPACK_IMPORTED_MODULE_6__.ItemType.row : _utils_types__WEBPACK_IMPORTED_MODULE_6__.ItemType.column;
+            const insertBefore = area.side[1] == '2';
+            const column = this.contentItems[0];
+            if (!(column instanceof _row_or_column__WEBPACK_IMPORTED_MODULE_7__.RowOrColumn) || column.type !== type) {
+                const itemConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_1__.ResolvedItemConfig.createDefault(type);
+                const rowOrColumn = this.layoutManager.createContentItem(itemConfig, this);
+                this.replaceChild(column, rowOrColumn);
+                rowOrColumn.addChild(contentItem, insertBefore ? 0 : undefined, true);
+                rowOrColumn.addChild(column, insertBefore ? undefined : 0, true);
+                column.size = 50;
+                contentItem.size = 50;
+                contentItem.sizeUnit = _utils_types__WEBPACK_IMPORTED_MODULE_6__.SizeUnitEnum.Percent;
+                rowOrColumn.updateSize(false);
+            }
+            else {
+                const sibling = column.contentItems[insertBefore ? 0 : column.contentItems.length - 1];
+                column.addChild(contentItem, insertBefore ? 0 : undefined, true);
+                sibling.size *= 0.5;
+                contentItem.size = sibling.size;
+                contentItem.sizeUnit = _utils_types__WEBPACK_IMPORTED_MODULE_6__.SizeUnitEnum.Percent;
+                column.updateSize(false);
+            }
+        }
+    }
+    // No ContentItem can dock with groundItem.  However Stack can have a GroundItem parent and Stack requires that
+    // its parent implement dock() function.  Accordingly this function is implemented but throws an exception as it should
+    // never be called
+    dock() {
+        throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('GID87731');
+    }
+    // No ContentItem can dock with groundItem.  However Stack can have a GroundItem parent and Stack requires that
+    // its parent implement validateDocking() function.  Accordingly this function is implemented but throws an exception as it should
+    // never be called
+    validateDocking() {
+        throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('GIVD87732');
+    }
+    getAllContentItems() {
+        const result = [this];
+        this.deepGetAllContentItems(this.contentItems, result);
+        return result;
+    }
+    getConfigMaximisedItems() {
+        const result = [];
+        this.deepFilterContentItems(this.contentItems, result, (item) => {
+            if (_content_item__WEBPACK_IMPORTED_MODULE_8__.ContentItem.isStack(item) && item.initialWantMaximise) {
+                return true;
+            }
+            else {
+                if (_content_item__WEBPACK_IMPORTED_MODULE_8__.ContentItem.isComponentItem(item) && item.initialWantMaximise) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        });
+        return result;
+    }
+    getItemsByPopInParentId(popInParentId) {
+        const result = [];
+        this.deepFilterContentItems(this.contentItems, result, (item) => item.popInParentIds.includes(popInParentId));
+        return result;
+    }
+    toConfig() {
+        throw new Error('Cannot generate GroundItem config');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setActiveComponentItem(item, focus, suppressFocusEvent) {
+        // only applicable if ComponentItem is root and then it always has focus
+    }
+    updateNodeSize() {
+        const { width, height } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.getElementWidthAndHeight)(this._containerElement);
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementWidth)(this.element, width);
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementHeight)(this.element, height);
+        /*
+         * GroundItem can be empty
+         */
+        if (this.contentItems.length > 0) {
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementWidth)(this.contentItems[0].element, width);
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_5__.setElementHeight)(this.contentItems[0].element, height);
+        }
+    }
+    deepGetAllContentItems(content, result) {
+        for (let i = 0; i < content.length; i++) {
+            const contentItem = content[i];
+            result.push(contentItem);
+            this.deepGetAllContentItems(contentItem.contentItems, result);
+        }
+    }
+    deepFilterContentItems(content, result, checkAcceptFtn) {
+        for (let i = 0; i < content.length; i++) {
+            const contentItem = content[i];
+            if (checkAcceptFtn(contentItem)) {
+                result.push(contentItem);
+            }
+            this.deepFilterContentItems(contentItem.contentItems, result, checkAcceptFtn);
+        }
+    }
+}
+/** @internal */
+(function (GroundItem) {
+    let Area;
+    (function (Area) {
+        Area.oppositeSides = {
+            y2: 'y1',
+            x2: 'x1',
+            y1: 'y2',
+            x1: 'x2',
+        };
+    })(Area = GroundItem.Area || (GroundItem.Area = {}));
+    function createElement(document) {
+        const element = document.createElement('div');
+        element.classList.add("lm_goldenlayout" /* GoldenLayout */);
+        element.classList.add("lm_item" /* Item */);
+        element.classList.add("lm_root" /* Root */);
+        return element;
+    }
+    GroundItem.createElement = createElement;
+})(GroundItem || (GroundItem = {}));
+//# sourceMappingURL=ground-item.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/items/row-or-column.js":
+/*!***************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/items/row-or-column.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RowOrColumn: () => (/* binding */ RowOrColumn)
+/* harmony export */ });
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _controls_splitter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controls/splitter */ "../../node_modules/golden-layout/dist/esm/ts/controls/splitter.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _content_item__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./content-item */ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js");
+
+
+
+
+
+
+/** @public */
+class RowOrColumn extends _content_item__WEBPACK_IMPORTED_MODULE_0__.ContentItem {
+    /** @internal */
+    constructor(isColumn, layoutManager, config, 
+    /** @internal */
+    _rowOrColumnParent) {
+        super(layoutManager, config, _rowOrColumnParent, RowOrColumn.createElement(document, isColumn));
+        this._rowOrColumnParent = _rowOrColumnParent;
+        /** @internal */
+        this._splitter = [];
+        this.isRow = !isColumn;
+        this.isColumn = isColumn;
+        this._childElementContainer = this.element;
+        this._splitterSize = layoutManager.layoutConfig.dimensions.borderWidth;
+        this._splitterGrabSize = layoutManager.layoutConfig.dimensions.borderGrabWidth;
+        this._isColumn = isColumn;
+        this._dimension = isColumn ? 'height' : 'width';
+        this._splitterPosition = null;
+        this._splitterMinPosition = null;
+        this._splitterMaxPosition = null;
+        switch (config.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_1__.ItemType.row:
+            case _utils_types__WEBPACK_IMPORTED_MODULE_1__.ItemType.column:
+                this._configType = config.type;
+                break;
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('ROCCCT00925');
+        }
+    }
+    newComponent(componentType, componentState, title, index) {
+        const itemConfig = {
+            type: 'component',
+            componentType,
+            componentState,
+            title,
+        };
+        return this.newItem(itemConfig, index);
+    }
+    addComponent(componentType, componentState, title, index) {
+        const itemConfig = {
+            type: 'component',
+            componentType,
+            componentState,
+            title,
+        };
+        return this.addItem(itemConfig, index);
+    }
+    newItem(itemConfig, index) {
+        index = this.addItem(itemConfig, index);
+        const createdItem = this.contentItems[index];
+        if (_content_item__WEBPACK_IMPORTED_MODULE_0__.ContentItem.isStack(createdItem) && (_config_config__WEBPACK_IMPORTED_MODULE_3__.ItemConfig.isComponent(itemConfig))) {
+            // createdItem is a Stack which was created to hold wanted component.  Return component
+            return createdItem.contentItems[0];
+        }
+        else {
+            return createdItem;
+        }
+    }
+    addItem(itemConfig, index) {
+        this.layoutManager.checkMinimiseMaximisedStack();
+        const resolvedItemConfig = _config_config__WEBPACK_IMPORTED_MODULE_3__.ItemConfig.resolve(itemConfig, false);
+        const contentItem = this.layoutManager.createAndInitContentItem(resolvedItemConfig, this);
+        return this.addChild(contentItem, index, false);
+    }
+    /**
+     * Add a new contentItem to the Row or Column
+     *
+     * @param contentItem -
+     * @param index - The position of the new item within the Row or Column.
+     *                If no index is provided the item will be added to the end
+     * @param suspendResize - If true the items won't be resized. This will leave the item in
+     *                        an inconsistent state and is only intended to be used if multiple
+     *                        children need to be added in one go and resize is called afterwards
+     *
+     * @returns
+     */
+    addChild(contentItem, index, suspendResize) {
+        // contentItem = this.layoutManager._$normalizeContentItem(contentItem, this);
+        if (index === undefined) {
+            index = this.contentItems.length;
+        }
+        if (this.contentItems.length > 0) {
+            const splitterElement = this.createSplitter(Math.max(0, index - 1)).element;
+            if (index > 0) {
+                this.contentItems[index - 1].element.insertAdjacentElement('afterend', splitterElement);
+                splitterElement.insertAdjacentElement('afterend', contentItem.element);
+            }
+            else {
+                this.contentItems[0].element.insertAdjacentElement('beforebegin', splitterElement);
+                splitterElement.insertAdjacentElement('beforebegin', contentItem.element);
+            }
+        }
+        else {
+            this._childElementContainer.appendChild(contentItem.element);
+        }
+        super.addChild(contentItem, index);
+        const newItemSize = (1 / this.contentItems.length) * 100;
+        if (suspendResize === true) {
+            this.emitBaseBubblingEvent('stateChanged');
+            return index;
+        }
+        for (let i = 0; i < this.contentItems.length; i++) {
+            const indexedContentItem = this.contentItems[i];
+            if (indexedContentItem === contentItem) {
+                contentItem.size = newItemSize;
+            }
+            else {
+                const itemSize = indexedContentItem.size *= (100 - newItemSize) / 100;
+                indexedContentItem.size = itemSize;
+            }
+        }
+        this.updateSize(false);
+        this.emitBaseBubblingEvent('stateChanged');
+        return index;
+    }
+    /**
+     * Removes a child of this element
+     *
+     * @param contentItem -
+     * @param keepChild - If true the child will be removed, but not destroyed
+     *
+     */
+    removeChild(contentItem, keepChild) {
+        const index = this.contentItems.indexOf(contentItem);
+        const splitterIndex = Math.max(index - 1, 0);
+        if (index === -1) {
+            throw new Error('Can\'t remove child. ContentItem is not child of this Row or Column');
+        }
+        /**
+         * Remove the splitter before the item or after if the item happens
+         * to be the first in the row/column
+         */
+        if (this._splitter[splitterIndex]) {
+            this._splitter[splitterIndex].destroy();
+            this._splitter.splice(splitterIndex, 1);
+        }
+        super.removeChild(contentItem, keepChild);
+        if (this.contentItems.length === 1 && this.isClosable === true) {
+            const childItem = this.contentItems[0];
+            this.contentItems.length = 0;
+            this._rowOrColumnParent.replaceChild(this, childItem, true);
+        }
+        else {
+            this.updateSize(false);
+            this.emitBaseBubblingEvent('stateChanged');
+        }
+    }
+    /**
+     * Replaces a child of this Row or Column with another contentItem
+     */
+    replaceChild(oldChild, newChild) {
+        const size = oldChild.size;
+        super.replaceChild(oldChild, newChild);
+        newChild.size = size;
+        this.updateSize(false);
+        this.emitBaseBubblingEvent('stateChanged');
+    }
+    /**
+     * Called whenever the dimensions of this item or one of its parents change
+     */
+    updateSize(force) {
+        this.layoutManager.beginVirtualSizedContainerAdding();
+        try {
+            this.updateNodeSize();
+            this.updateContentItemsSize(force);
+        }
+        finally {
+            this.layoutManager.endVirtualSizedContainerAdding();
+        }
+    }
+    /**
+     * Invoked recursively by the layout manager. ContentItem.init appends
+     * the contentItem's DOM elements to the container, RowOrColumn init adds splitters
+     * in between them
+     * @internal
+     */
+    init() {
+        if (this.isInitialised === true)
+            return;
+        this.updateNodeSize();
+        for (let i = 0; i < this.contentItems.length; i++) {
+            this._childElementContainer.appendChild(this.contentItems[i].element);
+        }
+        super.init();
+        for (let i = 0; i < this.contentItems.length - 1; i++) {
+            this.contentItems[i].element.insertAdjacentElement('afterend', this.createSplitter(i).element);
+        }
+        this.initContentItems();
+    }
+    toConfig() {
+        const result = {
+            type: this.type,
+            content: this.calculateConfigContent(),
+            size: this.size,
+            sizeUnit: this.sizeUnit,
+            minSize: this.minSize,
+            minSizeUnit: this.minSizeUnit,
+            id: this.id,
+            isClosable: this.isClosable,
+        };
+        return result;
+    }
+    /** @internal */
+    setParent(parent) {
+        this._rowOrColumnParent = parent;
+        super.setParent(parent);
+    }
+    /** @internal */
+    updateNodeSize() {
+        if (this.contentItems.length > 0) {
+            this.calculateRelativeSizes();
+            this.setAbsoluteSizes();
+        }
+        this.emitBaseBubblingEvent('stateChanged');
+        this.emit('resize');
+    }
+    /**
+     * Turns the relative sizes calculated by calculateRelativeSizes into
+     * absolute pixel values and applies them to the children's DOM elements
+     *
+     * Assigns additional pixels to counteract Math.floor
+     * @internal
+     */
+    setAbsoluteSizes() {
+        const absoluteSizes = this.calculateAbsoluteSizes();
+        for (let i = 0; i < this.contentItems.length; i++) {
+            if (absoluteSizes.additionalPixel - i > 0) {
+                absoluteSizes.itemSizes[i]++;
+            }
+            if (this._isColumn) {
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementWidth)(this.contentItems[i].element, absoluteSizes.crossAxisSize);
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementHeight)(this.contentItems[i].element, absoluteSizes.itemSizes[i]);
+            }
+            else {
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementWidth)(this.contentItems[i].element, absoluteSizes.itemSizes[i]);
+                (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementHeight)(this.contentItems[i].element, absoluteSizes.crossAxisSize);
+            }
+        }
+    }
+    /**
+     * Calculates the absolute sizes of all of the children of this Item.
+     * @returns Set with absolute sizes and additional pixels.
+     * @internal
+     */
+    calculateAbsoluteSizes() {
+        const totalSplitterSize = (this.contentItems.length - 1) * this._splitterSize;
+        const { width: elementWidth, height: elementHeight } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.getElementWidthAndHeight)(this.element);
+        let totalSize;
+        let crossAxisSize;
+        if (this._isColumn) {
+            totalSize = elementHeight - totalSplitterSize;
+            crossAxisSize = elementWidth;
+        }
+        else {
+            totalSize = elementWidth - totalSplitterSize;
+            crossAxisSize = elementHeight;
+        }
+        let totalAssigned = 0;
+        const itemSizes = [];
+        for (let i = 0; i < this.contentItems.length; i++) {
+            const contentItem = this.contentItems[i];
+            let itemSize;
+            if (contentItem.sizeUnit === _utils_types__WEBPACK_IMPORTED_MODULE_1__.SizeUnitEnum.Percent) {
+                itemSize = Math.floor(totalSize * (contentItem.size / 100));
+            }
+            else {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('ROCCAS6692');
+            }
+            totalAssigned += itemSize;
+            itemSizes.push(itemSize);
+        }
+        const additionalPixel = Math.floor(totalSize - totalAssigned);
+        return {
+            itemSizes,
+            additionalPixel,
+            totalSize,
+            crossAxisSize,
+        };
+    }
+    /**
+     * Calculates the relative sizes of all children of this Item. The logic
+     * is as follows:
+     *
+     * - Add up the total size of all items that have a configured size
+     *
+     * - If the total == 100 (check for floating point errors)
+     *        Excellent, job done
+     *
+     * - If the total is \> 100,
+     *        set the size of items without set dimensions to 1/3 and add this to the total
+     *        set the size off all items so that the total is hundred relative to their original size
+     *
+     * - If the total is \< 100
+     *        If there are items without set dimensions, distribute the remainder to 100 evenly between them
+     *        If there are no items without set dimensions, increase all items sizes relative to
+     *        their original size so that they add up to 100
+     *
+     * @internal
+     */
+    calculateRelativeSizes() {
+        let total = 0;
+        const itemsWithFractionalSize = [];
+        let totalFractionalSize = 0;
+        for (let i = 0; i < this.contentItems.length; i++) {
+            const contentItem = this.contentItems[i];
+            const sizeUnit = contentItem.sizeUnit;
+            switch (sizeUnit) {
+                case _utils_types__WEBPACK_IMPORTED_MODULE_1__.SizeUnitEnum.Percent: {
+                    total += contentItem.size;
+                    break;
+                }
+                case _utils_types__WEBPACK_IMPORTED_MODULE_1__.SizeUnitEnum.Fractional: {
+                    itemsWithFractionalSize.push(contentItem);
+                    totalFractionalSize += contentItem.size;
+                    break;
+                }
+                default:
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('ROCCRS49110', JSON.stringify(contentItem));
+            }
+        }
+        /**
+         * Everything adds up to hundred, all good :-)
+         */
+        if (Math.round(total) === 100) {
+            this.respectMinItemSize();
+            return;
+        }
+        else {
+            /**
+             * Allocate the remaining size to the items with a fractional size
+             */
+            if (Math.round(total) < 100 && itemsWithFractionalSize.length > 0) {
+                const fractionalAllocatedSize = 100 - total;
+                for (let i = 0; i < itemsWithFractionalSize.length; i++) {
+                    const contentItem = itemsWithFractionalSize[i];
+                    contentItem.size = fractionalAllocatedSize * (contentItem.size / totalFractionalSize);
+                    contentItem.sizeUnit = _utils_types__WEBPACK_IMPORTED_MODULE_1__.SizeUnitEnum.Percent;
+                }
+                this.respectMinItemSize();
+                return;
+            }
+            else {
+                /**
+                 * If the total is > 100, but there are also items with a fractional size, assign another 50%
+                 * to the fractional items
+                 *
+                 * This will be reset in the next step
+                 */
+                if (Math.round(total) > 100 && itemsWithFractionalSize.length > 0) {
+                    for (let i = 0; i < itemsWithFractionalSize.length; i++) {
+                        const contentItem = itemsWithFractionalSize[i];
+                        contentItem.size = 50 * (contentItem.size / totalFractionalSize);
+                        contentItem.sizeUnit = _utils_types__WEBPACK_IMPORTED_MODULE_1__.SizeUnitEnum.Percent;
+                    }
+                    total += 50;
+                }
+                /**
+                 * Set every items size relative to 100 relative to its size to total
+                 */
+                for (let i = 0; i < this.contentItems.length; i++) {
+                    const contentItem = this.contentItems[i];
+                    contentItem.size = (contentItem.size / total) * 100;
+                }
+                this.respectMinItemSize();
+            }
+        }
+    }
+    /**
+     * Adjusts the column widths to respect the dimensions minItemWidth if set.
+     * @internal
+     */
+    respectMinItemSize() {
+        const minItemSize = this.calculateContentItemMinSize(this);
+        if (minItemSize <= 0 || this.contentItems.length <= 1) {
+            return;
+        }
+        else {
+            let totalOverMin = 0;
+            let totalUnderMin = 0;
+            const entriesOverMin = [];
+            const allEntries = [];
+            const absoluteSizes = this.calculateAbsoluteSizes();
+            /**
+             * Figure out how much we are under the min item size total and how much room we have to use.
+             */
+            for (let i = 0; i < absoluteSizes.itemSizes.length; i++) {
+                const itemSize = absoluteSizes.itemSizes[i];
+                let entry;
+                if (itemSize < minItemSize) {
+                    totalUnderMin += minItemSize - itemSize;
+                    entry = {
+                        size: minItemSize
+                    };
+                }
+                else {
+                    totalOverMin += itemSize - minItemSize;
+                    entry = {
+                        size: itemSize
+                    };
+                    entriesOverMin.push(entry);
+                }
+                allEntries.push(entry);
+            }
+            /**
+             * If there is nothing under min, or there is not enough over to make up the difference, do nothing.
+             */
+            if (totalUnderMin === 0 || totalUnderMin > totalOverMin) {
+                return;
+            }
+            else {
+                /**
+                 * Evenly reduce all columns that are over the min item width to make up the difference.
+                 */
+                const reducePercent = totalUnderMin / totalOverMin;
+                let remainingSize = totalUnderMin;
+                for (let i = 0; i < entriesOverMin.length; i++) {
+                    const entry = entriesOverMin[i];
+                    const reducedSize = Math.round((entry.size - minItemSize) * reducePercent);
+                    remainingSize -= reducedSize;
+                    entry.size -= reducedSize;
+                }
+                /**
+                 * Take anything remaining from the last item.
+                 */
+                if (remainingSize !== 0) {
+                    allEntries[allEntries.length - 1].size -= remainingSize;
+                }
+                /**
+                 * Set every items size relative to 100 relative to its size to total
+                 */
+                for (let i = 0; i < this.contentItems.length; i++) {
+                    const contentItem = this.contentItems[i];
+                    contentItem.size = (allEntries[i].size / absoluteSizes.totalSize) * 100;
+                }
+            }
+        }
+    }
+    /**
+     * Instantiates a new Splitter, binds events to it and adds
+     * it to the array of splitters at the position specified as the index argument
+     *
+     * What it doesn't do though is append the splitter to the DOM
+     *
+     * @param index - The position of the splitter
+     *
+     * @returns
+     * @internal
+     */
+    createSplitter(index) {
+        const splitter = new _controls_splitter__WEBPACK_IMPORTED_MODULE_5__.Splitter(this._isColumn, this._splitterSize, this._splitterGrabSize);
+        splitter.on('drag', (offsetX, offsetY) => this.onSplitterDrag(splitter, offsetX, offsetY));
+        splitter.on('dragStop', () => this.onSplitterDragStop(splitter));
+        splitter.on('dragStart', () => this.onSplitterDragStart(splitter));
+        this._splitter.splice(index, 0, splitter);
+        return splitter;
+    }
+    /**
+     * Locates the instance of Splitter in the array of
+     * registered splitters and returns a map containing the contentItem
+     * before and after the splitters, both of which are affected if the
+     * splitter is moved
+     *
+     * @returns A map of contentItems that the splitter affects
+     * @internal
+     */
+    getSplitItems(splitter) {
+        const index = this._splitter.indexOf(splitter);
+        return {
+            before: this.contentItems[index],
+            after: this.contentItems[index + 1]
+        };
+    }
+    calculateContentItemMinSize(contentItem) {
+        const minSize = contentItem.minSize;
+        if (minSize !== undefined) {
+            if (contentItem.minSizeUnit === _utils_types__WEBPACK_IMPORTED_MODULE_1__.SizeUnitEnum.Pixel) {
+                return minSize;
+            }
+            else {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.AssertError('ROCGMD98831', JSON.stringify(contentItem));
+            }
+        }
+        else {
+            const dimensions = this.layoutManager.layoutConfig.dimensions;
+            return this._isColumn ? dimensions.defaultMinItemHeight : dimensions.defaultMinItemWidth;
+        }
+    }
+    /**
+     * Gets the minimum dimensions for the given item configuration array
+     * @internal
+     */
+    calculateContentItemsTotalMinSize(contentItems) {
+        let totalMinSize = 0;
+        for (const contentItem of contentItems) {
+            totalMinSize += this.calculateContentItemMinSize(contentItem);
+        }
+        return totalMinSize;
+    }
+    /**
+     * Invoked when a splitter's dragListener fires dragStart. Calculates the splitters
+     * movement area once (so that it doesn't need calculating on every mousemove event)
+     * @internal
+     */
+    onSplitterDragStart(splitter) {
+        const items = this.getSplitItems(splitter);
+        const beforeWidth = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.pixelsToNumber)(items.before.element.style[this._dimension]);
+        const afterSize = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.pixelsToNumber)(items.after.element.style[this._dimension]);
+        const beforeMinSize = this.calculateContentItemsTotalMinSize(items.before.contentItems);
+        const afterMinSize = this.calculateContentItemsTotalMinSize(items.after.contentItems);
+        this._splitterPosition = 0;
+        this._splitterMinPosition = -1 * (beforeWidth - beforeMinSize);
+        this._splitterMaxPosition = afterSize - afterMinSize;
+    }
+    /**
+     * Invoked when a splitter's DragListener fires drag. Updates the splitter's DOM position,
+     * but not the sizes of the elements the splitter controls in order to minimize resize events
+     *
+     * @param splitter -
+     * @param offsetX - Relative pixel values to the splitter's original position. Can be negative
+     * @param offsetY - Relative pixel values to the splitter's original position. Can be negative
+     * @internal
+     */
+    onSplitterDrag(splitter, offsetX, offsetY) {
+        let offset = this._isColumn ? offsetY : offsetX;
+        if (this._splitterMinPosition === null || this._splitterMaxPosition === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnexpectedNullError('ROCOSD59226');
+        }
+        offset = Math.max(offset, this._splitterMinPosition);
+        offset = Math.min(offset, this._splitterMaxPosition);
+        this._splitterPosition = offset;
+        const offsetPixels = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(offset);
+        if (this._isColumn) {
+            splitter.element.style.top = offsetPixels;
+        }
+        else {
+            splitter.element.style.left = offsetPixels;
+        }
+    }
+    /**
+     * Invoked when a splitter's DragListener fires dragStop. Resets the splitters DOM position,
+     * and applies the new sizes to the elements before and after the splitter and their children
+     * on the next animation frame
+     * @internal
+     */
+    onSplitterDragStop(splitter) {
+        if (this._splitterPosition === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_2__.UnexpectedNullError('ROCOSDS66932');
+        }
+        else {
+            const items = this.getSplitItems(splitter);
+            const sizeBefore = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.pixelsToNumber)(items.before.element.style[this._dimension]);
+            const sizeAfter = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.pixelsToNumber)(items.after.element.style[this._dimension]);
+            const splitterPositionInRange = (this._splitterPosition + sizeBefore) / (sizeBefore + sizeAfter);
+            const totalRelativeSize = items.before.size + items.after.size;
+            items.before.size = splitterPositionInRange * totalRelativeSize;
+            items.after.size = (1 - splitterPositionInRange) * totalRelativeSize;
+            splitter.element.style.top = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(0);
+            splitter.element.style.left = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.numberToPixels)(0);
+            globalThis.requestAnimationFrame(() => this.updateSize(false));
+        }
+    }
+}
+/** @public */
+(function (RowOrColumn) {
+    /** @internal */
+    function getElementDimensionSize(element, dimension) {
+        if (dimension === 'width') {
+            return (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.getElementWidth)(element);
+        }
+        else {
+            return (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.getElementHeight)(element);
+        }
+    }
+    RowOrColumn.getElementDimensionSize = getElementDimensionSize;
+    /** @internal */
+    function setElementDimensionSize(element, dimension, value) {
+        if (dimension === 'width') {
+            return (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementWidth)(element, value);
+        }
+        else {
+            return (0,_utils_utils__WEBPACK_IMPORTED_MODULE_4__.setElementHeight)(element, value);
+        }
+    }
+    RowOrColumn.setElementDimensionSize = setElementDimensionSize;
+    /** @internal */
+    function createElement(document, isColumn) {
+        const element = document.createElement('div');
+        element.classList.add("lm_item" /* Item */);
+        if (isColumn) {
+            element.classList.add("lm_column" /* Column */);
+        }
+        else {
+            element.classList.add("lm_row" /* Row */);
+        }
+        return element;
+    }
+    RowOrColumn.createElement = createElement;
+})(RowOrColumn || (RowOrColumn = {}));
+//# sourceMappingURL=row-or-column.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/items/stack.js":
+/*!*******************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/items/stack.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Stack: () => (/* binding */ Stack)
+/* harmony export */ });
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _controls_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controls/header */ "../../node_modules/golden-layout/dist/esm/ts/controls/header.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _utils_event_emitter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+/* harmony import */ var _component_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./component-item */ "../../node_modules/golden-layout/dist/esm/ts/items/component-item.js");
+/* harmony import */ var _component_parentable_item__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./component-parentable-item */ "../../node_modules/golden-layout/dist/esm/ts/items/component-parentable-item.js");
+/* harmony import */ var _content_item__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./content-item */ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js");
+
+
+
+
+
+
+
+
+
+
+/** @public */
+class Stack extends _component_parentable_item__WEBPACK_IMPORTED_MODULE_0__.ComponentParentableItem {
+    /** @internal */
+    constructor(layoutManager, config, parent) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u;
+        super(layoutManager, config, parent, Stack.createElement(document));
+        /** @internal */
+        this._headerSideChanged = false;
+        /** @internal */
+        this._resizeListener = () => this.handleResize();
+        /** @internal */
+        this._maximisedListener = () => this.handleMaximised();
+        /** @internal */
+        this._minimisedListener = () => this.handleMinimised();
+        this._headerConfig = config.header;
+        const layoutHeaderConfig = layoutManager.layoutConfig.header;
+        const configContent = config.content;
+        // If stack has only one component, then we can also check this for header settings
+        let componentHeaderConfig;
+        if (configContent.length !== 1) {
+            componentHeaderConfig = undefined;
+        }
+        else {
+            const firstChildItemConfig = configContent[0];
+            componentHeaderConfig = firstChildItemConfig.header; // will be undefined if not component (and wont be stack)
+        }
+        this._initialWantMaximise = config.maximised;
+        this._initialActiveItemIndex = (_a = config.activeItemIndex) !== null && _a !== void 0 ? _a : 0; // make sure defined
+        // check for defined value for each item in order of Stack (this Item), Component (first child), Manager.
+        const show = (_d = (_c = (_b = this._headerConfig) === null || _b === void 0 ? void 0 : _b.show) !== null && _c !== void 0 ? _c : componentHeaderConfig === null || componentHeaderConfig === void 0 ? void 0 : componentHeaderConfig.show) !== null && _d !== void 0 ? _d : layoutHeaderConfig.show;
+        const popout = (_g = (_f = (_e = this._headerConfig) === null || _e === void 0 ? void 0 : _e.popout) !== null && _f !== void 0 ? _f : componentHeaderConfig === null || componentHeaderConfig === void 0 ? void 0 : componentHeaderConfig.popout) !== null && _g !== void 0 ? _g : layoutHeaderConfig.popout;
+        const maximise = (_k = (_j = (_h = this._headerConfig) === null || _h === void 0 ? void 0 : _h.maximise) !== null && _j !== void 0 ? _j : componentHeaderConfig === null || componentHeaderConfig === void 0 ? void 0 : componentHeaderConfig.maximise) !== null && _k !== void 0 ? _k : layoutHeaderConfig.maximise;
+        const close = (_o = (_m = (_l = this._headerConfig) === null || _l === void 0 ? void 0 : _l.close) !== null && _m !== void 0 ? _m : componentHeaderConfig === null || componentHeaderConfig === void 0 ? void 0 : componentHeaderConfig.close) !== null && _o !== void 0 ? _o : layoutHeaderConfig.close;
+        const minimise = (_r = (_q = (_p = this._headerConfig) === null || _p === void 0 ? void 0 : _p.minimise) !== null && _q !== void 0 ? _q : componentHeaderConfig === null || componentHeaderConfig === void 0 ? void 0 : componentHeaderConfig.minimise) !== null && _r !== void 0 ? _r : layoutHeaderConfig.minimise;
+        const tabDropdown = (_u = (_t = (_s = this._headerConfig) === null || _s === void 0 ? void 0 : _s.tabDropdown) !== null && _t !== void 0 ? _t : componentHeaderConfig === null || componentHeaderConfig === void 0 ? void 0 : componentHeaderConfig.tabDropdown) !== null && _u !== void 0 ? _u : layoutHeaderConfig.tabDropdown;
+        this._maximisedEnabled = maximise !== false;
+        const headerSettings = {
+            show: show !== false,
+            side: show === false ? _utils_types__WEBPACK_IMPORTED_MODULE_1__.Side.top : show,
+            popoutEnabled: popout !== false,
+            popoutLabel: popout === false ? '' : popout,
+            maximiseEnabled: this._maximisedEnabled,
+            maximiseLabel: maximise === false ? '' : maximise,
+            closeEnabled: close !== false,
+            closeLabel: close === false ? '' : close,
+            minimiseEnabled: true,
+            minimiseLabel: minimise,
+            tabDropdownEnabled: tabDropdown !== false,
+            tabDropdownLabel: tabDropdown === false ? '' : tabDropdown,
+        };
+        this._header = new _controls_header__WEBPACK_IMPORTED_MODULE_2__.Header(layoutManager, this, headerSettings, config.isClosable && close !== false, () => this.getActiveComponentItem(), () => this.remove(), () => this.handlePopoutEvent(), () => this.toggleMaximise(), (ev) => this.handleHeaderClickEvent(ev), (ev) => this.handleHeaderTouchStartEvent(ev), (item) => this.handleHeaderComponentRemoveEvent(item), (item) => this.handleHeaderComponentFocusEvent(item), (x, y, dragListener, item) => this.handleHeaderComponentStartDragEvent(x, y, dragListener, item));
+        // this._dropZones = {};
+        this.isStack = true;
+        this._childElementContainer = document.createElement('section');
+        this._childElementContainer.classList.add("lm_items" /* Items */);
+        this.on('resize', this._resizeListener);
+        if (this._maximisedEnabled) {
+            this.on('maximised', this._maximisedListener);
+            this.on('minimised', this._minimisedListener);
+        }
+        this.element.appendChild(this._header.element);
+        this.element.appendChild(this._childElementContainer);
+        this.setupHeaderPosition();
+        this._header.updateClosability();
+    }
+    get childElementContainer() { return this._childElementContainer; }
+    get header() { return this._header; }
+    get headerShow() { return this._header.show; }
+    get headerSide() { return this._header.side; }
+    get headerLeftRightSided() { return this._header.leftRightSided; }
+    /** @internal */
+    get contentAreaDimensions() { return this._contentAreaDimensions; }
+    /** @internal */
+    get initialWantMaximise() { return this._initialWantMaximise; }
+    get isMaximised() { return this === this.layoutManager.maximisedStack; }
+    get stackParent() {
+        if (!this.parent) {
+            throw new Error('Stack should always have a parent');
+        }
+        return this.parent;
+    }
+    /** @internal */
+    updateSize(force) {
+        this.layoutManager.beginVirtualSizedContainerAdding();
+        try {
+            this.updateNodeSize();
+            this.updateContentItemsSize(force);
+        }
+        finally {
+            this.layoutManager.endVirtualSizedContainerAdding();
+        }
+    }
+    /** @internal */
+    init() {
+        if (this.isInitialised === true)
+            return;
+        this.updateNodeSize();
+        for (let i = 0; i < this.contentItems.length; i++) {
+            this._childElementContainer.appendChild(this.contentItems[i].element);
+        }
+        super.init();
+        const contentItems = this.contentItems;
+        const contentItemCount = contentItems.length;
+        if (contentItemCount > 0) { // contentItemCount will be 0 on drag drop
+            if (this._initialActiveItemIndex < 0 || this._initialActiveItemIndex >= contentItemCount) {
+                throw new Error(`ActiveItemIndex out of range: ${this._initialActiveItemIndex} id: ${this.id}`);
+            }
+            else {
+                for (let i = 0; i < contentItemCount; i++) {
+                    const contentItem = contentItems[i];
+                    if (!(contentItem instanceof _component_item__WEBPACK_IMPORTED_MODULE_3__.ComponentItem)) {
+                        throw new Error(`Stack Content Item is not of type ComponentItem: ${i} id: ${this.id}`);
+                    }
+                    else {
+                        this._header.createTab(contentItem, i);
+                        contentItem.hide();
+                        contentItem.container.setBaseLogicalZIndex();
+                    }
+                }
+                this.setActiveComponentItem(contentItems[this._initialActiveItemIndex], false);
+                this._header.updateTabSizes();
+            }
+        }
+        this._header.updateClosability();
+        this.initContentItems();
+    }
+    /** @deprecated Use {@link (Stack:class).setActiveComponentItem} */
+    setActiveContentItem(item) {
+        if (!_content_item__WEBPACK_IMPORTED_MODULE_4__.ContentItem.isComponentItem(item)) {
+            throw new Error('Stack.setActiveContentItem: item is not a ComponentItem');
+        }
+        else {
+            this.setActiveComponentItem(item, false);
+        }
+    }
+    setActiveComponentItem(componentItem, focus, suppressFocusEvent = false) {
+        if (this._activeComponentItem !== componentItem) {
+            if (this.contentItems.indexOf(componentItem) === -1) {
+                throw new Error('componentItem is not a child of this stack');
+            }
+            else {
+                this.layoutManager.beginSizeInvalidation();
+                try {
+                    if (this._activeComponentItem !== undefined) {
+                        this._activeComponentItem.hide();
+                    }
+                    this._activeComponentItem = componentItem;
+                    this._header.processActiveComponentChanged(componentItem);
+                    componentItem.show();
+                }
+                finally {
+                    this.layoutManager.endSizeInvalidation();
+                }
+                this.emit('activeContentItemChanged', componentItem);
+                this.layoutManager.emit('activeContentItemChanged', componentItem);
+                this.emitStateChangedEvent();
+            }
+        }
+        if (this.focused || focus) {
+            this.layoutManager.setFocusedComponentItem(componentItem, suppressFocusEvent);
+        }
+    }
+    /** @deprecated Use {@link (Stack:class).getActiveComponentItem} */
+    getActiveContentItem() {
+        var _a;
+        return (_a = this.getActiveComponentItem()) !== null && _a !== void 0 ? _a : null;
+    }
+    getActiveComponentItem() {
+        return this._activeComponentItem;
+    }
+    /** @internal */
+    focusActiveContentItem() {
+        var _a;
+        (_a = this._activeComponentItem) === null || _a === void 0 ? void 0 : _a.focus();
+    }
+    /** @internal */
+    setFocusedValue(value) {
+        this._header.applyFocusedValue(value);
+        super.setFocusedValue(value);
+    }
+    /** @internal */
+    setRowColumnClosable(value) {
+        this._header.setRowColumnClosable(value);
+    }
+    newComponent(componentType, componentState, title, index) {
+        const itemConfig = {
+            type: 'component',
+            componentType,
+            componentState,
+            title,
+        };
+        return this.newItem(itemConfig, index);
+    }
+    addComponent(componentType, componentState, title, index) {
+        const itemConfig = {
+            type: 'component',
+            componentType,
+            componentState,
+            title,
+        };
+        return this.addItem(itemConfig, index);
+    }
+    newItem(itemConfig, index) {
+        index = this.addItem(itemConfig, index);
+        return this.contentItems[index];
+    }
+    addItem(itemConfig, index) {
+        this.layoutManager.checkMinimiseMaximisedStack();
+        const resolvedItemConfig = _config_config__WEBPACK_IMPORTED_MODULE_5__.ItemConfig.resolve(itemConfig, false);
+        const contentItem = this.layoutManager.createAndInitContentItem(resolvedItemConfig, this);
+        return this.addChild(contentItem, index);
+    }
+    addChild(contentItem, index, focus = false) {
+        if (index !== undefined && index > this.contentItems.length) {
+            index -= 1;
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.AssertError('SAC99728'); // undisplayChild() removed so this condition should no longer occur
+        }
+        if (!(contentItem instanceof _component_item__WEBPACK_IMPORTED_MODULE_3__.ComponentItem)) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.AssertError('SACC88532'); // Stacks can only have Component children
+        }
+        else {
+            index = super.addChild(contentItem, index);
+            this._childElementContainer.appendChild(contentItem.element);
+            this._header.createTab(contentItem, index);
+            this.setActiveComponentItem(contentItem, focus);
+            this._header.updateTabSizes();
+            this.updateSize(false);
+            contentItem.container.setBaseLogicalZIndex();
+            this._header.updateClosability();
+            this.emitStateChangedEvent();
+            return index;
+        }
+    }
+    removeChild(contentItem, keepChild) {
+        const componentItem = contentItem;
+        const index = this.contentItems.indexOf(componentItem);
+        const stackWillBeDeleted = this.contentItems.length === 1;
+        if (this._activeComponentItem === componentItem) {
+            if (componentItem.focused) {
+                componentItem.blur();
+            }
+            if (!stackWillBeDeleted) {
+                // At this point we're already sure we have at least one content item left *after*
+                // removing contentItem, so we can safely assume index 1 is a valid one if
+                // the index of contentItem is 0, otherwise we just use the previous content item.
+                const newActiveComponentIdx = index === 0 ? 1 : index - 1;
+                this.setActiveComponentItem(this.contentItems[newActiveComponentIdx], false);
+            }
+        }
+        this._header.removeTab(componentItem);
+        super.removeChild(componentItem, keepChild);
+        if (!stackWillBeDeleted) {
+            this._header.updateClosability();
+        }
+        this.emitStateChangedEvent();
+    }
+    /**
+     * Maximises the Item or minimises it if it is already maximised
+     */
+    toggleMaximise() {
+        if (this.isMaximised) {
+            this.minimise();
+        }
+        else {
+            this.maximise();
+        }
+    }
+    maximise() {
+        if (!this.isMaximised) {
+            this.layoutManager.setMaximisedStack(this);
+            const contentItems = this.contentItems;
+            const contentItemCount = contentItems.length;
+            for (let i = 0; i < contentItemCount; i++) {
+                const contentItem = contentItems[i];
+                if (contentItem instanceof _component_item__WEBPACK_IMPORTED_MODULE_3__.ComponentItem) {
+                    contentItem.enterStackMaximised();
+                }
+                else {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.AssertError('SMAXI87773');
+                }
+            }
+            this.emitStateChangedEvent();
+        }
+    }
+    minimise() {
+        if (this.isMaximised) {
+            this.layoutManager.setMaximisedStack(undefined);
+            const contentItems = this.contentItems;
+            const contentItemCount = contentItems.length;
+            for (let i = 0; i < contentItemCount; i++) {
+                const contentItem = contentItems[i];
+                if (contentItem instanceof _component_item__WEBPACK_IMPORTED_MODULE_3__.ComponentItem) {
+                    contentItem.exitStackMaximised();
+                }
+                else {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.AssertError('SMINI87773');
+                }
+            }
+            this.emitStateChangedEvent();
+        }
+    }
+    /** @internal */
+    destroy() {
+        var _a;
+        if ((_a = this._activeComponentItem) === null || _a === void 0 ? void 0 : _a.focused) {
+            this._activeComponentItem.blur();
+        }
+        super.destroy();
+        this.off('resize', this._resizeListener);
+        if (this._maximisedEnabled) {
+            this.off('maximised', this._maximisedListener);
+            this.off('minimised', this._minimisedListener);
+        }
+        this._header.destroy();
+    }
+    toConfig() {
+        let activeItemIndex;
+        if (this._activeComponentItem) {
+            activeItemIndex = this.contentItems.indexOf(this._activeComponentItem);
+            if (activeItemIndex < 0) {
+                throw new Error('active component item not found in stack');
+            }
+        }
+        if (this.contentItems.length > 0 && activeItemIndex === undefined) {
+            throw new Error('expected non-empty stack to have an active component item');
+        }
+        else {
+            const result = {
+                type: 'stack',
+                content: this.calculateConfigContent(),
+                size: this.size,
+                sizeUnit: this.sizeUnit,
+                minSize: this.minSize,
+                minSizeUnit: this.minSizeUnit,
+                id: this.id,
+                isClosable: this.isClosable,
+                maximised: this.isMaximised,
+                header: this.createHeaderConfig(),
+                activeItemIndex,
+            };
+            return result;
+        }
+    }
+    /**
+     * Ok, this one is going to be the tricky one: The user has dropped a {@link (ContentItem:class)} onto this stack.
+     *
+     * It was dropped on either the stacks header or the top, right, bottom or left bit of the content area
+     * (which one of those is stored in this._dropSegment). Now, if the user has dropped on the header the case
+     * is relatively clear: We add the item to the existing stack... job done (might be good to have
+     * tab reordering at some point, but lets not sweat it right now)
+     *
+     * If the item was dropped on the content part things are a bit more complicated. If it was dropped on either the
+     * top or bottom region we need to create a new column and place the items accordingly.
+     * Unless, of course if the stack is already within a column... in which case we want
+     * to add the newly created item to the existing column...
+     * either prepend or append it, depending on wether its top or bottom.
+     *
+     * Same thing for rows and left / right drop segments... so in total there are 9 things that can potentially happen
+     * (left, top, right, bottom) * is child of the right parent (row, column) + header drop
+     *
+     * @internal
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onDrop(contentItem, area) {
+        /*
+         * The item was dropped on the header area. Just add it as a child of this stack and
+         * get the hell out of this logic
+         */
+        if (this._dropSegment === "header" /* Header */) {
+            this.resetHeaderDropZone();
+            if (this._dropIndex === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.UnexpectedUndefinedError('SODDI68990');
+            }
+            else {
+                this.addChild(contentItem, this._dropIndex);
+                return;
+            }
+        }
+        /*
+         * The stack is empty. Let's just add the element.
+         */
+        if (this._dropSegment === "body" /* Body */) {
+            this.addChild(contentItem, 0, true);
+            return;
+        }
+        /*
+         * The item was dropped on the top-, left-, bottom- or right- part of the content. Let's
+         * aggregate some conditions to make the if statements later on more readable
+         */
+        const isVertical = this._dropSegment === "top" /* Top */ || this._dropSegment === "bottom" /* Bottom */;
+        const isHorizontal = this._dropSegment === "left" /* Left */ || this._dropSegment === "right" /* Right */;
+        const insertBefore = this._dropSegment === "top" /* Top */ || this._dropSegment === "left" /* Left */;
+        const hasCorrectParent = (isVertical && this.stackParent.isColumn) || (isHorizontal && this.stackParent.isRow);
+        /*
+         * The content item can be either a component or a stack. If it is a component, wrap it into a stack
+         */
+        if (contentItem.isComponent) {
+            const itemConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_7__.ResolvedStackItemConfig.createDefault();
+            itemConfig.header = this.createHeaderConfig();
+            const stack = this.layoutManager.createAndInitContentItem(itemConfig, this);
+            stack.addChild(contentItem);
+            contentItem = stack;
+        }
+        /*
+         * If the contentItem that's being dropped is not dropped on a Stack (cases which just passed above and
+         * which would wrap the contentItem in a Stack) we need to check whether contentItem is a RowOrColumn.
+         * If it is, we need to re-wrap it in a Stack like it was when it was dragged by its Tab (it was dragged!).
+         */
+        if (contentItem.type === _utils_types__WEBPACK_IMPORTED_MODULE_1__.ItemType.row || contentItem.type === _utils_types__WEBPACK_IMPORTED_MODULE_1__.ItemType.column) {
+            const itemConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_7__.ResolvedStackItemConfig.createDefault();
+            itemConfig.header = this.createHeaderConfig();
+            const stack = this.layoutManager.createContentItem(itemConfig, this);
+            stack.addChild(contentItem);
+            contentItem = stack;
+        }
+        /*
+         * If the item is dropped on top or bottom of a column or left and right of a row, it's already
+         * layd out in the correct way. Just add it as a child
+         */
+        if (hasCorrectParent) {
+            const index = this.stackParent.contentItems.indexOf(this);
+            this.stackParent.addChild(contentItem, insertBefore ? index : index + 1, true);
+            this.size *= 0.5;
+            contentItem.size = this.size;
+            contentItem.sizeUnit = this.sizeUnit;
+            this.stackParent.updateSize(false);
+            /*
+             * This handles items that are dropped on top or bottom of a row or left / right of a column. We need
+             * to create the appropriate contentItem for them to live in
+             */
+        }
+        else {
+            const type = isVertical ? _utils_types__WEBPACK_IMPORTED_MODULE_1__.ItemType.column : _utils_types__WEBPACK_IMPORTED_MODULE_1__.ItemType.row;
+            const itemConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_7__.ResolvedItemConfig.createDefault(type);
+            const rowOrColumn = this.layoutManager.createContentItem(itemConfig, this);
+            this.stackParent.replaceChild(this, rowOrColumn);
+            rowOrColumn.addChild(contentItem, insertBefore ? 0 : undefined, true);
+            rowOrColumn.addChild(this, insertBefore ? undefined : 0, true);
+            this.size = 50;
+            contentItem.size = 50;
+            contentItem.sizeUnit = _utils_types__WEBPACK_IMPORTED_MODULE_1__.SizeUnitEnum.Percent;
+            rowOrColumn.updateSize(false);
+        }
+    }
+    /**
+     * If the user hovers above the header part of the stack, indicate drop positions for tabs.
+     * otherwise indicate which segment of the body the dragged item would be dropped on
+     *
+     * @param x - Absolute Screen X
+     * @param y - Absolute Screen Y
+     * @internal
+     */
+    highlightDropZone(x, y) {
+        for (const key in this._contentAreaDimensions) {
+            const segment = key;
+            const area = this._contentAreaDimensions[segment].hoverArea;
+            if (area.x1 < x && area.x2 > x && area.y1 < y && area.y2 > y) {
+                if (segment === "header" /* Header */) {
+                    this._dropSegment = "header" /* Header */;
+                    this.highlightHeaderDropZone(this._header.leftRightSided ? y : x);
+                }
+                else {
+                    this.resetHeaderDropZone();
+                    this.highlightBodyDropZone(segment);
+                }
+                return;
+            }
+        }
+    }
+    /** @internal */
+    getArea() {
+        if (this.element.style.display === 'none') {
+            return null;
+        }
+        const headerArea = super.getElementArea(this._header.element);
+        const contentArea = super.getElementArea(this._childElementContainer);
+        if (headerArea === null || contentArea === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.UnexpectedNullError('SGAHC13086');
+        }
+        const contentWidth = contentArea.x2 - contentArea.x1;
+        const contentHeight = contentArea.y2 - contentArea.y1;
+        this._contentAreaDimensions = {
+            header: {
+                hoverArea: {
+                    x1: headerArea.x1,
+                    y1: headerArea.y1,
+                    x2: headerArea.x2,
+                    y2: headerArea.y2
+                },
+                highlightArea: {
+                    x1: headerArea.x1,
+                    y1: headerArea.y1,
+                    x2: headerArea.x2,
+                    y2: headerArea.y2
+                }
+            }
+        };
+        /**
+         * Highlight the entire body if the stack is empty
+         */
+        if (this.contentItems.length === 0) {
+            this._contentAreaDimensions.body = {
+                hoverArea: {
+                    x1: contentArea.x1,
+                    y1: contentArea.y1,
+                    x2: contentArea.x2,
+                    y2: contentArea.y2
+                },
+                highlightArea: {
+                    x1: contentArea.x1,
+                    y1: contentArea.y1,
+                    x2: contentArea.x2,
+                    y2: contentArea.y2
+                }
+            };
+            return super.getElementArea(this.element);
+        }
+        else {
+            this._contentAreaDimensions.left = {
+                hoverArea: {
+                    x1: contentArea.x1,
+                    y1: contentArea.y1,
+                    x2: contentArea.x1 + contentWidth * 0.25,
+                    y2: contentArea.y2
+                },
+                highlightArea: {
+                    x1: contentArea.x1,
+                    y1: contentArea.y1,
+                    x2: contentArea.x1 + contentWidth * 0.5,
+                    y2: contentArea.y2
+                }
+            };
+            this._contentAreaDimensions.top = {
+                hoverArea: {
+                    x1: contentArea.x1 + contentWidth * 0.25,
+                    y1: contentArea.y1,
+                    x2: contentArea.x1 + contentWidth * 0.75,
+                    y2: contentArea.y1 + contentHeight * 0.5
+                },
+                highlightArea: {
+                    x1: contentArea.x1,
+                    y1: contentArea.y1,
+                    x2: contentArea.x2,
+                    y2: contentArea.y1 + contentHeight * 0.5
+                }
+            };
+            this._contentAreaDimensions.right = {
+                hoverArea: {
+                    x1: contentArea.x1 + contentWidth * 0.75,
+                    y1: contentArea.y1,
+                    x2: contentArea.x2,
+                    y2: contentArea.y2
+                },
+                highlightArea: {
+                    x1: contentArea.x1 + contentWidth * 0.5,
+                    y1: contentArea.y1,
+                    x2: contentArea.x2,
+                    y2: contentArea.y2
+                }
+            };
+            this._contentAreaDimensions.bottom = {
+                hoverArea: {
+                    x1: contentArea.x1 + contentWidth * 0.25,
+                    y1: contentArea.y1 + contentHeight * 0.5,
+                    x2: contentArea.x1 + contentWidth * 0.75,
+                    y2: contentArea.y2
+                },
+                highlightArea: {
+                    x1: contentArea.x1,
+                    y1: contentArea.y1 + contentHeight * 0.5,
+                    x2: contentArea.x2,
+                    y2: contentArea.y2
+                }
+            };
+            return super.getElementArea(this.element);
+        }
+    }
+    /**
+     * Programmatically operate with header position.
+     *
+     * @param position -
+     *
+     * @returns previous header position
+     * @internal
+     */
+    positionHeader(position) {
+        if (this._header.side !== position) {
+            this._header.setSide(position);
+            this._headerSideChanged = true;
+            this.setupHeaderPosition();
+        }
+    }
+    /** @internal */
+    updateNodeSize() {
+        if (this.element.style.display !== 'none') {
+            const content = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_8__.getElementWidthAndHeight)(this.element);
+            if (this._header.show) {
+                const dimension = this._header.leftRightSided ? _utils_types__WEBPACK_IMPORTED_MODULE_1__.WidthOrHeightPropertyName.width : _utils_types__WEBPACK_IMPORTED_MODULE_1__.WidthOrHeightPropertyName.height;
+                content[dimension] -= this.layoutManager.layoutConfig.dimensions.headerHeight;
+            }
+            this._childElementContainer.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_8__.numberToPixels)(content.width);
+            this._childElementContainer.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_8__.numberToPixels)(content.height);
+            for (let i = 0; i < this.contentItems.length; i++) {
+                this.contentItems[i].element.style.width = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_8__.numberToPixels)(content.width);
+                this.contentItems[i].element.style.height = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_8__.numberToPixels)(content.height);
+            }
+            this.emit('resize');
+            this.emitStateChangedEvent();
+        }
+    }
+    /** @internal */
+    highlightHeaderDropZone(x) {
+        const visibleTabsLength = this._header.lastVisibleTabIndex + 1;
+        const tabsContainerElement = this._header.tabsContainerElement;
+        const tabsContainerElementChildNodes = tabsContainerElement.childNodes;
+        // Create shallow copy of childNodes list, excluding DropPlaceHolder, as we will be modifying the childNodes list
+        const visibleTabElements = new Array(visibleTabsLength);
+        let tabIndex = 0;
+        let tabCount = 0;
+        while (tabCount < visibleTabsLength) {
+            const visibleTabElement = tabsContainerElementChildNodes[tabIndex++];
+            if (visibleTabElement !== this.layoutManager.tabDropPlaceholder) {
+                visibleTabElements[tabCount++] = visibleTabElement;
+            }
+        }
+        const dropTargetIndicator = this.layoutManager.dropTargetIndicator;
+        if (dropTargetIndicator === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.UnexpectedNullError('SHHDZDTI97110');
+        }
+        let area;
+        // Empty stack
+        if (visibleTabsLength === 0) {
+            const headerRect = this._header.element.getBoundingClientRect();
+            const headerTop = headerRect.top + document.body.scrollTop;
+            const headerLeft = headerRect.left + document.body.scrollLeft;
+            area = {
+                x1: headerLeft,
+                x2: headerLeft + 100,
+                y1: headerTop + headerRect.height - 20,
+                y2: headerTop + headerRect.height,
+            };
+            this._dropIndex = 0;
+        }
+        else {
+            let tabIndex = 0;
+            // This indicates whether our cursor is exactly over a tab
+            let isAboveTab = false;
+            let tabTop;
+            let tabLeft;
+            let tabWidth;
+            let tabElement;
+            do {
+                tabElement = visibleTabElements[tabIndex];
+                const tabRect = tabElement.getBoundingClientRect();
+                const tabRectTop = tabRect.top + document.body.scrollTop;
+                const tabRectLeft = tabRect.left + document.body.scrollLeft;
+                if (this._header.leftRightSided) {
+                    tabLeft = tabRectTop;
+                    tabTop = tabRectLeft;
+                    tabWidth = tabRect.height;
+                }
+                else {
+                    tabLeft = tabRectLeft;
+                    tabTop = tabRectTop;
+                    tabWidth = tabRect.width;
+                }
+                if (x >= tabLeft && x < tabLeft + tabWidth) {
+                    isAboveTab = true;
+                }
+                else {
+                    tabIndex++;
+                }
+            } while (tabIndex < visibleTabsLength && !isAboveTab);
+            // If we're not above any tabs, or to the right of any tab, we are out of the area, so give up
+            if (isAboveTab === false && x < tabLeft) {
+                return;
+            }
+            const halfX = tabLeft + tabWidth / 2;
+            if (x < halfX) {
+                this._dropIndex = tabIndex;
+                tabElement.insertAdjacentElement('beforebegin', this.layoutManager.tabDropPlaceholder);
+            }
+            else {
+                this._dropIndex = Math.min(tabIndex + 1, visibleTabsLength);
+                tabElement.insertAdjacentElement('afterend', this.layoutManager.tabDropPlaceholder);
+            }
+            const tabDropPlaceholderRect = this.layoutManager.tabDropPlaceholder.getBoundingClientRect();
+            const tabDropPlaceholderRectTop = tabDropPlaceholderRect.top + document.body.scrollTop;
+            const tabDropPlaceholderRectLeft = tabDropPlaceholderRect.left + document.body.scrollLeft;
+            const tabDropPlaceholderRectWidth = tabDropPlaceholderRect.width;
+            if (this._header.leftRightSided) {
+                const placeHolderTop = tabDropPlaceholderRectTop;
+                area = {
+                    x1: tabTop,
+                    x2: tabTop + tabElement.clientHeight,
+                    y1: placeHolderTop,
+                    y2: placeHolderTop + tabDropPlaceholderRectWidth,
+                };
+            }
+            else {
+                const placeHolderLeft = tabDropPlaceholderRectLeft;
+                area = {
+                    x1: placeHolderLeft,
+                    x2: placeHolderLeft + tabDropPlaceholderRectWidth,
+                    y1: tabTop,
+                    y2: tabTop + tabElement.clientHeight,
+                };
+            }
+        }
+        dropTargetIndicator.highlightArea(area, 0);
+        return;
+    }
+    /** @internal */
+    resetHeaderDropZone() {
+        this.layoutManager.tabDropPlaceholder.remove();
+    }
+    /** @internal */
+    setupHeaderPosition() {
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_8__.setElementDisplayVisibility)(this._header.element, this._header.show);
+        this.element.classList.remove("lm_left" /* Left */, "lm_right" /* Right */, "lm_bottom" /* Bottom */);
+        if (this._header.leftRightSided) {
+            this.element.classList.add('lm_' + this._header.side);
+        }
+        //if ([Side.right, Side.bottom].includes(this._header.side)) {
+        //    // move the header behind the content.
+        //    this.element.appendChild(this._header.element);
+        //}
+        this.updateSize(false);
+    }
+    /** @internal */
+    highlightBodyDropZone(segment) {
+        if (this._contentAreaDimensions === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.UnexpectedUndefinedError('SHBDZC82265');
+        }
+        else {
+            const highlightArea = this._contentAreaDimensions[segment].highlightArea;
+            const dropTargetIndicator = this.layoutManager.dropTargetIndicator;
+            if (dropTargetIndicator === null) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_6__.UnexpectedNullError('SHBDZD96110');
+            }
+            else {
+                dropTargetIndicator.highlightArea(highlightArea, 1);
+                this._dropSegment = segment;
+            }
+        }
+    }
+    /** @internal */
+    handleResize() {
+        this._header.updateTabSizes();
+    }
+    /** @internal */
+    handleMaximised() {
+        this._header.processMaximised();
+    }
+    /** @internal */
+    handleMinimised() {
+        this._header.processMinimised();
+    }
+    /** @internal */
+    handlePopoutEvent() {
+        this.popout();
+    }
+    /** @internal */
+    handleHeaderClickEvent(ev) {
+        const eventName = _utils_event_emitter__WEBPACK_IMPORTED_MODULE_9__.EventEmitter.headerClickEventName;
+        const bubblingEvent = new _utils_event_emitter__WEBPACK_IMPORTED_MODULE_9__.EventEmitter.ClickBubblingEvent(eventName, this, ev);
+        this.emit(eventName, bubblingEvent);
+    }
+    /** @internal */
+    handleHeaderTouchStartEvent(ev) {
+        const eventName = _utils_event_emitter__WEBPACK_IMPORTED_MODULE_9__.EventEmitter.headerTouchStartEventName;
+        const bubblingEvent = new _utils_event_emitter__WEBPACK_IMPORTED_MODULE_9__.EventEmitter.TouchStartBubblingEvent(eventName, this, ev);
+        this.emit(eventName, bubblingEvent);
+    }
+    /** @internal */
+    handleHeaderComponentRemoveEvent(item) {
+        this.removeChild(item, false);
+    }
+    /** @internal */
+    handleHeaderComponentFocusEvent(item) {
+        this.setActiveComponentItem(item, true);
+    }
+    /** @internal */
+    handleHeaderComponentStartDragEvent(x, y, dragListener, componentItem) {
+        if (this.isMaximised === true) {
+            this.toggleMaximise();
+        }
+        this.layoutManager.startComponentDrag(x, y, dragListener, componentItem, this);
+    }
+    /** @internal */
+    createHeaderConfig() {
+        if (!this._headerSideChanged) {
+            return _config_resolved_config__WEBPACK_IMPORTED_MODULE_7__.ResolvedHeaderedItemConfig.Header.createCopy(this._headerConfig);
+        }
+        else {
+            const show = this._header.show ? this._header.side : false;
+            let result = _config_resolved_config__WEBPACK_IMPORTED_MODULE_7__.ResolvedHeaderedItemConfig.Header.createCopy(this._headerConfig, show);
+            if (result === undefined) {
+                result = {
+                    show,
+                    popout: undefined,
+                    maximise: undefined,
+                    close: undefined,
+                    minimise: undefined,
+                    tabDropdown: undefined,
+                };
+            }
+            return result;
+        }
+    }
+    /** @internal */
+    emitStateChangedEvent() {
+        this.emitBaseBubblingEvent('stateChanged');
+    }
+}
+/** @public */
+(function (Stack) {
+    /** @internal */
+    function createElement(document) {
+        const element = document.createElement('div');
+        element.classList.add("lm_item" /* Item */);
+        element.classList.add("lm_stack" /* Stack */);
+        return element;
+    }
+    Stack.createElement = createElement;
+})(Stack || (Stack = {}));
+//# sourceMappingURL=stack.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/layout-manager.js":
+/*!**********************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/layout-manager.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LayoutManager: () => (/* binding */ LayoutManager)
+/* harmony export */ });
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _controls_browser_popout__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./controls/browser-popout */ "../../node_modules/golden-layout/dist/esm/ts/controls/browser-popout.js");
+/* harmony import */ var _controls_drag_proxy__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./controls/drag-proxy */ "../../node_modules/golden-layout/dist/esm/ts/controls/drag-proxy.js");
+/* harmony import */ var _controls_drag_source__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./controls/drag-source */ "../../node_modules/golden-layout/dist/esm/ts/controls/drag-source.js");
+/* harmony import */ var _controls_drop_target_indicator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./controls/drop-target-indicator */ "../../node_modules/golden-layout/dist/esm/ts/controls/drop-target-indicator.js");
+/* harmony import */ var _controls_transition_indicator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./controls/transition-indicator */ "../../node_modules/golden-layout/dist/esm/ts/controls/transition-indicator.js");
+/* harmony import */ var _errors_external_error__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./errors/external-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _items_component_item__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./items/component-item */ "../../node_modules/golden-layout/dist/esm/ts/items/component-item.js");
+/* harmony import */ var _items_content_item__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./items/content-item */ "../../node_modules/golden-layout/dist/esm/ts/items/content-item.js");
+/* harmony import */ var _items_ground_item__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./items/ground-item */ "../../node_modules/golden-layout/dist/esm/ts/items/ground-item.js");
+/* harmony import */ var _items_row_or_column__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./items/row-or-column */ "../../node_modules/golden-layout/dist/esm/ts/items/row-or-column.js");
+/* harmony import */ var _items_stack__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./items/stack */ "../../node_modules/golden-layout/dist/esm/ts/items/stack.js");
+/* harmony import */ var _utils_config_minifier__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/config-minifier */ "../../node_modules/golden-layout/dist/esm/ts/utils/config-minifier.js");
+/* harmony import */ var _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+/* harmony import */ var _utils_event_hub__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils/event-hub */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-hub.js");
+/* harmony import */ var _utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/i18n-strings */ "../../node_modules/golden-layout/dist/esm/ts/utils/i18n-strings.js");
+/* harmony import */ var _utils_types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/types */ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./utils/utils */ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * The main class that will be exposed as GoldenLayout.
+ */
+/** @public */
+class LayoutManager extends _utils_event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    /**
+    * @param container - A Dom HTML element. Defaults to body
+    * @internal
+    */
+    constructor(parameters) {
+        super();
+        /** Whether the layout will be automatically be resized to container whenever the container's size is changed
+         * Default is true if <body> is the container otherwise false
+         * Default will be changed to true for any container in the future
+         */
+        this.resizeWithContainerAutomatically = false;
+        /** The debounce interval (in milliseconds) used whenever a layout is automatically resized.  0 means next tick */
+        this.resizeDebounceInterval = 100;
+        /** Extend the current debounce delay time period if it is triggered during the delay.
+         * If this is true, the layout will only resize when its container has stopped being resized.
+         * If it is false, the layout will resize at intervals while its container is being resized.
+         */
+        this.resizeDebounceExtendedWhenPossible = true;
+        /** @internal */
+        this._isInitialised = false;
+        /** @internal */
+        this._groundItem = undefined;
+        /** @internal */
+        this._openPopouts = [];
+        /** @internal */
+        this._dropTargetIndicator = null;
+        /** @internal */
+        this._transitionIndicator = null;
+        /** @internal */
+        this._itemAreas = [];
+        /** @internal */
+        this._maximisePlaceholder = LayoutManager.createMaximisePlaceElement(document);
+        /** @internal */
+        this._tabDropPlaceholder = LayoutManager.createTabDropPlaceholderElement(document);
+        /** @internal */
+        this._dragSources = [];
+        /** @internal */
+        this._updatingColumnsResponsive = false;
+        /** @internal */
+        this._firstLoad = true;
+        /** @internal */
+        this._eventHub = new _utils_event_hub__WEBPACK_IMPORTED_MODULE_1__.EventHub(this);
+        /** @internal */
+        this._width = null;
+        /** @internal */
+        this._height = null;
+        /** @internal */
+        this._virtualSizedContainers = [];
+        /** @internal */
+        this._virtualSizedContainerAddingBeginCount = 0;
+        /** @internal */
+        this._sizeInvalidationBeginCount = 0;
+        /** @internal */
+        this._resizeObserver = new ResizeObserver(() => this.handleContainerResize());
+        /** @internal @deprecated to be removed in version 3 */
+        this._windowBeforeUnloadListener = () => this.onBeforeUnload();
+        /** @internal @deprecated to be removed in version 3 */
+        this._windowBeforeUnloadListening = false;
+        /** @internal */
+        this._maximisedStackBeforeDestroyedListener = (ev) => this.cleanupBeforeMaximisedStackDestroyed(ev);
+        this.isSubWindow = parameters.isSubWindow;
+        this._constructorOrSubWindowLayoutConfig = parameters.constructorOrSubWindowLayoutConfig;
+        _utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.I18nStrings.checkInitialise();
+        _utils_config_minifier__WEBPACK_IMPORTED_MODULE_3__.ConfigMinifier.checkInitialise();
+        if (parameters.containerElement !== undefined) {
+            this._containerElement = parameters.containerElement;
+        }
+    }
+    get container() { return this._containerElement; }
+    get isInitialised() { return this._isInitialised; }
+    /** @internal */
+    get groundItem() { return this._groundItem; }
+    /** @internal @deprecated use {@link (LayoutManager:class).groundItem} instead */
+    get root() { return this._groundItem; }
+    get openPopouts() { return this._openPopouts; }
+    /** @internal */
+    get dropTargetIndicator() { return this._dropTargetIndicator; }
+    /** @internal @deprecated To be removed */
+    get transitionIndicator() { return this._transitionIndicator; }
+    get width() { return this._width; }
+    get height() { return this._height; }
+    /**
+     * Retrieves the {@link (EventHub:class)} instance associated with this layout manager.
+     * This can be used to propagate events between the windows
+     * @public
+     */
+    get eventHub() { return this._eventHub; }
+    get rootItem() {
+        if (this._groundItem === undefined) {
+            throw new Error('Cannot access rootItem before init');
+        }
+        else {
+            const groundContentItems = this._groundItem.contentItems;
+            if (groundContentItems.length === 0) {
+                return undefined;
+            }
+            else {
+                return this._groundItem.contentItems[0];
+            }
+        }
+    }
+    get focusedComponentItem() { return this._focusedComponentItem; }
+    /** @internal */
+    get tabDropPlaceholder() { return this._tabDropPlaceholder; }
+    get maximisedStack() { return this._maximisedStack; }
+    /** @deprecated indicates deprecated constructor use */
+    get deprecatedConstructor() { return !this.isSubWindow && this._constructorOrSubWindowLayoutConfig !== undefined; }
+    /**
+     * Destroys the LayoutManager instance itself as well as every ContentItem
+     * within it. After this is called nothing should be left of the LayoutManager.
+     *
+     * This function only needs to be called if an application wishes to destroy the Golden Layout object while
+     * a page remains loaded. When a page is unloaded, all resources claimed by Golden Layout will automatically
+     * be released.
+     */
+    destroy() {
+        if (this._isInitialised) {
+            if (this._windowBeforeUnloadListening) {
+                globalThis.removeEventListener('beforeunload', this._windowBeforeUnloadListener);
+                this._windowBeforeUnloadListening = false;
+            }
+            if (this.layoutConfig.settings.closePopoutsOnUnload === true) {
+                this.closeAllOpenPopouts();
+            }
+            this._resizeObserver.disconnect();
+            this.checkClearResizeTimeout();
+            if (this._groundItem !== undefined) {
+                this._groundItem.destroy();
+            }
+            this._tabDropPlaceholder.remove();
+            if (this._dropTargetIndicator !== null) {
+                this._dropTargetIndicator.destroy();
+            }
+            if (this._transitionIndicator !== null) {
+                this._transitionIndicator.destroy();
+            }
+            this._eventHub.destroy();
+            for (const dragSource of this._dragSources) {
+                dragSource.destroy();
+            }
+            this._dragSources = [];
+            this._isInitialised = false;
+        }
+    }
+    /**
+     * Takes a GoldenLayout configuration object and
+     * replaces its keys and values recursively with
+     * one letter codes
+     * @deprecated use {@link (ResolvedLayoutConfig:namespace).minifyConfig} instead
+     */
+    minifyConfig(config) {
+        return _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedLayoutConfig.minifyConfig(config);
+    }
+    /**
+     * Takes a configuration Object that was previously minified
+     * using minifyConfig and returns its original version
+     * @deprecated use {@link (ResolvedLayoutConfig:namespace).unminifyConfig} instead
+     */
+    unminifyConfig(config) {
+        return _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedLayoutConfig.unminifyConfig(config);
+    }
+    /**
+     * Called from GoldenLayout class. Finishes of init
+     * @internal
+     */
+    init() {
+        this.setContainer();
+        this._dropTargetIndicator = new _controls_drop_target_indicator__WEBPACK_IMPORTED_MODULE_5__.DropTargetIndicator( /*this.container*/);
+        this._transitionIndicator = new _controls_transition_indicator__WEBPACK_IMPORTED_MODULE_6__.TransitionIndicator();
+        this.updateSizeFromContainer();
+        let subWindowRootConfig;
+        if (this.isSubWindow) {
+            if (this._constructorOrSubWindowLayoutConfig === undefined) {
+                // SubWindow LayoutConfig should have been generated by constructor
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMIU07155');
+            }
+            else {
+                const root = this._constructorOrSubWindowLayoutConfig.root;
+                if (root === undefined) {
+                    // SubWindow LayoutConfig must not be empty
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMIC07156');
+                }
+                else {
+                    if (_config_config__WEBPACK_IMPORTED_MODULE_8__.ItemConfig.isComponent(root)) {
+                        subWindowRootConfig = root;
+                    }
+                    else {
+                        // SubWindow LayoutConfig must have Component as Root
+                        throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMIC07157');
+                    }
+                }
+                const resolvedLayoutConfig = _config_config__WEBPACK_IMPORTED_MODULE_8__.LayoutConfig.resolve(this._constructorOrSubWindowLayoutConfig);
+                // remove root from layoutConfig
+                this.layoutConfig = Object.assign(Object.assign({}, resolvedLayoutConfig), { root: undefined });
+            }
+        }
+        else {
+            if (this._constructorOrSubWindowLayoutConfig === undefined) {
+                this.layoutConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedLayoutConfig.createDefault(); // will overwritten be loaded via loadLayout
+            }
+            else {
+                // backwards compatibility
+                this.layoutConfig = _config_config__WEBPACK_IMPORTED_MODULE_8__.LayoutConfig.resolve(this._constructorOrSubWindowLayoutConfig);
+            }
+        }
+        const layoutConfig = this.layoutConfig;
+        this._groundItem = new _items_ground_item__WEBPACK_IMPORTED_MODULE_9__.GroundItem(this, layoutConfig.root, this._containerElement);
+        this._groundItem.init();
+        this.checkLoadedLayoutMaximiseItem();
+        this._resizeObserver.observe(this._containerElement);
+        this._isInitialised = true;
+        this.adjustColumnsResponsive();
+        this.emit('initialised');
+        if (subWindowRootConfig !== undefined) {
+            // must be SubWindow
+            this.loadComponentAsRoot(subWindowRootConfig);
+        }
+    }
+    /**
+     * Loads a new layout
+     * @param layoutConfig - New layout to be loaded
+     */
+    loadLayout(layoutConfig) {
+        if (!this.isInitialised) {
+            // In case application not correctly using legacy constructor
+            throw new Error('GoldenLayout: Need to call init() if LayoutConfig with defined root passed to constructor');
+        }
+        else {
+            if (this._groundItem === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMLL11119');
+            }
+            else {
+                this.createSubWindows(); // still needs to be tested
+                this.layoutConfig = _config_config__WEBPACK_IMPORTED_MODULE_8__.LayoutConfig.resolve(layoutConfig);
+                this._groundItem.loadRoot(this.layoutConfig.root);
+                this.checkLoadedLayoutMaximiseItem();
+                this.adjustColumnsResponsive();
+            }
+        }
+    }
+    /**
+     * Creates a layout configuration object based on the the current state
+     *
+     * @public
+     * @returns GoldenLayout configuration
+     */
+    saveLayout() {
+        if (this._isInitialised === false) {
+            throw new Error('Can\'t create config, layout not yet initialised');
+        }
+        else {
+            // if (root !== undefined && !(root instanceof ContentItem)) {
+            //     throw new Error('Root must be a ContentItem');
+            // }
+            /*
+            * Content
+            */
+            if (this._groundItem === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMTC18244');
+            }
+            else {
+                const groundContent = this._groundItem.calculateConfigContent();
+                let rootItemConfig;
+                if (groundContent.length !== 1) {
+                    rootItemConfig = undefined;
+                }
+                else {
+                    rootItemConfig = groundContent[0];
+                }
+                /*
+                * Retrieve config for subwindows
+                */
+                this.reconcilePopoutWindows();
+                const openPopouts = [];
+                for (let i = 0; i < this._openPopouts.length; i++) {
+                    openPopouts.push(this._openPopouts[i].toConfig());
+                }
+                const config = {
+                    root: rootItemConfig,
+                    openPopouts,
+                    settings: _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedLayoutConfig.Settings.createCopy(this.layoutConfig.settings),
+                    dimensions: _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedLayoutConfig.Dimensions.createCopy(this.layoutConfig.dimensions),
+                    header: _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedLayoutConfig.Header.createCopy(this.layoutConfig.header),
+                    resolved: true,
+                };
+                return config;
+            }
+        }
+    }
+    /**
+     * Removes any existing layout. Effectively, an empty layout will be loaded.
+     */
+    clear() {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMCL11129');
+        }
+        else {
+            this._groundItem.clearRoot();
+        }
+    }
+    /**
+     * @deprecated Use {@link (LayoutManager:class).saveLayout}
+     */
+    toConfig() {
+        return this.saveLayout();
+    }
+    /**
+     * Adds a new ComponentItem.  Will use default location selectors to ensure a location is found and
+     * component is successfully added
+     * @param componentTypeName - Name of component type to be created.
+     * @param state - Optional initial state to be assigned to component
+     * @returns New ComponentItem created.
+     */
+    newComponent(componentType, componentState, title) {
+        const componentItem = this.newComponentAtLocation(componentType, componentState, title);
+        if (componentItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMNC65588');
+        }
+        else {
+            return componentItem;
+        }
+    }
+    /**
+     * Adds a ComponentItem at the first valid selector location.
+     * @param componentTypeName - Name of component type to be created.
+     * @param state - Optional initial state to be assigned to component
+     * @param locationSelectors - Array of location selectors used to find location in layout where component
+     * will be added. First location in array which is valid will be used. If locationSelectors is undefined,
+     * {@link (LayoutManager:namespace).defaultLocationSelectors} will be used
+     * @returns New ComponentItem created or undefined if no valid location selector was in array.
+     */
+    newComponentAtLocation(componentType, componentState, title, locationSelectors) {
+        if (this._groundItem === undefined) {
+            throw new Error('Cannot add component before init');
+        }
+        else {
+            const location = this.addComponentAtLocation(componentType, componentState, title, locationSelectors);
+            if (location === undefined) {
+                return undefined;
+            }
+            else {
+                const createdItem = location.parentItem.contentItems[location.index];
+                if (!_items_content_item__WEBPACK_IMPORTED_MODULE_10__.ContentItem.isComponentItem(createdItem)) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMNC992877533');
+                }
+                else {
+                    return createdItem;
+                }
+            }
+        }
+    }
+    /**
+     * Adds a new ComponentItem.  Will use default location selectors to ensure a location is found and
+     * component is successfully added
+     * @param componentType - Type of component to be created.
+     * @param state - Optional initial state to be assigned to component
+     * @returns Location of new ComponentItem created.
+     */
+    addComponent(componentType, componentState, title) {
+        const location = this.addComponentAtLocation(componentType, componentState, title);
+        if (location === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMAC99943');
+        }
+        else {
+            return location;
+        }
+    }
+    /**
+     * Adds a ComponentItem at the first valid selector location.
+     * @param componentType - Type of component to be created.
+     * @param state - Optional initial state to be assigned to component
+     * @param locationSelectors - Array of location selectors used to find determine location in layout where component
+     * will be added. First location in array which is valid will be used. If undefined,
+     * {@link (LayoutManager:namespace).defaultLocationSelectors} will be used.
+     * @returns Location of new ComponentItem created or undefined if no valid location selector was in array.
+     */
+    addComponentAtLocation(componentType, componentState, title, locationSelectors) {
+        const itemConfig = {
+            type: 'component',
+            componentType,
+            componentState,
+            title,
+        };
+        return this.addItemAtLocation(itemConfig, locationSelectors);
+    }
+    /**
+     * Adds a new ContentItem.  Will use default location selectors to ensure a location is found and
+     * component is successfully added
+     * @param itemConfig - ResolvedItemConfig of child to be added.
+     * @returns New ContentItem created.
+    */
+    newItem(itemConfig) {
+        const contentItem = this.newItemAtLocation(itemConfig);
+        if (contentItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMNC65588');
+        }
+        else {
+            return contentItem;
+        }
+    }
+    /**
+     * Adds a new child ContentItem under the root ContentItem.  If a root does not exist, then create root ContentItem instead
+     * @param itemConfig - ResolvedItemConfig of child to be added.
+     * @param locationSelectors - Array of location selectors used to find determine location in layout where ContentItem
+     * will be added. First location in array which is valid will be used. If undefined,
+     * {@link (LayoutManager:namespace).defaultLocationSelectors} will be used.
+     * @returns New ContentItem created or undefined if no valid location selector was in array. */
+    newItemAtLocation(itemConfig, locationSelectors) {
+        if (this._groundItem === undefined) {
+            throw new Error('Cannot add component before init');
+        }
+        else {
+            const location = this.addItemAtLocation(itemConfig, locationSelectors);
+            if (location === undefined) {
+                return undefined;
+            }
+            else {
+                const createdItem = location.parentItem.contentItems[location.index];
+                return createdItem;
+            }
+        }
+    }
+    /**
+     * Adds a new ContentItem.  Will use default location selectors to ensure a location is found and
+     * component is successfully added.
+     * @param itemConfig - ResolvedItemConfig of child to be added.
+     * @returns Location of new ContentItem created. */
+    addItem(itemConfig) {
+        const location = this.addItemAtLocation(itemConfig);
+        if (location === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMAI99943');
+        }
+        else {
+            return location;
+        }
+    }
+    /**
+     * Adds a ContentItem at the first valid selector location.
+     * @param itemConfig - ResolvedItemConfig of child to be added.
+     * @param locationSelectors - Array of location selectors used to find determine location in layout where ContentItem
+     * will be added. First location in array which is valid will be used. If undefined,
+     * {@link (LayoutManager:namespace).defaultLocationSelectors} will be used.
+     * @returns Location of new ContentItem created or undefined if no valid location selector was in array. */
+    addItemAtLocation(itemConfig, locationSelectors) {
+        if (this._groundItem === undefined) {
+            throw new Error('Cannot add component before init');
+        }
+        else {
+            if (locationSelectors === undefined) {
+                // defaultLocationSelectors should always find a location
+                locationSelectors = LayoutManager.defaultLocationSelectors;
+            }
+            const location = this.findFirstLocation(locationSelectors);
+            if (location === undefined) {
+                return undefined;
+            }
+            else {
+                let parentItem = location.parentItem;
+                let addIdx;
+                switch (parentItem.type) {
+                    case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.ground: {
+                        const groundItem = parentItem;
+                        addIdx = groundItem.addItem(itemConfig, location.index);
+                        if (addIdx >= 0) {
+                            parentItem = this._groundItem.contentItems[0]; // was added to rootItem
+                        }
+                        else {
+                            addIdx = 0; // was added as rootItem (which is the first and only ContentItem in GroundItem)
+                        }
+                        break;
+                    }
+                    case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.row:
+                    case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.column: {
+                        const rowOrColumn = parentItem;
+                        addIdx = rowOrColumn.addItem(itemConfig, location.index);
+                        break;
+                    }
+                    case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.stack: {
+                        if (!_config_config__WEBPACK_IMPORTED_MODULE_8__.ItemConfig.isComponent(itemConfig)) {
+                            throw Error(_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[6 /* ItemConfigIsNotTypeComponent */]);
+                        }
+                        else {
+                            const stack = parentItem;
+                            addIdx = stack.addItem(itemConfig, location.index);
+                            break;
+                        }
+                    }
+                    case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.component: {
+                        throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMAIALC87444602');
+                    }
+                    default:
+                        throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnreachableCaseError('LMAIALU98881733', parentItem.type);
+                }
+                if (_config_config__WEBPACK_IMPORTED_MODULE_8__.ItemConfig.isComponent(itemConfig)) {
+                    // see if stack was inserted
+                    const item = parentItem.contentItems[addIdx];
+                    if (_items_content_item__WEBPACK_IMPORTED_MODULE_10__.ContentItem.isStack(item)) {
+                        parentItem = item;
+                        addIdx = 0;
+                    }
+                }
+                location.parentItem = parentItem;
+                location.index = addIdx;
+                return location;
+            }
+        }
+    }
+    /** Loads the specified component ResolvedItemConfig as root.
+     * This can be used to display a Component all by itself.  The layout cannot be changed other than having another new layout loaded.
+     * Note that, if this layout is saved and reloaded, it will reload with the Component as a child of a Stack.
+    */
+    loadComponentAsRoot(itemConfig) {
+        if (this._groundItem === undefined) {
+            throw new Error('Cannot add item before init');
+        }
+        else {
+            this._groundItem.loadComponentAsRoot(itemConfig);
+        }
+    }
+    /** @deprecated Use {@link (LayoutManager:class).setSize} */
+    updateSize(width, height) {
+        this.setSize(width, height);
+    }
+    /**
+     * Updates the layout managers size
+     *
+     * @param width - Width in pixels
+     * @param height - Height in pixels
+     */
+    setSize(width, height) {
+        this._width = width;
+        this._height = height;
+        if (this._isInitialised === true) {
+            if (this._groundItem === undefined) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMUS18881');
+            }
+            else {
+                this._groundItem.setSize(this._width, this._height);
+                if (this._maximisedStack) {
+                    const { width, height } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.getElementWidthAndHeight)(this._containerElement);
+                    (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.setElementWidth)(this._maximisedStack.element, width);
+                    (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.setElementHeight)(this._maximisedStack.element, height);
+                    this._maximisedStack.updateSize(false);
+                }
+                this.adjustColumnsResponsive();
+            }
+        }
+    }
+    /** @internal */
+    beginSizeInvalidation() {
+        this._sizeInvalidationBeginCount++;
+    }
+    /** @internal */
+    endSizeInvalidation() {
+        if (--this._sizeInvalidationBeginCount === 0) {
+            this.updateSizeFromContainer();
+        }
+    }
+    /** @internal */
+    updateSizeFromContainer() {
+        const { width, height } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.getElementWidthAndHeight)(this._containerElement);
+        this.setSize(width, height);
+    }
+    /**
+     * Update the size of the root ContentItem.  This will update the size of all contentItems in the tree
+     * @param force - In some cases the size is not updated if it has not changed. In this case, events
+     * (such as ComponentContainer.virtualRectingRequiredEvent) are not fired. Setting force to true, ensures the size is updated regardless, and
+     * the respective events are fired. This is sometimes necessary when a component's size has not changed but it has become visible, and the
+     * relevant events need to be fired.
+     */
+    updateRootSize(force = false) {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMURS28881');
+        }
+        else {
+            this._groundItem.updateSize(force);
+        }
+    }
+    /** @public */
+    createAndInitContentItem(config, parent) {
+        const newItem = this.createContentItem(config, parent);
+        newItem.init();
+        return newItem;
+    }
+    /**
+     * Recursively creates new item tree structures based on a provided
+     * ItemConfiguration object
+     *
+     * @param config - ResolvedItemConfig
+     * @param parent - The item the newly created item should be a child of
+     * @internal
+     */
+    createContentItem(config, parent) {
+        if (typeof config.type !== 'string') {
+            throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_13__.ConfigurationError('Missing parameter \'type\'', JSON.stringify(config));
+        }
+        /**
+         * We add an additional stack around every component that's not within a stack anyways.
+         */
+        if (
+        // If this is a component
+        _config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedItemConfig.isComponentItem(config) &&
+            // and it's not already within a stack
+            !(parent instanceof _items_stack__WEBPACK_IMPORTED_MODULE_14__.Stack) &&
+            // and we have a parent
+            !!parent &&
+            // and it's not the topmost item in a new window
+            !(this.isSubWindow === true && parent instanceof _items_ground_item__WEBPACK_IMPORTED_MODULE_9__.GroundItem)) {
+            const stackConfig = {
+                type: _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.stack,
+                content: [config],
+                size: config.size,
+                sizeUnit: config.sizeUnit,
+                minSize: config.minSize,
+                minSizeUnit: config.minSizeUnit,
+                id: config.id,
+                maximised: config.maximised,
+                isClosable: config.isClosable,
+                activeItemIndex: 0,
+                header: undefined,
+            };
+            config = stackConfig;
+        }
+        const contentItem = this.createContentItemFromConfig(config, parent);
+        return contentItem;
+    }
+    findFirstComponentItemById(id) {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMFFCIBI82446');
+        }
+        else {
+            return this.findFirstContentItemTypeByIdRecursive(_utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.component, id, this._groundItem);
+        }
+    }
+    /**
+     * Creates a popout window with the specified content at the specified position
+     *
+     * @param itemConfigOrContentItem - The content of the popout window's layout manager derived from either
+     * a {@link (ContentItem:class)} or {@link (ItemConfig:interface)} or ResolvedItemConfig content (array of {@link (ItemConfig:interface)})
+     * @param positionAndSize - The width, height, left and top of Popout window
+     * @param parentId -The id of the element this item will be appended to when popIn is called
+     * @param indexInParent - The position of this item within its parent element
+     */
+    createPopout(itemConfigOrContentItem, positionAndSize, parentId, indexInParent) {
+        if (itemConfigOrContentItem instanceof _items_content_item__WEBPACK_IMPORTED_MODULE_10__.ContentItem) {
+            return this.createPopoutFromContentItem(itemConfigOrContentItem, positionAndSize, parentId, indexInParent);
+        }
+        else {
+            return this.createPopoutFromItemConfig(itemConfigOrContentItem, positionAndSize, parentId, indexInParent);
+        }
+    }
+    /** @internal */
+    createPopoutFromContentItem(item, window, parentId, indexInParent) {
+        /**
+         * If the item is the only component within a stack or for some
+         * other reason the only child of its parent the parent will be destroyed
+         * when the child is removed.
+         *
+         * In order to support this we move up the tree until we find something
+         * that will remain after the item is being popped out
+         */
+        let parent = item.parent;
+        let child = item;
+        while (parent !== null && parent.contentItems.length === 1 && !parent.isGround) {
+            child = parent;
+            parent = parent.parent;
+        }
+        if (parent === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedNullError('LMCPFCI00834');
+        }
+        else {
+            if (indexInParent === undefined) {
+                indexInParent = parent.contentItems.indexOf(child);
+            }
+            if (parentId !== null) {
+                parent.addPopInParentId(parentId);
+            }
+            if (window === undefined) {
+                const windowLeft = globalThis.screenX || globalThis.screenLeft;
+                const windowTop = globalThis.screenY || globalThis.screenTop;
+                const offsetLeft = item.element.offsetLeft;
+                const offsetTop = item.element.offsetTop;
+                // const { left: offsetLeft, top: offsetTop } = getJQueryLeftAndTop(item.element);
+                const { width, height } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.getElementWidthAndHeight)(item.element);
+                window = {
+                    left: windowLeft + offsetLeft,
+                    top: windowTop + offsetTop,
+                    width,
+                    height,
+                };
+            }
+            const itemConfig = item.toConfig();
+            item.remove();
+            if (!_config_resolved_config__WEBPACK_IMPORTED_MODULE_4__.ResolvedRootItemConfig.isRootItemConfig(itemConfig)) {
+                throw new Error(`${_utils_i18n_strings__WEBPACK_IMPORTED_MODULE_2__.i18nStrings[0 /* PopoutCannotBeCreatedWithGroundItemConfig */]}`);
+            }
+            else {
+                return this.createPopoutFromItemConfig(itemConfig, window, parentId, indexInParent);
+            }
+        }
+    }
+    /** @internal */
+    beginVirtualSizedContainerAdding() {
+        if (++this._virtualSizedContainerAddingBeginCount === 0) {
+            this._virtualSizedContainers.length = 0;
+        }
+    }
+    /** @internal */
+    addVirtualSizedContainer(container) {
+        this._virtualSizedContainers.push(container);
+    }
+    /** @internal */
+    endVirtualSizedContainerAdding() {
+        if (--this._virtualSizedContainerAddingBeginCount === 0) {
+            const count = this._virtualSizedContainers.length;
+            if (count > 0) {
+                this.fireBeforeVirtualRectingEvent(count);
+                for (let i = 0; i < count; i++) {
+                    const container = this._virtualSizedContainers[i];
+                    container.notifyVirtualRectingRequired();
+                }
+                this.fireAfterVirtualRectingEvent();
+                this._virtualSizedContainers.length = 0;
+            }
+        }
+    }
+    /** @internal */
+    fireBeforeVirtualRectingEvent(count) {
+        if (this.beforeVirtualRectingEvent !== undefined) {
+            this.beforeVirtualRectingEvent(count);
+        }
+    }
+    /** @internal */
+    fireAfterVirtualRectingEvent() {
+        if (this.afterVirtualRectingEvent !== undefined) {
+            this.afterVirtualRectingEvent();
+        }
+    }
+    /** @internal */
+    createPopoutFromItemConfig(rootItemConfig, window, parentId, indexInParent) {
+        const layoutConfig = this.toConfig();
+        const popoutLayoutConfig = {
+            root: rootItemConfig,
+            openPopouts: [],
+            settings: layoutConfig.settings,
+            dimensions: layoutConfig.dimensions,
+            header: layoutConfig.header,
+            window,
+            parentId,
+            indexInParent,
+            resolved: true,
+        };
+        return this.createPopoutFromPopoutLayoutConfig(popoutLayoutConfig);
+    }
+    /** @internal */
+    createPopoutFromPopoutLayoutConfig(config) {
+        var _a, _b, _c, _d;
+        const configWindow = config.window;
+        const initialWindow = {
+            left: (_a = configWindow.left) !== null && _a !== void 0 ? _a : (globalThis.screenX || globalThis.screenLeft + 20),
+            top: (_b = configWindow.top) !== null && _b !== void 0 ? _b : (globalThis.screenY || globalThis.screenTop + 20),
+            width: (_c = configWindow.width) !== null && _c !== void 0 ? _c : 500,
+            height: (_d = configWindow.height) !== null && _d !== void 0 ? _d : 309,
+        };
+        const browserPopout = new _controls_browser_popout__WEBPACK_IMPORTED_MODULE_15__.BrowserPopout(config, initialWindow, this);
+        browserPopout.on('initialised', () => this.emit('windowOpened', browserPopout));
+        browserPopout.on('closed', () => this.reconcilePopoutWindows());
+        this._openPopouts.push(browserPopout);
+        if (this.layoutConfig.settings.closePopoutsOnUnload && !this._windowBeforeUnloadListening) {
+            globalThis.addEventListener('beforeunload', this._windowBeforeUnloadListener, { passive: true });
+            this._windowBeforeUnloadListening = true;
+        }
+        return browserPopout;
+    }
+    /**
+     * Closes all Open Popouts
+     * Applications can call this method when a page is unloaded to remove its open popouts
+     */
+    closeAllOpenPopouts() {
+        for (let i = 0; i < this._openPopouts.length; i++) {
+            this._openPopouts[i].close();
+        }
+        this._openPopouts.length = 0;
+        if (this._windowBeforeUnloadListening) {
+            globalThis.removeEventListener('beforeunload', this._windowBeforeUnloadListener);
+            this._windowBeforeUnloadListening = false;
+        }
+    }
+    newDragSource(element, componentTypeOrItemConfigCallback, componentState, title, id) {
+        const dragSource = new _controls_drag_source__WEBPACK_IMPORTED_MODULE_16__.DragSource(this, element, [], componentTypeOrItemConfigCallback, componentState, title, id);
+        this._dragSources.push(dragSource);
+        return dragSource;
+    }
+    /**
+     * Removes a DragListener added by createDragSource() so the corresponding
+     * DOM element is not a drag source any more.
+     */
+    removeDragSource(dragSource) {
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.removeFromArray)(dragSource, this._dragSources);
+        dragSource.destroy();
+    }
+    /** @internal */
+    startComponentDrag(x, y, dragListener, componentItem, stack) {
+        new _controls_drag_proxy__WEBPACK_IMPORTED_MODULE_17__.DragProxy(x, y, dragListener, this, componentItem, stack);
+    }
+    /**
+     * Programmatically focuses an item. This focuses the specified component item
+     * and the item emits a focus event
+     *
+     * @param item - The component item to be focused
+     * @param suppressEvent - Whether to emit focus event
+     */
+    focusComponent(item, suppressEvent = false) {
+        item.focus(suppressEvent);
+    }
+    /**
+     * Programmatically blurs (defocuses) the currently focused component.
+     * If a component item is focused, then it is blurred and and the item emits a blur event
+     *
+     * @param item - The component item to be blurred
+     * @param suppressEvent - Whether to emit blur event
+     */
+    clearComponentFocus(suppressEvent = false) {
+        this.setFocusedComponentItem(undefined, suppressEvent);
+    }
+    /**
+     * Programmatically focuses a component item or removes focus (blurs) from an existing focused component item.
+     *
+     * @param item - If defined, specifies the component item to be given focus.  If undefined, clear component focus.
+     * @param suppressEvents - Whether to emit focus and blur events
+     * @internal
+     */
+    setFocusedComponentItem(item, suppressEvents = false) {
+        if (item !== this._focusedComponentItem) {
+            let newFocusedParentItem;
+            if (item === undefined) {
+                newFocusedParentItem === undefined;
+            }
+            else {
+                newFocusedParentItem = item.parentItem;
+            }
+            if (this._focusedComponentItem !== undefined) {
+                const oldFocusedItem = this._focusedComponentItem;
+                this._focusedComponentItem = undefined;
+                oldFocusedItem.setBlurred(suppressEvents);
+                const oldFocusedParentItem = oldFocusedItem.parentItem;
+                if (newFocusedParentItem === oldFocusedParentItem) {
+                    newFocusedParentItem = undefined;
+                }
+                else {
+                    oldFocusedParentItem.setFocusedValue(false);
+                }
+            }
+            if (item !== undefined) {
+                this._focusedComponentItem = item;
+                item.setFocused(suppressEvents);
+                if (newFocusedParentItem !== undefined) {
+                    newFocusedParentItem.setFocusedValue(true);
+                }
+            }
+        }
+    }
+    /** @internal */
+    createContentItemFromConfig(config, parent) {
+        switch (config.type) {
+            case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.ground: throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMCCIFC68871');
+            case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.row: return new _items_row_or_column__WEBPACK_IMPORTED_MODULE_18__.RowOrColumn(false, this, config, parent);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.column: return new _items_row_or_column__WEBPACK_IMPORTED_MODULE_18__.RowOrColumn(true, this, config, parent);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.stack: return new _items_stack__WEBPACK_IMPORTED_MODULE_14__.Stack(this, config, parent);
+            case _utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.component:
+                return new _items_component_item__WEBPACK_IMPORTED_MODULE_19__.ComponentItem(this, config, parent);
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnreachableCaseError('CCC913564', config.type, 'Invalid Config Item type specified');
+        }
+    }
+    /**
+     * This should only be called from stack component.
+     * Stack will look after docking processing associated with maximise/minimise
+     * @internal
+     **/
+    setMaximisedStack(stack) {
+        if (stack === undefined) {
+            if (this._maximisedStack !== undefined) {
+                this.processMinimiseMaximisedStack();
+            }
+        }
+        else {
+            if (stack !== this._maximisedStack) {
+                if (this._maximisedStack !== undefined) {
+                    this.processMinimiseMaximisedStack();
+                }
+                this.processMaximiseStack(stack);
+            }
+        }
+    }
+    checkMinimiseMaximisedStack() {
+        if (this._maximisedStack !== undefined) {
+            this._maximisedStack.minimise();
+        }
+    }
+    // showAllActiveContentItems() was called from ContentItem.show().  Not sure what its purpose was so have commented out
+    // Everything seems to work ok without this.  Have left commented code just in case there was a reason for it becomes
+    // apparent
+    // /** @internal */
+    // showAllActiveContentItems(): void {
+    //     const allStacks = this.getAllStacks();
+    //     for (let i = 0; i < allStacks.length; i++) {
+    //         const stack = allStacks[i];
+    //         const activeContentItem = stack.getActiveComponentItem();
+    //         if (activeContentItem !== undefined) {
+    //             if (!(activeContentItem instanceof ComponentItem)) {
+    //                 throw new AssertError('LMSAACIS22298');
+    //             } else {
+    //                 activeContentItem.container.show();
+    //             }
+    //         }
+    //     }
+    // }
+    // hideAllActiveContentItems() was called from ContentItem.hide().  Not sure what its purpose was so have commented out
+    // Everything seems to work ok without this.  Have left commented code just in case there was a reason for it becomes
+    // apparent
+    // /** @internal */
+    // hideAllActiveContentItems(): void {
+    //     const allStacks = this.getAllStacks();
+    //     for (let i = 0; i < allStacks.length; i++) {
+    //         const stack = allStacks[i];
+    //         const activeContentItem = stack.getActiveComponentItem();
+    //         if (activeContentItem !== undefined) {
+    //             if (!(activeContentItem instanceof ComponentItem)) {
+    //                 throw new AssertError('LMSAACIH22298');
+    //             } else {
+    //                 activeContentItem.container.hide();
+    //             }
+    //         }
+    //     }
+    // }
+    /** @internal */
+    cleanupBeforeMaximisedStackDestroyed(event) {
+        if (this._maximisedStack !== null && this._maximisedStack === event.target) {
+            this._maximisedStack.off('beforeItemDestroyed', this._maximisedStackBeforeDestroyedListener);
+            this._maximisedStack = undefined;
+        }
+    }
+    /**
+     * This method is used to get around sandboxed iframe restrictions.
+     * If 'allow-top-navigation' is not specified in the iframe's 'sandbox' attribute
+     * (as is the case with codepens) the parent window is forbidden from calling certain
+     * methods on the child, such as window.close() or setting document.location.href.
+     *
+     * This prevented GoldenLayout popouts from popping in in codepens. The fix is to call
+     * _$closeWindow on the child window's gl instance which (after a timeout to disconnect
+     * the invoking method from the close call) closes itself.
+     *
+     * @internal
+     */
+    closeWindow() {
+        globalThis.setTimeout(() => globalThis.close(), 1);
+    }
+    /** @internal */
+    getArea(x, y) {
+        let matchingArea = null;
+        let smallestSurface = Infinity;
+        for (let i = 0; i < this._itemAreas.length; i++) {
+            const area = this._itemAreas[i];
+            if (x >= area.x1 &&
+                x < area.x2 && // x2 is not included in area
+                y >= area.y1 &&
+                y < area.y2 && // y2 is not included in area
+                smallestSurface > area.surface) {
+                smallestSurface = area.surface;
+                matchingArea = area;
+            }
+        }
+        return matchingArea;
+    }
+    /** @internal */
+    calculateItemAreas() {
+        const allContentItems = this.getAllContentItems();
+        /**
+         * If the last item is dragged out, highlight the entire container size to
+         * allow to re-drop it. this.ground.contentiItems.length === 0 at this point
+         *
+         * Don't include ground into the possible drop areas though otherwise since it
+         * will used for every gap in the layout, e.g. splitters
+         */
+        const groundItem = this._groundItem;
+        if (groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMCIAR44365');
+        }
+        else {
+            if (allContentItems.length === 1) {
+                // No root ContentItem (just Ground ContentItem)
+                const groundArea = groundItem.getElementArea();
+                if (groundArea === null) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedNullError('LMCIARA44365');
+                }
+                else {
+                    this._itemAreas = [groundArea];
+                }
+                return;
+            }
+            else {
+                if (groundItem.contentItems[0].isStack) {
+                    // if root is Stack, then split stack and sides of Layout are same, so skip sides
+                    this._itemAreas = [];
+                }
+                else {
+                    // sides of layout
+                    this._itemAreas = groundItem.createSideAreas();
+                }
+                for (let i = 0; i < allContentItems.length; i++) {
+                    const stack = allContentItems[i];
+                    if (_items_content_item__WEBPACK_IMPORTED_MODULE_10__.ContentItem.isStack(stack)) {
+                        const area = stack.getArea();
+                        if (area === null) {
+                            continue;
+                        }
+                        else {
+                            this._itemAreas.push(area);
+                            const stackContentAreaDimensions = stack.contentAreaDimensions;
+                            if (stackContentAreaDimensions === undefined) {
+                                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMCIASC45599');
+                            }
+                            else {
+                                const highlightArea = stackContentAreaDimensions.header.highlightArea;
+                                const surface = (highlightArea.x2 - highlightArea.x1) * (highlightArea.y2 - highlightArea.y1);
+                                const header = {
+                                    x1: highlightArea.x1,
+                                    x2: highlightArea.x2,
+                                    y1: highlightArea.y1,
+                                    y2: highlightArea.y2,
+                                    contentItem: stack,
+                                    surface,
+                                };
+                                this._itemAreas.push(header);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Called as part of loading a new layout (including initial init()).
+     * Checks to see layout has a maximised item. If so, it maximises that item.
+     * @internal
+     */
+    checkLoadedLayoutMaximiseItem() {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMCLLMI43432');
+        }
+        else {
+            const configMaximisedItems = this._groundItem.getConfigMaximisedItems();
+            if (configMaximisedItems.length > 0) {
+                let item = configMaximisedItems[0];
+                if (_items_content_item__WEBPACK_IMPORTED_MODULE_10__.ContentItem.isComponentItem(item)) {
+                    const stack = item.parent;
+                    if (stack === null) {
+                        throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedNullError('LMXLLMI69999');
+                    }
+                    else {
+                        item = stack;
+                    }
+                }
+                if (!_items_content_item__WEBPACK_IMPORTED_MODULE_10__.ContentItem.isStack(item)) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMCLLMI19993');
+                }
+                else {
+                    item.maximise();
+                }
+            }
+        }
+    }
+    /** @internal */
+    processMaximiseStack(stack) {
+        this._maximisedStack = stack;
+        stack.on('beforeItemDestroyed', this._maximisedStackBeforeDestroyedListener);
+        stack.element.classList.add("lm_maximised" /* Maximised */);
+        stack.element.insertAdjacentElement('afterend', this._maximisePlaceholder);
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMMXI19993');
+        }
+        else {
+            this._groundItem.element.prepend(stack.element);
+            const { width, height } = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.getElementWidthAndHeight)(this._containerElement);
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.setElementWidth)(stack.element, width);
+            (0,_utils_utils__WEBPACK_IMPORTED_MODULE_12__.setElementHeight)(stack.element, height);
+            stack.updateSize(true);
+            stack.focusActiveContentItem();
+            this._maximisedStack.emit('maximised');
+            this.emit('stateChanged');
+        }
+    }
+    /** @internal */
+    processMinimiseMaximisedStack() {
+        if (this._maximisedStack === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMMMS74422');
+        }
+        else {
+            const stack = this._maximisedStack;
+            if (stack.parent === null) {
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedNullError('LMMI13668');
+            }
+            else {
+                stack.element.classList.remove("lm_maximised" /* Maximised */);
+                this._maximisePlaceholder.insertAdjacentElement('afterend', stack.element);
+                this._maximisePlaceholder.remove();
+                this.updateRootSize(true);
+                this._maximisedStack = undefined;
+                stack.off('beforeItemDestroyed', this._maximisedStackBeforeDestroyedListener);
+                stack.emit('minimised');
+                this.emit('stateChanged');
+            }
+        }
+    }
+    /**
+     * Iterates through the array of open popout windows and removes the ones
+     * that are effectively closed. This is necessary due to the lack of reliably
+     * listening for window.close / unload events in a cross browser compatible fashion.
+     * @internal
+     */
+    reconcilePopoutWindows() {
+        const openPopouts = [];
+        for (let i = 0; i < this._openPopouts.length; i++) {
+            if (this._openPopouts[i].getWindow().closed === false) {
+                openPopouts.push(this._openPopouts[i]);
+            }
+            else {
+                this.emit('windowClosed', this._openPopouts[i]);
+            }
+        }
+        if (this._openPopouts.length !== openPopouts.length) {
+            this._openPopouts = openPopouts;
+            this.emit('stateChanged');
+        }
+    }
+    /**
+     * Returns a flattened array of all content items,
+     * regardles of level or type
+     * @internal
+     */
+    getAllContentItems() {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMGACI13130');
+        }
+        else {
+            return this._groundItem.getAllContentItems();
+        }
+    }
+    /**
+     * Creates Subwindows (if there are any). Throws an error
+     * if popouts are blocked.
+     * @internal
+     */
+    createSubWindows() {
+        for (let i = 0; i < this.layoutConfig.openPopouts.length; i++) {
+            const popoutConfig = this.layoutConfig.openPopouts[i];
+            this.createPopoutFromPopoutLayoutConfig(popoutConfig);
+        }
+    }
+    /**
+     * Debounces resize events
+     * @internal
+     */
+    handleContainerResize() {
+        if (this.resizeWithContainerAutomatically) {
+            this.processResizeWithDebounce();
+        }
+    }
+    /**
+     * Debounces resize events
+     * @internal
+     */
+    processResizeWithDebounce() {
+        if (this.resizeDebounceExtendedWhenPossible) {
+            this.checkClearResizeTimeout();
+        }
+        if (this._resizeTimeoutId === undefined) {
+            this._resizeTimeoutId = setTimeout(() => {
+                this._resizeTimeoutId = undefined;
+                this.beginSizeInvalidation();
+                this.endSizeInvalidation();
+            }, this.resizeDebounceInterval);
+        }
+    }
+    checkClearResizeTimeout() {
+        if (this._resizeTimeoutId !== undefined) {
+            clearTimeout(this._resizeTimeoutId);
+            this._resizeTimeoutId = undefined;
+        }
+    }
+    /**
+     * Determines what element the layout will be created in
+     * @internal
+     */
+    setContainer() {
+        var _a;
+        const bodyElement = document.body;
+        const containerElement = (_a = this._containerElement) !== null && _a !== void 0 ? _a : bodyElement;
+        if (containerElement === bodyElement) {
+            this.resizeWithContainerAutomatically = true;
+            const documentElement = document.documentElement;
+            documentElement.style.height = '100%';
+            documentElement.style.margin = '0';
+            documentElement.style.padding = '0';
+            documentElement.style.overflow = 'clip';
+            bodyElement.style.height = '100%';
+            bodyElement.style.margin = '0';
+            bodyElement.style.padding = '0';
+            bodyElement.style.overflow = 'clip';
+        }
+        this._containerElement = containerElement;
+    }
+    /**
+     * Called when the window is closed or the user navigates away
+     * from the page
+     * @internal
+     * @deprecated to be removed in version 3
+     */
+    onBeforeUnload() {
+        this.destroy();
+    }
+    /**
+     * Adjusts the number of columns to be lower to fit the screen and still maintain minItemWidth.
+     * @internal
+     */
+    adjustColumnsResponsive() {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMACR20883');
+        }
+        else {
+            this._firstLoad = false;
+            // If there is no min width set, or not content items, do nothing.
+            if (this.useResponsiveLayout() &&
+                !this._updatingColumnsResponsive &&
+                this._groundItem.contentItems.length > 0 &&
+                this._groundItem.contentItems[0].isRow) {
+                if (this._groundItem === undefined || this._width === null) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMACR77412');
+                }
+                else {
+                    // If there is only one column, do nothing.
+                    const columnCount = this._groundItem.contentItems[0].contentItems.length;
+                    if (columnCount <= 1) {
+                        return;
+                    }
+                    else {
+                        // If they all still fit, do nothing.
+                        const minItemWidth = this.layoutConfig.dimensions.defaultMinItemWidth;
+                        const totalMinWidth = columnCount * minItemWidth;
+                        if (totalMinWidth <= this._width) {
+                            return;
+                        }
+                        else {
+                            // Prevent updates while it is already happening.
+                            this._updatingColumnsResponsive = true;
+                            // Figure out how many columns to stack, and put them all in the first stack container.
+                            const finalColumnCount = Math.max(Math.floor(this._width / minItemWidth), 1);
+                            const stackColumnCount = columnCount - finalColumnCount;
+                            const rootContentItem = this._groundItem.contentItems[0];
+                            const allStacks = this.getAllStacks();
+                            if (allStacks.length === 0) {
+                                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.AssertError('LMACRS77413');
+                            }
+                            else {
+                                const firstStackContainer = allStacks[0];
+                                for (let i = 0; i < stackColumnCount; i++) {
+                                    // Stack from right.
+                                    const column = rootContentItem.contentItems[rootContentItem.contentItems.length - 1];
+                                    this.addChildContentItemsToContainer(firstStackContainer, column);
+                                }
+                                this._updatingColumnsResponsive = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Determines if responsive layout should be used.
+     *
+     * @returns True if responsive layout should be used; otherwise false.
+     * @internal
+     */
+    useResponsiveLayout() {
+        const settings = this.layoutConfig.settings;
+        const alwaysResponsiveMode = settings.responsiveMode === _utils_types__WEBPACK_IMPORTED_MODULE_11__.ResponsiveMode.always;
+        const onLoadResponsiveModeAndFirst = settings.responsiveMode === _utils_types__WEBPACK_IMPORTED_MODULE_11__.ResponsiveMode.onload && this._firstLoad;
+        return alwaysResponsiveMode || onLoadResponsiveModeAndFirst;
+    }
+    /**
+     * Adds all children of a node to another container recursively.
+     * @param container - Container to add child content items to.
+     * @param node - Node to search for content items.
+     * @internal
+     */
+    addChildContentItemsToContainer(container, node) {
+        const contentItems = node.contentItems;
+        if (node instanceof _items_stack__WEBPACK_IMPORTED_MODULE_14__.Stack) {
+            for (let i = 0; i < contentItems.length; i++) {
+                const item = contentItems[i];
+                node.removeChild(item, true);
+                container.addChild(item);
+            }
+        }
+        else {
+            for (let i = 0; i < contentItems.length; i++) {
+                const item = contentItems[i];
+                this.addChildContentItemsToContainer(container, item);
+            }
+        }
+    }
+    /**
+     * Finds all the stacks.
+     * @returns The found stack containers.
+     * @internal
+     */
+    getAllStacks() {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMFASC52778');
+        }
+        else {
+            const stacks = [];
+            this.findAllStacksRecursive(stacks, this._groundItem);
+            return stacks;
+        }
+    }
+    /** @internal */
+    findFirstContentItemType(type) {
+        if (this._groundItem === undefined) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMFFCIT82446');
+        }
+        else {
+            return this.findFirstContentItemTypeRecursive(type, this._groundItem);
+        }
+    }
+    /** @internal */
+    findFirstContentItemTypeRecursive(type, node) {
+        const contentItems = node.contentItems;
+        const contentItemCount = contentItems.length;
+        if (contentItemCount === 0) {
+            return undefined;
+        }
+        else {
+            for (let i = 0; i < contentItemCount; i++) {
+                const contentItem = contentItems[i];
+                if (contentItem.type === type) {
+                    return contentItem;
+                }
+            }
+            for (let i = 0; i < contentItemCount; i++) {
+                const contentItem = contentItems[i];
+                const foundContentItem = this.findFirstContentItemTypeRecursive(type, contentItem);
+                if (foundContentItem !== undefined) {
+                    return foundContentItem;
+                }
+            }
+            return undefined;
+        }
+    }
+    /** @internal */
+    findFirstContentItemTypeByIdRecursive(type, id, node) {
+        const contentItems = node.contentItems;
+        const contentItemCount = contentItems.length;
+        if (contentItemCount === 0) {
+            return undefined;
+        }
+        else {
+            for (let i = 0; i < contentItemCount; i++) {
+                const contentItem = contentItems[i];
+                if (contentItem.type === type && contentItem.id === id) {
+                    return contentItem;
+                }
+            }
+            for (let i = 0; i < contentItemCount; i++) {
+                const contentItem = contentItems[i];
+                const foundContentItem = this.findFirstContentItemTypeByIdRecursive(type, id, contentItem);
+                if (foundContentItem !== undefined) {
+                    return foundContentItem;
+                }
+            }
+            return undefined;
+        }
+    }
+    /**
+     * Finds all the stack containers.
+     *
+     * @param stacks - Set of containers to populate.
+     * @param node - Current node to process.
+     * @internal
+     */
+    findAllStacksRecursive(stacks, node) {
+        const contentItems = node.contentItems;
+        for (let i = 0; i < contentItems.length; i++) {
+            const item = contentItems[i];
+            if (item instanceof _items_stack__WEBPACK_IMPORTED_MODULE_14__.Stack) {
+                stacks.push(item);
+            }
+            else {
+                if (!item.isComponent) {
+                    this.findAllStacksRecursive(stacks, item);
+                }
+            }
+        }
+    }
+    /** @internal */
+    findFirstLocation(selectors) {
+        const count = selectors.length;
+        for (let i = 0; i < count; i++) {
+            const selector = selectors[i];
+            const location = this.findLocation(selector);
+            if (location !== undefined) {
+                return location;
+            }
+        }
+        return undefined;
+    }
+    /** @internal */
+    findLocation(selector) {
+        const selectorIndex = selector.index;
+        switch (selector.typeId) {
+            case 0 /* FocusedItem */: {
+                if (this._focusedComponentItem === undefined) {
+                    return undefined;
+                }
+                else {
+                    const parentItem = this._focusedComponentItem.parentItem;
+                    const parentContentItems = parentItem.contentItems;
+                    const parentContentItemCount = parentContentItems.length;
+                    if (selectorIndex === undefined) {
+                        return { parentItem, index: parentContentItemCount };
+                    }
+                    else {
+                        const focusedIndex = parentContentItems.indexOf(this._focusedComponentItem);
+                        const index = focusedIndex + selectorIndex;
+                        if (index < 0 || index > parentContentItemCount) {
+                            return undefined;
+                        }
+                        else {
+                            return { parentItem, index };
+                        }
+                    }
+                }
+            }
+            case 1 /* FocusedStack */: {
+                if (this._focusedComponentItem === undefined) {
+                    return undefined;
+                }
+                else {
+                    const parentItem = this._focusedComponentItem.parentItem;
+                    return this.tryCreateLocationFromParentItem(parentItem, selectorIndex);
+                }
+            }
+            case 2 /* FirstStack */: {
+                const parentItem = this.findFirstContentItemType(_utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.stack);
+                if (parentItem === undefined) {
+                    return undefined;
+                }
+                else {
+                    return this.tryCreateLocationFromParentItem(parentItem, selectorIndex);
+                }
+            }
+            case 3 /* FirstRowOrColumn */: {
+                let parentItem = this.findFirstContentItemType(_utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.row);
+                if (parentItem !== undefined) {
+                    return this.tryCreateLocationFromParentItem(parentItem, selectorIndex);
+                }
+                else {
+                    parentItem = this.findFirstContentItemType(_utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.column);
+                    if (parentItem !== undefined) {
+                        return this.tryCreateLocationFromParentItem(parentItem, selectorIndex);
+                    }
+                    else {
+                        return undefined;
+                    }
+                }
+            }
+            case 4 /* FirstRow */: {
+                const parentItem = this.findFirstContentItemType(_utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.row);
+                if (parentItem === undefined) {
+                    return undefined;
+                }
+                else {
+                    return this.tryCreateLocationFromParentItem(parentItem, selectorIndex);
+                }
+            }
+            case 5 /* FirstColumn */: {
+                const parentItem = this.findFirstContentItemType(_utils_types__WEBPACK_IMPORTED_MODULE_11__.ItemType.column);
+                if (parentItem === undefined) {
+                    return undefined;
+                }
+                else {
+                    return this.tryCreateLocationFromParentItem(parentItem, selectorIndex);
+                }
+            }
+            case 6 /* Empty */: {
+                if (this._groundItem === undefined) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMFLRIF18244');
+                }
+                else {
+                    if (this.rootItem !== undefined) {
+                        return undefined;
+                    }
+                    else {
+                        if (selectorIndex === undefined || selectorIndex === 0)
+                            return { parentItem: this._groundItem, index: 0 };
+                        else {
+                            return undefined;
+                        }
+                    }
+                }
+            }
+            case 7 /* Root */: {
+                if (this._groundItem === undefined) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_7__.UnexpectedUndefinedError('LMFLF18244');
+                }
+                else {
+                    const groundContentItems = this._groundItem.contentItems;
+                    if (groundContentItems.length === 0) {
+                        if (selectorIndex === undefined || selectorIndex === 0)
+                            return { parentItem: this._groundItem, index: 0 };
+                        else {
+                            return undefined;
+                        }
+                    }
+                    else {
+                        const parentItem = groundContentItems[0];
+                        return this.tryCreateLocationFromParentItem(parentItem, selectorIndex);
+                    }
+                }
+            }
+        }
+    }
+    /** @internal */
+    tryCreateLocationFromParentItem(parentItem, selectorIndex) {
+        const parentContentItems = parentItem.contentItems;
+        const parentContentItemCount = parentContentItems.length;
+        if (selectorIndex === undefined) {
+            return { parentItem, index: parentContentItemCount };
+        }
+        else {
+            if (selectorIndex < 0 || selectorIndex > parentContentItemCount) {
+                return undefined;
+            }
+            else {
+                return { parentItem, index: selectorIndex };
+            }
+        }
+    }
+}
+/** @public */
+(function (LayoutManager) {
+    /** @internal */
+    function createMaximisePlaceElement(document) {
+        const element = document.createElement('div');
+        element.classList.add("lm_maximise_place" /* MaximisePlace */);
+        return element;
+    }
+    LayoutManager.createMaximisePlaceElement = createMaximisePlaceElement;
+    /** @internal */
+    function createTabDropPlaceholderElement(document) {
+        const element = document.createElement('div');
+        element.classList.add("lm_drop_tab_placeholder" /* DropTabPlaceholder */);
+        return element;
+    }
+    LayoutManager.createTabDropPlaceholderElement = createTabDropPlaceholderElement;
+    /**
+     * Default LocationSelectors array used if none is specified.  Will always find a location.
+     * @public
+     */
+    LayoutManager.defaultLocationSelectors = [
+        { typeId: 1 /* FocusedStack */, index: undefined },
+        { typeId: 2 /* FirstStack */, index: undefined },
+        { typeId: 3 /* FirstRowOrColumn */, index: undefined },
+        { typeId: 7 /* Root */, index: undefined },
+    ];
+    /**
+     * LocationSelectors to try to get location next to existing focused item
+     * @public
+     */
+    LayoutManager.afterFocusedItemIfPossibleLocationSelectors = [
+        { typeId: 0 /* FocusedItem */, index: 1 },
+        { typeId: 2 /* FirstStack */, index: undefined },
+        { typeId: 3 /* FirstRowOrColumn */, index: undefined },
+        { typeId: 7 /* Root */, index: undefined },
+    ];
+})(LayoutManager || (LayoutManager = {}));
+//# sourceMappingURL=layout-manager.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/config-minifier.js":
+/*!*****************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/config-minifier.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ConfigMinifier: () => (/* binding */ ConfigMinifier)
+/* harmony export */ });
+/**
+ * Minifies and unminifies configs by replacing frequent keys
+ * and values with one letter substitutes. Config options must
+ * retain array position/index, add new options at the end.
+ * @internal
+*/
+var ConfigMinifier;
+(function (ConfigMinifier) {
+    const keys = [
+        'settings',
+        'hasHeaders',
+        'constrainDragToContainer',
+        'selectionEnabled',
+        'dimensions',
+        'borderWidth',
+        'minItemHeight',
+        'minItemWidth',
+        'headerHeight',
+        'dragProxyWidth',
+        'dragProxyHeight',
+        'labels',
+        'close',
+        'maximise',
+        'minimise',
+        'popout',
+        'content',
+        'componentType',
+        'componentState',
+        'id',
+        'width',
+        'type',
+        'height',
+        'isClosable',
+        'title',
+        'popoutWholeStack',
+        'openPopouts',
+        'parentId',
+        'activeItemIndex',
+        'reorderEnabled',
+        'borderGrabWidth',
+        //Maximum 36 entries, do not cross this line!
+    ];
+    const values = [
+        true,
+        false,
+        'row',
+        'column',
+        'stack',
+        'component',
+        'close',
+        'maximise',
+        'minimise',
+        'open in new window'
+    ];
+    function checkInitialise() {
+        if (keys.length > 36) {
+            throw new Error('Too many keys in config minifier map');
+        }
+    }
+    ConfigMinifier.checkInitialise = checkInitialise;
+    function translateObject(from, minify) {
+        const to = {};
+        for (const key in from) {
+            if (from.hasOwnProperty(key)) { // In case something has extended Object prototypes
+                let translatedKey;
+                if (minify) {
+                    translatedKey = minifyKey(key);
+                }
+                else {
+                    translatedKey = unminifyKey(key);
+                }
+                const fromValue = from[key];
+                to[translatedKey] = translateValue(fromValue, minify);
+            }
+        }
+        return to;
+    }
+    ConfigMinifier.translateObject = translateObject;
+    function translateArray(from, minify) {
+        const length = from.length;
+        const to = new Array(length);
+        for (let i = 0; i < length; i++) {
+            // In original code, array indices were numbers and not translated
+            const fromValue = from[i];
+            to[i] = translateValue(fromValue, minify);
+        }
+        return to;
+    }
+    function translateValue(from, minify) {
+        if (typeof from === 'object') {
+            if (from === null) {
+                return null;
+            }
+            else {
+                if (Array.isArray(from)) {
+                    return translateArray(from, minify);
+                }
+                else {
+                    return translateObject(from, minify);
+                }
+            }
+        }
+        else {
+            if (minify) {
+                return minifyValue(from);
+            }
+            else {
+                return unminifyValue(from);
+            }
+        }
+    }
+    function minifyKey(value) {
+        /**
+         * If a value actually is a single character, prefix it
+         * with ___ to avoid mistaking it for a minification code
+         */
+        if (typeof value === 'string' && value.length === 1) {
+            return '___' + value;
+        }
+        const index = indexOfKey(value);
+        /**
+         * value not found in the dictionary, return it unmodified
+         */
+        if (index === -1) {
+            return value;
+            /**
+             * value found in dictionary, return its base36 counterpart
+             */
+        }
+        else {
+            return index.toString(36);
+        }
+    }
+    function unminifyKey(key) {
+        /**
+         * value is a single character. Assume that it's a translation
+         * and return the original value from the dictionary
+         */
+        if (key.length === 1) {
+            return keys[parseInt(key, 36)];
+        }
+        /**
+         * value originally was a single character and was prefixed with ___
+         * to avoid mistaking it for a translation. Remove the prefix
+         * and return the original character
+         */
+        if (key.substr(0, 3) === '___') {
+            return key[3];
+        }
+        /**
+         * value was not minified
+         */
+        return key;
+    }
+    function minifyValue(value) {
+        /**
+         * If a value actually is a single character, prefix it
+         * with ___ to avoid mistaking it for a minification code
+         */
+        if (typeof value === 'string' && value.length === 1) {
+            return '___' + value;
+        }
+        const index = indexOfValue(value);
+        /**
+         * value not found in the dictionary, return it unmodified
+         */
+        if (index === -1) {
+            return value;
+            /**
+             * value found in dictionary, return its base36 counterpart
+             */
+        }
+        else {
+            return index.toString(36);
+        }
+    }
+    function unminifyValue(value) {
+        /**
+         * value is a single character. Assume that it's a translation
+         * and return the original value from the dictionary
+         */
+        if (typeof value === 'string' && value.length === 1) {
+            return values[parseInt(value, 36)];
+        }
+        /**
+         * value originally was a single character and was prefixed with ___
+         * to avoid mistaking it for a translation. Remove the prefix
+         * and return the original character
+         */
+        if (typeof value === 'string' && value.substr(0, 3) === '___') {
+            return value[3];
+        }
+        /**
+         * value was not minified
+         */
+        return value;
+    }
+    function indexOfKey(key) {
+        for (let i = 0; i < keys.length; i++) {
+            if (keys[i] === key) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    function indexOfValue(value) {
+        for (let i = 0; i < values.length; i++) {
+            if (values[i] === value) {
+                return i;
+            }
+        }
+        return -1;
+    }
+})(ConfigMinifier || (ConfigMinifier = {}));
+//# sourceMappingURL=config-minifier.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/drag-listener.js":
+/*!***************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/drag-listener.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DragListener: () => (/* binding */ DragListener)
+/* harmony export */ });
+/* harmony import */ var _event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+
+/** @internal */
+class DragListener extends _event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    constructor(_eElement, extraAllowableChildTargets) {
+        super();
+        this._eElement = _eElement;
+        this._pointerTracking = false;
+        this._pointerDownEventListener = (ev) => this.onPointerDown(ev);
+        this._pointerMoveEventListener = (ev) => this.onPointerMove(ev);
+        this._pointerUpEventListener = (ev) => this.onPointerUp(ev);
+        this._timeout = undefined;
+        this._allowableTargets = [_eElement, ...extraAllowableChildTargets];
+        this._oDocument = document;
+        this._eBody = document.body;
+        /**
+         * The delay after which to start the drag in milliseconds
+         * Do NOT make too short (previous value of 200 was not long enough for my touchpad)
+         * Should generally rely on the mouse move to start drag.  Not this delay.
+         */
+        this._nDelay = 1800;
+        /**
+         * The distance the mouse needs to be moved to qualify as a drag
+         * Previous comment: works better with delay only
+         * ???
+         * Probably somehow needs tuning for different devices
+         */
+        this._nDistance = 10;
+        this._nX = 0;
+        this._nY = 0;
+        this._nOriginalX = 0;
+        this._nOriginalY = 0;
+        this._dragging = false;
+        this._eElement.addEventListener('pointerdown', this._pointerDownEventListener, { passive: true });
+    }
+    destroy() {
+        this.checkRemovePointerTrackingEventListeners();
+        this._eElement.removeEventListener('pointerdown', this._pointerDownEventListener);
+    }
+    cancelDrag() {
+        this.processDragStop(undefined);
+    }
+    onPointerDown(oEvent) {
+        if (this._allowableTargets.includes(oEvent.target) && oEvent.isPrimary) {
+            const coordinates = this.getPointerCoordinates(oEvent);
+            this.processPointerDown(coordinates);
+        }
+    }
+    processPointerDown(coordinates) {
+        this._nOriginalX = coordinates.x;
+        this._nOriginalY = coordinates.y;
+        this._oDocument.addEventListener('pointermove', this._pointerMoveEventListener);
+        this._oDocument.addEventListener('pointerup', this._pointerUpEventListener, { passive: true });
+        this._pointerTracking = true;
+        this._timeout = setTimeout(() => {
+            try {
+                this.startDrag();
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
+            }
+        }, this._nDelay);
+    }
+    onPointerMove(oEvent) {
+        if (this._pointerTracking) {
+            this.processDragMove(oEvent);
+            oEvent.preventDefault();
+        }
+    }
+    processDragMove(dragEvent) {
+        this._nX = dragEvent.pageX - this._nOriginalX;
+        this._nY = dragEvent.pageY - this._nOriginalY;
+        if (this._dragging === false) {
+            if (Math.abs(this._nX) > this._nDistance ||
+                Math.abs(this._nY) > this._nDistance) {
+                this.startDrag();
+            }
+        }
+        if (this._dragging) {
+            this.emit('drag', this._nX, this._nY, dragEvent);
+        }
+    }
+    onPointerUp(oEvent) {
+        this.processDragStop(oEvent);
+    }
+    processDragStop(dragEvent) {
+        var _a;
+        if (this._timeout !== undefined) {
+            clearTimeout(this._timeout);
+            this._timeout = undefined;
+        }
+        this.checkRemovePointerTrackingEventListeners();
+        if (this._dragging === true) {
+            this._eBody.classList.remove("lm_dragging" /* Dragging */);
+            this._eElement.classList.remove("lm_dragging" /* Dragging */);
+            (_a = this._oDocument.querySelector('iframe')) === null || _a === void 0 ? void 0 : _a.style.setProperty('pointer-events', '');
+            this._dragging = false;
+            this.emit('dragStop', dragEvent);
+        }
+    }
+    checkRemovePointerTrackingEventListeners() {
+        if (this._pointerTracking) {
+            this._oDocument.removeEventListener('pointermove', this._pointerMoveEventListener);
+            this._oDocument.removeEventListener('pointerup', this._pointerUpEventListener);
+            this._pointerTracking = false;
+        }
+    }
+    startDrag() {
+        var _a;
+        if (this._timeout !== undefined) {
+            clearTimeout(this._timeout);
+            this._timeout = undefined;
+        }
+        this._dragging = true;
+        this._eBody.classList.add("lm_dragging" /* Dragging */);
+        this._eElement.classList.add("lm_dragging" /* Dragging */);
+        (_a = this._oDocument.querySelector('iframe')) === null || _a === void 0 ? void 0 : _a.style.setProperty('pointer-events', 'none');
+        this.emit('dragStart', this._nOriginalX, this._nOriginalY);
+    }
+    getPointerCoordinates(event) {
+        const result = {
+            x: event.pageX,
+            y: event.pageY
+        };
+        return result;
+    }
+}
+//# sourceMappingURL=drag-listener.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js":
+/*!***************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EventEmitter: () => (/* binding */ EventEmitter)
+/* harmony export */ });
+/**
+ * A generic and very fast EventEmitter implementation. On top of emitting the actual event it emits an
+ * {@link (EventEmitter:namespace).ALL_EVENT} event for every event triggered. This allows to hook into it and proxy events forwards
+ * @public
+ */
+class EventEmitter {
+    constructor() {
+        /** @internal */
+        this._allEventSubscriptions = [];
+        /** @internal */
+        this._subscriptionsMap = new Map();
+        /**
+         * Alias for off
+         */
+        this.unbind = this.removeEventListener;
+        /**
+         * Alias for emit
+         */
+        this.trigger = this.emit;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    tryBubbleEvent(name, args) {
+        // overridden by ContentItem
+    }
+    /**
+     * Emit an event and notify listeners
+     *
+     * @param eventName - The name of the event
+     * @param args - Additional arguments that will be passed to the listener
+     */
+    emit(eventName, ...args) {
+        let subcriptions = this._subscriptionsMap.get(eventName);
+        if (subcriptions !== undefined) {
+            subcriptions = subcriptions.slice();
+            for (let i = 0; i < subcriptions.length; i++) {
+                const subscription = subcriptions[i];
+                subscription(...args);
+            }
+        }
+        this.emitAllEvent(eventName, args);
+        this.tryBubbleEvent(eventName, args);
+    }
+    /** @internal */
+    emitUnknown(eventName, ...args) {
+        let subs = this._subscriptionsMap.get(eventName);
+        if (subs !== undefined) {
+            subs = subs.slice();
+            for (let i = 0; i < subs.length; i++) {
+                subs[i](...args);
+            }
+        }
+        this.emitAllEvent(eventName, args);
+        this.tryBubbleEvent(eventName, args);
+    }
+    /* @internal **/
+    emitBaseBubblingEvent(eventName) {
+        const event = new EventEmitter.BubblingEvent(eventName, this);
+        this.emitUnknown(eventName, event);
+    }
+    /** @internal */
+    emitUnknownBubblingEvent(eventName) {
+        const event = new EventEmitter.BubblingEvent(eventName, this);
+        this.emitUnknown(eventName, event);
+    }
+    /**
+     * Removes a listener for an event.
+     * @param eventName - The name of the event
+     * @param callback - The previously registered callback method (optional)
+     */
+    removeEventListener(eventName, callback) {
+        const unknownCallback = callback;
+        this.removeUnknownEventListener(eventName, unknownCallback);
+    }
+    off(eventName, callback) {
+        this.removeEventListener(eventName, callback);
+    }
+    /**
+     * Listen for events
+     *
+     * @param eventName - The name of the event to listen to
+     * @param callback - The callback to execute when the event occurs
+     */
+    addEventListener(eventName, callback) {
+        const unknownCallback = callback;
+        this.addUnknownEventListener(eventName, unknownCallback);
+    }
+    on(eventName, callback) {
+        this.addEventListener(eventName, callback);
+    }
+    /** @internal */
+    addUnknownEventListener(eventName, callback) {
+        if (eventName === EventEmitter.ALL_EVENT) {
+            this._allEventSubscriptions.push(callback);
+        }
+        else {
+            let subscriptions = this._subscriptionsMap.get(eventName);
+            if (subscriptions !== undefined) {
+                subscriptions.push(callback);
+            }
+            else {
+                subscriptions = [callback];
+                this._subscriptionsMap.set(eventName, subscriptions);
+            }
+        }
+    }
+    /** @internal */
+    removeUnknownEventListener(eventName, callback) {
+        if (eventName === EventEmitter.ALL_EVENT) {
+            this.removeSubscription(eventName, this._allEventSubscriptions, callback);
+        }
+        else {
+            const subscriptions = this._subscriptionsMap.get(eventName);
+            if (subscriptions === undefined) {
+                throw new Error('No subscribtions to unsubscribe for event ' + eventName);
+            }
+            else {
+                this.removeSubscription(eventName, subscriptions, callback);
+            }
+        }
+    }
+    /** @internal */
+    removeSubscription(eventName, subscriptions, callback) {
+        const idx = subscriptions.indexOf(callback);
+        if (idx < 0) {
+            throw new Error('Nothing to unbind for ' + eventName);
+        }
+        else {
+            subscriptions.splice(idx, 1);
+        }
+    }
+    /** @internal */
+    emitAllEvent(eventName, args) {
+        const allEventSubscriptionsCount = this._allEventSubscriptions.length;
+        if (allEventSubscriptionsCount > 0) {
+            const unknownArgs = args.slice();
+            unknownArgs.unshift(eventName);
+            const allEventSubcriptions = this._allEventSubscriptions.slice();
+            for (let i = 0; i < allEventSubscriptionsCount; i++) {
+                allEventSubcriptions[i](...unknownArgs);
+            }
+        }
+    }
+}
+/** @public */
+(function (EventEmitter) {
+    /**
+     * The name of the event that's triggered for every event
+     */
+    EventEmitter.ALL_EVENT = '__all';
+    EventEmitter.headerClickEventName = 'stackHeaderClick';
+    EventEmitter.headerTouchStartEventName = 'stackHeaderTouchStart';
+    class BubblingEvent {
+        /** @internal */
+        constructor(
+        /** @internal */
+        _name, 
+        /** @internal */
+        _target) {
+            this._name = _name;
+            this._target = _target;
+            /** @internal */
+            this._isPropagationStopped = false;
+        }
+        get name() { return this._name; }
+        get target() { return this._target; }
+        /** @deprecated Use {@link (EventEmitter:namespace).(BubblingEvent:class).target} instead */
+        get origin() { return this._target; }
+        get isPropagationStopped() { return this._isPropagationStopped; }
+        stopPropagation() {
+            this._isPropagationStopped = true;
+        }
+    }
+    EventEmitter.BubblingEvent = BubblingEvent;
+    class ClickBubblingEvent extends BubblingEvent {
+        /** @internal */
+        constructor(name, target, 
+        /** @internal */
+        _mouseEvent) {
+            super(name, target);
+            this._mouseEvent = _mouseEvent;
+        }
+        get mouseEvent() { return this._mouseEvent; }
+    }
+    EventEmitter.ClickBubblingEvent = ClickBubblingEvent;
+    class TouchStartBubblingEvent extends BubblingEvent {
+        /** @internal */
+        constructor(name, target, 
+        /** @internal */
+        _touchEvent) {
+            super(name, target);
+            this._touchEvent = _touchEvent;
+        }
+        get touchEvent() { return this._touchEvent; }
+    }
+    EventEmitter.TouchStartBubblingEvent = TouchStartBubblingEvent;
+})(EventEmitter || (EventEmitter = {}));
+//# sourceMappingURL=event-emitter.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/event-hub.js":
+/*!***********************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/event-hub.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EventHub: () => (/* binding */ EventHub)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _event_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./event-emitter */ "../../node_modules/golden-layout/dist/esm/ts/utils/event-emitter.js");
+
+
+/**
+ * An EventEmitter singleton that propagates events
+ * across multiple windows. This is a little bit trickier since
+ * windows are allowed to open childWindows in their own right.
+ *
+ * This means that we deal with a tree of windows. Therefore, we do the event propagation in two phases:
+ *
+ * - Propagate events from this layout to the parent layout
+ *   - Repeat until the event arrived at the root layout
+ * - Propagate events to this layout and to all children
+ *   - Repeat until all layouts got the event
+ *
+ * **WARNING**: Only userBroadcast events are propagated between windows.
+ * This means the you have to take care of propagating state changes between windows yourself.
+ *
+ * @public
+ */
+class EventHub extends _event_emitter__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
+    /**
+     * Creates a new EventHub instance
+     * @param _layoutManager - the layout manager to synchronize between the windows
+     * @internal
+     */
+    constructor(
+    /** @internal */
+    _layoutManager) {
+        super();
+        this._layoutManager = _layoutManager;
+        /** @internal */
+        this._childEventListener = (childEvent) => this.onEventFromChild(childEvent);
+        globalThis.addEventListener(EventHub.ChildEventName, this._childEventListener, { passive: true });
+    }
+    /**
+     * Emit an event and notify listeners
+     *
+     * @param eventName - The name of the event
+     * @param args - Additional arguments that will be passed to the listener
+     * @public
+     */
+    emit(eventName, ...args) {
+        if (eventName === 'userBroadcast') {
+            // Explicitly redirect the user broadcast to our overridden method.
+            this.emitUserBroadcast(...args);
+        }
+        else {
+            super.emit(eventName, ...args);
+        }
+    }
+    /**
+     * Broadcasts a message to all other currently opened windows.
+     * @public
+     */
+    emitUserBroadcast(...args) {
+        // Step 1: Bubble up the event
+        this.handleUserBroadcastEvent('userBroadcast', args);
+    }
+    /**
+     * Destroys the EventHub
+     * @internal
+     */
+    destroy() {
+        globalThis.removeEventListener(EventHub.ChildEventName, this._childEventListener);
+    }
+    /**
+     * Internal processor to process local events.
+     * @internal
+     */
+    handleUserBroadcastEvent(eventName, args) {
+        if (this._layoutManager.isSubWindow) {
+            // We are a sub window and received an event from one of our children.
+            // So propagate it to the Root.
+            this.propagateToParent(eventName, args);
+        }
+        else {
+            // We are the root window, propagate it to the subtree below us.
+            this.propagateToThisAndSubtree(eventName, args);
+        }
+    }
+    /**
+     * Callback for child events raised on the window
+     * @internal
+     */
+    onEventFromChild(event) {
+        const detail = event.detail;
+        this.handleUserBroadcastEvent(detail.eventName, detail.args);
+    }
+    /**
+     * Propagates the event to the parent by emitting
+     * it on the parent's DOM window
+     * @internal
+     */
+    propagateToParent(eventName, args) {
+        const detail = {
+            layoutManager: this._layoutManager,
+            eventName,
+            args: args,
+        };
+        const eventInit = {
+            bubbles: true,
+            cancelable: true,
+            detail,
+        };
+        const event = new CustomEvent(EventHub.ChildEventName, eventInit);
+        const opener = globalThis.opener;
+        if (opener === null) {
+            throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedNullError('EHPTP15778');
+        }
+        opener.dispatchEvent(event);
+    }
+    /**
+     * Propagate events to the whole subtree under this event hub.
+     * @internal
+     */
+    propagateToThisAndSubtree(eventName, args) {
+        this.emitUnknown(eventName, ...args);
+        for (let i = 0; i < this._layoutManager.openPopouts.length; i++) {
+            const childGl = this._layoutManager.openPopouts[i].getGlInstance();
+            if (childGl) {
+                childGl.eventHub.propagateToThisAndSubtree(eventName, args);
+            }
+        }
+    }
+}
+/** @public */
+(function (EventHub) {
+    /** @internal */
+    EventHub.ChildEventName = 'gl_child_event';
+})(EventHub || (EventHub = {}));
+//# sourceMappingURL=event-hub.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/i18n-strings.js":
+/*!**************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/i18n-strings.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   I18nStrings: () => (/* binding */ I18nStrings),
+/* harmony export */   i18nStrings: () => (/* binding */ i18nStrings)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+
+/** @public */
+var I18nStrings;
+(function (I18nStrings) {
+    /** @internal */
+    let initialised = false;
+    /** @internal */
+    const infosObject = {
+        PopoutCannotBeCreatedWithGroundItemConfig: {
+            id: 0 /* PopoutCannotBeCreatedWithGroundItemConfig */,
+            default: 'Popout cannot be created with ground ItemConfig'
+        },
+        PleaseRegisterAConstructorFunction: {
+            id: 1 /* PleaseRegisterAConstructorFunction */,
+            default: 'Please register a constructor function'
+        },
+        ComponentTypeNotRegisteredAndBindComponentEventHandlerNotAssigned: {
+            id: 2 /* ComponentTypeNotRegisteredAndBindComponentEventHandlerNotAssigned */,
+            default: 'Component type not registered and BindComponentEvent handler not assigned',
+        },
+        ComponentIsAlreadyRegistered: {
+            id: 3 /* ComponentIsAlreadyRegistered */,
+            default: 'Component is already registered',
+        },
+        ComponentIsNotVirtuable: {
+            id: 4 /* ComponentIsNotVirtuable */,
+            default: 'Component is not virtuable. Requires rootHtmlElement field/getter',
+        },
+        VirtualComponentDoesNotHaveRootHtmlElement: {
+            id: 5 /* VirtualComponentDoesNotHaveRootHtmlElement */,
+            default: 'Virtual component does not have getter "rootHtmlElement"',
+        },
+        ItemConfigIsNotTypeComponent: {
+            id: 6 /* ItemConfigIsNotTypeComponent */,
+            default: 'ItemConfig is not of type component',
+        },
+        InvalidNumberPartInSizeString: {
+            id: 7 /* InvalidNumberPartInSizeString */,
+            default: 'Invalid number part in size string',
+        },
+        UnknownUnitInSizeString: {
+            id: 8 /* UnknownUnitInSizeString */,
+            default: 'Unknown unit in size string',
+        },
+        UnsupportedUnitInSizeString: {
+            id: 9 /* UnsupportedUnitInSizeString */,
+            default: 'Unsupported unit in size string',
+        },
+    };
+    I18nStrings.idCount = Object.keys(infosObject).length;
+    /** @internal */
+    const infos = Object.values(infosObject);
+    function checkInitialise() {
+        if (!initialised) {
+            for (let i = 0; i < I18nStrings.idCount; i++) {
+                const info = infos[i];
+                if (info.id !== i) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_0__.AssertError('INSI00110', `${i}: ${info.id}`);
+                }
+                else {
+                    i18nStrings[i] = info.default;
+                }
+            }
+        }
+        initialised = true;
+    }
+    I18nStrings.checkInitialise = checkInitialise;
+})(I18nStrings || (I18nStrings = {}));
+/** @public */
+const i18nStrings = new Array(I18nStrings.idCount);
+//# sourceMappingURL=i18n-strings.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/style-constants.js":
+/*!*****************************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/style-constants.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StyleConstants: () => (/* binding */ StyleConstants)
+/* harmony export */ });
+/** @public */
+var StyleConstants;
+(function (StyleConstants) {
+    StyleConstants.defaultComponentBaseZIndex = 'auto';
+    StyleConstants.defaultComponentDragZIndex = '32';
+    StyleConstants.defaultComponentStackMaximisedZIndex = '41';
+})(StyleConstants || (StyleConstants = {}));
+//# sourceMappingURL=style-constants.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/types.js":
+/*!*******************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/types.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ItemType: () => (/* binding */ ItemType),
+/* harmony export */   JsonValue: () => (/* binding */ JsonValue),
+/* harmony export */   LogicalZIndex: () => (/* binding */ LogicalZIndex),
+/* harmony export */   LogicalZIndexToDefaultMap: () => (/* binding */ LogicalZIndexToDefaultMap),
+/* harmony export */   ResponsiveMode: () => (/* binding */ ResponsiveMode),
+/* harmony export */   Side: () => (/* binding */ Side),
+/* harmony export */   SizeUnitEnum: () => (/* binding */ SizeUnitEnum),
+/* harmony export */   WidthOrHeightPropertyName: () => (/* binding */ WidthOrHeightPropertyName)
+/* harmony export */ });
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _style_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style-constants */ "../../node_modules/golden-layout/dist/esm/ts/utils/style-constants.js");
+
+
+/** @internal */
+var WidthOrHeightPropertyName;
+(function (WidthOrHeightPropertyName) {
+    WidthOrHeightPropertyName.width = 'width';
+    WidthOrHeightPropertyName.height = 'height';
+})(WidthOrHeightPropertyName || (WidthOrHeightPropertyName = {}));
+/** @public */
+var Side;
+(function (Side) {
+    Side.top = 'top';
+    Side.left = 'left';
+    Side.right = 'right';
+    Side.bottom = 'bottom';
+})(Side || (Side = {}));
+/** @public */
+var LogicalZIndex;
+(function (LogicalZIndex) {
+    LogicalZIndex.base = 'base';
+    LogicalZIndex.drag = 'drag';
+    LogicalZIndex.stackMaximised = 'stackMaximised';
+})(LogicalZIndex || (LogicalZIndex = {}));
+/** @public */
+const LogicalZIndexToDefaultMap = {
+    base: _style_constants__WEBPACK_IMPORTED_MODULE_0__.StyleConstants.defaultComponentBaseZIndex,
+    drag: _style_constants__WEBPACK_IMPORTED_MODULE_0__.StyleConstants.defaultComponentDragZIndex,
+    stackMaximised: _style_constants__WEBPACK_IMPORTED_MODULE_0__.StyleConstants.defaultComponentStackMaximisedZIndex,
+};
+/** @public */
+var JsonValue;
+(function (JsonValue) {
+    function isJson(value) {
+        return isJsonObject(value);
+    }
+    JsonValue.isJson = isJson;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    function isJsonObject(value) {
+        return !Array.isArray(value) && value !== null && typeof value === 'object';
+    }
+    JsonValue.isJsonObject = isJsonObject;
+})(JsonValue || (JsonValue = {}));
+/** @public */
+var ItemType;
+(function (ItemType) {
+    ItemType.ground = 'ground';
+    ItemType.row = 'row';
+    ItemType.column = 'column';
+    ItemType.stack = 'stack';
+    ItemType.component = 'component';
+})(ItemType || (ItemType = {}));
+/** @public */
+var ResponsiveMode;
+(function (ResponsiveMode) {
+    ResponsiveMode.none = 'none';
+    ResponsiveMode.always = 'always';
+    ResponsiveMode.onload = 'onload';
+})(ResponsiveMode || (ResponsiveMode = {}));
+/** @public */
+var SizeUnitEnum;
+(function (SizeUnitEnum) {
+    SizeUnitEnum["Pixel"] = "px";
+    SizeUnitEnum["Percent"] = "%";
+    SizeUnitEnum["Fractional"] = "fr";
+    SizeUnitEnum["Em"] = "em";
+})(SizeUnitEnum || (SizeUnitEnum = {}));
+/** @public */
+(function (SizeUnitEnum) {
+    function tryParse(value) {
+        switch (value) {
+            case SizeUnitEnum.Pixel: return SizeUnitEnum.Pixel;
+            case SizeUnitEnum.Percent: return SizeUnitEnum.Percent;
+            case SizeUnitEnum.Fractional: return SizeUnitEnum.Fractional;
+            case SizeUnitEnum.Em: return SizeUnitEnum.Em;
+            default: return undefined;
+        }
+    }
+    SizeUnitEnum.tryParse = tryParse;
+    function format(value) {
+        switch (value) {
+            case SizeUnitEnum.Pixel: return SizeUnitEnum.Pixel;
+            case SizeUnitEnum.Percent: return SizeUnitEnum.Percent;
+            case SizeUnitEnum.Fractional: return SizeUnitEnum.Fractional;
+            case SizeUnitEnum.Em: return SizeUnitEnum.Em;
+            default:
+                throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnreachableCaseError('SUEF44998', value);
+        }
+    }
+    SizeUnitEnum.format = format;
+})(SizeUnitEnum || (SizeUnitEnum = {}));
+//# sourceMappingURL=types.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/utils/utils.js":
+/*!*******************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/utils/utils.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   deepExtend: () => (/* binding */ deepExtend),
+/* harmony export */   deepExtendValue: () => (/* binding */ deepExtendValue),
+/* harmony export */   ensureElementPositionAbsolute: () => (/* binding */ ensureElementPositionAbsolute),
+/* harmony export */   extend: () => (/* binding */ extend),
+/* harmony export */   getElementHeight: () => (/* binding */ getElementHeight),
+/* harmony export */   getElementWidth: () => (/* binding */ getElementWidth),
+/* harmony export */   getElementWidthAndHeight: () => (/* binding */ getElementWidthAndHeight),
+/* harmony export */   getErrorMessage: () => (/* binding */ getErrorMessage),
+/* harmony export */   getUniqueId: () => (/* binding */ getUniqueId),
+/* harmony export */   isDigit: () => (/* binding */ isDigit),
+/* harmony export */   numberToPixels: () => (/* binding */ numberToPixels),
+/* harmony export */   pixelsToNumber: () => (/* binding */ pixelsToNumber),
+/* harmony export */   removeFromArray: () => (/* binding */ removeFromArray),
+/* harmony export */   setElementDisplayVisibility: () => (/* binding */ setElementDisplayVisibility),
+/* harmony export */   setElementHeight: () => (/* binding */ setElementHeight),
+/* harmony export */   setElementWidth: () => (/* binding */ setElementWidth),
+/* harmony export */   splitStringAtFirstNonNumericChar: () => (/* binding */ splitStringAtFirstNonNumericChar)
+/* harmony export */ });
+/** @internal */
+function numberToPixels(value) {
+    return value.toString(10) + 'px';
+}
+/** @internal */
+function pixelsToNumber(value) {
+    const numberStr = value.replace("px", "");
+    return parseFloat(numberStr);
+}
+/** @internal */
+function splitStringAtFirstNonNumericChar(value) {
+    value = value.trimStart();
+    const length = value.length;
+    if (length === 0) {
+        return { numericPart: '', firstNonNumericCharPart: '' };
+    }
+    else {
+        let firstNonDigitPartIndex = length;
+        let gotDecimalPoint = false;
+        for (let i = 0; i < length; i++) {
+            const char = value[i];
+            if (!isDigit(char)) {
+                if (char !== '.') {
+                    firstNonDigitPartIndex = i;
+                    break;
+                }
+                else {
+                    if (gotDecimalPoint) {
+                        firstNonDigitPartIndex = i;
+                        break;
+                    }
+                    else {
+                        gotDecimalPoint = true;
+                    }
+                }
+            }
+        }
+        const digitsPart = value.substring(0, firstNonDigitPartIndex);
+        const firstNonDigitPart = value.substring(firstNonDigitPartIndex).trim();
+        return { numericPart: digitsPart, firstNonNumericCharPart: firstNonDigitPart };
+    }
+}
+/** @internal */
+function isDigit(char) {
+    return char >= '0' && char <= '9';
+}
+/** @internal */
+function getElementWidth(element) {
+    return element.offsetWidth;
+}
+/** @internal */
+function setElementWidth(element, width) {
+    const widthAsPixels = numberToPixels(width);
+    element.style.width = widthAsPixels;
+}
+/** @internal */
+function getElementHeight(element) {
+    return element.offsetHeight;
+}
+/** @internal */
+function setElementHeight(element, height) {
+    const heightAsPixels = numberToPixels(height);
+    element.style.height = heightAsPixels;
+}
+/** @internal */
+function getElementWidthAndHeight(element) {
+    return {
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+    };
+}
+/** @internal */
+function setElementDisplayVisibility(element, visible) {
+    if (visible) {
+        element.style.display = '';
+    }
+    else {
+        element.style.display = 'none';
+    }
+}
+/** @internal */
+function ensureElementPositionAbsolute(element) {
+    const absolutePosition = 'absolute';
+    if (element.style.position !== absolutePosition) {
+        element.style.position = absolutePosition;
+    }
+}
+/**
+ * Replacement for JQuery $.extend(target, obj)
+ * @internal
+*/
+function extend(target, obj) {
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            target[key] = obj[key];
+        }
+    }
+    return target;
+}
+/**
+ * Replacement for JQuery $.extend(true, target, obj)
+ * @internal
+*/
+function deepExtend(target, obj) {
+    if (obj !== undefined) {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                const value = obj[key];
+                const existingTarget = target[key];
+                target[key] = deepExtendValue(existingTarget, value);
+            }
+        }
+    }
+    return target;
+}
+/** @internal */
+function deepExtendValue(existingTarget, value) {
+    if (typeof value !== 'object') {
+        return value;
+    }
+    else {
+        if (Array.isArray(value)) {
+            const length = value.length;
+            const targetArray = new Array(length);
+            for (let i = 0; i < length; i++) {
+                const element = value[i];
+                targetArray[i] = deepExtendValue({}, element);
+            }
+            return targetArray;
+        }
+        else {
+            if (value === null) {
+                return null;
+            }
+            else {
+                const valueObj = value;
+                if (existingTarget === undefined) {
+                    return deepExtend({}, valueObj); // overwrite
+                }
+                else {
+                    if (typeof existingTarget !== "object") {
+                        return deepExtend({}, valueObj); // overwrite
+                    }
+                    else {
+                        if (Array.isArray(existingTarget)) {
+                            return deepExtend({}, valueObj); // overwrite
+                        }
+                        else {
+                            if (existingTarget === null) {
+                                return deepExtend({}, valueObj); // overwrite
+                            }
+                            else {
+                                const existingTargetObj = existingTarget;
+                                return deepExtend(existingTargetObj, valueObj); // merge
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/** @internal */
+function removeFromArray(item, array) {
+    const index = array.indexOf(item);
+    if (index === -1) {
+        throw new Error('Can\'t remove item from array. Item is not in the array');
+    }
+    array.splice(index, 1);
+}
+/** @internal */
+function getUniqueId() {
+    return (Math.random() * 1000000000000000)
+        .toString(36)
+        .replace('.', '');
+}
+/** @internal */
+function getErrorMessage(e) {
+    if (e instanceof Error) {
+        return e.message;
+    }
+    else {
+        if (typeof e === 'string') {
+            return e;
+        }
+        else {
+            return 'Unknown Error';
+        }
+    }
+}
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
+/***/ "../../node_modules/golden-layout/dist/esm/ts/virtual-layout.js":
+/*!**********************************************************************!*\
+  !*** ../../node_modules/golden-layout/dist/esm/ts/virtual-layout.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   VirtualLayout: () => (/* binding */ VirtualLayout)
+/* harmony export */ });
+/* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/config */ "../../node_modules/golden-layout/dist/esm/ts/config/config.js");
+/* harmony import */ var _config_resolved_config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./config/resolved-config */ "../../node_modules/golden-layout/dist/esm/ts/config/resolved-config.js");
+/* harmony import */ var _errors_external_error__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./errors/external-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/external-error.js");
+/* harmony import */ var _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./errors/internal-error */ "../../node_modules/golden-layout/dist/esm/ts/errors/internal-error.js");
+/* harmony import */ var _layout_manager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layout-manager */ "../../node_modules/golden-layout/dist/esm/ts/layout-manager.js");
+/* harmony import */ var _utils_i18n_strings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/i18n-strings */ "../../node_modules/golden-layout/dist/esm/ts/utils/i18n-strings.js");
+
+
+
+
+
+
+/** @public */
+class VirtualLayout extends _layout_manager__WEBPACK_IMPORTED_MODULE_0__.LayoutManager {
+    /** @internal */
+    constructor(configOrOptionalContainer, containerOrBindComponentEventHandler, unbindComponentEventHandler, skipInit) {
+        super(VirtualLayout.createLayoutManagerConstructorParameters(configOrOptionalContainer, containerOrBindComponentEventHandler));
+        /** @internal @deprecated use while constructor is not determinate */
+        this._bindComponentEventHanlderPassedInConstructor = false; // remove when constructor is determinate
+        /** @internal  @deprecated use while constructor is not determinate */
+        this._creationTimeoutPassed = false; // remove when constructor is determinate
+        if (containerOrBindComponentEventHandler !== undefined) {
+            if (typeof containerOrBindComponentEventHandler === 'function') {
+                this.bindComponentEvent = containerOrBindComponentEventHandler;
+                this._bindComponentEventHanlderPassedInConstructor = true;
+                if (unbindComponentEventHandler !== undefined) {
+                    this.unbindComponentEvent = unbindComponentEventHandler;
+                }
+            }
+        }
+        if (!this._bindComponentEventHanlderPassedInConstructor) {
+            // backward compatibility
+            if (this.isSubWindow) {
+                // document.body.style.visibility = 'hidden';
+                // Set up layoutConfig since constructor is not determinate and may exit early. Other functions may need
+                // this.layoutConfig. this.layoutConfig is again calculated in the same way when init() completes.
+                // Remove this when constructor is determinate.
+                if (this._constructorOrSubWindowLayoutConfig === undefined) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedUndefinedError('VLC98823');
+                }
+                else {
+                    const resolvedLayoutConfig = _config_config__WEBPACK_IMPORTED_MODULE_2__.LayoutConfig.resolve(this._constructorOrSubWindowLayoutConfig);
+                    // remove root from layoutConfig
+                    this.layoutConfig = Object.assign(Object.assign({}, resolvedLayoutConfig), { root: undefined });
+                }
+            }
+        }
+        if (skipInit !== true) {
+            if (!this.deprecatedConstructor) {
+                this.init();
+            }
+        }
+    }
+    destroy() {
+        this.bindComponentEvent = undefined;
+        this.unbindComponentEvent = undefined;
+        super.destroy();
+    }
+    /**
+     * Creates the actual layout. Must be called after all initial components
+     * are registered. Recurses through the configuration and sets up
+     * the item tree.
+     *
+     * If called before the document is ready it adds itself as a listener
+     * to the document.ready event
+     * @deprecated LayoutConfig should not be loaded in {@link (LayoutManager:class)} constructor, but rather in a
+     * {@link (LayoutManager:class).loadLayout} call.  If LayoutConfig is not specified in {@link (LayoutManager:class)} constructor,
+     * then init() will be automatically called internally and should not be called externally.
+     */
+    init() {
+        /**
+         * If the document isn't ready yet, wait for it.
+         */
+        if (!this._bindComponentEventHanlderPassedInConstructor && (document.readyState === 'loading' || document.body === null)) {
+            document.addEventListener('DOMContentLoaded', () => this.init(), { passive: true });
+            return;
+        }
+        /**
+         * If this is a subwindow, wait a few milliseconds for the original
+         * page's js calls to be executed, then replace the bodies content
+         * with GoldenLayout
+         */
+        if (!this._bindComponentEventHanlderPassedInConstructor && this.isSubWindow === true && !this._creationTimeoutPassed) {
+            setTimeout(() => this.init(), 7);
+            this._creationTimeoutPassed = true;
+            return;
+        }
+        if (this.isSubWindow === true) {
+            if (!this._bindComponentEventHanlderPassedInConstructor) {
+                this.clearHtmlAndAdjustStylesForSubWindow();
+            }
+            // Expose this instance on the window object to allow the opening window to interact with it
+            window.__glInstance = this;
+        }
+        super.init();
+    }
+    /**
+     * Clears existing HTML and adjusts style to make window suitable to be a popout sub window
+     * Curently is automatically called when window is a subWindow and bindComponentEvent is not passed in the constructor
+     * If bindComponentEvent is not passed in the constructor, the application must either call this function explicitly or
+     * (preferably) make the window suitable as a subwindow.
+     * In the future, it is planned that this function is NOT automatically called in any circumstances.  Applications will
+     * need to determine whether a window is a Golden Layout popout window and either call this function explicitly or
+     * hide HTML not relevant to the popout.
+     * See apitest for an example of how HTML is hidden when popout windows are displayed
+     */
+    clearHtmlAndAdjustStylesForSubWindow() {
+        const headElement = document.head;
+        const appendNodeLists = new Array(4);
+        appendNodeLists[0] = document.querySelectorAll('body link');
+        appendNodeLists[1] = document.querySelectorAll('body style');
+        appendNodeLists[2] = document.querySelectorAll('template');
+        appendNodeLists[3] = document.querySelectorAll('.gl_keep');
+        for (let listIdx = 0; listIdx < appendNodeLists.length; listIdx++) {
+            const appendNodeList = appendNodeLists[listIdx];
+            for (let nodeIdx = 0; nodeIdx < appendNodeList.length; nodeIdx++) {
+                const node = appendNodeList[nodeIdx];
+                headElement.appendChild(node);
+            }
+        }
+        const bodyElement = document.body;
+        bodyElement.innerHTML = '';
+        bodyElement.style.visibility = 'visible';
+        this.checkAddDefaultPopinButton();
+        /*
+        * This seems a bit pointless, but actually causes a reflow/re-evaluation getting around
+        * slickgrid's "Cannot find stylesheet." bug in chrome
+        */
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const x = document.body.offsetHeight;
+    }
+    /**
+     * Will add button if not popinOnClose specified in settings
+     * @returns true if added otherwise false
+     */
+    checkAddDefaultPopinButton() {
+        if (this.layoutConfig.settings.popInOnClose) {
+            return false;
+        }
+        else {
+            const popInButtonElement = document.createElement('div');
+            popInButtonElement.classList.add("lm_popin" /* Popin */);
+            popInButtonElement.setAttribute('title', this.layoutConfig.header.dock);
+            const iconElement = document.createElement('div');
+            iconElement.classList.add("lm_icon" /* Icon */);
+            const bgElement = document.createElement('div');
+            bgElement.classList.add("lm_bg" /* Bg */);
+            popInButtonElement.appendChild(iconElement);
+            popInButtonElement.appendChild(bgElement);
+            popInButtonElement.addEventListener('click', () => this.emit('popIn'));
+            document.body.appendChild(popInButtonElement);
+            return true;
+        }
+    }
+    /** @internal */
+    bindComponent(container, itemConfig) {
+        if (this.bindComponentEvent !== undefined) {
+            const bindableComponent = this.bindComponentEvent(container, itemConfig);
+            return bindableComponent;
+        }
+        else {
+            if (this.getComponentEvent !== undefined) {
+                return {
+                    virtual: false,
+                    component: this.getComponentEvent(container, itemConfig),
+                };
+            }
+            else {
+                // There is no component registered for this type, and we don't have a getComponentEvent defined.
+                // This might happen when the user pops out a dialog and the component types are not registered upfront.
+                const text = _utils_i18n_strings__WEBPACK_IMPORTED_MODULE_3__.i18nStrings[2 /* ComponentTypeNotRegisteredAndBindComponentEventHandlerNotAssigned */];
+                const message = `${text}: ${JSON.stringify(itemConfig)}`;
+                throw new _errors_external_error__WEBPACK_IMPORTED_MODULE_4__.BindError(message);
+            }
+        }
+    }
+    /** @internal */
+    unbindComponent(container, virtual, component) {
+        if (this.unbindComponentEvent !== undefined) {
+            this.unbindComponentEvent(container);
+        }
+        else {
+            if (!virtual && this.releaseComponentEvent !== undefined) {
+                if (component === undefined) {
+                    throw new _errors_internal_error__WEBPACK_IMPORTED_MODULE_1__.UnexpectedUndefinedError('VCUCRCU333998');
+                }
+                else {
+                    this.releaseComponentEvent(container, component);
+                }
+            }
+        }
+    }
+}
+/** @public */
+(function (VirtualLayout) {
+    /** @internal
+     * Veriable to hold the state whether we already checked if we are running in a sub window.
+     * Fixes popout and creation of nested golden-layouts.
+     */
+    let subWindowChecked = false;
+    /** @internal */
+    function createLayoutManagerConstructorParameters(configOrOptionalContainer, containerOrBindComponentEventHandler) {
+        const windowConfigKey = subWindowChecked ? null : new URL(document.location.href).searchParams.get('gl-window');
+        subWindowChecked = true;
+        const isSubWindow = windowConfigKey !== null;
+        let containerElement;
+        let config;
+        if (windowConfigKey !== null) {
+            const windowConfigStr = localStorage.getItem(windowConfigKey);
+            if (windowConfigStr === null) {
+                throw new Error('Null gl-window Config');
+            }
+            localStorage.removeItem(windowConfigKey);
+            const minifiedWindowConfig = JSON.parse(windowConfigStr);
+            const resolvedConfig = _config_resolved_config__WEBPACK_IMPORTED_MODULE_5__.ResolvedLayoutConfig.unminifyConfig(minifiedWindowConfig);
+            config = _config_config__WEBPACK_IMPORTED_MODULE_2__.LayoutConfig.fromResolved(resolvedConfig);
+            if (configOrOptionalContainer instanceof HTMLElement) {
+                containerElement = configOrOptionalContainer;
+            }
+        }
+        else {
+            if (configOrOptionalContainer === undefined) {
+                config = undefined;
+            }
+            else {
+                if (configOrOptionalContainer instanceof HTMLElement) {
+                    config = undefined;
+                    containerElement = configOrOptionalContainer;
+                }
+                else {
+                    // backwards compatibility
+                    config = configOrOptionalContainer;
+                }
+            }
+            if (containerElement === undefined) {
+                if (containerOrBindComponentEventHandler instanceof HTMLElement) {
+                    containerElement = containerOrBindComponentEventHandler;
+                }
+            }
+        }
+        return {
+            constructorOrSubWindowLayoutConfig: config,
+            isSubWindow,
+            containerElement,
+        };
+    }
+    VirtualLayout.createLayoutManagerConstructorParameters = createLayoutManagerConstructorParameters;
+})(VirtualLayout || (VirtualLayout = {}));
+//# sourceMappingURL=virtual-layout.js.map
 
 /***/ }),
 
@@ -20116,8 +29922,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.init = void 0;
-const web_interop_1 = __webpack_require__(/*! @openfin/web-interop */ "../../node_modules/@openfin/web-interop/out/api-client.js");
-__webpack_require__(/*! ../util/buffer */ "./client/src/util/buffer.ts");
+const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
 /**
  * Initializes the OpenFin Web Broker connection.
@@ -20127,7 +29932,7 @@ async function init() {
     if (window.fin === undefined) {
         const settings = await (0, settings_1.getSettings)();
         // Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
-        window.fin = await (0, web_interop_1.connect)({
+        window.fin = await (0, core_web_1.connect)({
             options: {
                 brokerUrl: settings.platform.brokerUrl,
                 interopConfig: {
@@ -20179,47 +29984,6 @@ async function getSettings() {
     };
 }
 exports.getSettings = getSettings;
-
-
-/***/ }),
-
-/***/ "./client/src/util/buffer.ts":
-/*!***********************************!*\
-  !*** ./client/src/util/buffer.ts ***!
-  \***********************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const BufferSupport = __importStar(__webpack_require__(/*! buffer/ */ "../../node_modules/buffer/index.js"));
-if (window.Buffer === undefined) {
-    console.log("Buffer global does not exist. Creating a global Buffer object.");
-    window.Buffer = BufferSupport.Buffer;
-}
 
 
 /***/ }),
@@ -21192,13 +30956,15 @@ async function setContext() {
         id: idData
     };
     if (window.fin) {
-        window.fin.me.interop.setContext(context);
+        await window.fin.me.interop.setContext(context);
         console.log(`Set context: ${contextType} - ${contextName}`);
     }
     else {
         window.addEventListener("finReady", async () => {
-            window.fin.me.interop.setContext(context);
-            console.log(`Set context: ${contextType} - ${contextName}`);
+            if (window.fin) {
+                await window.fin.me.interop.setContext(context);
+                console.log(`Set context: ${contextType} - ${contextName}`);
+            }
         });
     }
 }
@@ -21207,15 +30973,17 @@ async function setContext() {
  */
 async function addContextListener() {
     if (window.fin) {
-        window.fin.me.interop.addContextHandler((context) => {
+        await window.fin.me.interop.addContextHandler((context) => {
             updateDOMElements(context);
         });
     }
     else {
         window.addEventListener("finReady", async () => {
-            window.fin.me.interop.addContextHandler((context) => {
-                updateDOMElements(context);
-            });
+            if (window.fin) {
+                await window.fin.me.interop.addContextHandler((context) => {
+                    updateDOMElements(context);
+                });
+            }
         });
     }
 }

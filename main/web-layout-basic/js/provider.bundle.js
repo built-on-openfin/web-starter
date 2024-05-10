@@ -29912,82 +29912,6 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ "./client/src/platform/api.ts":
-/*!************************************!*\
-  !*** ./client/src/platform/api.ts ***!
-  \************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.init = void 0;
-const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
-const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
-/**
- * Initializes the OpenFin Web Broker connection.
- */
-async function init() {
-    // Set window.fin to the `fin` object.
-    if (window.fin === undefined) {
-        const settings = await (0, settings_1.getSettings)();
-        // Specify an interopConfig with a specific provider ID and a context group to initialize the `fin.me.interop` client on connection.
-        window.fin = await (0, core_web_1.connect)({
-            options: {
-                brokerUrl: settings.platform.brokerUrl,
-                interopConfig: {
-                    providerId: settings.platform.providerId,
-                    currentContextGroup: settings.platform.defaultContextGroup
-                }
-            }
-        });
-        console.log("Finished initializing the fin API.");
-        // Create and dispatch the finReady event
-        const event = new CustomEvent("finReady");
-        window.dispatchEvent(event);
-    }
-    if (window.fdc3 === undefined && window?.fin?.me.interop?.getFDC3Sync !== undefined) {
-        window.fdc3 = fin.me.interop.getFDC3Sync("2.0");
-        console.log("Finished initializing the fdc3 API.");
-        // Create and dispatch the FDC3Ready event
-        const event = new CustomEvent("fdc3Ready");
-        window.dispatchEvent(event);
-    }
-}
-exports.init = init;
-
-
-/***/ }),
-
-/***/ "./client/src/platform/settings.ts":
-/*!*****************************************!*\
-  !*** ./client/src/platform/settings.ts ***!
-  \*****************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
-/**
- * Fetches the settings for the application.
- * @returns The settings for the application.
- */
-async function getSettings() {
-    return {
-        platform: {
-            sharedWorkerUrl: "https://built-on-openfin.github.io/web-starter/main/web-interop-basic/js/shared-worker.bundle.js",
-            brokerUrl: "https://built-on-openfin.github.io/web-starter/main/web-interop-basic/platform/iframe-broker.html",
-            providerId: "web-interop-basic",
-            defaultContextGroup: "green"
-        }
-    };
-}
-exports.getSettings = getSettings;
-
-
-/***/ }),
-
 /***/ "../../node_modules/uuid/dist/esm-browser/index.js":
 /*!*********************************************************!*\
   !*** ../../node_modules/uuid/dist/esm-browser/index.js ***!
@@ -30931,87 +30855,68 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!*****************************************!*\
-  !*** ./client/src/content/fdc3-view.ts ***!
-  \*****************************************/
+/*!********************************!*\
+  !*** ./client/src/provider.ts ***!
+  \********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const api_1 = __webpack_require__(/*! ../platform/api */ "./client/src/platform/api.ts");
-window.addEventListener("DOMContentLoaded", async () => {
-    await (0, api_1.init)();
-    await initializeDOM();
-});
+const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 /**
- * Broadcasts a context using FDC3.
+ * Gets the default layout for this app.
+ * @returns The default layout for this app.
  */
-async function broadcastContext() {
-    const contextType = "fdc3.instrument";
-    const contextName = "Apple";
-    const idData = {
-        ticker: "AAPL"
-    };
-    const context = {
-        type: contextType,
-        name: contextName,
-        id: idData
-    };
-    if (window.fdc3) {
-        await window.fdc3.broadcast(context);
-        console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-    }
-    else {
-        window.addEventListener("fdc3Ready", async () => {
-            await window.fdc3.broadcast(context);
-            console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-        });
-    }
+async function getDefaultLayout() {
+    const layoutResponse = await fetch("https://built-on-openfin.github.io/web-starter/main/web-layout-basic/layouts/default.layout.fin.json");
+    const layoutJson = (await layoutResponse.json());
+    return layoutJson;
 }
 /**
- * Adds an FDC3 context listener to the window.
+ * Initializes the OpenFin Web Broker connection.
  */
-async function addFDC3Listener() {
-    if (window.fdc3) {
-        await window.fdc3.addContextListener(null, (context) => {
-            updateDOMElements(context);
-        });
+async function init() {
+    // Get the default layout
+    const layoutSnapshot = await getDefaultLayout();
+    if (layoutSnapshot === undefined) {
+        console.error("Unable to run the sample as we have been unable to load the default snapshot.");
+        return;
     }
-    else {
-        window.addEventListener("fdc3Ready", async () => {
-            await window.fdc3.addContextListener(null, (context) => {
-                updateDOMElements(context);
-            });
-        });
+    // Get the dom element that should host the layout
+    const layoutContainer = document.querySelector("#layout_container");
+    if (layoutContainer === null) {
+        console.error("Please ensure the document has an element with the following id #layout_container so that the web-layout can be applied.");
+        return;
     }
+    // Connect to the OpenFin Web Broker and pass the default layout.
+    // It is good practice to specify providerId even if content is explicitly specifying it for cases where
+    // this provider uses our layout system and content uses inheritance. currentContextGroup
+    // is useful for defaulting any client that uses inheritance through our layout system.
+    const fin = await (0, core_web_1.connect)({
+        connectionInheritance: "enabled",
+        options: {
+            brokerUrl: "https://built-on-openfin.github.io/web-starter/main/web-layout-basic/platform/iframe-broker.html",
+            interopConfig: {
+                providerId: "web-layout-basic",
+                currentContextGroup: "green"
+            }
+        },
+        platform: { layoutSnapshot }
+    });
+    // You may now use the `fin` object to initialize the broker and the layout.
+    await fin.Interop.init("web-layout-basic");
+    // initialize the layout and pass it the dom element to bind to
+    await fin.Platform.Layout.init({
+        container: layoutContainer
+    });
 }
-/**
- * Updates the DOM elements with the provided context.
- * @param context The context to update the DOM elements with.
- */
-function updateDOMElements(context) {
-    const contextTypeSpan = document.querySelector("#contextType");
-    const contextNameSpan = document.querySelector("#contextName");
-    const contextBodyPre = document.querySelector("#contextBody");
-    if (contextTypeSpan !== null && contextNameSpan !== null && contextBodyPre !== null) {
-        contextTypeSpan.textContent = context.type;
-        contextNameSpan.textContent = context.name ?? "No name provided.";
-        contextBodyPre.textContent = JSON.stringify(context, null, 2);
-    }
-}
-/**
- * Initialize the DOM elements.
- */
-async function initializeDOM() {
-    const broadcastButton = document.querySelector("#broadcast");
-    if (broadcastButton !== null) {
-        broadcastButton.addEventListener("click", async () => {
-            await broadcastContext();
-        });
-    }
-    await addFDC3Listener();
-}
+init()
+    .then(() => {
+    console.log("Created the OpenFin Web Layout.");
+    return true;
+})
+    .catch((err) => console.error(err));
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=fdc3-view.bundle.js.map
+//# sourceMappingURL=provider.bundle.js.map

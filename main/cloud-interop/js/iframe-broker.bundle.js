@@ -21,22 +21,50 @@ const e="web-broker-ports-ready",t="worker-initialize-connection",r="create-fall
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
+exports.getDefaultLayout = exports.getSettings = void 0;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
  */
 async function getSettings() {
-    return {
-        platform: {
-            sharedWorkerUrl: "https://built-on-openfin.github.io/web-starter/main/web-interop-basic/js/shared-worker.bundle.js",
-            brokerUrl: "https://built-on-openfin.github.io/web-starter/main/web-interop-basic/platform/iframe-broker.html",
-            providerId: "web-interop-basic",
-            defaultContextGroup: "green"
-        }
-    };
+    const settings = await getManifestSettings();
+    if (settings === undefined) {
+        console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+    }
+    return settings;
 }
 exports.getSettings = getSettings;
+/**
+ * Returns a default layout from the settings if provided.
+ * @returns The default layout from the settings.
+ */
+async function getDefaultLayout() {
+    const settings = await getSettings();
+    if (settings?.platform?.layout?.defaultLayout === undefined) {
+        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
+        return;
+    }
+    if (typeof settings.platform.layout.defaultLayout === "string") {
+        const layoutResponse = await fetch(settings.platform.layout.defaultLayout);
+        const layoutJson = (await layoutResponse.json());
+        return layoutJson;
+    }
+    return settings.platform.layout.defaultLayout;
+}
+exports.getDefaultLayout = getDefaultLayout;
+/**
+ * Returns the settings from the manifest file.
+ * @returns customSettings for this example
+ */
+async function getManifestSettings() {
+    // Get the manifest link
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link !== null) {
+        const manifestResponse = await fetch(link.href);
+        const manifestJson = (await manifestResponse.json());
+        return manifestJson.custom_settings;
+    }
+}
 
 
 /***/ })
@@ -85,8 +113,12 @@ const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/
  */
 async function init() {
     const settings = await (0, settings_1.getSettings)();
+    if (settings === undefined) {
+        console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
+        return;
+    }
     return (0, iframe_broker_1.init)({
-        sharedWorkerUrl: settings.platform.sharedWorkerUrl
+        sharedWorkerUrl: settings.platform.interop.sharedWorkerUrl
     });
 }
 init()
