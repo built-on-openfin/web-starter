@@ -1,5 +1,4 @@
 import { connect } from "@openfin/core-web";
-import "./util/buffer";
 import { getDefaultLayout, getSettings } from "./platform/settings";
 import type { Settings } from "./shapes/setting-shapes";
 
@@ -62,13 +61,12 @@ async function init(): Promise<void> {
 			}
 		},
 		connectionInheritance: "enabled",
-		// @ts-expect-error connection inheritance is being set to true and that doesn't expect a platform config
 		platform: { layoutSnapshot }
 	});
 
 	// You may now use the `fin` object to initialize the broker and the layout.
 	await fin.Interop.init(settings.platform.interop.providerId);
-	// Show the main container and hide the loading container
+
 	// initialize the layout and pass it the dom element to bind to
 	await fin.Platform.Layout.init({
 		container: layoutContainer
