@@ -17,7 +17,7 @@ It also has a left panel which is outside of the OpenFin Layout and represents a
 
 Using Layouts, this demo also shows off a "Swap Layouts" function, which allows someone to quickly jump from one created layout (via a snapshot JSON defintion) to another.
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/vnext/use-web-layouts/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v18.0.0/web-layout/platform/provider.html)
 
 ![OpenFin Web Interop Example](./docs/web-interop.png)
 
@@ -51,7 +51,6 @@ npm run client
 
 There are a few things to note before trying to use @openfin/core-web:
 
-- This current release requires Buffer support and this is added through the [buffer](https://www.npmjs.com/package/buffer) npm package. We have added this to the npm package and we have made it available through a [buffer util TypeScript file](./client/src/util/buffer.ts). _This is a requirement that will be removed in the future_.
 - If your [tsconfig](./client/tsconfig.json) file is using **node** for moduleResolution it will need to use **Node16** instead as export/imports are defined in the package.json of the @openfin/core-web npm package. This is required for when you try to import @openfin/core-web/iframe-broker.
 - You will need to copy the shared-worker.js file from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-shared-worker.js](./scripts/copy-shared-worker.js) script to do this and it is referenced in the build-client npm command.
 
@@ -79,15 +78,15 @@ function layoutManagerOverride(Base: LayoutManagerConstructor):
     return class LayoutManagerBasic extends Base implements LayoutManager {
      public layoutMapArray: LayoutManagerItem[] = [];
 
-     public layoutContainer: HTMLElement = document.querySelector("#layout_container") as HTMLElement;
+     public layoutContainer = document.querySelector<HTMLElement>("#layout_container");
 
      /**
       * Override for applying multiple snapshots.
       * @param snapshot The layouts object containing the fixed set of available layouts.
       */
      public async applyLayoutSnapshot(snapshot: WebLayoutSnapshot): Promise<void> {
-      console.log(`DOes this exist? ${Boolean(this.layoutContainer)}`);
-      if (this.layoutContainer !== undefined) {
+      console.log(`Does this exist? ${Boolean(this.layoutContainer)}`);
+      if (this.layoutContainer !== null && this.layoutContainer !== undefined) {
         await Promise.all(Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) =>
           createLayout(fin, layoutName, layout, i))
         );
@@ -95,12 +94,6 @@ function layoutManagerOverride(Base: LayoutManagerConstructor):
        console.log("Layouts loaded");
       }
      }
-
-     // public async removeLayout(layoutIdentity): Promise<void> {
-     //  console.log(`[platform-window] manager: removeLayout called for ${layoutIdentity.layoutName}`);
-     //  return destroy(layoutIdentity);
-     // }
      };
    };
-}
 ```

@@ -25,7 +25,8 @@
 				"panels": {
 					"left": {
 						"url": "http://localhost:6060/views/fdc3-panel.html",
-						"frameId": "left-panel"
+						"frameId": "left-panel",
+						"frameContainerId": "left-panel-container"
 					}
 				},
 				"layoutContainerId": "layout_container",

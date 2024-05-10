@@ -1,11 +1,8 @@
 import type OpenFin from "@openfin/core";
-import { connect } from "@openfin/core-web";
-import "./util/buffer";
-import type { WebLayoutSnapshot } from "@openfin/core-web";
+import { type WebLayoutSnapshot, connect } from "@openfin/core-web";
 import { getDefaultLayout, getSettings } from "./platform/settings";
+import type { LayoutManager, LayoutManagerConstructor, LayoutManagerItem } from "./shapes/layout-shapes";
 import type { Settings } from "./shapes/setting-shapes";
-import type { LayoutManager, LayoutManagerConstructor, LayoutManagerItem } from "./shapes/shapes";
-
 
 let PARENT_CONTAINER: HTMLElement | null;
 
@@ -16,13 +13,21 @@ let PARENT_CONTAINER: HTMLElement | null;
 function setupPanels(settings: Settings): void {
 	if (settings?.platform?.layout?.panels?.left) {
 		const leftPanel = settings.platform.layout.panels.left;
+		const leftPanelFrameContainer = document.querySelector<HTMLElement>(`#${leftPanel.frameContainerId}`);
 		const leftPanelFrame = document.querySelector<HTMLIFrameElement>(`#${leftPanel.frameId}`);
-		if (leftPanelFrame === null) {
+		if (leftPanelFrameContainer === null) {
 			console.error(
-				`Please ensure the document has an element with the following id #${leftPanel.frameContainerId} so that the web-layout can be applied.`
+				`Please ensure the document has an element with the following id #${leftPanel.frameContainerId} containing an iframe with an id of #${leftPanel.frameId} so that the layout can be applied.`
 			);
 			return;
 		}
+		if (leftPanelFrame === null) {
+			console.error(
+				`Please ensure the document has an iframe with the following id #${leftPanel.frameId} so that the layout can be applied.`
+			);
+			return;
+		}
+		leftPanelFrameContainer.classList.remove("hidden");
 		leftPanelFrame.src = leftPanel.url;
 		console.log(`Panel ${leftPanel.frameId} has been setup with the url ${leftPanel.url}`);
 	} else {
@@ -40,7 +45,6 @@ async function attachListeners(): Promise<void> {
 	});
 }
 
-
 /**
  * A Create function for layouts.
  * @param fin the fin object.
@@ -48,9 +52,12 @@ async function attachListeners(): Promise<void> {
  * @param layout LayoutOptions
  * @param order which position to display in
  */
-async function createLayout(fin: OpenFin.Fin<OpenFin.EntityType>, layoutName: string,
+async function createLayout(
+	fin: OpenFin.Fin<OpenFin.EntityType>,
+	layoutName: string,
 	layout: OpenFin.LayoutOptions,
-	order: number): Promise<void> {
+	order: number
+): Promise<void> {
 	// Create a new div container for the layout.
 	const container = document.createElement("div");
 	container.id = layoutName;
@@ -74,48 +81,42 @@ async function createLayout(fin: OpenFin.Fin<OpenFin.EntityType>, layoutName: st
 	await fin.Platform.Layout.create({ layoutName, layout, container });
 }
 
-
 /**
  * MakeOverride assists in loading the Fin object before the applyLayoutSnapshot Manager call.
  * @param fin the fin object.
+ * @param layoutContainerId the layout container id.
  * @returns a function call.
  */
-function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>) {
-	return function layoutManagerOverride(Base: LayoutManagerConstructor):
-	LayoutManagerConstructor {
-		 /**
-			 * @class LayoutManagerBasic
-			 * This implementation is the fundamental override for Multiple Layouts in Web.
+function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>, layoutContainerId: string) {
+	return function layoutManagerOverride(Base: LayoutManagerConstructor): LayoutManagerConstructor {
+		/**
+		 * @class LayoutManagerBasic
+		 * This implementation is the fundamental override for Multiple Layouts in Web.
+		 */
+		return class LayoutManagerBasic extends Base implements LayoutManager {
+			public layoutMapArray: LayoutManagerItem[] = [];
+
+			public layoutContainer = document.querySelector<HTMLElement>(`#${layoutContainerId}`);
+
+			/**
+			 * Override for applying multiple snapshots.
+			 * @param snapshot The layouts object containing the fixed set of available layouts.
 			 */
-	   return class LayoutManagerBasic extends Base implements LayoutManager {
-		   public layoutMapArray: LayoutManagerItem[] = [];
-
-		   public layoutContainer: HTMLElement = document.querySelector("#layout_container") as HTMLElement;
-
-		   /**
-					 * Override for applying multiple snapshots.
-					 * @param snapshot The layouts object containing the fixed set of available layouts.
-					 */
-		   public async applyLayoutSnapshot(snapshot: WebLayoutSnapshot): Promise<void> {
-			   console.log(`DOes this exist? ${Boolean(this.layoutContainer)}`);
-			   if (this.layoutContainer !== undefined) {
-					   setTimeout(() => Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) =>
-						   createLayout(fin, layoutName, layout, i)
-					   ), 1000);
-				// 	await Promise.all(Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) =>
-				// 		createLayout(fin, layoutName, layout, i))
-				//    );
-
-				   console.log("Layouts loaded");
-			   }
-		   }
-
-		   // public async removeLayout(layoutIdentity): Promise<void> {
-		   // 	console.log(`[platform-window] manager: removeLayout called for ${layoutIdentity.layoutName}`);
-		   // 	return destroy(layoutIdentity);
-		   // }
-   		};
-   };
+			public async applyLayoutSnapshot(snapshot: WebLayoutSnapshot): Promise<void> {
+				console.log(`Does this exist? ${Boolean(this.layoutContainer)}`);
+				if (this.layoutContainer !== null && this.layoutContainer !== undefined) {
+					setTimeout(
+						() =>
+							Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) =>
+								createLayout(fin, layoutName, layout, i)
+							),
+						1000
+					);
+					console.log("Layouts loaded");
+				}
+			}
+		};
+	};
 }
 
 /**
@@ -157,9 +158,7 @@ async function init(): Promise<void> {
 	}
 
 	// Get the dom element that should host the layout - This will be the top element holding the children iframes.
-	PARENT_CONTAINER = document.querySelector<HTMLElement>(
-		`#${settings.platform.layout.layoutContainerId}`
-	);
+	PARENT_CONTAINER = document.querySelector<HTMLElement>(`#${settings.platform.layout.layoutContainerId}`);
 
 	if (PARENT_CONTAINER === null) {
 		console.error(
@@ -181,12 +180,11 @@ async function init(): Promise<void> {
 			}
 		},
 		connectionInheritance: "enabled",
-		// @ts-expect-error connection inheritance is being set to true and that doesn't expect a platform config
 		platform: { layoutSnapshot }
 	});
 
-	const layoutManagerOverride = makeOverride(fin);
 	if (fin) {
+		const layoutManagerOverride = makeOverride(fin, settings.platform.layout.layoutContainerId);
 		// You may now use the `fin` object to initialize the broker and the layout.
 		await fin.Interop.init(settings.platform.interop.providerId);
 		// Show the main container and hide the loading container
@@ -200,8 +198,7 @@ async function init(): Promise<void> {
 
 init()
 	.then(() => {
-		console.log("Connected to the OpenFin Web Broker.");
+		console.log("Connected to the OpenFin Web Broker and layout has been applied.");
 		return true;
 	})
 	.catch((err) => console.error(err));
-

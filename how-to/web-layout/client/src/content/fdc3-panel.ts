@@ -2,10 +2,8 @@ import type { Context } from "@finos/fdc3";
 import { init } from "../platform/api";
 
 window.addEventListener("DOMContentLoaded", async () => {
-	// setTimeout(async () => {
 	await init(false);
 	await initializeDOM();
-	// }, 1000);
 });
 
 /**

@@ -14,16 +14,16 @@ export type LayoutManager = OpenFin.LayoutManager<OpenFin.LayoutSnapshot>;
  * Layout Shape that is used to index one or more layouts used in a platform window.
  */
 export interface LayoutManagerItem {
-    /**
-     * Name of layout item.
-     */
-    layoutName: string;
-    /**
-     * Layout settings, and content options.
-     */
-    layout: OpenFin.LayoutOptions;
-    /**
-     * Layout element to bind the layout creation to.
-     */
-    container?: HTMLElement;
+	/**
+	 * Name of layout item.
+	 */
+	layoutName: string;
+	/**
+	 * Layout settings, and content options.
+	 */
+	layout: OpenFin.LayoutOptions;
+	/**
+	 * Layout element to bind the layout creation to.
+	 */
+	container?: HTMLElement;
 }

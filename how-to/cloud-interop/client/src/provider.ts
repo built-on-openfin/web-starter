@@ -11,13 +11,21 @@ import type { Settings } from "./shapes/setting-shapes";
 function setupPanels(settings: Settings): void {
 	if (settings?.platform?.layout?.panels?.left) {
 		const leftPanel = settings.platform.layout.panels.left;
+		const leftPanelFrameContainer = document.querySelector<HTMLElement>(`#${leftPanel.frameContainerId}`);
 		const leftPanelFrame = document.querySelector<HTMLIFrameElement>(`#${leftPanel.frameId}`);
-		if (leftPanelFrame === null) {
+		if (leftPanelFrameContainer === null) {
 			console.error(
-				`Please ensure the document has an element with the following id #${leftPanel.frameContainerId} so that the web-layout can be applied.`
+				`Please ensure the document has an element with the following id #${leftPanel.frameContainerId} containing an iframe with an id of #${leftPanel.frameId} so that the layout can be applied.`
 			);
 			return;
 		}
+		if (leftPanelFrame === null) {
+			console.error(
+				`Please ensure the document has an iframe with the following id #${leftPanel.frameId} so that the layout can be applied.`
+			);
+			return;
+		}
+		leftPanelFrameContainer.classList.remove("hidden");
 		leftPanelFrame.src = leftPanel.url;
 		console.log(`Panel ${leftPanel.frameId} has been setup with the url ${leftPanel.url}`);
 	} else {

@@ -1,5 +1,4 @@
 import { connect, type BaseConnectionOptions } from "@openfin/core-web";
-import "../util/buffer";
 import { getSettings } from "./settings";
 
 /**

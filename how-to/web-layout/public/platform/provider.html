@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<title>Web Interop Example</title>
+		<title>Web Multiple Layout Example</title>
 		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,8 +15,8 @@
 	<body class="col fill gap20">
 		<header class="row spread middle">
 			<div class="col">
-				<h1>Web Interop Example</h1>
-				<h1 class="tag">Demonstrate web interop usage with a layout</h1>
+				<h1>Web Multiple Layout Example</h1>
+				<h1 class="tag">Demonstrate web interop usage with multiple layouts</h1>
 			</div>
 			<div class="row middle gap20">
 				<button id="swap-layouts">Swap Layouts</button>
@@ -25,7 +25,7 @@
 		</header>
 		<main class="row fill gap10">
 			<div class="row fill" id="main-page">
-				<div class="col"><iframe id="left-panel" class="fill"></iframe></div>
+				<div class="col hidden" id="left-panel-container"><iframe id="left-panel" class="fill"></iframe></div>
 				<div id="layout_container" class="col fill"></div>
 			</div>
 		</main>
