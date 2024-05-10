@@ -1,0 +1,39 @@
+{
+	"name": "OpenFin Web Layouts",
+	"short_name": "OpenFinWebLayouts",
+	"start_url": "./platform/provider.html",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "An example showing a implementation of the OpenFin Web Layouts Feature.",
+	"icons": [
+		{
+			"src": "common/images/icon-blue.png",
+			"sizes": "72x72",
+			"type": "image/png"
+		}
+	],
+	"related_applications": [],
+	"custom_settings": {
+		"platform": {
+			"interop": {
+				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/dev/john/layout-examples/web-layout/js/shared-worker.bundle.js",
+				"brokerUrl": "https://built-on-openfin.github.io/web-starter/dev/john/layout-examples/web-layout/platform/iframe-broker.html",
+				"providerId": "web-interop",
+				"defaultContextGroup": "green"
+			},
+			"layout": {
+				"panels": {
+					"left": {
+						"url": "https://built-on-openfin.github.io/web-starter/dev/john/layout-examples/web-layout/views/fdc3-panel.html",
+						"frameId": "left-panel",
+						"frameContainerId": "left-panel-container"
+					}
+				},
+				"layoutContainerId": "layout_container",
+				"defaultLayout": "https://built-on-openfin.github.io/web-starter/dev/john/layout-examples/web-layout/layouts/default.layout.fin.json",
+				"secondaryContainerId": "layout_two",
+				"secondLayout": "https://built-on-openfin.github.io/web-starter/dev/john/layout-examples/web-layout/layouts/secondary.layout.fin.json"
+			}
+		}
+	}
+}
