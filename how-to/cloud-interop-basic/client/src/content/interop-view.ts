@@ -21,12 +21,14 @@ async function setContext(): Promise<void> {
 		id: idData
 	};
 	if (window.fin) {
-		window.fin.me.interop.setContext(context);
+		await window.fin.me.interop.setContext(context);
 		console.log(`Set context: ${contextType} - ${contextName}`);
 	} else {
 		window.addEventListener("finReady", async () => {
-			window.fin.me.interop.setContext(context);
-			console.log(`Set context: ${contextType} - ${contextName}`);
+			if (window.fin) {
+				await window.fin.me.interop.setContext(context);
+				console.log(`Set context: ${contextType} - ${contextName}`);
+			}
 		});
 	}
 }
@@ -36,14 +38,16 @@ async function setContext(): Promise<void> {
  */
 async function addContextListener(): Promise<void> {
 	if (window.fin) {
-		window.fin.me.interop.addContextHandler((context: Context) => {
+		await window.fin.me.interop.addContextHandler((context: Context) => {
 			updateDOMElements(context);
 		});
 	} else {
 		window.addEventListener("finReady", async () => {
-			window.fin.me.interop.addContextHandler((context: Context) => {
-				updateDOMElements(context);
-			});
+			if (window.fin) {
+				await window.fin.me.interop.addContextHandler((context: Context) => {
+					updateDOMElements(context);
+				});
+			}
 		});
 	}
 }

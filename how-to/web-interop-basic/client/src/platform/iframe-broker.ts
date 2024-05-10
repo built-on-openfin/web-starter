@@ -1,4 +1,4 @@
-import { init as initBrokerConnection } from "@openfin/web-interop/iframe-broker";
+import { init as initBrokerConnection } from "@openfin/core-web/iframe-broker";
 import { getSettings } from "./settings";
 
 /**
