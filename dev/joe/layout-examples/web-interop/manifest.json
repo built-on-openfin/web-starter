@@ -25,7 +25,8 @@
 				"panels": {
 					"left": {
 						"url": "https://built-on-openfin.github.io/web-starter/dev/joe/layout-examples/web-interop/views/fdc3-panel.html",
-						"frameId": "left-panel"
+						"frameId": "left-panel",
+						"frameContainerId": "left-panel-container"
 					}
 				},
 				"layoutContainerId": "layout_container",
