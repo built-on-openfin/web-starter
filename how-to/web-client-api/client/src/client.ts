@@ -212,7 +212,11 @@ export async function getAPI<FDC3 = typeof OpenFin.FDC3.v2_0>(
 			let newFin: _Fin | undefined;
 			try {
 				options.logger.info(
-					`Creating Fin API instance through @openfin/core-web connect using the following options: ${JSON.stringify(options)}.`
+					`Creating Fin API instance through @openfin/core-web connect using the following options. 
+					Connect Options: 
+					${JSON.stringify(options.connectOptions)} 
+					Request Connect Options:
+					${JSON.stringify(options.requestConnectOptions)}`
 				);
 				if (options.connectOptions !== undefined) {
 					newFin = (await connect(options.connectOptions)) as unknown as _Fin;
@@ -236,13 +240,21 @@ export async function getAPI<FDC3 = typeof OpenFin.FDC3.v2_0>(
 						newFin = (await connect(requestedConnectConfig)) as unknown as _Fin;
 					} catch (requestError) {
 						options.logger.error(
-							`Error creating Fin API instance through @openfin/core-web connect using the following options: ${JSON.stringify(options)}.`,
+							`Error creating Fin API instance through @openfin/core-web connect using the following options: 
+							Connect Options: 
+							${JSON.stringify(options.connectOptions)} 
+							Request Connect Options:
+							${JSON.stringify(options.requestConnectOptions)}`,
 							requestError as Error
 						);
 					}
 				} else {
 					options.logger.error(
-						`Error creating Fin API instance through @openfin/core-web connect using the following options: ${JSON.stringify(options)}.`,
+						`Error creating Fin API instance through @openfin/core-web connect using the following options: 
+						Connect Options: 
+						${JSON.stringify(options.connectOptions)} 
+						Request Connect Options:
+						${JSON.stringify(options.requestConnectOptions)}`,
 						err as Error
 					);
 				}
