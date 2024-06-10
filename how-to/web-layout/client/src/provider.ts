@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-param */
 import type OpenFin from "@openfin/core";
 import { type WebLayoutSnapshot, connect } from "@openfin/core-web";
 import { getDefaultLayout, getSettings } from "./platform/settings";
@@ -42,6 +43,11 @@ async function attachListeners(): Promise<void> {
 	const swapButton = document.querySelector<HTMLButtonElement>("#swap-layouts");
 	swapButton?.addEventListener("click", async () => {
 		await swapLayout();
+	});
+
+	const removeLayoutBtn = document.querySelector<HTMLButtonElement>("#remove-layout");
+	removeLayoutBtn?.addEventListener("click", async () => {
+		await removeThisLayout("Test");
 	});
 }
 
@@ -103,8 +109,11 @@ function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>, layoutContainerId: s
 			 * @param snapshot The layouts object containing the fixed set of available layouts.
 			 */
 			public async applyLayoutSnapshot(snapshot: WebLayoutSnapshot): Promise<void> {
-				console.log(`Does this exist? ${Boolean(this.layoutContainer)}`);
+				console.log(`[Apply Layout] Does this exist? ${Boolean(this.layoutContainer)}`);
 				if (this.layoutContainer !== null && this.layoutContainer !== undefined) {
+					for (const [key, value] of Object.entries(snapshot.layouts)) {
+						this.layoutMapArray.push({ layoutName: key, layout: value, container: this.layoutContainer });
+					}
 					setTimeout(
 						() =>
 							Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) =>
@@ -112,8 +121,18 @@ function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>, layoutContainerId: s
 							),
 						1000
 					);
-					console.log("Layouts loaded");
+					console.log("[Apply Layout] Layouts loaded");
+					console.log(`[Apply Layout] Layouts are: ${JSON.stringify(this.layoutMapArray)}`);
 				}
+			}
+
+			/**
+			 * Remove Layout - You guessed it, it removes a layout from the existing array of layouts.
+			 * @param layoutName The name of the layout you want removed.
+			 */
+			public async removeLayout({ layoutName }: OpenFin.LayoutIdentity): Promise<void> {
+				const index = this.layoutMapArray.findIndex((x) => x.layoutName === layoutName);
+				console.log(`[Remove Layout] Found layout at index ${index}`);
 			}
 		};
 	};
@@ -141,6 +160,15 @@ export async function swapLayout(): Promise<void> {
 	}
 }
 
+
+/**
+ * Click function to remove a layout by name.
+ * @param layoutName the name of a layout.
+ */
+export async function removeThisLayout(layoutName: string): Promise<void> {
+	const layoutMgr = fin.Platform.Layout.getCurrentLayoutManagerSync();
+	await layoutMgr.removeLayout({ layoutName } as OpenFin.LayoutIdentity);
+}
 /**
  * Initializes the OpenFin Web Broker connection.
  */
