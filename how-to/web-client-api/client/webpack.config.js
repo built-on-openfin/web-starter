@@ -45,6 +45,20 @@ module.exports = [
 		}
 	},
 	{
+		entry: './client/src/shim-connect-fallback.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'shim-connect-fallback.api.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
 		entry: './client/src/content/fdc3-view.ts',
 		devtool: 'source-map',
 		module: {

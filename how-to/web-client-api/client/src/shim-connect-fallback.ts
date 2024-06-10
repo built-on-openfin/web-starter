@@ -5,7 +5,7 @@ if (window.fin === undefined) {
 			const url =
 				"https://built-on-openfin.github.io/web-starter/web/vnext/web-client-api/js/web.client.api.bundle.js";
 			const webClient = await import(/* webpackIgnore: true */ url);
-			await webClient.getAPI({ target: window });
+			await webClient.getAPI({ target: window, requestConnectOptions: { strategy: "request-on-failure" } });
 		} catch (error) {
 			console.error(
 				"Failed to load the OpenFin API shim. Please note this is an example and you should implement your own approach for production.",
