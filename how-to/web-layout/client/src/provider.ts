@@ -135,7 +135,7 @@ function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>, layoutContainerId: s
 			public async removeLayout(id: OpenFin.LayoutIdentity): Promise<void> {
 				const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
 				console.log(`[Remove Layout] Found layout at index ${index}`);
-				// await removeThisLayout(fin, id.layoutName, index);
+				await removeThisLayout(id.layoutName, index);
 			}
 		};
 	};
@@ -197,7 +197,8 @@ export async function removeThisLayout(layoutName: string, index: number): Promi
 	if (layoutsBefore.length > 0) {
 		const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
 		layoutsAfter = layoutsBefore.splice(idx, 1);
-		saveLayout(layoutsAfter);
+		console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsAfter)}`);
+		saveLayout(layoutsBefore);
 	}
 }
 /**
