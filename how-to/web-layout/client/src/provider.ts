@@ -48,7 +48,8 @@ async function attachListeners(): Promise<void> {
 	const removeLayoutBtn = document.querySelector<HTMLButtonElement>("#remove-layout");
 	removeLayoutBtn?.addEventListener("click", async () => {
 		console.log("[Remove Layout] Removing Layout X");
-		await removeThisLayout("secondary", 1);
+		const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+		await currentLayout?.removeLayout({ layoutName: "secondary" } as OpenFin.LayoutIdentity);
 	});
 }
 
@@ -135,7 +136,7 @@ function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>, layoutContainerId: s
 			public async removeLayout(id: OpenFin.LayoutIdentity): Promise<void> {
 				const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
 				console.log(`[Remove Layout] Found layout at index ${index}`);
-				await removeThisLayout(id.layoutName, index);
+				await removeThisLayout(id.layoutName);
 			}
 		};
 	};
@@ -190,15 +191,18 @@ export function readLayouts(): LayoutManagerItem[] {
  * Click function to remove a layout by name.
  * @param layoutName the name of a layout.
  */
-export async function removeThisLayout(layoutName: string, index: number): Promise<void> {
+export async function removeThisLayout(layoutName: string): Promise<void> {
 	// remove layout from state.
 	const layoutsBefore = readLayouts();
-	let layoutsAfter: LayoutManagerItem[] = [];
-	if (layoutsBefore.length > 0) {
+	let layoutsRemoved: LayoutManagerItem[] = [];
+	const layoutNameElement = document.querySelector<HTMLElement>(`#${layoutName}`);
+	if (layoutsBefore.length > 0 && layoutNameElement !== null) {
 		const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
-		layoutsAfter = layoutsBefore.splice(idx, 1);
-		console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsAfter)}`);
+		layoutsRemoved = layoutsBefore.splice(idx, 1);
+		console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsRemoved)}`);
 		saveLayout(layoutsBefore);
+		console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
+		layoutNameElement.remove();
 	}
 }
 /**
