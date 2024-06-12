@@ -31049,7 +31049,7 @@ function makeOverride(fin, layoutContainerId) {
             async removeLayout(id) {
                 const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
                 console.log(`[Remove Layout] Found layout at index ${index}`);
-                // await removeThisLayout(fin, id.layoutName, index);
+                await removeThisLayout(id.layoutName, index);
             }
         };
     };
@@ -31108,7 +31108,8 @@ async function removeThisLayout(layoutName, index) {
     if (layoutsBefore.length > 0) {
         const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
         layoutsAfter = layoutsBefore.splice(idx, 1);
-        saveLayout(layoutsAfter);
+        console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsAfter)}`);
+        saveLayout(layoutsBefore);
     }
 }
 exports.removeThisLayout = removeThisLayout;
