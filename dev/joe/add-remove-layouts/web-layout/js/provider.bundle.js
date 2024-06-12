@@ -30975,7 +30975,8 @@ async function attachListeners() {
     const removeLayoutBtn = document.querySelector("#remove-layout");
     removeLayoutBtn?.addEventListener("click", async () => {
         console.log("[Remove Layout] Removing Layout X");
-        await removeThisLayout("secondary", 1);
+        const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+        await currentLayout?.removeLayout({ layoutName: "secondary" });
     });
 }
 /**
@@ -31049,7 +31050,7 @@ function makeOverride(fin, layoutContainerId) {
             async removeLayout(id) {
                 const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
                 console.log(`[Remove Layout] Found layout at index ${index}`);
-                await removeThisLayout(id.layoutName, index);
+                await removeThisLayout(id.layoutName);
             }
         };
     };
@@ -31101,15 +31102,18 @@ exports.readLayouts = readLayouts;
  * Click function to remove a layout by name.
  * @param layoutName the name of a layout.
  */
-async function removeThisLayout(layoutName, index) {
+async function removeThisLayout(layoutName) {
     // remove layout from state.
     const layoutsBefore = readLayouts();
-    let layoutsAfter = [];
-    if (layoutsBefore.length > 0) {
+    let layoutsRemoved = [];
+    const layoutNameElement = document.querySelector(`#${layoutName}`);
+    if (layoutsBefore.length > 0 && layoutNameElement !== null) {
         const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
-        layoutsAfter = layoutsBefore.splice(idx, 1);
-        console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsAfter)}`);
+        layoutsRemoved = layoutsBefore.splice(idx, 1);
+        console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsRemoved)}`);
         saveLayout(layoutsBefore);
+        console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
+        layoutNameElement.remove();
     }
 }
 exports.removeThisLayout = removeThisLayout;
