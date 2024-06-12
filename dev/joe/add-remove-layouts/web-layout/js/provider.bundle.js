@@ -30974,7 +30974,6 @@ async function attachListeners() {
     });
     const removeLayoutBtn = document.querySelector("#remove-layout");
     removeLayoutBtn?.addEventListener("click", async () => {
-        console.log("[Remove Layout] Removing Layout X");
         const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
         await currentLayout?.removeLayout({ layoutName: "secondary" });
     });
@@ -31049,7 +31048,8 @@ function makeOverride(fin, layoutContainerId) {
              */
             async removeLayout(id) {
                 const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
-                console.log(`[Remove Layout] Found layout at index ${index}`);
+                console.log(`[LM Override] Removing Layout ${id.layoutName}`);
+                console.log(`[LM Override] Found layout at index ${index}`);
                 await removeThisLayout(id.layoutName);
             }
         };
@@ -31080,10 +31080,21 @@ async function swapLayout() {
 exports.swapLayout = swapLayout;
 /**
  * Saves the list of layout items to Local Storage.
- * @param updatedLayout List of Layouts to save.
+ * @param updatedLayoutContents List of Layouts to save.
  */
-function saveLayout(updatedLayout) {
-    window.localStorage.setItem("currentLayout", JSON.stringify(updatedLayout));
+async function saveLayout(updatedLayoutContents) {
+    window.localStorage.setItem("[Save Layout] currentLayoutContents:", JSON.stringify(updatedLayoutContents));
+    const layoutsObj = {};
+    for (const content of updatedLayoutContents) {
+        layoutsObj[content.layoutName] = content.layout;
+    }
+    const newSnap = {
+        layouts: {}
+    };
+    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+    newSnap.layouts = layoutsObj;
+    const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+    await lm?.applyLayoutSnapshot(newSnap);
 }
 exports.saveLayout = saveLayout;
 /**
