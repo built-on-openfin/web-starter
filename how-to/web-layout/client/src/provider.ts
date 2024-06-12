@@ -47,7 +47,8 @@ async function attachListeners(): Promise<void> {
 
 	const removeLayoutBtn = document.querySelector<HTMLButtonElement>("#remove-layout");
 	removeLayoutBtn?.addEventListener("click", async () => {
-		await removeThisLayout("Test");
+		console.log("[Remove Layout] Removing Layout X");
+		await removeThisLayout("secondary", 1);
 	});
 }
 
@@ -123,16 +124,18 @@ function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>, layoutContainerId: s
 					);
 					console.log("[Apply Layout] Layouts loaded");
 					console.log(`[Apply Layout] Layouts are: ${JSON.stringify(this.layoutMapArray)}`);
+					window.localStorage.setItem("currentLayout", JSON.stringify(this.layoutMapArray));
 				}
 			}
 
 			/**
 			 * Remove Layout - You guessed it, it removes a layout from the existing array of layouts.
-			 * @param layoutName The name of the layout you want removed.
+			 * @param id The name of the layout you want removed.
 			 */
-			public async removeLayout({ layoutName }: OpenFin.LayoutIdentity): Promise<void> {
-				const index = this.layoutMapArray.findIndex((x) => x.layoutName === layoutName);
+			public async removeLayout(id: OpenFin.LayoutIdentity): Promise<void> {
+				const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
 				console.log(`[Remove Layout] Found layout at index ${index}`);
+				// await removeThisLayout(fin, id.layoutName, index);
 			}
 		};
 	};
@@ -162,12 +165,40 @@ export async function swapLayout(): Promise<void> {
 
 
 /**
+ * Saves the list of layout items to Local Storage.
+ * @param updatedLayout List of Layouts to save.
+ */
+export function saveLayout(updatedLayout: LayoutManagerItem[]): void {
+	window.localStorage.setItem("currentLayout", JSON.stringify(updatedLayout));
+}
+
+/**
+ *	Reads a list of layouts from Local Storage.
+ *	@returns List of Layouts.
+ */
+export function readLayouts(): LayoutManagerItem[] {
+	const currentLayouts = window.localStorage.getItem("currentLayout");
+	if (currentLayouts) {
+		return JSON.parse(currentLayouts) as LayoutManagerItem[];
+	}
+
+	return [];
+}
+
+
+/**
  * Click function to remove a layout by name.
  * @param layoutName the name of a layout.
  */
-export async function removeThisLayout(layoutName: string): Promise<void> {
-	const layoutMgr = fin.Platform.Layout.getCurrentLayoutManagerSync();
-	await layoutMgr.removeLayout({ layoutName } as OpenFin.LayoutIdentity);
+export async function removeThisLayout(layoutName: string, index: number): Promise<void> {
+	// remove layout from state.
+	const layoutsBefore = readLayouts();
+	let layoutsAfter: LayoutManagerItem[] = [];
+	if (layoutsBefore.length > 0) {
+		const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
+		layoutsAfter = layoutsBefore.splice(idx, 1);
+		saveLayout(layoutsAfter);
+	}
 }
 /**
  * Initializes the OpenFin Web Broker connection.
@@ -210,7 +241,7 @@ async function init(): Promise<void> {
 		connectionInheritance: "enabled",
 		platform: { layoutSnapshot }
 	});
-
+	window.fin = fin;
 	if (fin) {
 		const layoutManagerOverride = makeOverride(fin, settings.platform.layout.layoutContainerId);
 		// You may now use the `fin` object to initialize the broker and the layout.
