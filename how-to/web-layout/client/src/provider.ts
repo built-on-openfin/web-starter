@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-param */
 import type OpenFin from "@openfin/core";
-import { type WebLayoutSnapshot, connect } from "@openfin/core-web";
+import { type WebLayoutSnapshot, connect, type WebLayoutOptions } from "@openfin/core-web";
 import { getDefaultLayout, getSettings } from "./platform/settings";
 import type { LayoutManager, LayoutManagerConstructor, LayoutManagerItem } from "./shapes/layout-shapes";
 import type { Settings } from "./shapes/setting-shapes";
@@ -47,7 +47,6 @@ async function attachListeners(): Promise<void> {
 
 	const removeLayoutBtn = document.querySelector<HTMLButtonElement>("#remove-layout");
 	removeLayoutBtn?.addEventListener("click", async () => {
-		console.log("[Remove Layout] Removing Layout X");
 		const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
 		await currentLayout?.removeLayout({ layoutName: "secondary" } as OpenFin.LayoutIdentity);
 	});
@@ -135,7 +134,8 @@ function makeOverride(fin: OpenFin.Fin<OpenFin.EntityType>, layoutContainerId: s
 			 */
 			public async removeLayout(id: OpenFin.LayoutIdentity): Promise<void> {
 				const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
-				console.log(`[Remove Layout] Found layout at index ${index}`);
+				console.log(`[LM Override] Removing Layout ${id.layoutName}`);
+				console.log(`[LM Override] Found layout at index ${index}`);
 				await removeThisLayout(id.layoutName);
 			}
 		};
@@ -164,13 +164,28 @@ export async function swapLayout(): Promise<void> {
 	}
 }
 
-
 /**
  * Saves the list of layout items to Local Storage.
- * @param updatedLayout List of Layouts to save.
+ * @param updatedLayoutContents List of Layouts to save.
  */
-export function saveLayout(updatedLayout: LayoutManagerItem[]): void {
-	window.localStorage.setItem("currentLayout", JSON.stringify(updatedLayout));
+export async function saveLayout(updatedLayoutContents: LayoutManagerItem[]): Promise<void> {
+	window.localStorage.setItem("[Save Layout] currentLayoutContents:", JSON.stringify(updatedLayoutContents));
+
+	const layoutsObj: {
+		[key: string]: WebLayoutOptions; // whatever type of array
+	} = {};
+
+	for (const content of updatedLayoutContents) {
+		layoutsObj[content.layoutName] = content.layout;
+	}
+
+	const newSnap: WebLayoutSnapshot = {
+		layouts: {}
+	};
+	// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+	newSnap.layouts = layoutsObj as Record<string, WebLayoutOptions>;
+	const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+	await lm?.applyLayoutSnapshot(newSnap);
 }
 
 /**
