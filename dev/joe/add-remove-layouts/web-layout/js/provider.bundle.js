@@ -30935,7 +30935,7 @@ var exports = __webpack_exports__;
   \********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.removeThisLayout = exports.swapLayout = void 0;
+exports.removeThisLayout = exports.readLayouts = exports.saveLayout = exports.swapLayout = void 0;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
 let PARENT_CONTAINER;
@@ -30974,7 +30974,8 @@ async function attachListeners() {
     });
     const removeLayoutBtn = document.querySelector("#remove-layout");
     removeLayoutBtn?.addEventListener("click", async () => {
-        await removeThisLayout("Test");
+        console.log("[Remove Layout] Removing Layout X");
+        await removeThisLayout("secondary", 1);
     });
 }
 /**
@@ -31038,15 +31039,17 @@ function makeOverride(fin, layoutContainerId) {
                     setTimeout(() => Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) => createLayout(fin, layoutName, layout, i)), 1000);
                     console.log("[Apply Layout] Layouts loaded");
                     console.log(`[Apply Layout] Layouts are: ${JSON.stringify(this.layoutMapArray)}`);
+                    window.localStorage.setItem("currentLayout", JSON.stringify(this.layoutMapArray));
                 }
             }
             /**
              * Remove Layout - You guessed it, it removes a layout from the existing array of layouts.
-             * @param layoutName The name of the layout you want removed.
+             * @param id The name of the layout you want removed.
              */
-            async removeLayout({ layoutName }) {
-                const index = this.layoutMapArray.findIndex((x) => x.layoutName === layoutName);
+            async removeLayout(id) {
+                const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
                 console.log(`[Remove Layout] Found layout at index ${index}`);
+                // await removeThisLayout(fin, id.layoutName, index);
             }
         };
     };
@@ -31075,12 +31078,38 @@ async function swapLayout() {
 }
 exports.swapLayout = swapLayout;
 /**
+ * Saves the list of layout items to Local Storage.
+ * @param updatedLayout List of Layouts to save.
+ */
+function saveLayout(updatedLayout) {
+    window.localStorage.setItem("currentLayout", JSON.stringify(updatedLayout));
+}
+exports.saveLayout = saveLayout;
+/**
+ *	Reads a list of layouts from Local Storage.
+ *	@returns List of Layouts.
+ */
+function readLayouts() {
+    const currentLayouts = window.localStorage.getItem("currentLayout");
+    if (currentLayouts) {
+        return JSON.parse(currentLayouts);
+    }
+    return [];
+}
+exports.readLayouts = readLayouts;
+/**
  * Click function to remove a layout by name.
  * @param layoutName the name of a layout.
  */
-async function removeThisLayout(layoutName) {
-    const layoutMgr = fin.Platform.Layout.getCurrentLayoutManagerSync();
-    await layoutMgr.removeLayout({ layoutName });
+async function removeThisLayout(layoutName, index) {
+    // remove layout from state.
+    const layoutsBefore = readLayouts();
+    let layoutsAfter = [];
+    if (layoutsBefore.length > 0) {
+        const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
+        layoutsAfter = layoutsBefore.splice(idx, 1);
+        saveLayout(layoutsAfter);
+    }
 }
 exports.removeThisLayout = removeThisLayout;
 /**
@@ -31116,6 +31145,7 @@ async function init() {
         connectionInheritance: "enabled",
         platform: { layoutSnapshot }
     });
+    window.fin = fin;
     if (fin) {
         const layoutManagerOverride = makeOverride(fin, settings.platform.layout.layoutContainerId);
         // You may now use the `fin` object to initialize the broker and the layout.
