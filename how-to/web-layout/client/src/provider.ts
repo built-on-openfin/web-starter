@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-param */
 import type OpenFin from "@openfin/core";
 import { type WebLayoutSnapshot, connect, type WebLayoutOptions } from "@openfin/core-web";
-import { getDefaultLayout, getSettings } from "./platform/settings";
+import { getDefaultLayout, getSecondLayout, getSettings } from "./platform/settings";
 import type { LayoutManager, LayoutManagerConstructor, LayoutManagerItem } from "./shapes/layout-shapes";
 import type { Settings } from "./shapes/setting-shapes";
 
@@ -49,6 +49,11 @@ async function attachListeners(): Promise<void> {
 	removeLayoutBtn?.addEventListener("click", async () => {
 		const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
 		await currentLayout?.removeLayout({ layoutName: "secondary" } as OpenFin.LayoutIdentity);
+	});
+
+	const addLayoutBtn = document.querySelector<HTMLButtonElement>("#add-layout");
+	addLayoutBtn?.addEventListener("click", async () => {
+		await addLayout();
 	});
 }
 
@@ -172,7 +177,7 @@ export async function saveLayout(updatedLayoutContents: LayoutManagerItem[]): Pr
 	window.localStorage.setItem("[Save Layout] currentLayoutContents:", JSON.stringify(updatedLayoutContents));
 
 	const layoutsObj: {
-		[key: string]: WebLayoutOptions; // whatever type of array
+		[key: string]: WebLayoutOptions;
 	} = {};
 
 	for (const content of updatedLayoutContents) {
@@ -201,6 +206,20 @@ export function readLayouts(): LayoutManagerItem[] {
 	return [];
 }
 
+/**
+ * Adds another layout.
+ */
+export async function addLayout(): Promise<void> {
+	const secondLayoutToAdd = await getSecondLayout();
+	console.log("[Add Layout] Grabbing Secondary layout file...");
+	if (secondLayoutToAdd !== undefined) {
+		const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+		console.log("[Add Layout] Adding layout");
+		await lm?.applyLayoutSnapshot(secondLayoutToAdd);
+	} else {
+		console.log("[Add Layout] Error adding Layout.  No Secondary Layout exists.");
+	}
+}
 
 /**
  * Click function to remove a layout by name.
@@ -215,7 +234,7 @@ export async function removeThisLayout(layoutName: string): Promise<void> {
 		const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
 		layoutsRemoved = layoutsBefore.splice(idx, 1);
 		console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsRemoved)}`);
-		saveLayout(layoutsBefore);
+		await saveLayout(layoutsBefore);
 		console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
 		layoutNameElement.remove();
 	}
