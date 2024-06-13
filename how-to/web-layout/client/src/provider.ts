@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-param */
 import type OpenFin from "@openfin/core";
-import { type WebLayoutSnapshot, connect, type WebLayoutOptions } from "@openfin/core-web";
+import { type WebLayoutSnapshot, connect } from "@openfin/core-web";
 import { getDefaultLayout, getSecondLayout, getSettings } from "./platform/settings";
 import type { LayoutManager, LayoutManagerConstructor, LayoutManagerItem } from "./shapes/layout-shapes";
 import type { Settings } from "./shapes/setting-shapes";
