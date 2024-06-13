@@ -30935,7 +30935,7 @@ var exports = __webpack_exports__;
   \********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.removeThisLayout = exports.readLayouts = exports.saveLayout = exports.swapLayout = void 0;
+exports.removeThisLayout = exports.addLayout = exports.readLayouts = exports.saveLayout = exports.swapLayout = void 0;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
 let PARENT_CONTAINER;
@@ -30976,6 +30976,10 @@ async function attachListeners() {
     removeLayoutBtn?.addEventListener("click", async () => {
         const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
         await currentLayout?.removeLayout({ layoutName: "secondary" });
+    });
+    const addLayoutBtn = document.querySelector("#add-layout");
+    addLayoutBtn?.addEventListener("click", async () => {
+        await addLayout();
     });
 }
 /**
@@ -31110,6 +31114,22 @@ function readLayouts() {
 }
 exports.readLayouts = readLayouts;
 /**
+ * Adds another layout.
+ */
+async function addLayout() {
+    const secondLayoutToAdd = await (0, settings_1.getSecondLayout)();
+    console.log("[Add Layout] Grabbing Secondary layout file...");
+    if (secondLayoutToAdd !== undefined) {
+        const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+        console.log("[Add Layout] Adding layout");
+        await lm?.applyLayoutSnapshot(secondLayoutToAdd);
+    }
+    else {
+        console.log("[Add Layout] Error adding Layout.  No Secondary Layout exists.");
+    }
+}
+exports.addLayout = addLayout;
+/**
  * Click function to remove a layout by name.
  * @param layoutName the name of a layout.
  */
@@ -31122,7 +31142,7 @@ async function removeThisLayout(layoutName) {
         const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
         layoutsRemoved = layoutsBefore.splice(idx, 1);
         console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsRemoved)}`);
-        saveLayout(layoutsBefore);
+        await saveLayout(layoutsBefore);
         console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
         layoutNameElement.remove();
     }
