@@ -176,21 +176,21 @@ export async function swapLayout(): Promise<void> {
 export async function saveLayout(updatedLayoutContents: LayoutManagerItem[]): Promise<void> {
 	window.localStorage.setItem("[Save Layout] currentLayoutContents:", JSON.stringify(updatedLayoutContents));
 
-	const layoutsObj: {
-		[key: string]: WebLayoutOptions;
-	} = {};
+	// const layoutsObj: {
+	// 	[key: string]: WebLayoutOptions;
+	// } = {};
 
-	for (const content of updatedLayoutContents) {
-		layoutsObj[content.layoutName] = content.layout;
-	}
+	// for (const content of updatedLayoutContents) {
+	// 	layoutsObj[content.layoutName] = content.layout;
+	// }
 
-	const newSnap: WebLayoutSnapshot = {
-		layouts: {}
-	};
-	// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-	newSnap.layouts = layoutsObj as Record<string, WebLayoutOptions>;
-	const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
-	await lm?.applyLayoutSnapshot(newSnap);
+	// const newSnap: WebLayoutSnapshot = {
+	// 	layouts: {}
+	// };
+	// // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+	// newSnap.layouts = layoutsObj as Record<string, WebLayoutOptions>;
+	// const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+	// await lm?.applyLayoutSnapshot(newSnap);
 }
 
 /**
