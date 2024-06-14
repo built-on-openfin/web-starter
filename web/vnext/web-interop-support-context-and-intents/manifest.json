@@ -22,13 +22,8 @@
 				"defaultContextGroup": "green"
 			},
 			"layout": {
-				"panels": {
-					"left": {
-						"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/views/fdc3-panel.html",
-						"frameId": "left-panel"
-					}
-				},
 				"layoutContainerId": "layout_container",
+				"layoutSelectorId": "layout-selector",
 				"defaultLayout": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/layouts/default.layout.fin.json"
 			},
 			"app": {

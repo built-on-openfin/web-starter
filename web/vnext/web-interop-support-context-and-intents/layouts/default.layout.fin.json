@@ -1,5 +1,51 @@
 {
 	"layouts": {
+		"secondary": {
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "column",
+							"width": 100,
+							"content": [
+								{
+									"type": "stack",
+									"width": 50,
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/views/interop-view.html",
+												"name": "internal-generated-view-primary-6"
+											},
+											"title": "Interop Same Domain"
+										}
+									]
+								},
+								{
+									"type": "stack",
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "http://localhost:7070/fdc3/context/2-0/fdc3-broadcast-view.html",
+												"name": "internal-generated-view-primary-7"
+											},
+											"title": "FDC3 Broadcast External Domain"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
 		"default": {
 			"content": [
 				{
@@ -91,52 +137,10 @@
 					]
 				}
 			]
-		},
-		"secondary": {
-			"content": [
-				{
-					"type": "row",
-					"content": [
-						{
-							"type": "column",
-							"width": 100,
-							"content": [
-								{
-									"type": "stack",
-									"width": 50,
-									"height": 50,
-									"content": [
-										{
-											"type": "component",
-											"componentName": "view",
-											"componentState": {
-												"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/views/interop-view.html",
-												"name": "internal-generated-view-primary-6"
-											},
-											"title": "Interop Same Domain"
-										}
-									]
-								},
-								{
-									"type": "stack",
-									"height": 50,
-									"content": [
-										{
-											"type": "component",
-											"componentName": "view",
-											"componentState": {
-												"url": "http://localhost:7070/fdc3/context/2-0/fdc3-broadcast-view.html",
-												"name": "internal-generated-view-primary-7"
-											},
-											"title": "FDC3 Broadcast External Domain"
-										}
-									]
-								}
-							]
-						}
-					]
-				}
-			]
 		}
+	},
+	"layoutTitles": {
+		"default": "Context and Intents",
+		"secondary": "Contexts and Broadcasts"
 	}
 }
