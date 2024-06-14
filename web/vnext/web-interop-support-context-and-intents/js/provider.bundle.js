@@ -29912,10 +29912,866 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ "./client/src/platform/fdc3-errors.ts":
-/*!********************************************!*\
-  !*** ./client/src/platform/fdc3-errors.ts ***!
-  \********************************************/
+/***/ "./client/src/platform/apps.ts":
+/*!*************************************!*\
+  !*** ./client/src/platform/apps.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.launch = exports.getApps = exports.getApp = void 0;
+const utils_1 = __webpack_require__(/*! ../utils */ "./client/src/utils.ts");
+const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
+let cachedApps;
+/**
+ * The the app by its id.
+ * @param appId The id of the requested app.
+ * @returns The app if it was found.
+ */
+async function getApp(appId) {
+    const apps = await getApps();
+    const foundApp = apps.find((app) => app.appId === appId || (app.type === "web" && app.details.url === appId));
+    return foundApp;
+}
+exports.getApp = getApp;
+/**
+ * Get the list of applications and filter if requested.
+ * @returns The list of application.
+ */
+async function getApps() {
+    if (cachedApps) {
+        return cachedApps;
+    }
+    const settings = await (0, settings_1.getSettings)();
+    if (settings?.platform?.app?.directory) {
+        const response = await fetch(settings.platform.app.directory);
+        const appDirectory = (await response.json());
+        cachedApps = appDirectory.applications;
+        return cachedApps;
+    }
+    cachedApps = [];
+    return cachedApps;
+}
+exports.getApps = getApps;
+/**
+ * Launch an application in the way specified by its manifest type.
+ * @param platformApp The application to launch.
+ * @returns Identifiers specific to the type of application launched.
+ */
+async function launch(platformApp) {
+    // until we have an ability to addViews to a layout we will add a new layout for each app
+    // we are currently using the dom to find the of-view to get the name of the view in order
+    // to return the identity until the addView api is available
+    const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+    const layoutId = `tab-${(0, utils_1.randomUUID)()}`;
+    const appSnapshot = getAppLayout(platformApp, layoutId, `${platformApp.appId}/${(0, utils_1.randomUUID)()}`);
+    await currentLayout?.applyLayoutSnapshot(appSnapshot);
+    const layoutElement = await getLayoutElement(layoutId);
+    if (layoutElement !== null) {
+        const ofViewElement = layoutElement.querySelector("of-view");
+        if (ofViewElement !== null) {
+            const name = ofViewElement.getAttribute("of-name");
+            const uuid = ofViewElement.getAttribute("of-uuid");
+            if (name !== null && uuid !== null) {
+                return [{ name, uuid, appId: platformApp.appId }];
+            }
+        }
+    }
+    return undefined;
+}
+exports.launch = launch;
+/**
+ * Get the layout for the application.
+ * @param platformApp The application to get the layout for.
+ * @param layoutId The id of the layout to create for the app.
+ * @param viewName The name of the view to create.
+ * @returns The layout options.
+ */
+function getAppLayout(platformApp, layoutId, viewName) {
+    const appSnapshot = {
+        layouts: {}
+    };
+    appSnapshot.layouts[layoutId] = {
+        content: [
+            {
+                type: "row",
+                content: [
+                    {
+                        type: "column",
+                        width: 100,
+                        content: [
+                            {
+                                type: "stack",
+                                width: 50,
+                                height: 50,
+                                content: [
+                                    {
+                                        type: "component",
+                                        componentName: "view",
+                                        componentState: {
+                                            url: platformApp.details.url,
+                                            name: viewName
+                                        },
+                                        title: platformApp.title
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+    return appSnapshot;
+}
+/**
+ * Wait for the layout and view to be ready.
+ * @param layoutId The selector to wait for.
+ * @returns The element when it is ready.
+ */
+async function getLayoutElement(layoutId) {
+    return new Promise((resolve, reject) => {
+        const layoutIdSelector = `#${layoutId}`;
+        const element = document.querySelector(layoutIdSelector);
+        if (element) {
+            resolve(element);
+            return;
+        }
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                const nodes = Array.from(mutation.addedNodes);
+                for (const node of nodes) {
+                    if (node instanceof Element && node.matches?.(layoutIdSelector)) {
+                        observer.disconnect();
+                        resolve(node);
+                        return;
+                    }
+                }
+            }
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+    });
+}
+
+
+/***/ }),
+
+/***/ "./client/src/platform/broker/app-id-helper.ts":
+/*!*****************************************************!*\
+  !*** ./client/src/platform/broker/app-id-helper.ts ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppIdHelper = void 0;
+const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+/**
+ * The AppIdHelper class provides helpful functions related to app ids.
+ */
+class AppIdHelper {
+    /**
+     * Provides helpful functions related to app ids.
+     * @param getApp The function to use to get an app for validation.
+     * @param platformId The platform id that represents the current platform.
+     * @param logger The logger to use
+     * @param unregisteredApp The app to use as a placeholder for unregistered apps.
+     */
+    constructor(getApp, platformId, logger, unregisteredApp) {
+        this._validatedAppIds = [];
+        this._invalidAppIds = [];
+        this._appMap = new Map();
+        this._unregisteredApp = unregisteredApp;
+        this._logger = logger;
+        this._getApp = getApp;
+        this._platformId = platformId;
+    }
+    /**
+     * Lookup an application identity.
+     * @param clientIdentity The client identity to use.
+     * @returns The application identity.
+     */
+    async lookupAppId(clientIdentity) {
+        const name = clientIdentity.name;
+        let appIdOrUrl;
+        if (name.startsWith("internal-generated-")) {
+            try {
+                const ofView = document.querySelector(`of-view[of-name="${clientIdentity.name}"]`);
+                if (!(0, utils_1.isEmpty)(ofView)) {
+                    const src = ofView.getAttribute("src");
+                    if (!(0, utils_1.isEmpty)(src)) {
+                        appIdOrUrl = src;
+                    }
+                }
+            }
+            catch {
+                // dom element is likely not available yet return undefined
+                this._logger.debug("Dom element not available yet for lookupAppId");
+                return;
+            }
+        }
+        else {
+            const nameParts = name.split("/");
+            if (nameParts.length === 1 || nameParts.length === 2) {
+                appIdOrUrl = nameParts[0];
+            }
+            else {
+                appIdOrUrl = `${nameParts[0]}/${nameParts[1]}`;
+            }
+        }
+        if (!(0, utils_1.isEmpty)(appIdOrUrl)) {
+            const appId = await this.validateApp(appIdOrUrl);
+            return appId;
+        }
+    }
+    /**
+     * Validates the app id or url.
+     * @param appIdOrUrl The id of the app if it has been determined or the url of the app to be used as an alternative lookup.
+     * @returns The validated app id or undefined if there is no match.
+     */
+    async validateApp(appIdOrUrl) {
+        if (this._validatedAppIds.includes(appIdOrUrl)) {
+            return this._appMap.get(appIdOrUrl);
+        }
+        if (this._invalidAppIds.includes(appIdOrUrl)) {
+            return;
+        }
+        // perform a lookup to validate the appId
+        const app = await this._getApp(appIdOrUrl);
+        if (!(0, utils_1.isEmpty)(app)) {
+            this._validatedAppIds.push(appIdOrUrl);
+            this._appMap.set(appIdOrUrl, app.appId);
+            return app.appId;
+        }
+        else if (!(0, utils_1.isEmpty)(this._unregisteredApp)) {
+            this._logger.debug(`Content that is not an app but runs within the platform is running and a placeholder app has been specified ${this._unregisteredApp?.appId}}.`, appIdOrUrl);
+            this._validatedAppIds.push(appIdOrUrl);
+            this._appMap.set(appIdOrUrl, this._unregisteredApp.appId);
+            return this._unregisteredApp.appId;
+        }
+        this._invalidAppIds.push(appIdOrUrl);
+        this._logger.warn(`AppId ${appIdOrUrl} does not exist in the directory and we do not have an unregistered app fallback. No app id will be returned as it is unconfirmed.`);
+    }
+}
+exports.AppIdHelper = AppIdHelper;
+
+
+/***/ }),
+
+/***/ "./client/src/platform/broker/app-intent-helper.ts":
+/*!*********************************************************!*\
+  !*** ./client/src/platform/broker/app-intent-helper.ts ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppIntentHelper = void 0;
+const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+/**
+ * The App Intent Helper inspects app catalogs to discover supported intents and contexts.
+ */
+class AppIntentHelper {
+    /**
+     * Create an instance of the App Intent Helper.
+     * @param getApps returns an array of Apps
+     * @param logger the logger to use.
+     */
+    constructor(getApps, logger) {
+        this._getApps = getApps;
+        this._logger = logger;
+    }
+    /**
+     * Get the application that support the requested intent.
+     * @param intent The intent the application must support.
+     * @returns The list of application that support the intent.
+     */
+    async getAppsByIntent(intent) {
+        const apps = await this._getApps();
+        return apps.filter((app) => {
+            const listensFor = app.interop?.intents?.listensFor;
+            if ((0, utils_1.isEmpty)(listensFor)) {
+                return false;
+            }
+            const intentNames = Object.keys(listensFor);
+            for (const intentName of intentNames) {
+                if (intentName.toLowerCase() === intent.toLowerCase()) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+    /**
+     * Get an intent and the apps that support it.
+     * @param intent The intent to look for.
+     * @param contextType Optional context type to look for.
+     * @param resultType Optional result type to look for.
+     * @returns The intent and its supporting apps if found.
+     */
+    async getIntent(intent, contextType, resultType) {
+        const apps = await this._getApps();
+        if (apps.length === 0) {
+            this._logger.warn("There was no apps returned so we are unable to find apps that support an intent");
+            return;
+        }
+        const intentsMap = {};
+        for (const app of apps) {
+            if (app.interop?.intents?.listensFor && !(0, utils_1.isEmpty)(app.interop.intents.listensFor[intent])) {
+                const appIntent = app.interop.intents.listensFor[intent];
+                const include = this.appIntentContains(appIntent, contextType, resultType);
+                if (include) {
+                    // re-use approach used by getting intents by context for the context map although this will only have one
+                    this.updateAppIntentsMap(intentsMap, intent, appIntent.displayName, app);
+                }
+            }
+        }
+        const results = Object.values(intentsMap);
+        if (results.length === 0) {
+            this._logger.info(`No results found for findIntent for intent ${intent} and context ${contextType} and resultType ${resultType}`);
+            return;
+        }
+        else if (results.length === 1) {
+            return results[0];
+        }
+        this._logger.warn(`Received more than one result for findIntent for intent ${intent} and context ${contextType} and resultType ${resultType}. Returning the first entry.`);
+        return results[0];
+    }
+    /**
+     * Get the apps that support intents by the context type.
+     * @param contextType The context type the app must support.
+     * @param resultType The optional result type to match as well.
+     * @returns The apps for the specified intent.
+     */
+    async getIntentsByContext(contextType, resultType) {
+        const apps = await this._getApps();
+        if (apps.length === 0) {
+            this._logger.warn("Unable to get apps so we can not get apps and intents that support a particular context");
+            return [];
+        }
+        const intents = {};
+        for (const app of apps) {
+            const listensFor = app.interop?.intents?.listensFor;
+            if (!(0, utils_1.isEmpty)(listensFor)) {
+                const supportedIntents = Object.keys(listensFor);
+                for (const supportedIntent of supportedIntents) {
+                    const appIntent = listensFor[supportedIntent];
+                    const include = this.appIntentContains(appIntent, contextType, resultType);
+                    if (include) {
+                        this.updateAppIntentsMap(intents, supportedIntent, appIntent.displayName, app);
+                    }
+                }
+            }
+        }
+        return Object.values(intents);
+    }
+    /**
+     * Check to see if the supplied appIntent supports the context and result types.
+     * @param appIntent The app intent to check.
+     * @param contextType The optional context type to look for.
+     * @param resultType The optional result type to look for.
+     * @returns True if the app intent matches.
+     */
+    appIntentContains(appIntent, contextType, resultType) {
+        if (!(0, utils_1.isEmpty)(contextType) && !(0, utils_1.isEmpty)(resultType)) {
+            if (!appIntent?.contexts?.includes(contextType) || !appIntent.resultType?.includes(resultType)) {
+                return false;
+            }
+        }
+        else if (!(0, utils_1.isEmpty)(contextType) && !appIntent?.contexts?.includes(contextType)) {
+            return false;
+        }
+        else if (!(0, utils_1.isEmpty)(resultType) && !appIntent?.resultType?.includes(resultType)) {
+            return false;
+        }
+        return true;
+    }
+    /**
+     * Update the map containing the intent to apps.
+     * @param intentsMap The map to update.
+     * @param name The name of the intent.
+     * @param displayName The Options display name to update with.
+     * @param app The application to update.
+     */
+    updateAppIntentsMap(intentsMap, name, displayName, app) {
+        if ((0, utils_1.isEmpty)(intentsMap[name])) {
+            // in a production app you would either need to ensure that every app was populated with the same name & displayName for an intent from a golden source (e.g. intents table) so picking the first entry wouldn't make a difference.
+            // or you could pull in a golden source of intents from a service and then do a lookup using the intent name to get an object with intent name and official display name.
+            intentsMap[name] = {
+                intent: {
+                    name,
+                    displayName
+                },
+                apps: []
+            };
+        }
+        intentsMap[name].apps.push(app);
+    }
+}
+exports.AppIntentHelper = AppIntentHelper;
+
+
+/***/ }),
+
+/***/ "./client/src/platform/broker/app-meta-data-helper.ts":
+/*!************************************************************!*\
+  !*** ./client/src/platform/broker/app-meta-data-helper.ts ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.mapToAppMetaData = exports.getAppsMetaData = void 0;
+/**
+ * Gets app meta data in the right format based on the version.
+ * @param apps the apps to get the meta data for.
+ * @param findInstances the function to find the instances of an app so you can add them to the meta data.
+ * @returns the app meta data.
+ */
+async function getAppsMetaData(apps, findInstances) {
+    const appsMetaData = [];
+    for (const app of apps) {
+        const appData = mapToAppMetaData(app);
+        const instances = await findInstances(app.appId);
+        appsMetaData.push(appData);
+        for (const instance of instances) {
+            const instanceAppEntry = { ...appData, instanceId: instance.instanceId };
+            appsMetaData.push(instanceAppEntry);
+        }
+    }
+    return appsMetaData;
+}
+exports.getAppsMetaData = getAppsMetaData;
+/**
+ * Map the platform app to app metadata.
+ * @param app The application to map.
+ * @param resultType The result type to include in the data.
+ * @returns The app metadata.
+ */
+function mapToAppMetaData(app, resultType) {
+    const appMetaData = {
+        appId: app.appId,
+        description: app.description,
+        icons: app.icons,
+        name: app.name,
+        screenshots: app.screenshots,
+        title: app.title,
+        tooltip: app.tooltip,
+        version: app.version,
+        resultType
+    };
+    return appMetaData;
+}
+exports.mapToAppMetaData = mapToAppMetaData;
+
+
+/***/ }),
+
+/***/ "./client/src/platform/broker/client-registration-helper.ts":
+/*!******************************************************************!*\
+  !*** ./client/src/platform/broker/client-registration-helper.ts ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ClientRegistrationHelper = void 0;
+const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+const fdc3_errors_1 = __webpack_require__(/*! ./fdc3-errors */ "./client/src/platform/broker/fdc3-errors.ts");
+/**
+ * Used to track client interactions with a broker.
+ */
+class ClientRegistrationHelper {
+    /**
+     * Create an instance of the Client Registration Helper.
+     * @param lookupAppId determine appId based on clientIdentity
+     * @param logger the logger to use.
+     */
+    constructor(lookupAppId, logger) {
+        this._logger = logger;
+        this._lookupAppId = lookupAppId;
+        this._clientReadyRequests = {};
+        this._trackedClientConnections = {};
+        this._trackedContextHandlers = {};
+        this._trackedIntentHandlers = {};
+    }
+    /**
+     * The client has disconnected form the broker.
+     * @param clientIdentity The identity of the client that disconnected.
+     */
+    async clientDisconnected(clientIdentity) {
+        this._logger.info("Client Disconnected.", clientIdentity);
+        for (const [key, value] of Object.entries(this._trackedIntentHandlers)) {
+            this._trackedIntentHandlers[key] = value.filter((entry) => entry.clientIdentity.endpointId !== clientIdentity.endpointId);
+        }
+        for (const [key, value] of Object.entries(this._trackedContextHandlers)) {
+            this._trackedContextHandlers[key] = value.filter((entry) => entry.clientIdentity.endpointId !== clientIdentity.endpointId);
+        }
+        this.removeTrackedClientConnection(clientIdentity);
+    }
+    /**
+     * Handle an intent handler being registered.
+     * @param payload The payload.
+     * @param clientIdentity The client identity.
+     * @returns Nothing.
+     */
+    async intentHandlerRegistered(payload, clientIdentity) {
+        this._logger.info("intentHandlerRegistered:", payload, clientIdentity);
+        if (!(0, utils_1.isEmpty)(payload)) {
+            const intentName = payload.handlerId.replace("intent-handler-", "");
+            let trackedIntentHandler = this._trackedIntentHandlers[intentName];
+            if ((0, utils_1.isEmpty)(trackedIntentHandler)) {
+                trackedIntentHandler = [];
+                this._trackedIntentHandlers[intentName] = trackedIntentHandler;
+            }
+            const trackedHandler = this._trackedIntentHandlers[intentName].find((entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId);
+            if ((0, utils_1.isEmpty)(trackedHandler)) {
+                this._logger.info(`intentHandler endpoint not registered. Registering ${clientIdentity.endpointId} against intent ${intentName} and looking up app name.`);
+                const appId = await this._lookupAppId(clientIdentity);
+                if ((0, utils_1.isEmpty)(appId)) {
+                    this._logger.warn("Unable to determine app id based on name. This app will not be tracked via intent handler registration.");
+                    return;
+                }
+                this._trackedIntentHandlers[intentName].push({
+                    fdc3Version: payload.fdc3Version,
+                    clientIdentity,
+                    appId
+                });
+                this._logger.info(`intentHandler endpoint: ${clientIdentity.endpointId} registered against intent: ${intentName} and app Id: ${appId}.`);
+            }
+            const clientReadyKey = this.getClientReadyKey(clientIdentity, "intent", intentName);
+            if (!(0, utils_1.isEmpty)(this._clientReadyRequests[clientReadyKey])) {
+                this._logger.info("Resolving client ready request.");
+                this._clientReadyRequests[clientReadyKey](clientIdentity.endpointId);
+            }
+        }
+    }
+    /**
+     * A context handler has been registered against the broker.
+     * @param payload The payload from a context listener registration.
+     * @param payload.contextType The context type that the client is listening for.
+     * @param payload.handlerId The handler Id for this listener.
+     * @param clientIdentity The identity of the application that is adding the context handler.
+     */
+    async contextHandlerRegistered(payload, clientIdentity) {
+        this._logger.info("contextHandlerRegistered:", payload, clientIdentity);
+        if (!(0, utils_1.isEmpty)(payload?.handlerId)) {
+            const contextTypeName = payload?.contextType ?? "*";
+            const handlerId = payload.handlerId;
+            let trackedContextHandler = this._trackedContextHandlers[contextTypeName];
+            if ((0, utils_1.isEmpty)(trackedContextHandler)) {
+                trackedContextHandler = [];
+                this._trackedContextHandlers[contextTypeName] = trackedContextHandler;
+            }
+            const trackedHandler = this._trackedContextHandlers[contextTypeName].find((entry) => entry.clientIdentity.endpointId === clientIdentity.endpointId);
+            if ((0, utils_1.isEmpty)(trackedHandler)) {
+                this._logger.info(`contextHandler endpoint not registered. Registering ${clientIdentity.endpointId} against context handler for context type ${contextTypeName} and looking up app name.`);
+                const appId = await this._lookupAppId(clientIdentity);
+                if ((0, utils_1.isEmpty)(appId)) {
+                    this._logger.warn("Unable to determine app id based on name. This app will not be tracked via context handler registration.");
+                    return;
+                }
+                this._trackedContextHandlers[contextTypeName].push({
+                    clientIdentity,
+                    appId,
+                    handlerId
+                });
+                this._logger.info(`contextHandler endpoint: ${clientIdentity.endpointId} registered against context type: ${contextTypeName} and app Id: ${appId}.`);
+            }
+            const clientReadyKey = this.getClientReadyKey(clientIdentity, "context", contextTypeName);
+            if (!(0, utils_1.isEmpty)(this._clientReadyRequests[clientReadyKey])) {
+                this._logger.info("Resolving client ready request.");
+                this._clientReadyRequests[clientReadyKey](clientIdentity.endpointId);
+            }
+        }
+    }
+    /**
+     * Capture the connection and API version.
+     * @param id The client identity to capture from.
+     * @param payload The payload.
+     */
+    async clientConnectionRegistered(id, payload) {
+        const key = `${id.uuid}-${id.name}`;
+        let apiVersion = {
+            type: "fdc3",
+            version: "2.0"
+        };
+        if ((0, utils_1.isEmpty)(this._trackedClientConnections[key])) {
+            if (payload?.apiVersion) {
+                const payloadApiVersion = payload?.apiVersion;
+                if (!(0, utils_1.isEmpty)(payloadApiVersion) && !(0, utils_1.isEmpty)(payloadApiVersion?.type)) {
+                    apiVersion = payloadApiVersion;
+                }
+                else if ((0, utils_1.isStringValue)(id.connectionUrl)) {
+                    // if they haven't specified apiVersion meta data and it is external and has a url then we will assume fdc3 2.0
+                    apiVersion = { type: "fdc3", version: "2.0" };
+                }
+                else {
+                    // if a native app has specified a preference through apiVersion then we assume interop
+                    apiVersion = { type: "interop" };
+                }
+            }
+            else {
+                const entityType = id.entityType;
+                if (!(0, utils_1.isEmpty)(entityType)) {
+                    switch (entityType) {
+                        default: {
+                            this._logger.warn(`We currently do not check for entity types that are not views or windows. Entity type: ${entityType}`);
+                        }
+                    }
+                }
+                else {
+                    // console unable to find api version.
+                    apiVersion = {
+                        type: "fdc3",
+                        version: "2.0"
+                    };
+                }
+            }
+            const brokerClientConnection = {
+                clientIdentity: id,
+                apiMetadata: apiVersion
+            };
+            this._trackedClientConnections[key] = brokerClientConnection;
+            const clientReadyKey = this.getClientReadyKey(id, "connection");
+            if (!(0, utils_1.isEmpty)(this._clientReadyRequests[clientReadyKey])) {
+                this._logger.info("Resolving client ready request.");
+                this._clientReadyRequests[clientReadyKey](id.endpointId);
+            }
+        }
+    }
+    /**
+     * Get a context handler that matches the context type name and instance id.
+     * @param contextTypeName the name of the context the listener is registered for.
+     * @param instanceId the instanceId you wish to check for.
+     * @returns The ContextRegistrationEntry or undefined.
+     */
+    getRegisteredContextHandler(contextTypeName, instanceId) {
+        const trackedHandler = this._trackedContextHandlers[contextTypeName]?.find((entry) => entry.clientIdentity.endpointId === instanceId);
+        return trackedHandler;
+    }
+    /**
+     * Handle FDC3 find instances for app instances that have registered for an intent.
+     * @param app The app identifier to find.
+     * @param clientIdentity The client identity.
+     * @param type the type of app instances you are after. CONNECTED = anything that has connected to the broker and INTENT means an APP that has registered an Intent Handler.
+     * @returns The instance of the app.
+     */
+    async findAppInstances(app, clientIdentity, type = "connected") {
+        const endpointApps = {};
+        if (type === "intent") {
+            for (const [, value] of Object.entries(this._trackedIntentHandlers)) {
+                const entries = value.filter((entry) => entry.appId === app.appId);
+                for (const entry of entries) {
+                    endpointApps[entry.clientIdentity.endpointId] = {
+                        appId: entry.appId ?? "",
+                        instanceId: entry.clientIdentity.endpointId
+                    };
+                }
+            }
+            return Object.values(endpointApps);
+        }
+        for (const [, value] of Object.entries(this._trackedClientConnections)) {
+            const trackedAppId = await this._lookupAppId(value.clientIdentity);
+            if (trackedAppId === app.appId && (0, utils_1.isEmpty)(endpointApps[value.clientIdentity.endpointId])) {
+                endpointApps[value.clientIdentity.endpointId] = {
+                    appId: app.appId ?? "",
+                    instanceId: value.clientIdentity.endpointId
+                };
+            }
+        }
+        return Object.values(endpointApps);
+    }
+    /**
+     * Get the api version for the identity.
+     * @param id The identity to get the api version for.
+     * @returns The api metadata.
+     */
+    getApiVersion(id) {
+        const key = `${id.uuid}-${id.name}`;
+        const apiVersion = this._trackedClientConnections[key]?.apiMetadata;
+        return apiVersion;
+    }
+    /**
+     * Handle client ready event for opening and awaiting a connection to the broker.
+     * @param identity The identity of the client.
+     * @param timeout The timeout to wait for the client.
+     * @returns The instance id.
+     */
+    async onConnectionClientReady(identity, timeout = 15000) {
+        return new Promise((resolve, reject) => {
+            const clientIdentity = this.getClientIdentity(identity);
+            if (!(0, utils_1.isEmpty)(clientIdentity)) {
+                resolve(clientIdentity.endpointId);
+            }
+            const key = this.getClientReadyKey(identity, "connection");
+            const timerId = setTimeout(() => {
+                if (!(0, utils_1.isEmpty)(this._clientReadyRequests[key])) {
+                    delete this._clientReadyRequests[key];
+                    reject(fdc3_errors_1.RESOLVE_ERROR.TargetInstanceUnavailable);
+                }
+            }, timeout);
+            this._clientReadyRequests[key] = (instanceId) => {
+                clearTimeout(timerId);
+                // clear the callback asynchronously
+                delete this._clientReadyRequests[key];
+                resolve(instanceId);
+            };
+        });
+    }
+    /**
+     * Handle client ready event for intent handling.
+     * @param identity The identity of the client.
+     * @param intentName The intent name.
+     * @param timeout The timeout to wait for the client.
+     * @returns The instance id.
+     */
+    async onIntentClientReady(identity, intentName, timeout = 15000) {
+        return new Promise((resolve, reject) => {
+            const registeredHandlers = this._trackedIntentHandlers[intentName];
+            let existingInstanceId;
+            if (!(0, utils_1.isEmpty)(registeredHandlers)) {
+                for (const handler of registeredHandlers) {
+                    if (handler.clientIdentity.uuid === identity.uuid &&
+                        handler.clientIdentity.name === identity.name) {
+                        existingInstanceId = handler.clientIdentity.endpointId;
+                        break;
+                    }
+                }
+            }
+            if (!(0, utils_1.isEmpty)(existingInstanceId)) {
+                resolve(existingInstanceId);
+            }
+            const key = this.getClientReadyKey(identity, "intent", intentName);
+            const timerId = setTimeout(() => {
+                if (!(0, utils_1.isEmpty)(this._clientReadyRequests[key])) {
+                    delete this._clientReadyRequests[key];
+                    reject(fdc3_errors_1.RESOLVE_ERROR.IntentDeliveryFailed);
+                }
+            }, timeout);
+            this._clientReadyRequests[key] = (instanceId) => {
+                clearTimeout(timerId);
+                // clear the callback asynchronously
+                delete this._clientReadyRequests[key];
+                resolve(instanceId);
+            };
+        });
+    }
+    /**
+     * Handle client ready event for context handling.
+     * @param identity The identity of the client.
+     * @param contextTypeName The contextType name.
+     * @param timeout The timeout to wait for the client.
+     * @returns The instance id.
+     */
+    async onContextClientReady(identity, contextTypeName, timeout = 15000) {
+        return new Promise((resolve, reject) => {
+            const contextRegisteredHandlers = this._trackedContextHandlers[contextTypeName];
+            const globalRegisteredHandlers = this._trackedContextHandlers["*"];
+            let existingContextHandlerInstanceId;
+            if (!(0, utils_1.isEmpty)(contextRegisteredHandlers)) {
+                for (const handler of contextRegisteredHandlers) {
+                    if (handler.clientIdentity.uuid === identity.uuid &&
+                        handler.clientIdentity.name === identity.name) {
+                        existingContextHandlerInstanceId = handler.clientIdentity.endpointId;
+                        break;
+                    }
+                }
+            }
+            if (!(0, utils_1.isEmpty)(globalRegisteredHandlers) && !(0, utils_1.isEmpty)(existingContextHandlerInstanceId)) {
+                for (const handler of globalRegisteredHandlers) {
+                    if (handler.clientIdentity.uuid === identity.uuid &&
+                        handler.clientIdentity.name === identity.name) {
+                        existingContextHandlerInstanceId = handler.clientIdentity.endpointId;
+                        break;
+                    }
+                }
+            }
+            if (!(0, utils_1.isEmpty)(existingContextHandlerInstanceId)) {
+                resolve(existingContextHandlerInstanceId);
+                return;
+            }
+            const contextKey = this.getClientReadyKey(identity, "context", contextTypeName);
+            const globalKey = this.getClientReadyKey(identity, "context", "*");
+            const timerId = setTimeout(() => {
+                const hasContextRequest = !(0, utils_1.isEmpty)(this._clientReadyRequests[contextKey]);
+                const hasGlobalRequest = !(0, utils_1.isEmpty)(this._clientReadyRequests[globalKey]);
+                if (hasContextRequest || hasGlobalRequest) {
+                    delete this._clientReadyRequests[contextKey];
+                    delete this._clientReadyRequests[globalKey];
+                    reject(fdc3_errors_1.OPEN_ERROR.AppTimeout);
+                }
+            }, timeout);
+            let isResolved = false;
+            this._clientReadyRequests[contextKey] = (instanceId) => {
+                clearTimeout(timerId);
+                if (!isResolved) {
+                    isResolved = true;
+                    // clear the callback asynchronously
+                    delete this._clientReadyRequests[contextKey];
+                    delete this._clientReadyRequests[globalKey];
+                    resolve(instanceId);
+                }
+            };
+            this._clientReadyRequests[globalKey] = (instanceId) => {
+                clearTimeout(timerId);
+                if (!isResolved) {
+                    isResolved = true;
+                    // clear the callback asynchronously
+                    delete this._clientReadyRequests[contextKey];
+                    delete this._clientReadyRequests[globalKey];
+                    resolve(instanceId);
+                }
+            };
+        });
+    }
+    /**
+     * Get the client identity given a standard identity.
+     * @param id The identity to get the client identity for.
+     * @returns The client identity if available.
+     */
+    getClientIdentity(id) {
+        const key = `${id.uuid}-${id.name}`;
+        const clientIdentity = this._trackedClientConnections[key]?.clientIdentity;
+        return clientIdentity;
+    }
+    /**
+     * Remove the tracking for the identity.
+     * @param id The identity to remove the connection information for.
+     */
+    removeTrackedClientConnection(id) {
+        const key = `${id.uuid}-${id.name}`;
+        delete this._trackedClientConnections[key];
+    }
+    /**
+     * Get a key that can be used for an identity and client.
+     * @param identity The identity to use in the key.
+     * @param type The type of ready event you are looking for
+     * @param name The name of the type if required to use in the key
+     * @returns The key.
+     */
+    getClientReadyKey(identity, type, name) {
+        if ((0, utils_1.isEmpty)(name)) {
+            return `${identity.uuid}/${identity.name}/${type}`;
+        }
+        return `${identity.uuid}/${identity.name}/${type}/${name}`;
+    }
+}
+exports.ClientRegistrationHelper = ClientRegistrationHelper;
+
+
+/***/ }),
+
+/***/ "./client/src/platform/broker/fdc3-errors.ts":
+/*!***************************************************!*\
+  !*** ./client/src/platform/broker/fdc3-errors.ts ***!
+  \***************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -29958,22 +30814,121 @@ exports.RESOLVE_ERROR = {
 
 /***/ }),
 
-/***/ "./client/src/platform/interop-override.ts":
-/*!*************************************************!*\
-  !*** ./client/src/platform/interop-override.ts ***!
-  \*************************************************/
+/***/ "./client/src/platform/broker/intent-resolver-helper.ts":
+/*!**************************************************************!*\
+  !*** ./client/src/platform/broker/intent-resolver-helper.ts ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.IntentResolverHelper = void 0;
+const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+const fdc3_errors_1 = __webpack_require__(/*! ./fdc3-errors */ "./client/src/platform/broker/fdc3-errors.ts");
+/**
+ * An Intent Resolver Used for resolving intent selection.
+ */
+class IntentResolverHelper {
+    /**
+     * Create an instance of the Intent Resolver Helper.
+     * @param intentResolverOptions options for the helper
+     * @param logger the logger to use.
+     * @param unregisteredAppId if you support unregistered apps what Id should they be assigned against.
+     */
+    constructor(intentResolverOptions, logger, unregisteredAppId) {
+        this._defaultIntentResolverHeight = 715;
+        this._defaultIntentResolverWidth = 665;
+        this._intentResolverOptions = {
+            height: this._defaultIntentResolverHeight,
+            width: this._defaultIntentResolverWidth,
+            fdc3InteropApi: "2.0",
+            title: "Intent Resolver",
+            ...intentResolverOptions
+        };
+        this._logger = logger;
+    }
+    /**
+     * Launch the intent resolver.
+     * @param launchOptions The options for launching the resolver.
+     * @param launchOptions.apps The apps to pick from.
+     * @param launchOptions.intent The intent to pick.
+     * @param launchOptions.intents The intents to pick from.
+     * @param clientIdentity The client that triggered this request.
+     * @returns The response from the intent resolver.
+     */
+    async launchIntentResolver(launchOptions, clientIdentity) {
+        // launch a new window and optionally pass the available intents as customData.apps as part of the window
+        // options the window can then use raiseIntent against a specific app (the selected one). this logic runs in
+        // the provider so we are using it as a way of determining the root (so it works with root hosting and
+        // subdirectory based hosting if a url is not provided)
+        try {
+            const winOption = {
+                name: "intent-picker",
+                includeInSnapshots: false,
+                fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
+                defaultWidth: this._intentResolverOptions?.width,
+                defaultHeight: this._intentResolverOptions?.height,
+                showTaskbarIcon: false,
+                saveWindowState: false,
+                customData: {
+                    title: this._intentResolverOptions?.title,
+                    apps: launchOptions.apps,
+                    intent: launchOptions.intent,
+                    intents: launchOptions.intents,
+                    unregisteredAppId: this._unregisteredAppId
+                },
+                url: this._intentResolverOptions?.url,
+                frame: false,
+                autoShow: true,
+                alwaysOnTop: true
+            };
+            const win = await fin.Window.create(winOption);
+            const webWindow = win.getWebWindow();
+            const webWindowResolver = webWindow;
+            const selectedAppId = await webWindowResolver.getIntentSelection();
+            return selectedAppId;
+        }
+        catch (error) {
+            const message = (0, utils_1.formatError)(error);
+            if (message?.includes(fdc3_errors_1.RESOLVE_ERROR.UserCancelled)) {
+                this._logger.info("App for intent not selected/launched by user", launchOptions.intent);
+                throw new Error(message);
+            }
+            this._logger.error("Unexpected error from intent picker/resolver for intent", launchOptions.intent);
+            throw new Error(fdc3_errors_1.RESOLVE_ERROR.ResolverUnavailable);
+        }
+    }
+}
+exports.IntentResolverHelper = IntentResolverHelper;
+
+
+/***/ }),
+
+/***/ "./client/src/platform/broker/interop-override.ts":
+/*!********************************************************!*\
+  !*** ./client/src/platform/broker/interop-override.ts ***!
+  \********************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getConstructorOverride = void 0;
-const fdc3_errors_1 = __webpack_require__(/*! ./fdc3-errors */ "./client/src/platform/fdc3-errors.ts");
+const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+const apps_1 = __webpack_require__(/*! ../apps */ "./client/src/platform/apps.ts");
+const app_id_helper_1 = __webpack_require__(/*! ./app-id-helper */ "./client/src/platform/broker/app-id-helper.ts");
+const app_intent_helper_1 = __webpack_require__(/*! ./app-intent-helper */ "./client/src/platform/broker/app-intent-helper.ts");
+const app_meta_data_helper_1 = __webpack_require__(/*! ./app-meta-data-helper */ "./client/src/platform/broker/app-meta-data-helper.ts");
+const client_registration_helper_1 = __webpack_require__(/*! ./client-registration-helper */ "./client/src/platform/broker/client-registration-helper.ts");
+const fdc3_errors_1 = __webpack_require__(/*! ./fdc3-errors */ "./client/src/platform/broker/fdc3-errors.ts");
+const intent_resolver_helper_1 = __webpack_require__(/*! ./intent-resolver-helper */ "./client/src/platform/broker/intent-resolver-helper.ts");
 /**
  * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
  * @returns The override constructor to be used in an array.
  */
 async function constructorOverride() {
+    const logger = console;
     return (Base) => 
     /**
      * Extend the InteropBroker to handle intents.
@@ -29984,7 +30939,16 @@ async function constructorOverride() {
          */
         constructor() {
             super();
-            console.log("Custom Broker Instantiated");
+            console.log("InteropOverride:Custom Broker Instantiated");
+            logger.info("Interop Broker Constructor applying settings.");
+            this._appIntentHelper = new app_intent_helper_1.AppIntentHelper(apps_1.getApps, logger);
+            this._metadataKey = `_metadata_${(0, utils_1.randomUUID)()}`;
+            this._intentResolverHelper = new intent_resolver_helper_1.IntentResolverHelper({
+                url: "http://localhost:8080/intent-resolver.html"
+            }, logger);
+            this._openOptions = { openStrategy: "fdc3" };
+            this._appIdHelper = new app_id_helper_1.AppIdHelper(apps_1.getApp, fin.me.identity.uuid, logger, this._unregisteredApp);
+            this._clientRegistrationHelper = new client_registration_helper_1.ClientRegistrationHelper(async (clientIdentity) => this._appIdHelper.lookupAppId(clientIdentity), logger);
         }
         /**
          * Is the connection authorized.
@@ -29994,6 +30958,7 @@ async function constructorOverride() {
          */
         async isConnectionAuthorized(id, payload) {
             console.log("Interop connection being made by the following identity. About to verify connection", id);
+            await this._clientRegistrationHelper.clientConnectionRegistered(id, payload);
             return super.isConnectionAuthorized(id, payload);
         }
         /**
@@ -30003,7 +30968,12 @@ async function constructorOverride() {
          * @param clientIdentity Identity of the client sender.
          */
         async setContext(sentContext, clientIdentity) {
-            console.log("Context being set by the following identity", clientIdentity);
+            console.log("InteropOverride:Context being set by the following identity", clientIdentity);
+            const contextMetadata = await this.getContextMetadata(clientIdentity);
+            sentContext.context = {
+                ...sentContext.context,
+                [this._metadataKey]: contextMetadata
+            };
             super.setContext(sentContext, clientIdentity);
         }
         /**
@@ -30014,8 +30984,15 @@ async function constructorOverride() {
          * @returns A promise that resolves when the context handler is invoked.
          */
         async invokeContextHandler(clientIdentity, handlerId, context) {
-            console.log("Context being invoked by the following identity", clientIdentity);
-            return super.invokeContextHandler(clientIdentity, handlerId, context);
+            const passedContext = { ...context };
+            const contextMetadata = passedContext[this._metadataKey];
+            if (!(0, utils_1.isEmpty)(contextMetadata)) {
+                delete passedContext[this._metadataKey];
+            }
+            return super.invokeContextHandler(clientIdentity, handlerId, {
+                ...passedContext,
+                contextMetadata
+            });
         }
         /**
          * Handle the information for intents by context.
@@ -30024,8 +31001,28 @@ async function constructorOverride() {
          * @returns The intents mapped to app metadata.
          */
         async handleInfoForIntentsByContext(contextOptions, clientIdentity) {
-            console.log("Handle Info For Intents By Context", contextOptions, clientIdentity);
-            throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
+            console.log("InteropOverride:Handle Info For Intents By Context", contextOptions, clientIdentity);
+            let requestedContextType;
+            let requestedResultType;
+            let request;
+            if ("type" in contextOptions) {
+                requestedContextType = contextOptions.type;
+            }
+            else {
+                request = contextOptions;
+                requestedContextType = request.context.type;
+                requestedResultType = request.metadata.resultType;
+            }
+            const intents = await this._appIntentHelper.getIntentsByContext(requestedContextType, requestedResultType);
+            if (intents.length === 0) {
+                throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
+            }
+            const mappedIntents = [];
+            for (const entry of intents) {
+                const appMetaData = await (0, app_meta_data_helper_1.getAppsMetaData)(entry.apps, async (appId) => this._clientRegistrationHelper.findAppInstances({ appId }, clientIdentity, "intent"));
+                mappedIntents.push({ intent: entry.intent, apps: appMetaData });
+            }
+            return mappedIntents;
         }
         /**
          * Handle the information for and intent.
@@ -30034,8 +31031,21 @@ async function constructorOverride() {
          * @returns The intents mapped to app metadata.
          */
         async handleInfoForIntent(intentOptions, clientIdentity) {
-            console.log("Handle Info For Intents", intentOptions, clientIdentity);
-            throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
+            console.log("InteropOverride:Handle Info For Intents", intentOptions, clientIdentity);
+            let contextType;
+            const optContextType = intentOptions?.context?.type;
+            if (!(0, utils_1.isEmpty)(optContextType) && optContextType !== "fdc3.nothing") {
+                contextType = optContextType;
+            }
+            const result = await this._appIntentHelper.getIntent(intentOptions.name, contextType, intentOptions?.metadata?.resultType);
+            if ((0, utils_1.isEmpty)(result)) {
+                throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
+            }
+            const response = {
+                intent: result.intent,
+                apps: await (0, app_meta_data_helper_1.getAppsMetaData)(result.apps, async (appId) => this._clientRegistrationHelper.findAppInstances({ appId }, clientIdentity, "intent"))
+            };
+            return response;
         }
         /**
          * Handle the fired intent for context.
@@ -30046,7 +31056,110 @@ async function constructorOverride() {
          * @returns The intent resolution.
          */
         async handleFiredIntentForContext(contextForIntent, clientIdentity) {
-            console.log("handleFiredIntentForContext fired.", contextForIntent, clientIdentity);
+            console.log("InteropOverride:handleFiredIntentForContext fired.", contextForIntent, clientIdentity);
+            const targetAppIdentifier = this.getApplicationIdentity(contextForIntent.metadata);
+            const intent = {
+                context: contextForIntent
+            };
+            // const intentsForSelection: AppsForIntent[] = await this._appIntentHelper.getIntentsByContext(
+            // 	contextForIntent.type
+            // );
+            // app specified flow
+            if (!(0, utils_1.isEmpty)(targetAppIdentifier)) {
+                const targetApp = await (0, apps_1.getApp)(targetAppIdentifier.appId);
+                if ((0, utils_1.isEmpty)(targetApp)) {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetAppUnavailable);
+                }
+                if (!targetApp?.interop?.intents?.listensFor ||
+                    !Object.values(targetApp.interop.intents.listensFor).some((listenedForIntent) => listenedForIntent.contexts.includes(contextForIntent.type))) {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
+                }
+                const intentResolver = await this.handleTargetedIntent(targetAppIdentifier, intent, true, clientIdentity);
+                return intentResolver;
+            }
+            // check for unregistered app intent handlers (if enabled)
+            // const unregisteredAppIntents = await this.getUnregisteredAppIntentByContext(
+            // 	contextForIntent.type,
+            // 	clientIdentity
+            // );
+            // if (unregisteredAppIntents.length > 0 && !isEmpty(this._unregisteredApp)) {
+            // 	const matchedIntents: string[] = [];
+            // 	for (const intentForSelection of intentsForSelection) {
+            // 		if (unregisteredAppIntents.includes(intentForSelection.intent.name)) {
+            // 			intentForSelection.apps.push(this._unregisteredApp);
+            // 			matchedIntents.push(intentForSelection.intent.name);
+            // 		}
+            // 	}
+            // 	const missingIntentMatches = unregisteredAppIntents.filter(
+            // 		(intentName) => !matchedIntents.includes(intentName)
+            // 	);
+            // 	for (const missingIntentMatch of missingIntentMatches) {
+            // 		const missingIntent = this._unregisteredApp.intents?.find(
+            // 			(entry) => entry.name === missingIntentMatch
+            // 		);
+            // 		if (missingIntent) {
+            // 			intentsForSelection.push({
+            // 				intent: { name: missingIntent.name, displayName: missingIntent.displayName },
+            // 				apps: [this._unregisteredApp]
+            // 			});
+            // 		}
+            // 	}
+            // }
+            // let userSelection: IntentResolverResponse | undefined;
+            // if (intentsForSelection.length === 1) {
+            // 	const intentForSelection = intentsForSelection[0];
+            // 	// only one intent matches the passed context
+            // 	intent.name = intentForSelection.intent.name;
+            // 	intent.displayName = intentForSelection.intent.displayName;
+            // 	if (intentForSelection.apps.length === 1) {
+            // 		const appInstances = await this._clientRegistrationHelper.findAppInstances(
+            // 			intentForSelection.apps[0],
+            // 			clientIdentity,
+            // 			"intent"
+            // 		);
+            // 		// if there are no instances launch a new one otherwise present the choice to the user
+            // 		// by falling through to the next code block
+            // 		if (appInstances.length === 0 || this.createNewInstance(intentForSelection.apps[0])) {
+            // 			const intentResolver = await this.launchAppWithIntent(
+            // 				intentForSelection.apps[0],
+            // 				intent as OpenFin.Intent,
+            // 				undefined,
+            // 				clientIdentity
+            // 			);
+            // 			if (isEmpty(intentResolver)) {
+            // 				throw new Error(ResolveError.NoAppsFound);
+            // 			}
+            // 			return this.shapeIntentResolver(intentResolver, usesAppIdentity);
+            // 		}
+            // 	}
+            // 	userSelection = await this._intentResolverHelper?.launchIntentResolver(
+            // 		{
+            // 			apps: intentsForSelection[0].apps,
+            // 			intent
+            // 		},
+            // 		clientIdentity
+            // 	);
+            // } else {
+            // 	userSelection = await this._intentResolverHelper?.launchIntentResolver(
+            // 		{
+            // 			intent,
+            // 			intents: intentsForSelection
+            // 		},
+            // 		clientIdentity
+            // 	);
+            // }
+            // // update intent with user selection
+            // if (isEmpty(userSelection)) {
+            // 	throw new Error(ResolveError.ResolverUnavailable);
+            // }
+            // intent.displayName = userSelection.intent.displayName;
+            // intent.name = userSelection.intent.name;
+            // const intentResolver = await this.handleIntentPickerSelection(
+            // 	userSelection,
+            // 	intent as OpenFin.Intent,
+            // 	clientIdentity
+            // );
+            // return this.shapeIntentResolver(intentResolver, usesAppIdentity);
             throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
         }
         /**
@@ -30056,8 +31169,81 @@ async function constructorOverride() {
          * @returns The intent resolution.
          */
         async handleFiredIntent(intent, clientIdentity) {
-            console.log("handleFiredIntent: Received request for a raised intent", intent);
-            throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetAppUnavailable);
+            console.log("InteropOverride:handleFiredIntent: Received request for a raised intent", intent);
+            logger.info("Received request for a raised intent", intent);
+            const targetAppIdentifier = this.getApplicationIdentity(intent.metadata);
+            // const usesAppIdentifier = this.usesApplicationIdentity(clientIdentity);
+            const matchedIntents = await this._appIntentHelper.getIntent(intent.name, intent?.context?.type);
+            const intentApps = [];
+            if (!(0, utils_1.isEmpty)(matchedIntents)) {
+                intentApps.push(...matchedIntents.apps);
+            }
+            if (!(0, utils_1.isEmpty)(targetAppIdentifier)) {
+                const targetApp = await (0, apps_1.getApp)(targetAppIdentifier.appId);
+                if ((0, utils_1.isEmpty)(targetApp)) {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetAppUnavailable);
+                }
+                // ensure that the specified app is one of the intent apps
+                if (!intentApps.some((app) => app.appId === targetAppIdentifier.appId)) {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
+                }
+                const intentResolver = await this.handleTargetedIntent(targetAppIdentifier, intent, false, clientIdentity);
+                return intentResolver;
+            }
+            throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
+            // if (
+            // 	this._unregisteredApp &&
+            // 	(await this.canAddUnregisteredApp(clientIdentity, intent.name, intent?.context?.type))
+            // ) {
+            // 	// We have unregistered app instances that support this intent and support for unregistered instances is enabled
+            // 	intentApps.push(this._unregisteredApp);
+            // }
+            // if (intentApps.length === 0) {
+            // 	logger.info("No apps support this intent");
+            // 	throw new Error(ResolveError.NoAppsFound);
+            // }
+            // if (intentApps.length === 1) {
+            // 	// handle single entry
+            // 	const appInstances = await this._clientRegistrationHelper.findAppInstances(
+            // 		intentApps[0],
+            // 		clientIdentity,
+            // 		"intent"
+            // 	);
+            // 	// if there are no instances launch a new one otherwise present the choice to the user
+            // 	// by falling through to the next code block
+            // 	let appInstanceId: string | undefined;
+            // 	if (appInstances.length === 1) {
+            // 		appInstanceId = appInstances[0].instanceId;
+            // 	}
+            // 	if (
+            // 		appInstances.length === 0 ||
+            // 		this.useSingleInstance(intentApps[0]) ||
+            // 		this.createNewInstance(intentApps[0])
+            // 	) {
+            // 		const intentResolver = await this.launchAppWithIntent(
+            // 			intentApps[0],
+            // 			intent,
+            // 			appInstanceId,
+            // 			clientIdentity
+            // 		);
+            // 		if (isEmpty(intentResolver)) {
+            // 			throw new Error(ResolveError.NoAppsFound);
+            // 		}
+            // 		return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
+            // 	}
+            // }
+            // const userSelection = await this._intentResolverHelper?.launchIntentResolver(
+            // 	{
+            // 		apps: intentApps,
+            // 		intent
+            // 	},
+            // 	clientIdentity
+            // );
+            // if (isEmpty(userSelection)) {
+            // 	throw new Error(ResolveError.ResolverUnavailable);
+            // }
+            // const intentResolver = await this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
+            // return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
         }
         /**
          * Invoke the intent handler.
@@ -30067,9 +31253,22 @@ async function constructorOverride() {
          * @returns A promise that resolves when the intent handler is invoked.
          */
         async invokeIntentHandler(clientIdentity, handlerId, intent) {
-            console.log("invokeIntentHandler fired.", clientIdentity, handlerId, intent);
+            const { context } = intent;
+            let contextMetadata;
+            let passedContext;
+            if (!(0, utils_1.isEmpty)(context)) {
+                passedContext = { ...context };
+                contextMetadata = passedContext[this._metadataKey];
+                if (!(0, utils_1.isEmpty)(contextMetadata)) {
+                    delete passedContext[this._metadataKey];
+                }
+            }
             return super.invokeIntentHandler(clientIdentity, handlerId, {
-                ...intent
+                ...intent,
+                context: {
+                    ...passedContext,
+                    contextMetadata
+                }
             });
         }
         /**
@@ -30081,7 +31280,7 @@ async function constructorOverride() {
          * @returns The application identifier.
          */
         async fdc3HandleOpen(fdc3OpenOptions, clientIdentity) {
-            console.log("fdc3HandleOpen fired.", clientIdentity, fdc3OpenOptions);
+            console.log("InteropOverride:fdc3HandleOpen fired.", clientIdentity, fdc3OpenOptions);
             throw new Error(fdc3_errors_1.RESOLVE_ERROR.NoAppsFound);
         }
         /**
@@ -30089,7 +31288,8 @@ async function constructorOverride() {
          * @param clientIdentity The identity of the client that disconnected.
          */
         async clientDisconnected(clientIdentity) {
-            console.log("Client disconnected.", clientIdentity);
+            console.log("InteropOverride:Client disconnected.", clientIdentity);
+            await this._clientRegistrationHelper.clientDisconnected(clientIdentity);
             await super.clientDisconnected(clientIdentity);
         }
         /**
@@ -30099,8 +31299,8 @@ async function constructorOverride() {
          * @returns The instance of the app.
          */
         async fdc3HandleFindInstances(app, clientIdentity) {
-            console.log("fdc3HandleFindInstances fired.", app, clientIdentity);
-            return super.fdc3HandleFindInstances(app, clientIdentity);
+            console.log("InteropOverride:fdc3HandleFindInstances fired.", app, clientIdentity);
+            return this._clientRegistrationHelper.findAppInstances(app, clientIdentity);
         }
         /**
          * Handle request to get FDC3 app metadata.
@@ -30109,8 +31309,16 @@ async function constructorOverride() {
          * @returns The app metadata.
          */
         async fdc3HandleGetAppMetadata(app, clientIdentity) {
-            console.log("fdc3HandleGetAppMetadata call received.", app, clientIdentity);
+            logger.info("fdc3HandleGetAppMetadata call received.", app, clientIdentity);
             // this will only be called by FDC3 2.0+
+            let platformApp = await (0, apps_1.getApp)(app.appId);
+            if ((0, utils_1.isEmpty)(platformApp) && app.appId === this._unregisteredApp?.appId) {
+                platformApp = this._unregisteredApp;
+            }
+            if (!(0, utils_1.isEmpty)(platformApp)) {
+                const appMetaData = (0, app_meta_data_helper_1.mapToAppMetaData)(platformApp);
+                return appMetaData;
+            }
             throw new Error("TargetAppUnavailable");
         }
         /**
@@ -30121,7 +31329,20 @@ async function constructorOverride() {
          * @returns The info.
          */
         async fdc3HandleGetInfo(payload, clientIdentity) {
-            console.log("fdc3HandleGetInfo", payload, clientIdentity);
+            console.log("InteropOverride:fdc3HandleGetInfo", payload, clientIdentity);
+            logger.info("fdc3HandleGetInfo", payload, clientIdentity);
+            if (payload?.fdc3Version === "2.0") {
+                const response = (await super.fdc3HandleGetInfo(payload, clientIdentity));
+                const appId = await this._appIdHelper.lookupAppId(clientIdentity);
+                if (!(0, utils_1.isEmpty)(appId)) {
+                    const updatedResponse = {
+                        ...response,
+                        appMetadata: { appId, instanceId: clientIdentity.endpointId }
+                    };
+                    return updatedResponse;
+                }
+                return response;
+            }
             return super.fdc3HandleGetInfo(payload, clientIdentity);
         }
         /**
@@ -30131,7 +31352,8 @@ async function constructorOverride() {
          * @returns Nothing.
          */
         async intentHandlerRegistered(payload, clientIdentity) {
-            console.log("intentHandlerRegistered", payload, clientIdentity);
+            console.log("InteropOverride:intentHandlerRegistered", payload, clientIdentity);
+            await this._clientRegistrationHelper.intentHandlerRegistered(payload, clientIdentity);
             await super.intentHandlerRegistered(payload, clientIdentity);
         }
         /**
@@ -30142,8 +31364,256 @@ async function constructorOverride() {
          * @param clientIdentity The identity of the application that is adding the context handler.
          */
         async contextHandlerRegistered(payload, clientIdentity) {
-            console.log("contextHandlerRegistered", payload, clientIdentity);
+            console.log("InteropOverride:contextHandlerRegistered", payload, clientIdentity);
+            await this._clientRegistrationHelper.contextHandlerRegistered(payload, clientIdentity);
             super.contextHandlerRegistered(payload, clientIdentity);
+        }
+        /**
+         * Get an application identity.
+         * @param metadata The metadata for the app.
+         * @returns The app identifier.
+         */
+        getApplicationIdentity(metadata) {
+            const target = metadata?.target;
+            if ((0, utils_1.isEmpty)(target)) {
+                return;
+            }
+            if ((0, utils_1.isString)(target)) {
+                if (target.trim().length === 0) {
+                    return undefined;
+                }
+                return { appId: target };
+            }
+            if ((0, utils_1.isEmpty)(target.appId)) {
+                return undefined;
+            }
+            return { appId: target.appId, instanceId: target.instanceId };
+        }
+        /**
+         * Does the app use application identity.
+         * @param clientIdentity The client app to check.
+         * @returns True if the app uses application identity.
+         */
+        usesApplicationIdentity(clientIdentity) {
+            const apiMetadata = this._clientRegistrationHelper.getApiVersion(clientIdentity);
+            if ((0, utils_1.isEmpty)(apiMetadata)) {
+                return false;
+            }
+            return apiMetadata.type === "fdc3" && apiMetadata.version === "2.0";
+        }
+        /**
+         * Handle a targeted intent.
+         * @param targetAppIdentifier The identifier for the target app.
+         * @param intent The intent.
+         * @param targetByContext Perform the target by context.
+         * @param clientIdentity The client identity.
+         * @returns The intent resolution.
+         */
+        async handleTargetedIntent(targetAppIdentifier, intent, targetByContext, clientIdentity) {
+            // app specified flow
+            // const intentsForSelection: AppsForIntent[] = [];
+            let targetApp = await (0, apps_1.getApp)(targetAppIdentifier.appId);
+            // if the specified app isn't available then let the caller know
+            if ((0, utils_1.isEmpty)(targetApp)) {
+                if (!(0, utils_1.isEmpty)(targetAppIdentifier.instanceId) &&
+                    targetAppIdentifier.appId === this._unregisteredApp?.appId) {
+                    targetApp = this._unregisteredApp;
+                }
+                else {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetAppUnavailable);
+                }
+            }
+            // if an instanceId is specified then check to see if it is valid and if it isn't inform the caller
+            if (!(0, utils_1.isEmpty)(targetAppIdentifier.instanceId)) {
+                const availableAppInstances = await this._clientRegistrationHelper.findAppInstances(targetAppIdentifier, clientIdentity, "intent");
+                if (availableAppInstances.length === 0 ||
+                    !availableAppInstances.some((entry) => 
+                    // eslint-disable-next-line max-len
+                    entry.appId === targetAppIdentifier.appId &&
+                        entry.instanceId === targetAppIdentifier.instanceId)) {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetInstanceUnavailable);
+                }
+            }
+            if ((0, utils_1.isEmpty)(targetApp.interop?.intents?.listensFor) ||
+                Object.values(targetApp.interop.intents.listensFor).length === 0) {
+                // an app was specified but it doesn't have any intents. Indicate that something is wrong
+                throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetAppUnavailable);
+            }
+            const supportedIntents = [];
+            const intentNames = Object.keys(targetApp.interop.intents.listensFor);
+            for (const intentName of intentNames) {
+                const intentEntry = targetApp.interop.intents.listensFor[intentName];
+                let contextMatch = true;
+                const contextType = intent.context?.type;
+                let supportedIntent;
+                if (!(0, utils_1.isEmpty)(contextType)) {
+                    contextMatch = intentEntry.contexts?.includes(contextType);
+                    if (targetByContext) {
+                        supportedIntent = { ...intentEntry, name: intentName };
+                    }
+                }
+                if ((0, utils_1.isEmpty)(supportedIntent) && intentName === intent.name && contextMatch) {
+                    supportedIntent = { ...intentEntry, name: intentName };
+                }
+                if (!(0, utils_1.isEmpty)(supportedIntent)) {
+                    supportedIntents.push(supportedIntent);
+                }
+            }
+            if (supportedIntents.length === 0) {
+                // the specified app does have intent support but just none that support this context type
+                throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetAppUnavailable);
+            }
+            if (supportedIntents.length === 1) {
+                // a preferred name for an app was given with the context object
+                // the app existed and it supported the context type and there was only one intent that supported
+                // that context type. Launch the app with that intent otherwise present the user with a list of
+                // everything that supports that context type
+                intent.name = supportedIntents[0].name;
+                // check for instances
+                if (!(0, utils_1.isEmpty)(targetAppIdentifier.instanceId)) {
+                    const intentResolver = await this.launchAppWithIntent(targetApp, intent, targetAppIdentifier.instanceId, clientIdentity);
+                    return intentResolver;
+                }
+                const specifiedAppInstances = await this._clientRegistrationHelper.findAppInstances(targetApp, clientIdentity, "intent");
+                // the launch logic is single instance aware but can also bring content to front where possible
+                // this will let the context be set and the content brought to front.
+                // const launchSingleInstanceApp =
+                // 	specifiedAppInstances.length === 1 && this.useSingleInstance(targetApp);
+                if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
+                    const intentResolver = await this.launchAppWithIntent(targetApp, intent, undefined, clientIdentity);
+                    if ((0, utils_1.isEmpty)(intentResolver)) {
+                        throw new Error(fdc3_errors_1.RESOLVE_ERROR.IntentDeliveryFailed);
+                    }
+                    return intentResolver;
+                }
+            }
+            // for (const supportedIntent of supportedIntents) {
+            // 	const appForIntent: AppsForIntent = {
+            // 		apps: [targetApp],
+            // 		intent: { name: supportedIntent.name, displayName: supportedIntent.displayName }
+            // 	};
+            // 	intentsForSelection.push(appForIntent);
+            // }
+            // let userSelection: IntentResolverResponse | undefined;
+            // if (intentsForSelection.length === 1) {
+            // 	if (
+            // 		!isStringValue(intent.name) &&
+            // 		!isEmpty(intentsForSelection[0]?.intent?.name) &&
+            // 		!isEmpty(intent?.context) &&
+            // 		!isEmpty(intent?.context?.type)
+            // 	) {
+            // 		logger.info(
+            // 			`A request to raise an intent was passed and the intent name was not passed but a context was ${intent?.context?.type} with 1 matching intent. Name: ${intentsForSelection[0]?.intent?.name},  Display Name: ${intentsForSelection[0]?.intent?.displayName}. Updating intent object.`
+            // 		);
+            // 		intent.name = intentsForSelection[0]?.intent?.name;
+            // 	}
+            // 	userSelection = await this._intentResolverHelper?.launchIntentResolver(
+            // 		{
+            // 			apps: intentsForSelection[0].apps,
+            // 			intent
+            // 		},
+            // 		clientIdentity
+            // 	);
+            // } else {
+            // 	userSelection = await this._intentResolverHelper?.launchIntentResolver(
+            // 		{
+            // 			intent,
+            // 			intents: intentsForSelection
+            // 		},
+            // 		clientIdentity
+            // 	);
+            // 	if (!isStringValue(intent.name) && !isEmpty(userSelection?.intent?.name)) {
+            // 		logger.info(
+            // 			`A request to raise an intent was passed and the following intent was selected (from a selection of ${intentsForSelection.length}). Name: ${userSelection?.intent?.name},  Display Name: ${userSelection?.intent?.displayName}. Updating intent object.`
+            // 		);
+            // 		intent.name = userSelection?.intent?.name ?? intent.name;
+            // 	}
+            // }
+            // if (isEmpty(userSelection)) {
+            // 	throw new Error(ResolveError.ResolverUnavailable);
+            // }
+            // return this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
+            throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetAppUnavailable);
+        }
+        /**
+         * Launch an app with intent.
+         * @param app The application to launch.
+         * @param intent The intent to open it with.
+         * @param instanceId The instance of the app.
+         * @param clientIdentity The identity of the source of the request.
+         * @returns The intent resolution.
+         */
+        async launchAppWithIntent(app, intent, instanceId, clientIdentity) {
+            logger.info("Launching app with intent");
+            let platformIdentities = [];
+            // let existingInstance = true;
+            if (!(0, utils_1.isEmpty)(instanceId)) {
+                // an instance of an application was selected
+                const allConnectedClients = await this.getAllClientInfo();
+                const clientInfo = allConnectedClients.find((connectedClient) => connectedClient.endpointId === instanceId);
+                if (!(0, utils_1.isEmpty)(clientInfo)) {
+                    logger.info(`App Id: ${app.appId} and instance Id: ${instanceId} was provided and found.`);
+                    // the connected instance is available
+                    platformIdentities.push({
+                        uuid: clientInfo.uuid,
+                        name: clientInfo.name,
+                        appId: app.appId,
+                        instanceId: clientInfo.endpointId
+                    });
+                }
+                else {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.TargetInstanceUnavailable);
+                }
+            }
+            if (platformIdentities.length === 0) {
+                platformIdentities = await (0, apps_1.launch)(app);
+                if (!platformIdentities?.length) {
+                    throw new Error(fdc3_errors_1.RESOLVE_ERROR.IntentDeliveryFailed);
+                }
+                // existingInstance = false;
+                if (platformIdentities.length === 1) {
+                    const intentTimeout = 5000;
+                    // if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
+                    try {
+                        instanceId = await this._clientRegistrationHelper.onIntentClientReady(platformIdentities[0], intent.name, intentTimeout);
+                    }
+                    catch (intentReadyError) {
+                        logger.warn("An error occurred while getting a instance to target an intent at.", intentReadyError);
+                        throw new Error(fdc3_errors_1.RESOLVE_ERROR.IntentDeliveryFailed);
+                    }
+                }
+            }
+            for (const target of platformIdentities) {
+                await super.setIntentTarget(intent, target);
+            }
+            return {
+                source: { appId: app.appId, instanceId },
+                version: app.version,
+                intent: intent.name
+            };
+        }
+        /**
+         * Get the context metadata for a client identity.
+         * @param clientIdentity The client identity.
+         * @returns The context metadata.
+         */
+        async getContextMetadata(clientIdentity) {
+            const appId = (await this._appIdHelper.lookupAppId(clientIdentity)) ?? "unknown";
+            return {
+                source: {
+                    appId,
+                    instanceId: clientIdentity.endpointId
+                }
+            };
+        }
+        /**
+         * Should we always use a new instance of the app.
+         * @param app The app to check.
+         * @returns True if we should always use a new instance.
+         */
+        createNewInstance(app) {
+            const instanceMode = app.hostManifests?.OpenFin?.config?.instanceMode ?? "new";
+            return instanceMode === "new";
         }
     };
 }
@@ -30212,6 +31682,277 @@ async function getManifestSettings() {
         return manifestJson.custom_settings;
     }
 }
+
+
+/***/ }),
+
+/***/ "./client/src/utils.ts":
+/*!*****************************!*\
+  !*** ./client/src/utils.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getCommandLineArgs = exports.sanitizeString = exports.formatError = exports.randomUUID = exports.deepMerge = exports.deepEqual = exports.objectClone = exports.isInteger = exports.isBoolean = exports.isNumberValue = exports.isNumber = exports.isStringValue = exports.isString = exports.isObject = exports.isEmpty = void 0;
+/**
+ * Test if a value is a undefined or null.
+ * @param value The value to test.
+ * @returns True if the value is null or undefined.
+ */
+function isEmpty(value) {
+    // eslint-disable-next-line no-restricted-syntax
+    return value === undefined || value === null;
+}
+exports.isEmpty = isEmpty;
+/**
+ * Test if a value is an object.
+ * @param value The value to test.
+ * @returns True if the value is an object.
+ */
+function isObject(value) {
+    // eslint-disable-next-line no-restricted-syntax
+    return value !== undefined && value !== null && typeof value === "object" && !Array.isArray(value);
+}
+exports.isObject = isObject;
+/**
+ * Test if a value is a string.
+ * @param value The value to test.
+ * @returns True if the value is a string.
+ */
+function isString(value) {
+    // eslint-disable-next-line no-restricted-syntax
+    return value !== undefined && value !== null && typeof value === "string";
+}
+exports.isString = isString;
+/**
+ * Test if a value is a string that is not empty.
+ * @param value The value to test.
+ * @returns True if the value is a string that is not empty.
+ */
+function isStringValue(value) {
+    return isString(value) && value.trim().length > 0;
+}
+exports.isStringValue = isStringValue;
+/**
+ * Test if a value is a number.
+ * @param value The value to test.
+ * @returns True if the value is a number.
+ */
+function isNumber(value) {
+    // eslint-disable-next-line no-restricted-syntax
+    return value !== undefined && value !== null && typeof value === "number";
+}
+exports.isNumber = isNumber;
+/**
+ * Test if a value is a number with a real value i.e. not NaN or Infinite.
+ * @param value The value to test.
+ * @returns True if the value is a number.
+ */
+function isNumberValue(value) {
+    return isNumber(value) && !Number.isNaN(value) && Number.isFinite(value);
+}
+exports.isNumberValue = isNumberValue;
+/**
+ * Test if a value is a boolean.
+ * @param value The value to test.
+ * @returns True if the value is a boolean.
+ */
+function isBoolean(value) {
+    // eslint-disable-next-line no-restricted-syntax
+    return value !== undefined && value !== null && typeof value === "boolean";
+}
+exports.isBoolean = isBoolean;
+/**
+ * Test if a value is an integer.
+ * @param value The value to test.
+ * @returns True if the value is an integer.
+ */
+function isInteger(value) {
+    return isNumber(value) && Number.isInteger(value);
+}
+exports.isInteger = isInteger;
+/**
+ * Deep clone an object.
+ * @param obj The object to clone.
+ * @returns The clone of the object.
+ */
+function objectClone(obj) {
+    // eslint-disable-next-line no-restricted-syntax
+    return obj === undefined ? undefined : JSON.parse(JSON.stringify(obj));
+}
+exports.objectClone = objectClone;
+/**
+ * Do a deep comparison of the objects.
+ * @param obj1 The first object to compare.
+ * @param obj2 The second object to compare.
+ * @param matchPropertyOrder If true the properties must be in the same order.
+ * @returns True if the objects are the same.
+ */
+function deepEqual(obj1, obj2, matchPropertyOrder = true) {
+    if (isObject(obj1) && isObject(obj2)) {
+        const objKeys1 = Object.keys(obj1);
+        const objKeys2 = Object.keys(obj2);
+        if (objKeys1.length !== objKeys2.length) {
+            return false;
+        }
+        if (matchPropertyOrder && JSON.stringify(objKeys1) !== JSON.stringify(objKeys2)) {
+            return false;
+        }
+        for (const key of objKeys1) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const value1 = obj1[key];
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const value2 = obj2[key];
+            if (!deepEqual(value1, value2, matchPropertyOrder)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    else if (Array.isArray(obj1) && Array.isArray(obj2)) {
+        if (obj1.length !== obj2.length) {
+            return false;
+        }
+        for (let i = 0; i < obj1.length; i++) {
+            if (!deepEqual(obj1[i], obj2[i], matchPropertyOrder)) {
+                return false;
+            }
+        }
+    }
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+exports.deepEqual = deepEqual;
+/**
+ * Deep merge two objects.
+ * @param target The object to be merged into.
+ * @param sources The objects to merge into the target.
+ * @returns The merged object.
+ */
+function deepMerge(target, ...sources) {
+    if (!Array.isArray(sources) || sources.length === 0) {
+        return target;
+    }
+    const targetAsMap = target;
+    const source = sources.shift();
+    let keys;
+    if (isObject(targetAsMap) && isObject(source)) {
+        keys = Object.keys(source);
+    }
+    else if (Array.isArray(source)) {
+        if (!Array.isArray(target)) {
+            return source;
+        }
+        keys = Object.keys(source).map((k) => Number.parseInt(k, 10));
+    }
+    if (keys) {
+        const sourceAsMap = source;
+        for (const key of keys) {
+            const value = sourceAsMap[key];
+            if (isObject(value)) {
+                if (isEmpty(targetAsMap[key])) {
+                    targetAsMap[key] = {};
+                }
+                deepMerge(targetAsMap[key], value);
+            }
+            else if (Array.isArray(value)) {
+                if (isEmpty(targetAsMap[key])) {
+                    targetAsMap[key] = [];
+                }
+                deepMerge(targetAsMap[key], value);
+            }
+            else {
+                targetAsMap[key] = value;
+            }
+        }
+    }
+    return deepMerge(target, ...sources);
+}
+exports.deepMerge = deepMerge;
+/**
+ * Polyfills randomUUID if running in a non-secure context.
+ * @returns The random UUID.
+ */
+function randomUUID() {
+    if ("randomUUID" in globalThis.crypto) {
+        // eslint-disable-next-line no-restricted-syntax
+        return globalThis.crypto.randomUUID();
+    }
+    // Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
+    // we are still using window.crypto.getRandomValues which is always available
+    // https://stackoverflow.com/a/2117523/2800218
+    /**
+     * Get random hex value.
+     * @param c The number to base the random value on.
+     * @returns The random value.
+     */
+    function getRandomHex(c) {
+        // eslint-disable-next-line no-bitwise
+        const rnd = globalThis.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
+        return (
+        // eslint-disable-next-line no-bitwise
+        (Number(c) ^ rnd).toString(16));
+    }
+    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
+}
+exports.randomUUID = randomUUID;
+/**
+ * Format an error to a readable string.
+ * @param err The error to format.
+ * @returns The formatted error.
+ */
+function formatError(err) {
+    if (isEmpty(err)) {
+        return "";
+    }
+    else if (err instanceof Error) {
+        return err.message;
+    }
+    else if (isStringValue(err)) {
+        return err;
+    }
+    else if (isObject(err) && "message" in err && isString(err.message)) {
+        return err.message;
+    }
+    return JSON.stringify(err);
+}
+exports.formatError = formatError;
+/**
+ * A basic string sanitize function that removes angle brackets <> from a string.
+ * @param content the content to sanitize
+ * @returns a string without angle brackets <>
+ */
+function sanitizeString(content) {
+    if (isStringValue(content)) {
+        return content
+            .replace(/<[^>]*>?/gm, "")
+            .replace(/&gt;/g, ">")
+            .replace(/&lt;/g, "<")
+            .replace(/&amp;/g, "&")
+            .replace(/&nbsp;/g, " ")
+            .replace(/\n\s*\n/g, "\n");
+    }
+    return "";
+}
+exports.sanitizeString = sanitizeString;
+/**
+ * Get the command line arguments from a command line string.
+ * Examples of command line strings: arg1 key1=value1 key2="value with spaces" key3='value3' key4='value with more spaces'`.
+ * @param commandLine The command line string.
+ * @returns The command line arguments or an empty array if none
+ */
+function getCommandLineArgs(commandLine) {
+    if (!isStringValue(commandLine)) {
+        return [];
+    }
+    const matches = commandLine.match(/(\w+=)?("[^"]*"|'[^']*'|[^ ]+)/g);
+    if (isEmpty(matches)) {
+        return [];
+    }
+    return matches;
+}
+exports.getCommandLineArgs = getCommandLineArgs;
 
 
 /***/ }),
@@ -31164,28 +32905,105 @@ var exports = __webpack_exports__;
   \********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.swapLayout = void 0;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
-const interop_override_1 = __webpack_require__(/*! ./platform/interop-override */ "./client/src/platform/interop-override.ts");
+const interop_override_1 = __webpack_require__(/*! ./platform/broker/interop-override */ "./client/src/platform/broker/interop-override.ts");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
+let PARENT_CONTAINER;
 /**
- * Sets up panels if supported.
- * @param settings The settings to use.
+ * Attach listeners to elements.
  */
-function setupPanels(settings) {
-    if (settings?.platform?.layout?.panels?.left) {
-        const leftPanel = settings.platform.layout.panels.left;
-        const leftPanelFrame = document.querySelector(`#${leftPanel.frameId}`);
-        if (leftPanelFrame === null) {
-            console.error(`Please ensure the document has an element with the following id #${leftPanel.frameContainerId} so that the web-layout can be applied.`);
-            return;
-        }
-        leftPanelFrame.src = leftPanel.url;
-        console.log(`Panel ${leftPanel.frameId} has been setup with the url ${leftPanel.url}`);
+async function attachListeners() {
+    const swapButton = document.querySelector("#swap-layouts");
+    swapButton?.addEventListener("click", async () => {
+        await swapLayout();
+    });
+}
+/**
+ * A Create function for layouts.
+ * @param fin the fin object.
+ * @param layoutName A string for the layout name.
+ * @param layout LayoutOptions
+ * @param order which position to display in
+ */
+async function createLayout(fin, layoutName, layout, order) {
+    // Create a new div container for the layout.
+    const container = document.createElement("div");
+    container.id = layoutName;
+    container.className = "col fill";
+    container.style.display = order === 0 ? "block" : "none";
+    PARENT_CONTAINER?.append(container);
+    // Normally you can use state here, but just tracking the order of layouts in localStorage.
+    const currentOrder = window.localStorage.getItem("order");
+    if (!currentOrder) {
+        window.localStorage.setItem("order", "");
+    }
+    let newOrder = "";
+    if (order === 0) {
+        newOrder = layoutName;
     }
     else {
-        console.log("No panels require setup.");
+        newOrder = currentOrder ? currentOrder.concat(",", layoutName) : "";
+    }
+    window.localStorage.setItem("order", newOrder);
+    // Finally, call the Layout.create() function to apply the snapshot layout to the div we just created.
+    await fin.Platform.Layout.create({ layoutName, layout, container });
+}
+/**
+ * MakeOverride assists in loading the Fin object before the applyLayoutSnapshot Manager call.
+ * @param fin the fin object.
+ * @param layoutContainerId the layout container id.
+ * @returns a function call.
+ */
+function makeOverride(fin, layoutContainerId) {
+    return function layoutManagerOverride(Base) {
+        /**
+         * @class LayoutManagerBasic
+         * This implementation is the fundamental override for Multiple Layouts in Web.
+         */
+        return class LayoutManagerBasic extends Base {
+            constructor() {
+                super(...arguments);
+                this.layoutMapArray = [];
+                this.layoutContainer = document.querySelector(`#${layoutContainerId}`);
+            }
+            /**
+             * Override for applying multiple snapshots.
+             * @param snapshot The layouts object containing the fixed set of available layouts.
+             */
+            async applyLayoutSnapshot(snapshot) {
+                console.log(`Does this exist? ${Boolean(this.layoutContainer)}`);
+                if (this.layoutContainer !== null && this.layoutContainer !== undefined) {
+                    setTimeout(() => Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) => createLayout(fin, layoutName, layout, i)), 1000);
+                    console.log("Layouts loaded");
+                }
+            }
+        };
+    };
+}
+/**
+ * Returns a layout from the settings with a provided name.
+ * @returns The default layout from the settings.
+ */
+async function swapLayout() {
+    // Get that order of created div ids from storage, or state, or wherever you want to save them.
+    const currentOrder = window.localStorage.getItem("order");
+    const layouts = currentOrder?.split(",");
+    // This is a simple swap between two, but you can do this anyway you like.
+    const firstLayout = document.querySelector(`#${layouts ? layouts[0] : null}`);
+    const secondLayout = document.querySelector(`#${layouts ? layouts[1] : null}`);
+    if (firstLayout && secondLayout) {
+        if (secondLayout.style.display === "block") {
+            firstLayout.style.display = "block";
+            secondLayout.style.display = "none";
+        }
+        else {
+            firstLayout.style.display = "none";
+            secondLayout.style.display = "block";
+        }
     }
 }
+exports.swapLayout = swapLayout;
 /**
  * Initializes the OpenFin Web Broker connection.
  */
@@ -31198,9 +33016,9 @@ async function init() {
         console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
         return;
     }
-    // Get the dom element that should host the layout
-    const layoutContainer = document.querySelector(`#${settings.platform.layout.layoutContainerId}`);
-    if (layoutContainer === null) {
+    // Get the dom element that should host the layout - This will be the top element holding the children iframes.
+    PARENT_CONTAINER = document.querySelector(`#${settings.platform.layout.layoutContainerId}`);
+    if (PARENT_CONTAINER === null) {
         console.error(`Please ensure the document has an element with the following id #${settings.platform.layout.layoutContainerId} so that the web-layout can be applied.`);
         return;
     }
@@ -31219,15 +33037,20 @@ async function init() {
         connectionInheritance: "enabled",
         platform: { layoutSnapshot }
     });
-    const interopOverride = await (0, interop_override_1.getConstructorOverride)();
-    // You may now use the `fin` object to initialize the broker and the layout.
-    await fin.Interop.init(settings.platform.interop.providerId, [interopOverride]);
-    // initialize the layout and pass it the dom element to bind to
-    await fin.Platform.Layout.init({
-        container: layoutContainer
-    });
-    // setup panels not that everything has been initialized
-    setupPanels(settings);
+    if (fin) {
+        // Store the fin object in the window object for easy access.
+        window.fin = fin;
+        const layoutManagerOverride = makeOverride(fin, settings.platform.layout.layoutContainerId);
+        const interopOverride = await (0, interop_override_1.getConstructorOverride)();
+        const overrides = [interopOverride];
+        // You may now use the `fin` object to initialize the broker and the layout.
+        await fin.Interop.init(settings.platform.interop.providerId, overrides);
+        // Show the main container and hide the loading container
+        // initialize the layout and pass it the dom element to bind to
+        await fin.Platform.Layout.init({ layoutManagerOverride, container: PARENT_CONTAINER });
+        // setup panels not that everything has been initialized
+        await attachListeners();
+    }
 }
 init()
     .then(() => {
