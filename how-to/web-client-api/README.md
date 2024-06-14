@@ -31,11 +31,15 @@ For this to work a host needs to listen for a message from content:
 ```javascript
 window.addEventListener(
   'message',
-  function (event) {
+  (event) => {
     // Check the origin of the message
     // this is where you could check to see if the request is coming from domains registered in your app directory
-    // alternatively this logic could be done in the interop broker when the connection is attempted
-    if (event.origin !== 'https://expected-origin.com') {
+    // alternatively this logic could be done in the interop broker when the connection is attempted. These are
+    // just example origins we have put
+    if (
+      event.origin !== 'https://built-on-openfin.github.io' &&
+      !event.origin.startsWith('http://localhost:')
+    ) {
       console.warn(`Incoming request came from an untrusted domain: ${event.origin}`);
       return;
     }
@@ -46,24 +50,25 @@ window.addEventListener(
       `Incoming request coming from: ${event.origin}. Received request: ${JSON.stringify(request)}`
     );
 
+    // this just our example namespace. You could create your own and decide what data to pass.
+    const connectConfigContextType = 'openfin.coreWeb.connectConfig';
     // ensure it is requesting connect details for core web
-    if (request.type === 'openfin.coreWeb.connectConfig') {
+    if (request.type === connectConfigContextType) {
       // send back the connect details required by the client
-      event.source.postMessage(
+      event.source?.postMessage(
         {
-          type: 'openfin.coreWeb.connectConfig',
+          type: connectConfigContextType,
           connectConfig: {
-            brokerUrl:
-              "url to the broker's iframe broker e.g. http://localhost:6060/platform/iframe-broker.html",
-            // optional
-            interopConfig: {
-              // optional
-              providerId: 'the platforms provider id',
-              currentContextGroup: 'the context group this connection should automatically join e.g. green.'
+            options: {
+              brokerUrl: 'Settings provided by your platform',
+              interopConfig: {
+                providerId: 'Setting used by your platform',
+                currentContextGroup: 'the default context group you want everyone to join e.g. green'
+              }
             }
           }
         },
-        event.origin
+        { targetOrigin: event.origin }
       );
     }
   },

@@ -25,5 +25,8 @@ export interface Settings {
 			layoutContainerId: string;
 			defaultLayout: WebLayoutSnapshot | string;
 		};
+		app: {
+			directory: string;
+		};
 	};
 }

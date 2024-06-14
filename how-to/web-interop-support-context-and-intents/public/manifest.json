@@ -30,6 +30,9 @@
 				},
 				"layoutContainerId": "layout_container",
 				"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
+			},
+			"app": {
+				"directory": "http://localhost:6060/apps.json"
 			}
 		}
 	}
