@@ -65,18 +65,21 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 }
 
 /**
- * Brings the targetted app to front.
+ * Brings the targeted app to front.
  * @param platformApp The app to bring to front.
  * @param targets The list of apps to bring to front.
  */
-export async function bringAppToFront(platformApp: PlatformApp, targets: PlatformAppIdentifier[]): Promise<void> {
-    const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
-    if(!isEmpty(currentLayout)) {
-        for (const target of targets) {
-            const targetLayout = currentLayout.getLayoutIdentityForView(target);
-            await currentLayout.showLayout(targetLayout);
-        }
-    }
+export async function bringAppToFront(
+	platformApp: PlatformApp,
+	targets: PlatformAppIdentifier[]
+): Promise<void> {
+	const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+	if (!isEmpty(currentLayout)) {
+		for (const target of targets) {
+			const targetLayout = currentLayout.getLayoutIdentityForView(target);
+			await currentLayout.showLayout(targetLayout);
+		}
+	}
 }
 
 /**
@@ -89,7 +92,7 @@ export async function bringAppToFront(platformApp: PlatformApp, targets: Platfor
 function getAppLayout(platformApp: PlatformApp, layoutId: string, viewName: string): PlatformLayoutSnapshot {
 	const appSnapshot: PlatformLayoutSnapshot = {
 		layouts: {},
-        layoutTitles: {}
+		layoutTitles: {}
 	};
 	appSnapshot.layouts[layoutId] = {
 		content: [
@@ -122,7 +125,7 @@ function getAppLayout(platformApp: PlatformApp, layoutId: string, viewName: stri
 			}
 		]
 	};
-    appSnapshot.layoutTitles[layoutId] = platformApp.title ?? "App Layout";
+	appSnapshot.layoutTitles[layoutId] = platformApp.title ?? "App Layout";
 	return appSnapshot;
 }
 

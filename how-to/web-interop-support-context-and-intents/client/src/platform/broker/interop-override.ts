@@ -6,7 +6,12 @@ import type {
 	IntentResolution
 } from "@finos/fdc3";
 import type { OpenFin } from "@openfin/core";
-import type { AppsForIntent, PlatformApp, PlatformAppIdentifier, PlatformAppIntents } from "../../shapes/app-shapes";
+import type {
+	AppsForIntent,
+	PlatformApp,
+	PlatformAppIdentifier,
+	PlatformAppIntents
+} from "../../shapes/app-shapes";
 import type {
 	CaptureApiPayload,
 	IntentRegistrationPayload,
@@ -59,7 +64,7 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 				this._metadataKey = `_metadata_${randomUUID()}`;
 				this._intentResolverHelper = new IntentResolverHelper(
 					{
-						url: "http://localhost:8080/intent-resolver.html"
+						url: "http://localhost:6060/common/intents/instance-picker.html"
 					},
 					logger
 				);
@@ -395,7 +400,6 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 					);
 					return intentResolver;
 				}
-				throw new Error(ResolveError.NoAppsFound);
 				// if (
 				// 	this._unregisteredApp &&
 				// 	(await this.canAddUnregisteredApp(clientIdentity, intent.name, intent?.context?.type))
@@ -404,56 +408,55 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 				// 	intentApps.push(this._unregisteredApp);
 				// }
 
-				// if (intentApps.length === 0) {
-				// 	logger.info("No apps support this intent");
-				// 	throw new Error(ResolveError.NoAppsFound);
-				// }
+				if (intentApps.length === 0) {
+					logger.info("No apps support this intent");
+					throw new Error(ResolveError.NoAppsFound);
+				}
 
-				// if (intentApps.length === 1) {
-				// 	// handle single entry
-				// 	const appInstances = await this._clientRegistrationHelper.findAppInstances(
-				// 		intentApps[0],
-				// 		clientIdentity,
-				// 		"intent"
-				// 	);
-				// 	// if there are no instances launch a new one otherwise present the choice to the user
-				// 	// by falling through to the next code block
-				// 	let appInstanceId: string | undefined;
-				// 	if (appInstances.length === 1) {
-				// 		appInstanceId = appInstances[0].instanceId;
-				// 	}
-				// 	if (
-				// 		appInstances.length === 0 ||
-				// 		this.useSingleInstance(intentApps[0]) ||
-				// 		this.createNewInstance(intentApps[0])
-				// 	) {
-				// 		const intentResolver = await this.launchAppWithIntent(
-				// 			intentApps[0],
-				// 			intent,
-				// 			appInstanceId,
-				// 			clientIdentity
-				// 		);
-				// 		if (isEmpty(intentResolver)) {
-				// 			throw new Error(ResolveError.NoAppsFound);
-				// 		}
-				// 		return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
-				// 	}
-				// }
+				if (intentApps.length === 1) {
+					// handle single entry
+					const appInstances = await this._clientRegistrationHelper.findAppInstances(
+						intentApps[0],
+						clientIdentity,
+						"intent"
+					);
+					// if there are no instances launch a new one otherwise present the choice to the user
+					// by falling through to the next code block
+					let appInstanceId: string | undefined;
+					if (appInstances.length === 1) {
+						appInstanceId = appInstances[0].instanceId;
+					}
+					if (
+						appInstances.length === 0 ||
+						this.createNewInstance(intentApps[0])
+					) {
+						const intentResolver = await this.launchAppWithIntent(
+							intentApps[0],
+							intent,
+							appInstanceId,
+							clientIdentity
+						);
+						if (isEmpty(intentResolver)) {
+							throw new Error(ResolveError.NoAppsFound);
+						}
+						return intentResolver;
+					}
+				}
 
-				// const userSelection = await this._intentResolverHelper?.launchIntentResolver(
-				// 	{
-				// 		apps: intentApps,
-				// 		intent
-				// 	},
-				// 	clientIdentity
-				// );
+				const userSelection = await this._intentResolverHelper?.launchIntentResolver(
+					{
+						apps: intentApps,
+						intent
+					},
+					clientIdentity
+				);
 
-				// if (isEmpty(userSelection)) {
-				// 	throw new Error(ResolveError.ResolverUnavailable);
-				// }
+				if (isEmpty(userSelection)) {
+					throw new Error(ResolveError.ResolverUnavailable);
+				}
 
-				// const intentResolver = await this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
-				// return this.shapeIntentResolver(intentResolver, usesAppIdentifier);
+				const intentResolver = await this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
+				return intentResolver;
 			}
 
 			/**
@@ -933,37 +936,37 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 				return instanceMode === "new";
 			}
 
-				/**
+			/**
 			 * Handle the intent picker selection.
 			 * @param userSelection The user selection from the intent picker.
 			 * @param intent The intent.
 			 * @param clientIdentity The source of the request.
 			 * @returns The intent resolution.
 			 */
-				private async handleIntentPickerSelection(
-					userSelection: IntentResolverResponse,
-					intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
-					clientIdentity?: OpenFin.ClientIdentity
-				): Promise<Omit<IntentResolution, "getResult">> {
-					let selectedApp = await getApp(userSelection.appId);
-					if (isEmpty(selectedApp) && !isEmpty(this._unregisteredApp)) {
-						selectedApp = this._unregisteredApp;
-					}
-					if (isEmpty(selectedApp)) {
-						throw new Error(ResolveError.NoAppsFound);
-					}
-					const instanceId: string | undefined = userSelection.instanceId;
-					const intentResolver = await this.launchAppWithIntent(
-						selectedApp,
-						intent,
-						instanceId,
-						clientIdentity
-					);
-					if (isEmpty(intentResolver)) {
-						throw new Error(ResolveError.NoAppsFound);
-					}
-					return intentResolver;
+			private async handleIntentPickerSelection(
+				userSelection: IntentResolverResponse,
+				intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
+				clientIdentity?: OpenFin.ClientIdentity
+			): Promise<Omit<IntentResolution, "getResult">> {
+				let selectedApp = await getApp(userSelection.appId);
+				if (isEmpty(selectedApp) && !isEmpty(this._unregisteredApp)) {
+					selectedApp = this._unregisteredApp;
 				}
+				if (isEmpty(selectedApp)) {
+					throw new Error(ResolveError.NoAppsFound);
+				}
+				const instanceId: string | undefined = userSelection.instanceId;
+				const intentResolver = await this.launchAppWithIntent(
+					selectedApp,
+					intent,
+					instanceId,
+					clientIdentity
+				);
+				if (isEmpty(intentResolver)) {
+					throw new Error(ResolveError.NoAppsFound);
+				}
+				return intentResolver;
+			}
 		};
 }
 

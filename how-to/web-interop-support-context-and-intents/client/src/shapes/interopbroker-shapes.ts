@@ -17,15 +17,15 @@ export interface ApiMetadata {
 
 /** A simple AppIntent */
 export interface AppIntent {
-    /**
-     * The name of the intent.
-     */
-    name: string;
+	/**
+	 * The name of the intent.
+	 */
+	name: string;
 	/**
 	 * The display name of the intent.
 	 */
-    displayName: string;
-    /** The Contexts the intent supports */
+	displayName: string;
+	/** The Contexts the intent supports */
 	contexts: string[];
 }
 

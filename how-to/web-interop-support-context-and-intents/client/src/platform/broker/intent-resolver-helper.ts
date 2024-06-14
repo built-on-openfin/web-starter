@@ -1,8 +1,12 @@
 import type OpenFin from "@openfin/core";
 import type { PlatformApp } from "../../shapes/app-shapes";
-import type { IntentResolverResponse, IntentResolverOptions, AppIntent } from "../../shapes/interopbroker-shapes";
+import type {
+	IntentResolverResponse,
+	IntentResolverOptions,
+	AppIntent
+} from "../../shapes/interopbroker-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
-import { formatError } from "../../utils";
+// import { formatError } from "../../utils";
 import { RESOLVE_ERROR as ResolveError } from "./fdc3-errors";
 
 /**
@@ -18,6 +22,10 @@ export class IntentResolverHelper {
 	private readonly _defaultIntentResolverHeight: number;
 
 	private readonly _defaultIntentResolverWidth: number;
+
+	private readonly _dialogElement: HTMLDialogElement | null = null;
+
+	private _dialogClient: OpenFin.ChannelClient | null = null;
 
 	/**
 	 * Create an instance of the Intent Resolver Helper.
@@ -36,6 +44,25 @@ export class IntentResolverHelper {
 			...intentResolverOptions
 		};
 		this._logger = logger;
+		this._dialogElement = document.createElement("dialog");
+		this._dialogElement.style.height = `${this._intentResolverOptions.height}px`;
+		this._dialogElement.style.width = `${this._intentResolverOptions.width}px`;
+		this._dialogElement.style.padding = "0px";
+		this._dialogElement.style.backgroundColor = "var(--brand-background)";
+		// Create a new iframe element
+		const intentPicker = document.createElement("iframe");
+
+		// Set the source of the iframe
+		intentPicker.src = intentResolverOptions.url;
+		intentPicker.style.height = "99%";
+		intentPicker.style.width = "100%";
+
+
+		// Append the iframe to the dialog
+		this._dialogElement.append(intentPicker);
+
+		// Append the dialog to the body
+		document.body.append(this._dialogElement);
 	}
 
 	/**
@@ -59,44 +86,48 @@ export class IntentResolverHelper {
 		// options the window can then use raiseIntent against a specific app (the selected one). this logic runs in
 		// the provider so we are using it as a way of determining the root (so it works with root hosting and
 		// subdirectory based hosting if a url is not provided)
-		try {
-			const winOption: OpenFin.WindowCreationOptions = {
-				name: "intent-picker",
-				includeInSnapshots: false,
-				fdc3InteropApi: this._intentResolverOptions?.fdc3InteropApi,
-				defaultWidth: this._intentResolverOptions?.width,
-				defaultHeight: this._intentResolverOptions?.height,
-				showTaskbarIcon: false,
-				saveWindowState: false,
-				customData: {
-					title: this._intentResolverOptions?.title,
-					apps: launchOptions.apps,
-					intent: launchOptions.intent,
-					intents: launchOptions.intents,
-					unregisteredAppId: this._unregisteredAppId
-				},
-				url: this._intentResolverOptions?.url,
-				frame: false,
-				autoShow: true,
-				alwaysOnTop: true
-			};
-
-			const win = await fin.Window.create(winOption);
-			const webWindow = win.getWebWindow();
-			const webWindowResolver = webWindow as unknown as {
-				getIntentSelection: () => Promise<IntentResolverResponse>;
-			};
-			const selectedAppId: IntentResolverResponse = await webWindowResolver.getIntentSelection();
-			return selectedAppId;
-		} catch (error) {
-			const message = formatError(error);
-
-			if (message?.includes(ResolveError.UserCancelled)) {
-				this._logger.info("App for intent not selected/launched by user", launchOptions.intent);
-				throw new Error(message);
+		// try {
+			let resolveAppSelection: (value: IntentResolverResponse) => void;
+			let rejectAppSelection: (reason?: string) => void;
+			if(this._dialogElement) {
+				this._dialogElement.showModal();
 			}
-			this._logger.error("Unexpected error from intent picker/resolver for intent", launchOptions.intent);
-			throw new Error(ResolveError.ResolverUnavailable);
-		}
+			if(!this._dialogClient && this._dialogClient === null) {
+				const intentResolverChannel = "intent-resolver";
+				console.log("Connecting to picker", intentResolverChannel);
+				this._dialogClient = await fin.InterApplicationBus.Channel.connect(intentResolverChannel);
+
+				// eslint-disable-next-line @typescript-eslint/await-thenable
+				await this._dialogClient.register("intent-resolver-response", async (payload, sender) => {
+					const response = payload as { intentResolverResponse?: IntentResolverResponse;
+						errorMessage?: string; };
+					this._logger.info("Received intent resolver message", payload);
+					if(response.errorMessage) {
+						rejectAppSelection(response.errorMessage);
+					} else if(response.intentResolverResponse === undefined) {
+						rejectAppSelection(ResolveError.ResolverUnavailable);
+					} else {
+						resolveAppSelection(response.intentResolverResponse);
+					}
+					if(this._dialogElement) {
+						this._dialogElement.close();
+					}
+				});
+			}
+			if(this._dialogElement && this._dialogClient) {
+				await this._dialogClient.dispatch("resolve-intent-request", {
+					customData: {
+									title: this._intentResolverOptions?.title,
+									apps: launchOptions.apps,
+									intent: launchOptions.intent,
+									intents: launchOptions.intents,
+									unregisteredAppId: this._unregisteredAppId
+								}
+				});
+			}
+			return new Promise((resolve, reject) => {
+				resolveAppSelection = resolve;
+				rejectAppSelection = reject;
+			});
 	}
 }

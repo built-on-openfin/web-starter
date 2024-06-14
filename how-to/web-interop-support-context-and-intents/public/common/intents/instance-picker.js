@@ -1,7 +1,5 @@
 import { createOptionEntry, setElementVisibility } from './helper.js';
 
-let rejectAppSelection;
-let resolveAppSelection;
 let launchBtn;
 let cancelSelectionBtn;
 let intentsContainer;
@@ -18,10 +16,15 @@ let intent;
 let intents;
 let apps;
 let unregisteredAppId;
-const appLookup = {};
+let appLookup = {};
+let intentResolverService;
 
 document.addEventListener('DOMContentLoaded', () => {
-	init();
+	if(window.fdc3 !== undefined) {
+		init();
+	} else {
+		window.addEventListener('fdc3Ready', init);
+	}
 });
 
 /**
@@ -53,34 +56,10 @@ async function init() {
 	appSummaryContainer = document.querySelector('#summary');
 	setElementVisibility(appSummaryContainer, false);
 	launchBtn = document.querySelector('#launch');
-
-	const data = await fin.me.getOptions();
-
-	if (data.customData !== undefined) {
-		apps = data.customData.apps;
-		intent = data.customData.intent;
-		intents = data.customData.intents;
-		unregisteredAppId = data.customData.unregisteredAppId;
-		if (data.customData.title !== undefined) {
-			const title = document.querySelector('#title');
-			title.textContent = data.customData.title;
-		}
-	}
-
-	if (Array.isArray(intents)) {
-		for (const passedIntent of intents) {
-			for (const intentApp of passedIntent.apps) {
-				appLookup[intentApp.appId] = intentApp;
-			}
-		}
-	}
-	await setupIntentView(intents);
-
 	cancelSelectionBtn.addEventListener('click', async () => {
-		if (rejectAppSelection !== undefined) {
-			rejectAppSelection('UserCancelledResolution');
+		if (intentResolverService !== undefined && intentResolverService !== null) {
+			await intentResolverService.publish("intent-resolver-response", { errorMessage: 'UserCancelledResolution' });
 		}
-		fin.me.close(true);
 	});
 
 	launchBtn.addEventListener('click', async () => {
@@ -89,17 +68,49 @@ async function init() {
 			instanceId = appInstanceContainer.value;
 		}
 		const appId = appsContainer.value;
-
-		resolveAppSelection({ appId, instanceId, intent });
-		fin.me.close(true);
+		if (intentResolverService !== undefined && intentResolverService !== null) {
+			await intentResolverService.publish("intent-resolver-response", { intentResolverResponse: { appId, instanceId, intent } });
+		}
 	});
 
-	if (Array.isArray(apps)) {
-		for (const app of apps) {
-			appLookup[app.appId] = app;
+	const intentResolverChannel = "intent-resolver";
+	console.log("Instance picker initialized", intentResolverChannel);
+	intentResolverService = await window.fin.InterApplicationBus.Channel.create(intentResolverChannel);
+	console.log("Registering resolve-intent-request handler...");
+	await intentResolverService.register('resolve-intent-request', async (data) => {
+		// reset everything
+		apps = undefined;
+		intent = undefined;
+		intents = undefined;
+		unregisteredAppId = undefined;
+		appLookup = {};
+		if (data.customData !== undefined) {
+			apps = data.customData.apps;
+			intent = data.customData.intent;
+			intents = data.customData.intents;
+			unregisteredAppId = data.customData.unregisteredAppId;
+			if (data.customData.title !== undefined) {
+				const title = document.querySelector('#title');
+				title.textContent = data.customData.title;
+			}
 		}
-		await setupAppView(apps, intent.name);
-	}
+		if (Array.isArray(intents)) {
+			for (const passedIntent of intents) {
+				for (const intentApp of passedIntent.apps) {
+					appLookup[intentApp.appId] = intentApp;
+				}
+			}
+		}
+		await setupIntentView(intents);
+
+		if (Array.isArray(apps)) {
+			for (const app of apps) {
+				appLookup[app.appId] = app;
+			}
+			await setupAppView(apps, intent.name);
+		}
+	});
+	console.log("Instance picker initialized");
 }
 
 /**
@@ -107,6 +118,7 @@ async function init() {
  * @param setupIntents The intents to display.
  */
 async function setupIntentView(setupIntents) {
+	intentsContainer.options.length = 0;
 	if (Array.isArray(setupIntents) && setupIntents.length > 0) {
 		if (intent.context?.type !== undefined) {
 			targetLabel.textContent = `Select an Intent & Application to handle the ${intent.context.type} context: ${intent.context.name}`;
@@ -256,6 +268,9 @@ function loadAppPreview(appId) {
 	if (Array.isArray(appMetadata?.images) && appMetadata.images.length > 0) {
 		appPreviewImage.src = appMetadata.images[0].src;
 		setElementVisibility(appPreviewImage, true);
+	} else if(Array.isArray(appMetadata?.screenshots) && appMetadata.screenshots.length > 0) {
+		appPreviewImage.src = appMetadata.screenshots[0].src;
+		setElementVisibility(appPreviewImage, true);
 	}
 }
 
@@ -287,12 +302,3 @@ function setupAppMetadata(appId) {
 		setElementVisibility(appSummaryContainer, false);
 	}
 }
-
-// this function is called by the interop broker.ts file in the src directory so that it waits to see whether the end user has made a selection or cancelled the intent request.
-window['getIntentSelection'] = async () => {
-	launchBtn.disabled = false;
-	return new Promise((resolve, reject) => {
-		resolveAppSelection = resolve;
-		rejectAppSelection = reject;
-	});
-};
