@@ -1,4 +1,3 @@
-import type { AppIntent } from "@finos/fdc3";
 import type { OpenFin } from "@openfin/core";
 
 /**
@@ -14,6 +13,20 @@ export interface ApiMetadata {
 	 * The version.
 	 */
 	version?: "1.2" | "2.0" | string;
+}
+
+/** A simple AppIntent */
+export interface AppIntent {
+    /**
+     * The name of the intent.
+     */
+    name: string;
+	/**
+	 * The display name of the intent.
+	 */
+    displayName: string;
+    /** The Contexts the intent supports */
+	contexts: string[];
 }
 
 /**

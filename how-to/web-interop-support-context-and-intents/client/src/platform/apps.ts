@@ -1,6 +1,6 @@
-import type { OpenFin } from "@openfin/core";
 import type { PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
-import { randomUUID } from "../utils";
+import type { PlatformLayoutSnapshot } from "../shapes/layout-shapes";
+import { isEmpty, randomUUID } from "../utils";
 import { getSettings } from "./settings";
 
 let cachedApps: PlatformApp[] | undefined;
@@ -65,15 +65,31 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 }
 
 /**
+ * Brings the targetted app to front.
+ * @param platformApp The app to bring to front.
+ * @param targets The list of apps to bring to front.
+ */
+export async function bringAppToFront(platformApp: PlatformApp, targets: PlatformAppIdentifier[]): Promise<void> {
+    const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+    if(!isEmpty(currentLayout)) {
+        for (const target of targets) {
+            const targetLayout = currentLayout.getLayoutIdentityForView(target);
+            await currentLayout.showLayout(targetLayout);
+        }
+    }
+}
+
+/**
  * Get the layout for the application.
  * @param platformApp The application to get the layout for.
  * @param layoutId The id of the layout to create for the app.
  * @param viewName The name of the view to create.
  * @returns The layout options.
  */
-function getAppLayout(platformApp: PlatformApp, layoutId: string, viewName: string): OpenFin.LayoutSnapshot {
-	const appSnapshot: OpenFin.LayoutSnapshot = {
-		layouts: {}
+function getAppLayout(platformApp: PlatformApp, layoutId: string, viewName: string): PlatformLayoutSnapshot {
+	const appSnapshot: PlatformLayoutSnapshot = {
+		layouts: {},
+        layoutTitles: {}
 	};
 	appSnapshot.layouts[layoutId] = {
 		content: [
@@ -106,6 +122,7 @@ function getAppLayout(platformApp: PlatformApp, layoutId: string, viewName: stri
 			}
 		]
 	};
+    appSnapshot.layoutTitles[layoutId] = platformApp.title ?? "App Layout";
 	return appSnapshot;
 }
 

@@ -6,15 +6,16 @@ import type {
 	IntentResolution
 } from "@finos/fdc3";
 import type { OpenFin } from "@openfin/core";
-import type { PlatformApp, PlatformAppIdentifier, PlatformAppIntents } from "../../shapes/app-shapes";
+import type { AppsForIntent, PlatformApp, PlatformAppIdentifier, PlatformAppIntents } from "../../shapes/app-shapes";
 import type {
 	CaptureApiPayload,
 	IntentRegistrationPayload,
+	IntentResolverResponse,
 	IntentTargetMetaData,
 	OpenOptions
 } from "../../shapes/interopbroker-shapes";
-import { isEmpty, isString, randomUUID } from "../../utils";
-import { getApp, getApps, launch } from "../apps";
+import { isEmpty, isString, isStringValue, randomUUID } from "../../utils";
+import { bringAppToFront, getApp, getApps, launch } from "../apps";
 import { AppIdHelper } from "./app-id-helper";
 import { AppIntentHelper } from "./app-intent-helper";
 import { getAppsMetaData, mapToAppMetaData } from "./app-meta-data-helper";
@@ -667,7 +668,7 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 				clientIdentity: OpenFin.ClientIdentity
 			): Promise<Omit<IntentResolution, "getResult">> {
 				// app specified flow
-				// const intentsForSelection: AppsForIntent[] = [];
+				const intentsForSelection: AppsForIntent[] = [];
 				let targetApp = await getApp(targetAppIdentifier.appId);
 
 				// if the specified app isn't available then let the caller know
@@ -756,10 +757,6 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 						clientIdentity,
 						"intent"
 					);
-					// the launch logic is single instance aware but can also bring content to front where possible
-					// this will let the context be set and the content brought to front.
-					// const launchSingleInstanceApp =
-					// 	specifiedAppInstances.length === 1 && this.useSingleInstance(targetApp);
 
 					if (specifiedAppInstances.length === 0 || this.createNewInstance(targetApp)) {
 						const intentResolver = await this.launchAppWithIntent(
@@ -775,54 +772,53 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 					}
 				}
 
-				// for (const supportedIntent of supportedIntents) {
-				// 	const appForIntent: AppsForIntent = {
-				// 		apps: [targetApp],
-				// 		intent: { name: supportedIntent.name, displayName: supportedIntent.displayName }
-				// 	};
-				// 	intentsForSelection.push(appForIntent);
-				// }
-				// let userSelection: IntentResolverResponse | undefined;
-				// if (intentsForSelection.length === 1) {
-				// 	if (
-				// 		!isStringValue(intent.name) &&
-				// 		!isEmpty(intentsForSelection[0]?.intent?.name) &&
-				// 		!isEmpty(intent?.context) &&
-				// 		!isEmpty(intent?.context?.type)
-				// 	) {
-				// 		logger.info(
-				// 			`A request to raise an intent was passed and the intent name was not passed but a context was ${intent?.context?.type} with 1 matching intent. Name: ${intentsForSelection[0]?.intent?.name},  Display Name: ${intentsForSelection[0]?.intent?.displayName}. Updating intent object.`
-				// 		);
-				// 		intent.name = intentsForSelection[0]?.intent?.name;
-				// 	}
-				// 	userSelection = await this._intentResolverHelper?.launchIntentResolver(
-				// 		{
-				// 			apps: intentsForSelection[0].apps,
-				// 			intent
-				// 		},
-				// 		clientIdentity
-				// 	);
-				// } else {
-				// 	userSelection = await this._intentResolverHelper?.launchIntentResolver(
-				// 		{
-				// 			intent,
-				// 			intents: intentsForSelection
-				// 		},
-				// 		clientIdentity
-				// 	);
-				// 	if (!isStringValue(intent.name) && !isEmpty(userSelection?.intent?.name)) {
-				// 		logger.info(
-				// 			`A request to raise an intent was passed and the following intent was selected (from a selection of ${intentsForSelection.length}). Name: ${userSelection?.intent?.name},  Display Name: ${userSelection?.intent?.displayName}. Updating intent object.`
-				// 		);
-				// 		intent.name = userSelection?.intent?.name ?? intent.name;
-				// 	}
-				// }
-				// if (isEmpty(userSelection)) {
-				// 	throw new Error(ResolveError.ResolverUnavailable);
-				// }
+				for (const supportedIntent of supportedIntents) {
+					const appForIntent: AppsForIntent = {
+						apps: [targetApp],
+						intent: { name: supportedIntent.name, displayName: supportedIntent.displayName }
+					};
+					intentsForSelection.push(appForIntent);
+				}
+				let userSelection: IntentResolverResponse | undefined;
+				if (intentsForSelection.length === 1) {
+					if (
+						!isStringValue(intent.name) &&
+						!isEmpty(intentsForSelection[0]?.intent?.name) &&
+						!isEmpty(intent?.context) &&
+						!isEmpty(intent?.context?.type)
+					) {
+						logger.info(
+							`A request to raise an intent was passed and the intent name was not passed but a context was ${intent?.context?.type} with 1 matching intent. Name: ${intentsForSelection[0]?.intent?.name},  Display Name: ${intentsForSelection[0]?.intent?.displayName}. Updating intent object.`
+						);
+						intent.name = intentsForSelection[0]?.intent?.name;
+					}
+					userSelection = await this._intentResolverHelper?.launchIntentResolver(
+						{
+							apps: intentsForSelection[0].apps,
+							intent
+						},
+						clientIdentity
+					);
+				} else {
+					userSelection = await this._intentResolverHelper?.launchIntentResolver(
+						{
+							intent,
+							intents: intentsForSelection
+						},
+						clientIdentity
+					);
+					if (!isStringValue(intent.name) && !isEmpty(userSelection?.intent?.name)) {
+						logger.info(
+							`A request to raise an intent was passed and the following intent was selected (from a selection of ${intentsForSelection.length}). Name: ${userSelection?.intent?.name},  Display Name: ${userSelection?.intent?.displayName}. Updating intent object.`
+						);
+						intent.name = userSelection?.intent?.name ?? intent.name;
+					}
+				}
+				if (isEmpty(userSelection)) {
+					throw new Error(ResolveError.ResolverUnavailable);
+				}
 
-				// return this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
-				throw new Error(ResolveError.TargetAppUnavailable);
+				return this.handleIntentPickerSelection(userSelection, intent, clientIdentity);
 			}
 
 			/**
@@ -841,7 +837,7 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 			): Promise<Omit<IntentResolution, "getResult">> {
 				logger.info("Launching app with intent");
 				let platformIdentities: PlatformAppIdentifier[] | undefined = [];
-				// let existingInstance = true;
+				let existingInstance = true;
 
 				if (!isEmpty(instanceId)) {
 					// an instance of an application was selected
@@ -865,6 +861,7 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 
 				if (platformIdentities.length === 0) {
 					platformIdentities = await launch(app);
+					existingInstance = false;
 					if (!platformIdentities?.length) {
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
@@ -890,6 +887,18 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 
 				for (const target of platformIdentities) {
 					await super.setIntentTarget(intent, target);
+					if (existingInstance) {
+						try {
+							if (bringAppToFront) {
+								await bringAppToFront(app, [target]);
+							}
+						} catch (bringToFrontError) {
+							logger.warn(
+								`There was an error bringing app: ${target.appId}, and instance ${target.instanceId} with name: ${target.name} to front.`,
+								bringToFrontError
+							);
+						}
+					}
 				}
 
 				return {
@@ -923,6 +932,38 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 				const instanceMode = app.hostManifests?.OpenFin?.config?.instanceMode ?? "new";
 				return instanceMode === "new";
 			}
+
+				/**
+			 * Handle the intent picker selection.
+			 * @param userSelection The user selection from the intent picker.
+			 * @param intent The intent.
+			 * @param clientIdentity The source of the request.
+			 * @returns The intent resolution.
+			 */
+				private async handleIntentPickerSelection(
+					userSelection: IntentResolverResponse,
+					intent: OpenFin.Intent<OpenFin.IntentMetadata<IntentTargetMetaData>>,
+					clientIdentity?: OpenFin.ClientIdentity
+				): Promise<Omit<IntentResolution, "getResult">> {
+					let selectedApp = await getApp(userSelection.appId);
+					if (isEmpty(selectedApp) && !isEmpty(this._unregisteredApp)) {
+						selectedApp = this._unregisteredApp;
+					}
+					if (isEmpty(selectedApp)) {
+						throw new Error(ResolveError.NoAppsFound);
+					}
+					const instanceId: string | undefined = userSelection.instanceId;
+					const intentResolver = await this.launchAppWithIntent(
+						selectedApp,
+						intent,
+						instanceId,
+						clientIdentity
+					);
+					if (isEmpty(intentResolver)) {
+						throw new Error(ResolveError.NoAppsFound);
+					}
+					return intentResolver;
+				}
 		};
 }
 

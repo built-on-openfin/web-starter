@@ -1,4 +1,4 @@
-import type { WebLayoutSnapshot } from "@openfin/core-web";
+import type { PlatformLayoutSnapshot } from "./layout-shapes";
 
 /**
  * Settings for the client
@@ -23,7 +23,8 @@ export interface Settings {
 				};
 			};
 			layoutContainerId: string;
-			defaultLayout: WebLayoutSnapshot | string;
+			layoutSelectorId: string;
+			defaultLayout: PlatformLayoutSnapshot | string;
 		};
 		app: {
 			directory: string;

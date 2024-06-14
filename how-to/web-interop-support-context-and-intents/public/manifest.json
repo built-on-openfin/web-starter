@@ -22,13 +22,8 @@
 				"defaultContextGroup": "green"
 			},
 			"layout": {
-				"panels": {
-					"left": {
-						"url": "http://localhost:6060/views/fdc3-panel.html",
-						"frameId": "left-panel"
-					}
-				},
 				"layoutContainerId": "layout_container",
+				"layoutSelectorId": "layout-selector",
 				"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
 			},
 			"app": {
