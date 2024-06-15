@@ -15,12 +15,11 @@ let targetLabelSet = false;
 let intent;
 let intents;
 let apps;
-let unregisteredAppId;
 let appLookup = {};
 let intentResolverService;
 
 document.addEventListener('DOMContentLoaded', () => {
-	if(window.fdc3 !== undefined) {
+	if (window.fdc3 !== undefined) {
 		init();
 	} else {
 		window.addEventListener('fdc3Ready', init);
@@ -58,7 +57,9 @@ async function init() {
 	launchBtn = document.querySelector('#launch');
 	cancelSelectionBtn.addEventListener('click', async () => {
 		if (intentResolverService !== undefined && intentResolverService !== null) {
-			await intentResolverService.publish("intent-resolver-response", { errorMessage: 'UserCancelledResolution' });
+			await intentResolverService.publish('intent-resolver-response', {
+				errorMessage: 'UserCancelledResolution'
+			});
 		}
 	});
 
@@ -69,26 +70,26 @@ async function init() {
 		}
 		const appId = appsContainer.value;
 		if (intentResolverService !== undefined && intentResolverService !== null) {
-			await intentResolverService.publish("intent-resolver-response", { intentResolverResponse: { appId, instanceId, intent } });
+			await intentResolverService.publish('intent-resolver-response', {
+				intentResolverResponse: { appId, instanceId, intent }
+			});
 		}
 	});
 
-	const intentResolverChannel = "intent-resolver";
-	console.log("Instance picker initialized", intentResolverChannel);
+	const intentResolverChannel = 'intent-resolver';
+	console.log('Instance picker initialized', intentResolverChannel);
 	intentResolverService = await window.fin.InterApplicationBus.Channel.create(intentResolverChannel);
-	console.log("Registering resolve-intent-request handler...");
+	console.log('Registering resolve-intent-request handler...');
 	await intentResolverService.register('resolve-intent-request', async (data) => {
 		// reset everything
 		apps = undefined;
 		intent = undefined;
 		intents = undefined;
-		unregisteredAppId = undefined;
 		appLookup = {};
 		if (data.customData !== undefined) {
 			apps = data.customData.apps;
 			intent = data.customData.intent;
 			intents = data.customData.intents;
-			unregisteredAppId = data.customData.unregisteredAppId;
 			if (data.customData.title !== undefined) {
 				const title = document.querySelector('#title');
 				title.textContent = data.customData.title;
@@ -110,7 +111,7 @@ async function init() {
 			await setupAppView(apps, intent.name);
 		}
 	});
-	console.log("Instance picker initialized");
+	console.log('Instance picker initialized');
 }
 
 /**
@@ -230,7 +231,7 @@ async function onAppSelection(appId) {
 		(selectedApp.instanceMode !== 'single' && selectedApp.instanceMode !== 'new')
 	) {
 		const foundAppInstances = await fdc3.findInstances({ appId });
-		const addNewInstanceOption = appId !== unregisteredAppId;
+		const addNewInstanceOption = true;
 		await setupAppInstancesView(foundAppInstances, addNewInstanceOption);
 	} else {
 		// clear previous selections
@@ -268,7 +269,7 @@ function loadAppPreview(appId) {
 	if (Array.isArray(appMetadata?.images) && appMetadata.images.length > 0) {
 		appPreviewImage.src = appMetadata.images[0].src;
 		setElementVisibility(appPreviewImage, true);
-	} else if(Array.isArray(appMetadata?.screenshots) && appMetadata.screenshots.length > 0) {
+	} else if (Array.isArray(appMetadata?.screenshots) && appMetadata.screenshots.length > 0) {
 		appPreviewImage.src = appMetadata.screenshots[0].src;
 		setElementVisibility(appPreviewImage, true);
 	}

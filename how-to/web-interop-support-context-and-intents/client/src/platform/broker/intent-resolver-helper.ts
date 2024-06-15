@@ -17,8 +17,6 @@ export class IntentResolverHelper {
 
 	private readonly _intentResolverOptions?: IntentResolverOptions;
 
-	private readonly _unregisteredAppId?: string;
-
 	private readonly _defaultIntentResolverHeight: number;
 
 	private readonly _defaultIntentResolverWidth: number;
@@ -31,9 +29,8 @@ export class IntentResolverHelper {
 	 * Create an instance of the Intent Resolver Helper.
 	 * @param intentResolverOptions options for the helper
 	 * @param logger the logger to use.
-	 * @param unregisteredAppId if you support unregistered apps what Id should they be assigned against.
 	 */
-	constructor(intentResolverOptions: IntentResolverOptions, logger: Logger, unregisteredAppId?: string) {
+	constructor(intentResolverOptions: IntentResolverOptions, logger: Logger) {
 		this._defaultIntentResolverHeight = 715;
 		this._defaultIntentResolverWidth = 665;
 		this._intentResolverOptions = {
@@ -56,7 +53,6 @@ export class IntentResolverHelper {
 		intentPicker.src = intentResolverOptions.url;
 		intentPicker.style.height = "99%";
 		intentPicker.style.width = "100%";
-
 
 		// Append the iframe to the dialog
 		this._dialogElement.append(intentPicker);
@@ -87,47 +83,48 @@ export class IntentResolverHelper {
 		// the provider so we are using it as a way of determining the root (so it works with root hosting and
 		// subdirectory based hosting if a url is not provided)
 		// try {
-			let resolveAppSelection: (value: IntentResolverResponse) => void;
-			let rejectAppSelection: (reason?: string) => void;
-			if(this._dialogElement) {
-				this._dialogElement.showModal();
-			}
-			if(!this._dialogClient && this._dialogClient === null) {
-				const intentResolverChannel = "intent-resolver";
-				console.log("Connecting to picker", intentResolverChannel);
-				this._dialogClient = await fin.InterApplicationBus.Channel.connect(intentResolverChannel);
+		let resolveAppSelection: (value: IntentResolverResponse) => void;
+		let rejectAppSelection: (reason?: string) => void;
+		if (this._dialogElement) {
+			this._dialogElement.showModal();
+		}
+		if (!this._dialogClient && this._dialogClient === null) {
+			const intentResolverChannel = "intent-resolver";
+			console.log("Connecting to picker", intentResolverChannel);
+			this._dialogClient = await fin.InterApplicationBus.Channel.connect(intentResolverChannel);
 
-				// eslint-disable-next-line @typescript-eslint/await-thenable
-				await this._dialogClient.register("intent-resolver-response", async (payload, sender) => {
-					const response = payload as { intentResolverResponse?: IntentResolverResponse;
-						errorMessage?: string; };
-					this._logger.info("Received intent resolver message", payload);
-					if(response.errorMessage) {
-						rejectAppSelection(response.errorMessage);
-					} else if(response.intentResolverResponse === undefined) {
-						rejectAppSelection(ResolveError.ResolverUnavailable);
-					} else {
-						resolveAppSelection(response.intentResolverResponse);
-					}
-					if(this._dialogElement) {
-						this._dialogElement.close();
-					}
-				});
-			}
-			if(this._dialogElement && this._dialogClient) {
-				await this._dialogClient.dispatch("resolve-intent-request", {
-					customData: {
-									title: this._intentResolverOptions?.title,
-									apps: launchOptions.apps,
-									intent: launchOptions.intent,
-									intents: launchOptions.intents,
-									unregisteredAppId: this._unregisteredAppId
-								}
-				});
-			}
-			return new Promise((resolve, reject) => {
-				resolveAppSelection = resolve;
-				rejectAppSelection = reject;
+			// eslint-disable-next-line @typescript-eslint/await-thenable
+			await this._dialogClient.register("intent-resolver-response", async (payload, sender) => {
+				const response = payload as {
+					intentResolverResponse?: IntentResolverResponse;
+					errorMessage?: string;
+				};
+				this._logger.info("Received intent resolver message", payload);
+				if (response.errorMessage) {
+					rejectAppSelection(response.errorMessage);
+				} else if (response.intentResolverResponse === undefined) {
+					rejectAppSelection(ResolveError.ResolverUnavailable);
+				} else {
+					resolveAppSelection(response.intentResolverResponse);
+				}
+				if (this._dialogElement) {
+					this._dialogElement.close();
+				}
 			});
+		}
+		if (this._dialogElement && this._dialogClient) {
+			await this._dialogClient.dispatch("resolve-intent-request", {
+				customData: {
+					title: this._intentResolverOptions?.title,
+					apps: launchOptions.apps,
+					intent: launchOptions.intent,
+					intents: launchOptions.intents
+				}
+			});
+		}
+		return new Promise((resolve, reject) => {
+			resolveAppSelection = resolve;
+			rejectAppSelection = reject;
+		});
 	}
 }

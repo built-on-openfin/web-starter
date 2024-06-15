@@ -12,31 +12,18 @@ export class AppIdHelper {
 
 	private readonly _appMap = new Map<string, string>();
 
-	private readonly _unregisteredApp: PlatformApp | undefined;
-
 	private readonly _logger: Logger;
 
 	private readonly _getApp: (appId: string) => Promise<PlatformApp | undefined>;
 
-	private readonly _platformId: string;
-
 	/**
 	 * Provides helpful functions related to app ids.
 	 * @param getApp The function to use to get an app for validation.
-	 * @param platformId The platform id that represents the current platform.
 	 * @param logger The logger to use
-	 * @param unregisteredApp The app to use as a placeholder for unregistered apps.
 	 */
-	constructor(
-		getApp: (appId: string) => Promise<PlatformApp | undefined>,
-		platformId: string,
-		logger: Logger,
-		unregisteredApp?: PlatformApp
-	) {
-		this._unregisteredApp = unregisteredApp;
+	constructor(getApp: (appId: string) => Promise<PlatformApp | undefined>, logger: Logger) {
 		this._logger = logger;
 		this._getApp = getApp;
-		this._platformId = platformId;
 	}
 
 	/**
@@ -95,14 +82,6 @@ export class AppIdHelper {
 			this._validatedAppIds.push(appIdOrUrl);
 			this._appMap.set(appIdOrUrl, app.appId);
 			return app.appId;
-		} else if (!isEmpty(this._unregisteredApp)) {
-			this._logger.debug(
-				`Content that is not an app but runs within the platform is running and a placeholder app has been specified ${this._unregisteredApp?.appId}}.`,
-				appIdOrUrl
-			);
-			this._validatedAppIds.push(appIdOrUrl);
-			this._appMap.set(appIdOrUrl, this._unregisteredApp.appId);
-			return this._unregisteredApp.appId;
 		}
 		this._invalidAppIds.push(appIdOrUrl);
 		this._logger.warn(

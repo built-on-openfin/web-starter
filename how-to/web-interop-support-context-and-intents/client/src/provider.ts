@@ -70,48 +70,48 @@ async function init(): Promise<void> {
 	window.addEventListener(
 		"message",
 		(event) => {
-		  // Check the origin of the message
-		  // this is where you could check to see if the request is coming from domains registered in your app directory
-		  // alternatively this logic could be done in the interop broker when the connection is attempted. These are
-		  // just example origins we have put
-		  if (
-			event.origin !== "https://built-on-openfin.github.io" &&
-			!event.origin.startsWith("http://localhost:")
-		  ) {
-			console.warn(`Incoming request came from an untrusted domain: ${event.origin}`);
-			return;
-		  }
+			// Check the origin of the message
+			// this is where you could check to see if the request is coming from domains registered in your app directory
+			// alternatively this logic could be done in the interop broker when the connection is attempted. These are
+			// just example origins we have put
+			if (
+				event.origin !== "https://built-on-openfin.github.io" &&
+				!event.origin.startsWith("http://localhost:")
+			) {
+				console.warn(`Incoming request came from an untrusted domain: ${event.origin}`);
+				return;
+			}
 
-		  // The data sent with postMessage is stored in event.data
-		  const request = event.data;
-		  console.log(
-			`Incoming request coming from: ${event.origin}. Received request: ${JSON.stringify(request)}`
-		  );
-
-		  // this just our example namespace. You could create your own and decide what data to pass.
-		  const connectConfigContextType = "openfin.coreWeb.connectConfig";
-		  // ensure it is requesting connect details for core web
-		  if (request.type === connectConfigContextType) {
-			// send back the connect details required by the client
-			event.source?.postMessage(
-			  {
-				type: connectConfigContextType,
-				connectConfig: {
-				  options: {
-					brokerUrl: settings.platform.interop.brokerUrl,
-					interopConfig: {
-					  providerId: settings.platform.interop.providerId,
-					  currentContextGroup: settings.platform.interop.defaultContextGroup
-					}
-				  }
-				}
-			  },
-			  { targetOrigin: event.origin }
+			// The data sent with postMessage is stored in event.data
+			const request = event.data;
+			console.log(
+				`Incoming request coming from: ${event.origin}. Received request: ${JSON.stringify(request)}`
 			);
-		  }
+
+			// this just our example namespace. You could create your own and decide what data to pass.
+			const connectConfigContextType = "openfin.coreWeb.connectConfig";
+			// ensure it is requesting connect details for core web
+			if (request.type === connectConfigContextType) {
+				// send back the connect details required by the client
+				event.source?.postMessage(
+					{
+						type: connectConfigContextType,
+						connectConfig: {
+							options: {
+								brokerUrl: settings.platform.interop.brokerUrl,
+								interopConfig: {
+									providerId: settings.platform.interop.providerId,
+									currentContextGroup: settings.platform.interop.defaultContextGroup
+								}
+							}
+						}
+					},
+					{ targetOrigin: event.origin }
+				);
+			}
 		},
 		false
-	  );
+	);
 
 	if (fin) {
 		// Store the fin object in the window object for easy access.
