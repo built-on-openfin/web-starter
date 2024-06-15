@@ -31778,7 +31778,7 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
                 const index = this._layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
                 console.log(`[LM Override] Removing Layout ${id.layoutName}`);
                 console.log(`[LM Override] Found layout at index ${index}`);
-                await this.removeThisLayout(id.layoutName);
+                await this.removeThisLayout(id.layoutName, index);
             }
             /**
              * Returns the layout identity for the specified view identity.
@@ -31815,13 +31815,26 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
             /**
              * Removes this layout from the state and the DOM.
              * @param layoutName The name of the layout to remove.
+             * @param index The index of the layout that is being removed.
              */
-            async removeThisLayout(layoutName) {
+            async removeThisLayout(layoutName, index) {
                 // remove layout from state.
                 const layoutNameElement = document.querySelector(`#${layoutName}`);
                 if (layoutNameElement) {
                     layoutNameElement.remove();
                     await fin.Platform.Layout.destroy({ layoutName, uuid: fin.me.uuid, name: fin.me.name });
+                    this._layoutMapArray = this._layoutMapArray.filter((x) => x.layoutName !== layoutName);
+                    const nextLayoutName = this._layoutMapArray[index]?.layoutName ?? this._layoutMapArray[index - 1]?.layoutName;
+                    if (this._layoutSelector !== null) {
+                        for (let i = 0; i < this._layoutSelector.options.length; i++) {
+                            if (this._layoutSelector.options[i].value === layoutName) {
+                                this._layoutSelector.remove(i);
+                                break;
+                            }
+                        }
+                        this.bindLayoutSelector(nextLayoutName, false);
+                        await this.showLayout({ layoutName: nextLayoutName, uuid: fin.me.uuid, name: fin.me.name });
+                    }
                 }
             }
             /**
@@ -31858,7 +31871,7 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
                             const option = document.createElement("option");
                             option.value = layout.layoutName;
                             option.text = layout.layoutTitle ?? layout.layoutName;
-                            this._layoutSelector?.add(option);
+                            this._layoutSelector.add(option);
                         }
                     }
                     this._layoutSelector.value = layoutName;
@@ -33148,7 +33161,6 @@ var exports = __webpack_exports__;
   \********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.swapLayout = void 0;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const interop_override_1 = __webpack_require__(/*! ./platform/broker/interop-override */ "./client/src/platform/broker/interop-override.ts");
 const layout_override_1 = __webpack_require__(/*! ./platform/layout/layout-override */ "./client/src/platform/layout/layout-override.ts");
@@ -33157,34 +33169,23 @@ const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/
  * Attach listeners to elements.
  */
 async function attachListeners() {
-    const swapButton = document.querySelector("#swap-layouts");
+    const swapButton = document.querySelector("#delete-layout");
     swapButton?.addEventListener("click", async () => {
-        await swapLayout();
+        await deleteCurrentLayout();
     });
 }
 /**
- * Returns a layout from the settings with a provided name.
- * @returns The default layout from the settings.
+ * Delete the current layout.
  */
-async function swapLayout() {
-    // Get that order of created div ids from storage, or state, or wherever you want to save them.
-    const currentOrder = window.localStorage.getItem("order");
-    const layouts = currentOrder?.split(",");
-    // This is a simple swap between two, but you can do this anyway you like.
-    const firstLayout = document.querySelector(`#${layouts ? layouts[0] : null}`);
-    const secondLayout = document.querySelector(`#${layouts ? layouts[1] : null}`);
-    if (firstLayout && secondLayout) {
-        if (secondLayout.style.display === "block") {
-            firstLayout.style.display = "block";
-            secondLayout.style.display = "none";
-        }
-        else {
-            firstLayout.style.display = "none";
-            secondLayout.style.display = "block";
+async function deleteCurrentLayout() {
+    const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+    if (currentLayout) {
+        const selectedLayout = currentLayout.resolveLayoutIdentity();
+        if (selectedLayout) {
+            await currentLayout.removeLayout(selectedLayout);
         }
     }
 }
-exports.swapLayout = swapLayout;
 /**
  * Initializes the OpenFin Web Broker connection.
  */
