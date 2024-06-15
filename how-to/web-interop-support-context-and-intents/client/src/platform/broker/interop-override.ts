@@ -56,13 +56,12 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 			 */
 			constructor() {
 				super();
-				console.log("InteropOverride:Custom Broker Instantiated");
 				logger.info("Interop Broker Constructor applying settings.");
 				this._appIntentHelper = new AppIntentHelper(getApps, logger);
 				this._metadataKey = `_metadata_${randomUUID()}`;
 				this._intentResolverHelper = new IntentResolverHelper(
 					{
-						url: "http://localhost:6060/common/intents/instance-picker.html"
+						url: "http://localhost:6060/platform/intents/instance-picker.html"
 					},
 					logger
 				);
@@ -73,6 +72,17 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 					async (clientIdentity: OpenFin.ClientIdentity) => this._appIdHelper.lookupAppId(clientIdentity),
 					logger
 				);
+				// this is not required for interop/fdc3 support but provides a list of apps for clients that wish to use fdc3.open.
+				// fin.InterApplicationBus.Channel.create("app-service").then((channel) => {
+				// 	channel.register("get-apps", async (_, clientIdentity) => {
+				// 		logger.info("Get apps called", clientIdentity);
+				// 		const apps = await getApps();
+				// 		const appsMetaData = await getAppsMetaData(apps, async (appId: string) => []);
+				// 		return { customData: { apps: appsMetaData } };
+				// 	});
+				// 	return true;
+				// })
+				// .catch((error) => { logger.error("Error creating capture-api channel", error); });
 			}
 
 			/**

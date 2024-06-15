@@ -15,13 +15,8 @@ export interface Settings {
 			defaultContextGroup?: string;
 		};
 		layout: {
-			panels?: {
-				left?: {
-					frameId: string;
-					frameContainerId: string;
-					url: string;
-				};
-			};
+			addLayoutId: string;
+			deleteLayoutId: string;
 			layoutContainerId: string;
 			layoutSelectorId: string;
 			defaultLayout: PlatformLayoutSnapshot | string;

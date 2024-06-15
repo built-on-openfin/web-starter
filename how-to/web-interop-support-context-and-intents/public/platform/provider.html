@@ -23,24 +23,28 @@
 			<div class="row middle gap20">
 				<label for="layout-selector">Layout</label>
 				<select id="layout-selector">
-					<option selected="">Value 1</option>
-					<option>Value 2</option>
-					<option>Value 3</option>
-					<option>Value 4</option>
-					<option>Value 5</option>
 				</select>
+				<button type="button" id="add-layout" class="small" title="Add Layout" popovertarget="app-picker">
+				<img
+					src="../images/plus.svg"
+					alt="Add Layout"
+					height="20px"
+				/>
+				</button>
+				<button type="button" id="delete-layout" class="small" title="Delete Layout">
 				<img
 					src="../images/trash.svg"
 					alt="Delete Layout"
 					height="20px"
-					id="delete-layout"
-					title="Delete Layout"
-					style="cursor: pointer"
-				/>
+				/></button>
+				
 				<img src="../common/images/icon-blue.png" alt="OpenFin" height="40px" />
 			</div>
 		</header>
 		<main class="row fill gap10">
+			<div id="app-picker" popover style="padding: 0px; height: 600px; width: 600px;">
+				hi
+			  </div>
 			<div class="row fill" id="main-page">
 				<div id="layout_container" class="col fill"></div>
 			</div>

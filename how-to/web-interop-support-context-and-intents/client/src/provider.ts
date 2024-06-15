@@ -7,10 +7,27 @@ import { getDefaultLayout, getSettings } from "./platform/settings";
  * Attach listeners to elements.
  */
 async function attachListeners(): Promise<void> {
-	const swapButton = document.querySelector<HTMLImageElement>("#delete-layout");
-	swapButton?.addEventListener("click", async () => {
-		await deleteCurrentLayout();
-	});
+	// Get the required settings
+	const settings = await getSettings();
+	if(settings !== undefined) {
+		const layoutSelectorId = `#${settings.platform.layout.layoutSelectorId}`;
+		const deleteLayoutId = `#${settings.platform.layout.deleteLayoutId}`;
+		const deleteButton = document.querySelector<HTMLButtonElement>(deleteLayoutId);
+		const layoutSelector = document.querySelector<HTMLSelectElement>(layoutSelectorId);
+		if(deleteButton !== null && layoutSelector !== null) {
+			deleteButton?.addEventListener("click", async () => {
+				await deleteCurrentLayout();
+			});
+			// Create a MutationObserver to watch for changes in the child list of the select element
+			const observer = new MutationObserver(() => {
+			// Update the enabled state of the trash button based on the number of options
+			deleteButton.disabled = !(layoutSelector.options.length > 1);
+			});
+
+			// Start observing the select element with the configured parameters
+			observer.observe(layoutSelector, { childList: true });
+		}
+	}
 }
 
 /**
@@ -112,6 +129,7 @@ async function init(): Promise<void> {
 			settings.platform.layout.layoutContainerId,
 			settings.platform.layout.layoutSelectorId
 		);
+
 		const interopOverride = await getConstructorOverride();
 		const overrides = [interopOverride];
 		// You may now use the `fin` object to initialize the broker and the layout.
@@ -122,7 +140,7 @@ async function init(): Promise<void> {
 			layoutManagerOverride,
 			containerId: settings.platform.layout.layoutContainerId
 		});
-		// setup panels not that everything has been initialized
+		// setup listeners now that everything has been initialized
 		await attachListeners();
 	}
 }

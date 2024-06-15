@@ -22,6 +22,8 @@
 				"defaultContextGroup": "green"
 			},
 			"layout": {
+				"addLayoutId": "add-layout",
+				"deleteLayoutId": "delete-layout",
 				"layoutContainerId": "layout_container",
 				"layoutSelectorId": "layout-selector",
 				"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
