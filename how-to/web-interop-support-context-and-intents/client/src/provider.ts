@@ -7,30 +7,21 @@ import { getDefaultLayout, getSettings } from "./platform/settings";
  * Attach listeners to elements.
  */
 async function attachListeners(): Promise<void> {
-	const swapButton = document.querySelector<HTMLButtonElement>("#swap-layouts");
+	const swapButton = document.querySelector<HTMLImageElement>("#delete-layout");
 	swapButton?.addEventListener("click", async () => {
-		await swapLayout();
+		await deleteCurrentLayout();
 	});
 }
 
 /**
- * Returns a layout from the settings with a provided name.
- * @returns The default layout from the settings.
+ * Delete the current layout.
  */
-export async function swapLayout(): Promise<void> {
-	// Get that order of created div ids from storage, or state, or wherever you want to save them.
-	const currentOrder = window.localStorage.getItem("order");
-	const layouts = currentOrder?.split(",");
-	// This is a simple swap between two, but you can do this anyway you like.
-	const firstLayout = document.querySelector<HTMLElement>(`#${layouts ? layouts[0] : null}`);
-	const secondLayout = document.querySelector<HTMLElement>(`#${layouts ? layouts[1] : null}`);
-	if (firstLayout && secondLayout) {
-		if (secondLayout.style.display === "block") {
-			firstLayout.style.display = "block";
-			secondLayout.style.display = "none";
-		} else {
-			firstLayout.style.display = "none";
-			secondLayout.style.display = "block";
+async function deleteCurrentLayout(): Promise<void> {
+	const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+	if (currentLayout) {
+		const selectedLayout = currentLayout.resolveLayoutIdentity();
+		if (selectedLayout) {
+			await currentLayout.removeLayout(selectedLayout);
 		}
 	}
 }

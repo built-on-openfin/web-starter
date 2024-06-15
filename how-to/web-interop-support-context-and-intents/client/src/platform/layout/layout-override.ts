@@ -25,7 +25,7 @@ export function makeOverride(
 		 * This implementation is the fundamental override for Multiple Layouts in Web.
 		 */
 		return class LayoutManagerBasic extends Base implements LayoutManager {
-			private readonly _layoutMapArray: LayoutManagerItem[];
+			private _layoutMapArray: LayoutManagerItem[];
 
 			private readonly _layoutContainer: HTMLElement | null;
 
@@ -106,7 +106,7 @@ export function makeOverride(
 				const index = this._layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
 				console.log(`[LM Override] Removing Layout ${id.layoutName}`);
 				console.log(`[LM Override] Found layout at index ${index}`);
-				await this.removeThisLayout(id.layoutName);
+				await this.removeThisLayout(id.layoutName, index);
 			}
 
 			/**
@@ -148,13 +148,27 @@ export function makeOverride(
 			/**
 			 * Removes this layout from the state and the DOM.
 			 * @param layoutName The name of the layout to remove.
+			 * @param index The index of the layout that is being removed.
 			 */
-			private async removeThisLayout(layoutName: string): Promise<void> {
+			private async removeThisLayout(layoutName: string, index: number): Promise<void> {
 				// remove layout from state.
 				const layoutNameElement = document.querySelector<HTMLElement>(`#${layoutName}`);
 				if (layoutNameElement) {
 					layoutNameElement.remove();
 					await fin.Platform.Layout.destroy({ layoutName, uuid: fin.me.uuid, name: fin.me.name });
+					this._layoutMapArray = this._layoutMapArray.filter((x) => x.layoutName !== layoutName);
+					const nextLayoutName =
+						this._layoutMapArray[index]?.layoutName ?? this._layoutMapArray[index - 1]?.layoutName;
+					if (this._layoutSelector !== null) {
+						for (let i = 0; i < this._layoutSelector.options.length; i++) {
+							if (this._layoutSelector.options[i].value === layoutName) {
+								this._layoutSelector.remove(i);
+								break;
+							}
+						}
+						this.bindLayoutSelector(nextLayoutName, false);
+						await this.showLayout({ layoutName: nextLayoutName, uuid: fin.me.uuid, name: fin.me.name });
+					}
 				}
 			}
 
@@ -198,7 +212,7 @@ export function makeOverride(
 							const option = document.createElement("option");
 							option.value = layout.layoutName;
 							option.text = layout.layoutTitle ?? layout.layoutName;
-							this._layoutSelector?.add(option);
+							this._layoutSelector.add(option);
 						}
 					}
 					this._layoutSelector.value = layoutName;
