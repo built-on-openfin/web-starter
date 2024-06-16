@@ -29912,10 +29912,10 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ "./client/src/platform/api.ts":
-/*!************************************!*\
-  !*** ./client/src/platform/api.ts ***!
-  \************************************/
+/***/ "./client/src/content/api.ts":
+/*!***********************************!*\
+  !*** ./client/src/content/api.ts ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -29923,7 +29923,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.init = void 0;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
-const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
+const settings_1 = __webpack_require__(/*! ../platform/settings */ "./client/src/platform/settings.ts");
 /**
  * Initializes the OpenFin Web Broker connection.
  * @param inherit Should we inherit settings from the host (available in the OpenFin layout system) or use settings? Default is true.
@@ -30980,7 +30980,7 @@ var exports = __webpack_exports__;
   \********************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const api_1 = __webpack_require__(/*! ../platform/api */ "./client/src/platform/api.ts");
+const api_1 = __webpack_require__(/*! ./api */ "./client/src/content/api.ts");
 window.addEventListener("DOMContentLoaded", async () => {
     await (0, api_1.init)(true);
     await initializeDOM();

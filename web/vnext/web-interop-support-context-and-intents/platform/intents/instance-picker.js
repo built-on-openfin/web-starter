@@ -1,4 +1,4 @@
-import { createOptionEntry, setElementVisibility } from './helper.js';
+import { createOptionEntry, setElementVisibility } from '../util/helper.js';
 
 let launchBtn;
 let cancelSelectionBtn;

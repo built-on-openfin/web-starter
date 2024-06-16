@@ -29912,18 +29912,112 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ "./client/src/platform/apps.ts":
-/*!*************************************!*\
-  !*** ./client/src/platform/apps.ts ***!
-  \*************************************/
+/***/ "./client/src/platform/apps/app-resolver-helper.ts":
+/*!*********************************************************!*\
+  !*** ./client/src/platform/apps/app-resolver-helper.ts ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppResolverHelper = void 0;
+const apps_1 = __webpack_require__(/*! ./apps */ "./client/src/platform/apps/apps.ts");
+/**
+ * An App Resolver Used for resolving app selection.
+ */
+class AppResolverHelper {
+    /**
+     * Create an instance of the Intent Resolver Helper.
+     * @param appResolverOptions options for the helper
+     * @param logger the logger to use.
+     */
+    constructor(appResolverOptions, logger) {
+        this._dialogElement = null;
+        this._dialogClient = null;
+        this._defaultAppResolverHeight = 715;
+        this._defaultAppResolverWidth = 665;
+        this._appResolverOptions = {
+            height: this._defaultAppResolverHeight,
+            width: this._defaultAppResolverWidth,
+            ...appResolverOptions
+        };
+        this._logger = logger;
+        this._dialogElement = document.createElement("dialog");
+        this._dialogElement.id = "app-resolver-dialog";
+        this._dialogElement.style.height = `${this._appResolverOptions.height}px`;
+        this._dialogElement.style.width = `${this._appResolverOptions.width}px`;
+        this._dialogElement.style.padding = "0px";
+        this._dialogElement.style.backgroundColor = "var(--brand-background)";
+        // Create a new iframe element
+        const appPicker = document.createElement("iframe");
+        // Set the source of the iframe
+        appPicker.src = appResolverOptions.url;
+        appPicker.style.height = "99%";
+        appPicker.style.width = "100%";
+        // Append the iframe to the dialog
+        this._dialogElement.append(appPicker);
+        // Append the dialog to the body
+        document.body.append(this._dialogElement);
+    }
+    /**
+     * Launch the app resolver.
+     * @returns Nothing as it handles the display and hiding of the resolver.
+     */
+    async launchAppResolver() {
+        if (this._dialogElement) {
+            this._dialogElement.showModal();
+        }
+        if (!this._dialogClient && this._dialogClient === null) {
+            const appResolverChannel = "app-resolver";
+            console.log("Connecting to picker", appResolverChannel);
+            this._dialogClient = await fin.InterApplicationBus.Channel.connect(appResolverChannel);
+            // eslint-disable-next-line @typescript-eslint/await-thenable
+            await this._dialogClient.register("app-resolver-response", async (payload, sender) => {
+                const response = payload;
+                this._logger.info("Received app resolver message", payload);
+                if (response.errorMessage) {
+                    this._logger.error("There was an error with the loaded App Resolver", response.errorMessage);
+                }
+                else if (response.appResolverResponse === undefined) {
+                    this._logger.info("App Resolver response is undefined. No app was selected.");
+                }
+                else {
+                    this._logger.info("The following app was selected: ", response.appResolverResponse);
+                }
+                if (this._dialogElement) {
+                    this._dialogElement.close();
+                }
+            });
+        }
+        if (this._dialogElement && this._dialogClient) {
+            const apps = await (0, apps_1.getApps)();
+            await this._dialogClient.dispatch("resolve-app-request", {
+                customData: {
+                    title: this._appResolverOptions?.title,
+                    apps
+                }
+            });
+        }
+    }
+}
+exports.AppResolverHelper = AppResolverHelper;
+
+
+/***/ }),
+
+/***/ "./client/src/platform/apps/apps.ts":
+/*!******************************************!*\
+  !*** ./client/src/platform/apps/apps.ts ***!
+  \******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.bringAppToFront = exports.launch = exports.getApps = exports.getApp = void 0;
-const utils_1 = __webpack_require__(/*! ../utils */ "./client/src/utils.ts");
-const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
+const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+const settings_1 = __webpack_require__(/*! ../settings */ "./client/src/platform/settings.ts");
 let cachedApps;
 /**
  * The the app by its id.
@@ -29957,7 +30051,7 @@ async function getApps() {
 exports.getApps = getApps;
 /**
  * Launch an application in the way specified by its manifest type.
- * @param platformApp The application to launch.
+ * @param platformApp The application to launch or it's id.
  * @returns Identifiers specific to the type of application launched.
  */
 async function launch(platformApp) {
@@ -29966,7 +30060,17 @@ async function launch(platformApp) {
     // to return the identity until the addView api is available
     const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
     const layoutId = `tab-${(0, utils_1.randomUUID)()}`;
-    const appSnapshot = getAppLayout(platformApp, layoutId, `${platformApp.appId}/${(0, utils_1.randomUUID)()}`);
+    let appToLaunch;
+    if (typeof platformApp === "string") {
+        appToLaunch = await getApp(platformApp);
+    }
+    else {
+        appToLaunch = platformApp;
+    }
+    if (!appToLaunch) {
+        return undefined;
+    }
+    const appSnapshot = getAppLayout(appToLaunch, layoutId, `${appToLaunch.appId}/${(0, utils_1.randomUUID)()}`);
     await currentLayout?.applyLayoutSnapshot(appSnapshot);
     const layoutElement = await getLayoutElement(layoutId);
     if (layoutElement !== null) {
@@ -29975,7 +30079,7 @@ async function launch(platformApp) {
             const name = ofViewElement.getAttribute("of-name");
             const uuid = ofViewElement.getAttribute("of-uuid");
             if (name !== null && uuid !== null) {
-                return [{ name, uuid, appId: platformApp.appId }];
+                return [{ name, uuid, appId: appToLaunch.appId }];
             }
         }
     }
@@ -30856,6 +30960,7 @@ class IntentResolverHelper {
         };
         this._logger = logger;
         this._dialogElement = document.createElement("dialog");
+        this._dialogElement.id = "intent-resolver-dialog";
         this._dialogElement.style.height = `${this._intentResolverOptions.height}px`;
         this._dialogElement.style.width = `${this._intentResolverOptions.width}px`;
         this._dialogElement.style.padding = "0px";
@@ -30945,7 +31050,7 @@ exports.IntentResolverHelper = IntentResolverHelper;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getConstructorOverride = void 0;
 const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
-const apps_1 = __webpack_require__(/*! ../apps */ "./client/src/platform/apps.ts");
+const apps_1 = __webpack_require__(/*! ../apps/apps */ "./client/src/platform/apps/apps.ts");
 const app_id_helper_1 = __webpack_require__(/*! ./app-id-helper */ "./client/src/platform/broker/app-id-helper.ts");
 const app_intent_helper_1 = __webpack_require__(/*! ./app-intent-helper */ "./client/src/platform/broker/app-intent-helper.ts");
 const app_meta_data_helper_1 = __webpack_require__(/*! ./app-meta-data-helper */ "./client/src/platform/broker/app-meta-data-helper.ts");
@@ -30954,9 +31059,10 @@ const fdc3_errors_1 = __webpack_require__(/*! ./fdc3-errors */ "./client/src/pla
 const intent_resolver_helper_1 = __webpack_require__(/*! ./intent-resolver-helper */ "./client/src/platform/broker/intent-resolver-helper.ts");
 /**
  * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
+ * @param options The options for the platform interop broker.
  * @returns The override constructor to be used in an array.
  */
-async function constructorOverride() {
+async function constructorOverride(options) {
     const logger = console;
     return (Base) => 
     /**
@@ -30968,14 +31074,13 @@ async function constructorOverride() {
          */
         constructor() {
             super();
-            console.log("InteropOverride:Custom Broker Instantiated");
             logger.info("Interop Broker Constructor applying settings.");
             this._appIntentHelper = new app_intent_helper_1.AppIntentHelper(apps_1.getApps, logger);
             this._metadataKey = `_metadata_${(0, utils_1.randomUUID)()}`;
-            this._intentResolverHelper = new intent_resolver_helper_1.IntentResolverHelper({
-                url: "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/common/intents/instance-picker.html"
-            }, logger);
-            this._openOptions = { connectionTimeout: 5000 };
+            if (options.intentResolver) {
+                this._intentResolverHelper = new intent_resolver_helper_1.IntentResolverHelper(options.intentResolver, logger);
+            }
+            this._openOptions = options?.openOptions;
             this._appIdHelper = new app_id_helper_1.AppIdHelper(apps_1.getApp, logger);
             this._clientRegistrationHelper = new client_registration_helper_1.ClientRegistrationHelper(async (clientIdentity) => this._appIdHelper.lookupAppId(clientIdentity), logger);
         }
@@ -31285,14 +31390,17 @@ async function constructorOverride() {
                 }
                 if (!(0, utils_1.isEmpty)(platformIdentities) && platformIdentities?.length > 0) {
                     appId = platformIdentities[0].appId;
-                    const openTimeout = this._openOptions?.connectionTimeout;
-                    // if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-                    instanceId = await this._clientRegistrationHelper.onConnectionClientReady(platformIdentities[0], openTimeout);
                     if (platformIdentities.length > 1) {
                         logger.warn("Open can only return one app and instance id and multiple instances were launched as a result. Returning the first instance. Returned instances: ", platformIdentities);
                     }
                     if (!(0, utils_1.isEmpty)(fdc3OpenOptions?.context)) {
-                        const contextTimeout = 5000;
+                        // an app might be a standard url that doesn't use the OpenFin fin api and as we are running in a browser APIs are not
+                        // injected into the DOM. As a result it might not connect to the broker so we should only get the instance id if it is
+                        // linked to a context request.
+                        const openTimeout = this._openOptions?.connectionTimeout ?? 15000;
+                        // if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
+                        instanceId = await this._clientRegistrationHelper.onConnectionClientReady(platformIdentities[0], openTimeout);
+                        const contextTimeout = this._openOptions?.contextTimeout ?? 15000;
                         const contextTypeName = fdc3OpenOptions.context.type;
                         // if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
                         const clientReadyInstanceId = await this._clientRegistrationHelper.onContextClientReady(platformIdentities[0], contextTypeName, contextTimeout);
@@ -31597,7 +31705,7 @@ async function constructorOverride() {
                     throw new Error(fdc3_errors_1.RESOLVE_ERROR.IntentDeliveryFailed);
                 }
                 if (platformIdentities.length === 1) {
-                    const intentTimeout = 5000;
+                    const intentTimeout = options?.intentOptions?.intentTimeout ?? 15000;
                     // if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
                     try {
                         instanceId = await this._clientRegistrationHelper.onIntentClientReady(platformIdentities[0], intent.name, intentTimeout);
@@ -31673,10 +31781,11 @@ async function constructorOverride() {
 }
 /**
  * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
+ * @param options The options for the broker.
  * @returns The override constructor to be used in an array.
  */
-async function getConstructorOverride() {
-    return constructorOverride();
+async function getConstructorOverride(options) {
+    return constructorOverride(options);
 }
 exports.getConstructorOverride = getConstructorOverride;
 
@@ -33162,6 +33271,7 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
+const app_resolver_helper_1 = __webpack_require__(/*! ./platform/apps/app-resolver-helper */ "./client/src/platform/apps/app-resolver-helper.ts");
 const interop_override_1 = __webpack_require__(/*! ./platform/broker/interop-override */ "./client/src/platform/broker/interop-override.ts");
 const layout_override_1 = __webpack_require__(/*! ./platform/layout/layout-override */ "./client/src/platform/layout/layout-override.ts");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
@@ -33169,10 +33279,34 @@ const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/
  * Attach listeners to elements.
  */
 async function attachListeners() {
-    const swapButton = document.querySelector("#delete-layout");
-    swapButton?.addEventListener("click", async () => {
-        await deleteCurrentLayout();
-    });
+    // Get the required settings
+    const settings = await (0, settings_1.getSettings)();
+    if (settings !== undefined) {
+        const layoutSelectorId = `#${settings.platform.layout.layoutSelectorId}`;
+        const deleteLayoutId = `#${settings.platform.layout.deleteLayoutId}`;
+        const addLayoutId = `#${settings.platform.layout.addLayoutId}`;
+        const addLayoutButton = document.querySelector(addLayoutId);
+        const deleteButton = document.querySelector(deleteLayoutId);
+        const layoutSelector = document.querySelector(layoutSelectorId);
+        if (deleteButton !== null && layoutSelector !== null) {
+            deleteButton?.addEventListener("click", async () => {
+                await deleteCurrentLayout();
+            });
+            // Create a MutationObserver to watch for changes in the child list of the select element
+            const observer = new MutationObserver(() => {
+                // Update the enabled state of the trash button based on the number of options
+                deleteButton.disabled = !(layoutSelector.options.length > 1);
+            });
+            // Start observing the select element with the configured parameters
+            observer.observe(layoutSelector, { childList: true });
+        }
+        if (addLayoutButton !== null) {
+            const addResolverHelper = new app_resolver_helper_1.AppResolverHelper(settings.platform.app.appResolver, console);
+            addLayoutButton?.addEventListener("click", async () => {
+                await addResolverHelper.launchAppResolver();
+            });
+        }
+    }
 }
 /**
  * Delete the current layout.
@@ -33213,6 +33347,8 @@ async function init() {
         connectionInheritance: "enabled",
         platform: { layoutSnapshot }
     });
+    // This allows iframes that are not in the layout to request the connect details if they do not have them
+    // available to them.
     window.addEventListener("message", (event) => {
         // Check the origin of the message
         // this is where you could check to see if the request is coming from domains registered in your app directory
@@ -33249,7 +33385,7 @@ async function init() {
         // Store the fin object in the window object for easy access.
         window.fin = fin;
         const layoutManagerOverride = (0, layout_override_1.makeOverride)(fin, settings.platform.layout.layoutContainerId, settings.platform.layout.layoutSelectorId);
-        const interopOverride = await (0, interop_override_1.getConstructorOverride)();
+        const interopOverride = await (0, interop_override_1.getConstructorOverride)(settings.platform.interop.overrideOptions);
         const overrides = [interopOverride];
         // You may now use the `fin` object to initialize the broker and the layout.
         await fin.Interop.init(settings.platform.interop.providerId, overrides);
@@ -33259,7 +33395,7 @@ async function init() {
             layoutManagerOverride,
             containerId: settings.platform.layout.layoutContainerId
         });
-        // setup panels not that everything has been initialized
+        // setup listeners now that everything has been initialized
         await attachListeners();
     }
 }

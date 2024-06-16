@@ -19,15 +19,27 @@
 				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/js/shared-worker.bundle.js",
 				"brokerUrl": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/platform/iframe-broker.html",
 				"providerId": "web-interop",
-				"defaultContextGroup": "green"
+				"defaultContextGroup": "green",
+				"overrideOptions": {
+					"intentResolver": {
+						"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/platform/intents/instance-picker.html",
+						"title": "Intent Resolver"
+					}
+				}
 			},
 			"layout": {
+				"addLayoutId": "add-layout",
+				"deleteLayoutId": "delete-layout",
 				"layoutContainerId": "layout_container",
 				"layoutSelectorId": "layout-selector",
 				"defaultLayout": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/layouts/default.layout.fin.json"
 			},
 			"app": {
-				"directory": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/apps.json"
+				"directory": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/apps.json",
+				"appResolver": {
+					"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/platform/apps/app-picker.html",
+					"title": "App Resolver"
+				}
 			}
 		}
 	}
