@@ -8,7 +8,7 @@ let appSummaryContainer;
 
 let apps;
 let appLookup = {};
-let appService;
+let appResolverService;
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (window.fdc3 !== undefined) {
@@ -35,34 +35,51 @@ async function init() {
 	setElementVisibility(appSummaryContainer, false);
 	launchBtn = document.querySelector('#launch');
 	cancelSelectionBtn.addEventListener('click', async () => {
+		if (appResolverService !== undefined && appResolverService !== null) {
+			// no app selection was made.
+			await appResolverService.publish('app-resolver-response', {});
+		}
 	});
 
 	launchBtn.addEventListener('click', async () => {
 		const appId = appsContainer.value;
-		if(appId !== undefined && appId !== null && appId !== '') {
-			window.fdc3.open({ appId });
+		if (
+			appId !== undefined &&
+			appId !== null &&
+			appId !== '' &&
+			appResolverService !== undefined &&
+			appResolverService !== null
+		) {
+			await appResolverService.publish('app-resolver-response', {
+				appResolverResponse: { appId }
+			});
+			await window.fdc3.open({ appId });
 		}
 	});
 
-	const appServiceId = 'app-service';
-	console.log('App service initialized', appServiceId);
-	// appService = await window.fin.InterApplicationBus.Channel.connect(appServiceId);
-	console.log('Requesting apps...');
-	//await appService.dispatch('get-apps', async (data) => {
+	const appResolverChannel = 'app-resolver';
+	console.log('App picker initialized', appResolverChannel);
+	appResolverService = await window.fin.InterApplicationBus.Channel.create(appResolverChannel);
+	console.log('Registering resolve-app-request handler...');
+	await appResolverService.register('resolve-app-request', async (data) => {
 		// reset everything
 		apps = undefined;
 		appLookup = {};
 		if (data.customData !== undefined) {
 			apps = data.customData.apps;
 		}
+		if (data.customData.title !== undefined) {
+			const title = document.querySelector('#title');
+			title.textContent = data.customData.title;
+		}
 
 		if (Array.isArray(apps)) {
 			for (const app of apps) {
 				appLookup[app.appId] = app;
 			}
-			await setupAppView(apps, intent.name);
+			await setupAppView(apps);
 		}
-	//});
+	});
 	console.log('App picker initialized');
 }
 
@@ -71,13 +88,12 @@ async function init() {
  * @param applications The application to use.
  */
 async function setupAppView(applications) {
-	setElementVisibility(appInstanceSelectionContainer, false);
 	setElementVisibility(appSummaryContainer, false);
 	appsContainer.options.length = 0;
 	if (Array.isArray(applications) && applications.length > 0) {
 		for (let i = 0; i < applications.length; i++) {
-				const appEntry = createOptionEntry(applications[i].title, applications[i].appId, i === 0);
-				appsContainer.append(appEntry);
+			const appEntry = createOptionEntry(applications[i].title, applications[i].appId, i === 0);
+			appsContainer.append(appEntry);
 		}
 		setElementVisibility(appSelectionContainer, true);
 		await onAppSelection(applications[0].appId);

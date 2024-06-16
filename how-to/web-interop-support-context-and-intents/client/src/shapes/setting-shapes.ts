@@ -1,3 +1,5 @@
+import type { AppResolverOptions } from "./app-shapes";
+import type { PlatformInteropBrokerOptions } from "./interopbroker-shapes";
 import type { PlatformLayoutSnapshot } from "./layout-shapes";
 
 /**
@@ -13,6 +15,7 @@ export interface Settings {
 			brokerUrl: string;
 			providerId: string;
 			defaultContextGroup?: string;
+			overrideOptions: PlatformInteropBrokerOptions;
 		};
 		layout: {
 			addLayoutId: string;
@@ -23,6 +26,7 @@ export interface Settings {
 		};
 		app: {
 			directory: string;
+			appResolver: AppResolverOptions;
 		};
 	};
 }

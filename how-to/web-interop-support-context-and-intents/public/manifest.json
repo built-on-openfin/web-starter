@@ -19,7 +19,13 @@
 				"sharedWorkerUrl": "http://localhost:6060/js/shared-worker.bundle.js",
 				"brokerUrl": "http://localhost:6060/platform/iframe-broker.html",
 				"providerId": "web-interop",
-				"defaultContextGroup": "green"
+				"defaultContextGroup": "green",
+				"overrideOptions": {
+					"intentResolver": {
+						"url": "http://localhost:6060/platform/intents/instance-picker.html",
+						"title": "Intent Resolver"
+					}
+				}
 			},
 			"layout": {
 				"addLayoutId": "add-layout",
@@ -29,7 +35,11 @@
 				"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
 			},
 			"app": {
-				"directory": "http://localhost:6060/apps.json"
+				"directory": "http://localhost:6060/apps.json",
+				"appResolver": {
+					"url": "http://localhost:6060/platform/apps/app-picker.html",
+					"title": "App Resolver"
+				}
 			}
 		}
 	}

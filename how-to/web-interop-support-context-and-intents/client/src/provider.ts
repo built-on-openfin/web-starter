@@ -1,4 +1,5 @@
 import { connect } from "@openfin/core-web";
+import { AppResolverHelper } from "./platform/apps/app-resolver-helper";
 import { getConstructorOverride } from "./platform/broker/interop-override";
 import { makeOverride } from "./platform/layout/layout-override";
 import { getDefaultLayout, getSettings } from "./platform/settings";
@@ -9,23 +10,31 @@ import { getDefaultLayout, getSettings } from "./platform/settings";
 async function attachListeners(): Promise<void> {
 	// Get the required settings
 	const settings = await getSettings();
-	if(settings !== undefined) {
+	if (settings !== undefined) {
 		const layoutSelectorId = `#${settings.platform.layout.layoutSelectorId}`;
 		const deleteLayoutId = `#${settings.platform.layout.deleteLayoutId}`;
+		const addLayoutId = `#${settings.platform.layout.addLayoutId}`;
+		const addLayoutButton = document.querySelector<HTMLButtonElement>(addLayoutId);
 		const deleteButton = document.querySelector<HTMLButtonElement>(deleteLayoutId);
 		const layoutSelector = document.querySelector<HTMLSelectElement>(layoutSelectorId);
-		if(deleteButton !== null && layoutSelector !== null) {
+		if (deleteButton !== null && layoutSelector !== null) {
 			deleteButton?.addEventListener("click", async () => {
 				await deleteCurrentLayout();
 			});
 			// Create a MutationObserver to watch for changes in the child list of the select element
 			const observer = new MutationObserver(() => {
-			// Update the enabled state of the trash button based on the number of options
-			deleteButton.disabled = !(layoutSelector.options.length > 1);
+				// Update the enabled state of the trash button based on the number of options
+				deleteButton.disabled = !(layoutSelector.options.length > 1);
 			});
 
 			// Start observing the select element with the configured parameters
 			observer.observe(layoutSelector, { childList: true });
+		}
+		if (addLayoutButton !== null) {
+			const addResolverHelper = new AppResolverHelper(settings.platform.app.appResolver, console);
+			addLayoutButton?.addEventListener("click", async () => {
+				await addResolverHelper.launchAppResolver();
+			});
 		}
 	}
 }
@@ -75,6 +84,8 @@ async function init(): Promise<void> {
 		platform: { layoutSnapshot }
 	});
 
+	// This allows iframes that are not in the layout to request the connect details if they do not have them
+	// available to them.
 	window.addEventListener(
 		"message",
 		(event) => {
@@ -130,7 +141,7 @@ async function init(): Promise<void> {
 			settings.platform.layout.layoutSelectorId
 		);
 
-		const interopOverride = await getConstructorOverride();
+		const interopOverride = await getConstructorOverride(settings.platform.interop.overrideOptions);
 		const overrides = [interopOverride];
 		// You may now use the `fin` object to initialize the broker and the layout.
 		await fin.Interop.init(settings.platform.interop.providerId, overrides);

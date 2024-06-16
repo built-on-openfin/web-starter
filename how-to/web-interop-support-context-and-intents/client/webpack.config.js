@@ -52,20 +52,6 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/content/fdc3-panel.ts',
-		devtool: 'source-map',
-		module: {
-			rules
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
-		},
-		output: {
-			filename: 'fdc3-panel.bundle.js',
-			path: path.resolve(__dirname, '..', 'public', 'js')
-		}
-	},
-	{
 		entry: './client/src/content/interop-view.ts',
 		devtool: 'source-map',
 		module: {

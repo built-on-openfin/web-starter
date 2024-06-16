@@ -17,10 +17,11 @@ import type {
 	IntentRegistrationPayload,
 	IntentResolverResponse,
 	IntentTargetMetaData,
-	OpenOptions
+	OpenOptions,
+	PlatformInteropBrokerOptions
 } from "../../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue, randomUUID } from "../../utils";
-import { bringAppToFront, getApp, getApps, launch } from "../apps";
+import { bringAppToFront, getApp, getApps, launch } from "../apps/apps";
 import { AppIdHelper } from "./app-id-helper";
 import { AppIntentHelper } from "./app-intent-helper";
 import { getAppsMetaData, mapToAppMetaData } from "./app-meta-data-helper";
@@ -30,9 +31,12 @@ import { IntentResolverHelper } from "./intent-resolver-helper";
 
 /**
  * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
+ * @param options The options for the platform interop broker.
  * @returns The override constructor to be used in an array.
  */
-async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
+async function constructorOverride(
+	options: PlatformInteropBrokerOptions
+): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
 	const logger = console;
 	return (Base: OpenFin.Constructor<OpenFin.InteropBroker>) =>
 		/**
@@ -59,30 +63,16 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 				logger.info("Interop Broker Constructor applying settings.");
 				this._appIntentHelper = new AppIntentHelper(getApps, logger);
 				this._metadataKey = `_metadata_${randomUUID()}`;
-				this._intentResolverHelper = new IntentResolverHelper(
-					{
-						url: "http://localhost:6060/platform/intents/instance-picker.html"
-					},
-					logger
-				);
+				if (options.intentResolver) {
+					this._intentResolverHelper = new IntentResolverHelper(options.intentResolver, logger);
+				}
 
-				this._openOptions = { connectionTimeout: 5000 };
+				this._openOptions = options?.openOptions;
 				this._appIdHelper = new AppIdHelper(getApp, logger);
 				this._clientRegistrationHelper = new ClientRegistrationHelper(
 					async (clientIdentity: OpenFin.ClientIdentity) => this._appIdHelper.lookupAppId(clientIdentity),
 					logger
 				);
-				// this is not required for interop/fdc3 support but provides a list of apps for clients that wish to use fdc3.open.
-				// fin.InterApplicationBus.Channel.create("app-service").then((channel) => {
-				// 	channel.register("get-apps", async (_, clientIdentity) => {
-				// 		logger.info("Get apps called", clientIdentity);
-				// 		const apps = await getApps();
-				// 		const appsMetaData = await getAppsMetaData(apps, async (appId: string) => []);
-				// 		return { customData: { apps: appsMetaData } };
-				// 	});
-				// 	return true;
-				// })
-				// .catch((error) => { logger.error("Error creating capture-api channel", error); });
 			}
 
 			/**
@@ -525,12 +515,6 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 
 					if (!isEmpty(platformIdentities) && platformIdentities?.length > 0) {
 						appId = platformIdentities[0].appId;
-						const openTimeout: number | undefined = this._openOptions?.connectionTimeout;
-						// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
-						instanceId = await this._clientRegistrationHelper.onConnectionClientReady(
-							platformIdentities[0],
-							openTimeout
-						);
 						if (platformIdentities.length > 1) {
 							logger.warn(
 								"Open can only return one app and instance id and multiple instances were launched as a result. Returning the first instance. Returned instances: ",
@@ -538,7 +522,16 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 							);
 						}
 						if (!isEmpty(fdc3OpenOptions?.context)) {
-							const contextTimeout: number | undefined = 5000;
+							// an app might be a standard url that doesn't use the OpenFin fin api and as we are running in a browser APIs are not
+							// injected into the DOM. As a result it might not connect to the broker so we should only get the instance id if it is
+							// linked to a context request.
+							const openTimeout: number | undefined = this._openOptions?.connectionTimeout ?? 15000;
+							// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
+							instanceId = await this._clientRegistrationHelper.onConnectionClientReady(
+								platformIdentities[0],
+								openTimeout
+							);
+							const contextTimeout: number | undefined = this._openOptions?.contextTimeout ?? 15000;
 							const contextTypeName = fdc3OpenOptions.context.type;
 							// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 							const clientReadyInstanceId = await this._clientRegistrationHelper.onContextClientReady(
@@ -954,7 +947,7 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 						throw new Error(ResolveError.IntentDeliveryFailed);
 					}
 					if (platformIdentities.length === 1) {
-						const intentTimeout: number | undefined = 5000;
+						const intentTimeout: number | undefined = options?.intentOptions?.intentTimeout ?? 15000;
 						// if we have a snapshot and multiple identities we will not wait as not all of them might not support intents.
 						try {
 							instanceId = await this._clientRegistrationHelper.onIntentClientReady(
@@ -1053,8 +1046,11 @@ async function constructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFi
 
 /**
  * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).
+ * @param options The options for the broker.
  * @returns The override constructor to be used in an array.
  */
-export async function getConstructorOverride(): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
-	return constructorOverride();
+export async function getConstructorOverride(
+	options: PlatformInteropBrokerOptions
+): Promise<OpenFin.ConstructorOverride<OpenFin.InteropBroker>> {
+	return constructorOverride(options);
 }

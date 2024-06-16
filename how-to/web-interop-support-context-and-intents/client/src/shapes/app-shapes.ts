@@ -379,3 +379,43 @@ export interface AppsForIntent {
  * An identifier for an application on a platform.
  */
 export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
+
+/**
+ * The response from the app resolver.
+ */
+export interface AppResolverResponse {
+	/**
+	 * The appId that was selected. Undefined if no selection was made and the action was cancelled.
+	 */
+	appId?: string;
+
+	/**
+	 * The instance that was selected.
+	 */
+	instanceId?: string;
+}
+
+/**
+ * App resolver options.
+ */
+export interface AppResolverOptions {
+	/**
+	 * The url of the html page that has the app picker
+	 */
+	url: string;
+
+	/**
+	 * the height you wish the content container to be
+	 */
+	height?: number;
+
+	/**
+	 * the width you wish the content container to be
+	 */
+	width?: number;
+
+	/**
+	 * A suggested title for the app picker/resolver ui
+	 */
+	title?: string;
+}

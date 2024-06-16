@@ -144,12 +144,12 @@ export interface IntentResolverOptions {
 	url: string;
 
 	/**
-	 * the height you wish the window to be
+	 * the height you wish the content container to be
 	 */
 	height?: number;
 
 	/**
-	 * the width you wish the window to be
+	 * the width you wish the content container to be
 	 */
 	width?: number;
 
@@ -177,4 +177,36 @@ export interface OpenOptions {
 	 * is 15000 (15 seconds).
 	 */
 	connectionTimeout?: number;
+}
+
+/**
+ * Option for the intent.
+ */
+export interface IntentOptions {
+	/**
+	 * How long should the broker wait after launching a view/window for it to register an intent handler. The default
+	 * is 15000 (15 seconds)
+	 */
+	intentTimeout?: number;
+}
+
+/**
+ * Options for the platform interop broker.
+ */
+export interface PlatformInteropBrokerOptions {
+	/**
+	 * Intent Resolver configuration if you wish to support intents. It needs to support the functions required by the
+	 * platform
+	 */
+	intentResolver?: IntentResolverOptions;
+
+	/**
+	 * Options related to the way this platform supports intents
+	 */
+	intentOptions?: IntentOptions;
+
+	/**
+	 * When fdc3.open is used what settings should be applied?
+	 */
+	openOptions?: OpenOptions;
 }

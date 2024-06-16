@@ -42,6 +42,7 @@ export class IntentResolverHelper {
 		};
 		this._logger = logger;
 		this._dialogElement = document.createElement("dialog");
+		this._dialogElement.id = "intent-resolver-dialog";
 		this._dialogElement.style.height = `${this._intentResolverOptions.height}px`;
 		this._dialogElement.style.width = `${this._intentResolverOptions.width}px`;
 		this._dialogElement.style.padding = "0px";

@@ -1,5 +1,5 @@
 import type { Context } from "@finos/fdc3";
-import { init } from "../platform/api";
+import { init } from "./api";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	await init(true);

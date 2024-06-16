@@ -1,7 +1,7 @@
-import type { PlatformApp, PlatformAppIdentifier } from "../shapes/app-shapes";
-import type { PlatformLayoutSnapshot } from "../shapes/layout-shapes";
-import { isEmpty, randomUUID } from "../utils";
-import { getSettings } from "./settings";
+import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
+import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
+import { isEmpty, randomUUID } from "../../utils";
+import { getSettings } from "../settings";
 
 let cachedApps: PlatformApp[] | undefined;
 
@@ -39,16 +39,27 @@ export async function getApps(): Promise<PlatformApp[]> {
 
 /**
  * Launch an application in the way specified by its manifest type.
- * @param platformApp The application to launch.
+ * @param platformApp The application to launch or it's id.
  * @returns Identifiers specific to the type of application launched.
  */
-export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdentifier[] | undefined> {
+export async function launch(
+	platformApp: PlatformApp | string
+): Promise<PlatformAppIdentifier[] | undefined> {
 	// until we have an ability to addViews to a layout we will add a new layout for each app
 	// we are currently using the dom to find the of-view to get the name of the view in order
 	// to return the identity until the addView api is available
 	const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
 	const layoutId = `tab-${randomUUID()}`;
-	const appSnapshot = getAppLayout(platformApp, layoutId, `${platformApp.appId}/${randomUUID()}`);
+	let appToLaunch: PlatformApp | undefined;
+	if (typeof platformApp === "string") {
+		appToLaunch = await getApp(platformApp);
+	} else {
+		appToLaunch = platformApp;
+	}
+	if (!appToLaunch) {
+		return undefined;
+	}
+	const appSnapshot = getAppLayout(appToLaunch, layoutId, `${appToLaunch.appId}/${randomUUID()}`);
 	await currentLayout?.applyLayoutSnapshot(appSnapshot);
 	const layoutElement = await getLayoutElement(layoutId);
 	if (layoutElement !== null) {
@@ -57,7 +68,7 @@ export async function launch(platformApp: PlatformApp): Promise<PlatformAppIdent
 			const name = ofViewElement.getAttribute("of-name");
 			const uuid = ofViewElement.getAttribute("of-uuid");
 			if (name !== null && uuid !== null) {
-				return [{ name, uuid, appId: platformApp.appId }];
+				return [{ name, uuid, appId: appToLaunch.appId }];
 			}
 		}
 	}
