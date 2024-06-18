@@ -17,9 +17,16 @@ export async function getSettings(): Promise<Settings | undefined> {
 		);
 		return;
 	}
-	const settingsEndpoint = settings.endpointProvider.endpoints.find((endpoint) => endpoint.id === "platform-settings");
+	const settingsEndpoint = settings.endpointProvider.endpoints.find(
+		(endpoint) => endpoint.id === "platform-settings"
+	);
 
-	if(settingsEndpoint === undefined || settingsEndpoint.type !== "fetch" || settingsEndpoint.options.method !== "GET" || settingsEndpoint.options.url === undefined) {
+	if (
+		settingsEndpoint === undefined ||
+		settingsEndpoint.type !== "fetch" ||
+		settingsEndpoint.options.method !== "GET" ||
+		settingsEndpoint.options.url === undefined
+	) {
 		console.error(
 			"Unable to run the example as settings are required and we fetch them from the endpoint defined with the id: 'platform-settings' in the manifest. It needs to be of type fetch, performing a GET and it must have a url defined."
 		);
@@ -103,5 +110,5 @@ function getSavedSettingsId(): string {
 	const env = urlParams.get("env");
 
 	const settingsKey = env ? `${env}-settings` : "settings";
-    return settingsKey;
+	return settingsKey;
 }

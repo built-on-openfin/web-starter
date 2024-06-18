@@ -28,20 +28,14 @@ export async function getApps(): Promise<PlatformApp[]> {
 	}
 	const settings = await getSettings();
 	if (Array.isArray(settings?.platform?.app?.directory)) {
-        // Fetch data from all URLs concurrently
-        const responses = await Promise.all(
-            settings.platform.app.directory.map(async (url) => fetch(url))
-        );
-        // Parse the JSON from all responses
-        const appDirectories = await Promise.all(
-            responses.map(async (response) => response.json())
-        );
-        // Combine all applications into a single array
-        cachedApps = appDirectories.flatMap(
-            (appDirectory) => appDirectory.applications
-        );
-        return cachedApps;
-    }
+		// Fetch data from all URLs concurrently
+		const responses = await Promise.all(settings.platform.app.directory.map(async (url) => fetch(url)));
+		// Parse the JSON from all responses
+		const appDirectories = await Promise.all(responses.map(async (response) => response.json()));
+		// Combine all applications into a single array
+		cachedApps = appDirectories.flatMap((appDirectory) => appDirectory.applications);
+		return cachedApps;
+	}
 	cachedApps = [];
 	return cachedApps;
 }

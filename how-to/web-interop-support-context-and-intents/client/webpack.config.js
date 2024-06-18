@@ -66,6 +66,20 @@ module.exports = [
 		}
 	},
 	{
+		entry: './client/src/content/fdc3-intent-view.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'fdc3-intent-view.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
 		entry: './client/src/content/interop-view.ts',
 		devtool: 'source-map',
 		module: {
@@ -76,6 +90,20 @@ module.exports = [
 		},
 		output: {
 			filename: 'interop-view.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
+		entry: './client/src/content/interop-intent-view.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'interop-intent-view.bundle.js',
 			path: path.resolve(__dirname, '..', 'public', 'js')
 		}
 	}

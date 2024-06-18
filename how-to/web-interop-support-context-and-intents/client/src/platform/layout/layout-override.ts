@@ -62,7 +62,7 @@ export function makeOverride(
 					layoutSelected: this._selectedLayout
 				};
 				for (const layout of this._layoutMapArray) {
-					if(layout.layoutTitle !== undefined) {
+					if (layout.layoutTitle !== undefined) {
 						platformLayoutSnapshot.layoutTitles[layout.layoutName] = layout.layoutTitle;
 					}
 				}
@@ -78,8 +78,10 @@ export function makeOverride(
 				if (this._layoutContainer !== null && this._layoutContainer !== undefined) {
 					const platformLayoutSnapshot = snapshot as PlatformLayoutSnapshot;
 					for (const [key, value] of Object.entries(snapshot.layouts)) {
-						const layoutTitle = platformLayoutSnapshot?.layoutTitles === undefined
-						? undefined : platformLayoutSnapshot.layoutTitles[key];
+						const layoutTitle =
+							platformLayoutSnapshot?.layoutTitles === undefined
+								? undefined
+								: platformLayoutSnapshot.layoutTitles[key];
 						this._layoutMapArray.push({
 							layoutName: key,
 							layoutTitle,
@@ -93,8 +95,13 @@ export function makeOverride(
 						for (const entry of entries) {
 							entryInstance++;
 							const layoutName = entry[0];
-							await this.createLayout(layoutName, entry[1], entryInstance, entries.length,
-								platformLayoutSnapshot.layoutSelected);
+							await this.createLayout(
+								layoutName,
+								entry[1],
+								entryInstance,
+								entries.length,
+								platformLayoutSnapshot.layoutSelected
+							);
 						}
 					}, 1000);
 					console.log("[Apply Layout] Layouts loaded");
@@ -217,8 +224,11 @@ export function makeOverride(
 				this._layoutContainer?.append(container);
 				if (entry === length) {
 					this.bindLayoutSelector(selectedLayout ?? layoutName);
-					await this.showLayout({ layoutName: selectedLayout ?? layoutName,
-						uuid: fin.me.uuid, name: fin.me.name });
+					await this.showLayout({
+						layoutName: selectedLayout ?? layoutName,
+						uuid: fin.me.uuid,
+						name: fin.me.name
+					});
 				}
 				// Finally, call the Layout.create() function to apply the snapshot layout to the div we just created.
 				await fin.Platform.Layout.create({ layoutName, layout, container });

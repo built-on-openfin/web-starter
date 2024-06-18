@@ -81,8 +81,8 @@ export interface Settings {
 			overrideOptions: PlatformInteropBrokerOptions;
 		};
 		cloudInterop: {
-		   connectParams: CloudInteropOverrideParams;
-	   	};
+			connectParams: CloudInteropOverrideParams;
+		};
 		layout: {
 			addLayoutId: string;
 			deleteLayoutId: string;
@@ -91,11 +91,11 @@ export interface Settings {
 			defaultLayout: PlatformLayoutSnapshot | string;
 		};
 		ui: {
-            logo: string;
-            title: string;
-            subTitle: string;
+			logo: string;
+			title: string;
+			subTitle: string;
 			settingsResolver: SettingsResolverOptions;
-        };
+		};
 		app: {
 			directory: string;
 			appResolver: AppResolverOptions;

@@ -10,8 +10,10 @@ export type LayoutManagerConstructor = OpenFin.LayoutManagerConstructor<OpenFin.
 /**
  * Adds support for adding titles to go alongside the layouts
  */
-export type PlatformLayoutSnapshot = WebLayoutSnapshot & { layoutTitles: { [key: string]: string };
-layoutSelected?: string; };
+export type PlatformLayoutSnapshot = WebLayoutSnapshot & {
+	layoutTitles: { [key: string]: string };
+	layoutSelected?: string;
+};
 
 /**
  * Type of the LayoutManager instance created by the override.

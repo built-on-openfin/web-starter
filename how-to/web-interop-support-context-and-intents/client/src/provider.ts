@@ -1,3 +1,4 @@
+import { cloudInteropOverride } from "@openfin/cloud-interop";
 import type { OpenFin } from "@openfin/core";
 import { connect } from "@openfin/core-web";
 import { AppResolverHelper } from "./platform/apps/app-resolver-helper";
@@ -7,7 +8,6 @@ import { clearSettings, getDefaultLayout, getSettings, saveSettings } from "./pl
 import type { PlatformLayoutSnapshot } from "./shapes/layout-shapes";
 import type { Settings } from "./shapes/setting-shapes";
 import { sanitizeString } from "./utils";
-import { cloudInteropOverride } from "@openfin/cloud-interop";
 
 /**
  * Attach listeners to elements.
@@ -43,7 +43,7 @@ async function attachListeners(fin: OpenFin.Fin<OpenFin.EntityType>): Promise<vo
 				await addResolverHelper.launchAppResolver();
 			});
 		}
-		if(settingsButton !== null) {
+		if (settingsButton !== null) {
 			const dialogElement = document.createElement("dialog");
 			dialogElement.id = "settings-dialog";
 			dialogElement.style.height = `${settings?.platform?.ui?.settingsResolver?.height ?? 700}px`;
@@ -83,7 +83,7 @@ async function attachListeners(fin: OpenFin.Fin<OpenFin.EntityType>): Promise<vo
 					await clearSettings();
 					location.reload();
 				}
-			 });
+			});
 		}
 	}
 }
@@ -96,8 +96,10 @@ function updateDOM(settings: Settings | undefined): void {
 	const title = document.querySelector<HTMLHeadingElement>("#title");
 	const subTitle = document.querySelector<HTMLHeadingElement>("#subTitle");
 	const logo = document.querySelector<HTMLImageElement>("#logo");
-	if(title === null || subTitle === null || logo === null || settings === undefined) {
-		console.error("Unable to use settings as there are missing input fields/buttons or settings have not been provided.");
+	if (title === null || subTitle === null || logo === null || settings === undefined) {
+		console.error(
+			"Unable to use settings as there are missing input fields/buttons or settings have not been provided."
+		);
 		return;
 	}
 	const documentTitle = sanitizeString(settings?.platform?.ui?.title ?? "");
@@ -107,7 +109,7 @@ function updateDOM(settings: Settings | undefined): void {
 	const documentIcon = sanitizeString(settings?.platform?.ui?.logo ?? "");
 	logo.src = documentIcon;
 	const fav = document.querySelector<HTMLLinkElement>("#favicon");
-	if(fav !== null && documentIcon !== "") {
+	if (fav !== null && documentIcon !== "") {
 		fav.href = documentIcon;
 	}
 }

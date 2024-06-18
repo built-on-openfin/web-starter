@@ -23,7 +23,8 @@
 						"method": "GET",
 						"url": "http://localhost:6060/settings.json"
 					}
-				}]
+				}
+			]
 		}
 	}
 }
