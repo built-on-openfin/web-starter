@@ -31,13 +31,7 @@
 												"name": "local-fdc3-context-view/e7fe7df3-6f64-4235-899f-4e91af2cb32d2"
 											},
 											"title": "FDC3 Local Context"
-										}
-									]
-								},
-								{
-									"type": "stack",
-									"height": 50,
-									"content": [
+										},
 										{
 											"type": "component",
 											"componentName": "view",
@@ -86,13 +80,7 @@
 												"name": "local-interop-context-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac92"
 											},
 											"title": "Interop Local Context"
-										}
-									]
-								},
-								{
-									"type": "stack",
-									"height": 50,
-									"content": [
+										},
 										{
 											"type": "component",
 											"componentName": "view",
