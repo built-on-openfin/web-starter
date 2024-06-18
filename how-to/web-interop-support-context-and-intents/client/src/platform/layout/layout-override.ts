@@ -51,28 +51,50 @@ export function makeOverride(
 			}
 
 			/**
+			 * Our implementation of getLayoutSnapshot that contains titles.
+			 * @returns Promise<PlatformLayoutSnapshot>
+			 */
+			public async getLayoutSnapshot(): Promise<PlatformLayoutSnapshot> {
+				const layoutSnapshot = await super.getLayoutSnapshot();
+				const platformLayoutSnapshot: PlatformLayoutSnapshot = {
+					layouts: layoutSnapshot.layouts,
+					layoutTitles: {},
+					layoutSelected: this._selectedLayout
+				};
+				for (const layout of this._layoutMapArray) {
+					if(layout.layoutTitle !== undefined) {
+						platformLayoutSnapshot.layoutTitles[layout.layoutName] = layout.layoutTitle;
+					}
+				}
+				return platformLayoutSnapshot;
+			}
+
+			/**
 			 * Override for applying multiple snapshots.
 			 * @param snapshot The layouts object containing the fixed set of available layouts.
 			 */
 			public async applyLayoutSnapshot(snapshot: WebLayoutSnapshot): Promise<void> {
 				console.log(`[Apply Layout] Does this exist? ${Boolean(this._layoutContainer)}`);
 				if (this._layoutContainer !== null && this._layoutContainer !== undefined) {
-					const snapShotWithTitles = snapshot as PlatformLayoutSnapshot;
+					const platformLayoutSnapshot = snapshot as PlatformLayoutSnapshot;
 					for (const [key, value] of Object.entries(snapshot.layouts)) {
+						const layoutTitle = platformLayoutSnapshot?.layoutTitles === undefined
+						? undefined : platformLayoutSnapshot.layoutTitles[key];
 						this._layoutMapArray.push({
 							layoutName: key,
-							layoutTitle: snapShotWithTitles?.layoutTitles[key],
+							layoutTitle,
 							layout: value,
 							container: this._layoutContainer
 						});
 					}
 					setTimeout(async () => {
-						const entries = Object.entries(snapshot.layouts);
+						const entries = Object.entries(platformLayoutSnapshot.layouts);
 						let entryInstance = 0;
 						for (const entry of entries) {
 							entryInstance++;
 							const layoutName = entry[0];
-							await this.createLayout(layoutName, entry[1], entryInstance, entries.length);
+							await this.createLayout(layoutName, entry[1], entryInstance, entries.length,
+								platformLayoutSnapshot.layoutSelected);
 						}
 					}, 1000);
 					console.log("[Apply Layout] Layouts loaded");
@@ -178,12 +200,14 @@ export function makeOverride(
 			 * @param layout LayoutOptions.
 			 * @param entry the entry from the batch that is being created.
 			 * @param length the total number of layouts to create.
+			 * @param selectedLayout the layout that is selected.
 			 */
 			private async createLayout(
 				layoutName: string,
 				layout: OpenFin.LayoutOptions,
 				entry: number,
-				length: number
+				length: number,
+				selectedLayout: string | undefined
 			): Promise<void> {
 				// Create a new div container for the layout.
 				const container = document.createElement("div");
@@ -192,8 +216,9 @@ export function makeOverride(
 				container.style.display = "none";
 				this._layoutContainer?.append(container);
 				if (entry === length) {
-					this.bindLayoutSelector(layoutName);
-					await this.showLayout({ layoutName, uuid: fin.me.uuid, name: fin.me.name });
+					this.bindLayoutSelector(selectedLayout ?? layoutName);
+					await this.showLayout({ layoutName: selectedLayout ?? layoutName,
+						uuid: fin.me.uuid, name: fin.me.name });
 				}
 				// Finally, call the Layout.create() function to apply the snapshot layout to the div we just created.
 				await fin.Platform.Layout.create({ layoutName, layout, container });

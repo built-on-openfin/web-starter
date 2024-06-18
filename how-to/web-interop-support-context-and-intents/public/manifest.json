@@ -1,10 +1,10 @@
 {
-	"name": "OpenFin Web Interop",
-	"short_name": "OpenFinWebInterop",
+	"name": "OpenFin - Support Context and Intents",
+	"short_name": "OpenFinSupportInteropContextAndIntents",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing a implementation of the OpenFin Web Interop Library.",
+	"description": "An example showing a implementation of the OpenFin Core Web Library to support context and intents as well as layouts.",
 	"icons": [
 		{
 			"src": "common/images/icon-blue.png",
@@ -14,33 +14,16 @@
 	],
 	"related_applications": [],
 	"custom_settings": {
-		"platform": {
-			"interop": {
-				"sharedWorkerUrl": "http://localhost:6060/js/shared-worker.bundle.js",
-				"brokerUrl": "http://localhost:6060/platform/iframe-broker.html",
-				"providerId": "web-interop",
-				"defaultContextGroup": "green",
-				"overrideOptions": {
-					"intentResolver": {
-						"url": "http://localhost:6060/platform/intents/instance-picker.html",
-						"title": "Intent Resolver"
+		"endpointProvider": {
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "http://localhost:6060/settings.json"
 					}
-				}
-			},
-			"layout": {
-				"addLayoutId": "add-layout",
-				"deleteLayoutId": "delete-layout",
-				"layoutContainerId": "layout_container",
-				"layoutSelectorId": "layout-selector",
-				"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
-			},
-			"app": {
-				"directory": "http://localhost:6060/apps.json",
-				"appResolver": {
-					"url": "http://localhost:6060/platform/apps/app-picker.html",
-					"title": "App Resolver"
-				}
-			}
+				}]
 		}
 	}
 }

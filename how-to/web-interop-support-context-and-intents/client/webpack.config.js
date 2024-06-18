@@ -24,6 +24,20 @@ module.exports = [
 		}
 	},
 	{
+		entry: './client/src/content/settings-dialog.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'settings-dialog.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
 		entry: './client/src/platform/iframe-broker.ts',
 		devtool: 'source-map',
 		module: {

@@ -1,0 +1,48 @@
+{
+    "platform": {
+        "ui": {
+            "logo": "http://localhost:6060/common/images/icon-blue.png",
+            "title": "OpenFin - Support Context and Intents",
+            "subTitle": "Demonstrate how OpenFin's FDC3 Context and Intents support can be utilized and combined with OpenFin's Layout support.",
+            "settingsResolver": {
+                "url": "http://localhost:6060/platform/settings/settings-dialog.html"
+            }
+        },
+        "interop": {
+            "sharedWorkerUrl": "http://localhost:6060/js/shared-worker.bundle.js",
+            "brokerUrl": "http://localhost:6060/platform/iframe-broker.html",
+            "providerId": "support-context-and-intents",
+            "defaultContextGroup": "green",
+            "overrideOptions": {
+                "intentResolver": {
+                    "url": "http://localhost:6060/platform/intents/instance-picker.html",
+                    "title": "Intent Resolver"
+                }
+            }
+        },
+        "cloudInterop": {
+            "connectParams": {
+				"userId": "<PLEASE ASK OPENFIN FOR A USER ID>",
+				"password": "<PLEASE ASK OPENFIN FOR A PASSWORD>",
+				"platformId": "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
+				"url": "<PLEASE ASK OPENFIN FOR A URL>",
+				"sourceId": "cloud-interop-contents-and-intents",
+				"sourceDisplayName": "Cloud Interop Basic Example"
+			}
+        },
+        "layout": {
+            "addLayoutId": "add-layout",
+            "deleteLayoutId": "delete-layout",
+            "layoutContainerId": "layout_container",
+            "layoutSelectorId": "layout-selector",
+            "defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
+        },
+        "app": {
+            "directory": ["http://localhost:6060/apps.json", "http://localhost:6060/common/apps.json"],
+            "appResolver": {
+                "url": "http://localhost:6060/platform/apps/app-picker.html",
+                "title": "App Resolver"
+            }
+        }
+    }
+}
