@@ -21,17 +21,32 @@ const e="web-broker-ports-ready",t="worker-initialize-connection",r="create-fall
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDefaultLayout = exports.getSettings = void 0;
+exports.saveSettings = exports.clearSettings = exports.getDefaultLayout = exports.getSettings = void 0;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
  */
 async function getSettings() {
-    const settings = await getManifestSettings();
-    if (settings === undefined) {
-        console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+    const savedSettings = await getSavedSettings();
+    if (savedSettings) {
+        return savedSettings;
     }
-    return settings;
+    const settings = await getManifestSettings();
+    if (!Array.isArray(settings?.endpointProvider?.endpoints)) {
+        console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+        return;
+    }
+    const settingsEndpoint = settings.endpointProvider.endpoints.find((endpoint) => endpoint.id === "platform-settings");
+    if (settingsEndpoint === undefined ||
+        settingsEndpoint.type !== "fetch" ||
+        settingsEndpoint.options.method !== "GET" ||
+        settingsEndpoint.options.url === undefined) {
+        console.error("Unable to run the example as settings are required and we fetch them from the endpoint defined with the id: 'platform-settings' in the manifest. It needs to be of type fetch, performing a GET and it must have a url defined.");
+        return;
+    }
+    const platformSettings = await fetch(settingsEndpoint?.options.url);
+    const settingsJson = (await platformSettings.json());
+    return settingsJson;
 }
 exports.getSettings = getSettings;
 /**
@@ -64,6 +79,45 @@ async function getManifestSettings() {
         const manifestJson = (await manifestResponse.json());
         return manifestJson.custom_settings;
     }
+}
+/**
+ * Clears any saved settings.
+ * @returns The saved settings.
+ */
+async function clearSettings() {
+    const settingsId = getSavedSettingsId();
+    localStorage.removeItem(settingsId);
+}
+exports.clearSettings = clearSettings;
+/**
+ * Saves the settings.
+ * @param settings The settings to save.
+ */
+async function saveSettings(settings) {
+    const settingsId = getSavedSettingsId();
+    localStorage.setItem(settingsId, JSON.stringify(settings));
+}
+exports.saveSettings = saveSettings;
+/**
+ * Retrieves saved settings from local storage.
+ * @returns The saved settings.
+ */
+async function getSavedSettings() {
+    const settingsId = getSavedSettingsId();
+    const settings = localStorage.getItem(settingsId);
+    if (settings !== null) {
+        return JSON.parse(settings);
+    }
+}
+/**
+ * Get the Id used for saving and fetching settings from storage.
+ * @returns The settings id.
+ */
+function getSavedSettingsId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const env = urlParams.get("env");
+    const settingsKey = env ? `${env}-settings` : "settings";
+    return settingsKey;
 }
 
 

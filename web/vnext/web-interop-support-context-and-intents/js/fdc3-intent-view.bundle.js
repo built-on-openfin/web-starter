@@ -31029,9 +31029,9 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!*****************************************!*\
-  !*** ./client/src/content/fdc3-view.ts ***!
-  \*****************************************/
+/*!************************************************!*\
+  !*** ./client/src/content/fdc3-intent-view.ts ***!
+  \************************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const api_1 = __webpack_require__(/*! ./api */ "./client/src/content/api.ts");
@@ -31040,44 +31040,45 @@ window.addEventListener("DOMContentLoaded", async () => {
     await initializeDOM();
 });
 /**
- * Broadcasts a context using FDC3.
+ * Raise an intent using the fdc3 API.
  */
-async function broadcastContext() {
-    const contextType = "fdc3.instrument";
-    const contextName = "Apple";
-    const idData = {
-        ticker: "AAPL"
-    };
-    const context = {
-        type: contextType,
-        name: contextName,
-        id: idData
-    };
-    if (window.fdc3) {
-        await window.fdc3.broadcast(context);
-        console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-    }
-    else {
-        window.addEventListener("fdc3Ready", async () => {
-            await window.fdc3.broadcast(context);
-            console.log(`Broadcasted context: ${contextType} - ${contextName}`);
-        });
+async function raiseIntent() {
+    if (window.fin !== undefined) {
+        const context = {
+            type: "fdc3.contact",
+            name: "Andy Young",
+            id: {
+                email: "andy.young@example.com"
+            }
+        };
+        const intent = "ViewContact";
+        const intentResolver = await window.fdc3.raiseIntent(intent, context);
+        if (intentResolver !== undefined) {
+            console.log("Intent resolver received:", intentResolver);
+        }
     }
 }
 /**
- * Adds an FDC3 context listener to the window.
+ * Adds an fdc3 intent listener to the window.
  */
-async function addFDC3Listener() {
+async function addIntentListener() {
+    const intent = "ViewContact";
     if (window.fdc3) {
-        await window.fdc3.addContextListener(null, (context) => {
-            updateDOMElements(context);
+        await window.fdc3.addIntentListener(intent, (ctx, metadata) => {
+            console.log(`Received Context For Intent: ${intent}`, ctx);
+            console.log(`Received Metadata With Intent: ${intent}`, metadata);
+            updateDOMElements(ctx);
         });
     }
     else {
         window.addEventListener("fdc3Ready", async () => {
-            await window.fdc3.addContextListener(null, (context) => {
-                updateDOMElements(context);
-            });
+            if (window.fdc3) {
+                await window.fdc3.addIntentListener(intent, (ctx, metadata) => {
+                    console.log(`Received Context For Intent: ${intent}`, ctx);
+                    console.log(`Received Metadata With Intent: ${intent}`, metadata);
+                    updateDOMElements(ctx);
+                });
+            }
         });
     }
 }
@@ -31099,17 +31100,17 @@ function updateDOMElements(context) {
  * Initialize the DOM elements.
  */
 async function initializeDOM() {
-    const broadcastButton = document.querySelector("#broadcast");
-    if (broadcastButton !== null) {
-        broadcastButton.addEventListener("click", async () => {
-            await broadcastContext();
+    const raiseIntentButton = document.querySelector("#raiseIntent");
+    if (raiseIntentButton !== null) {
+        raiseIntentButton.addEventListener("click", async () => {
+            await raiseIntent();
         });
     }
-    await addFDC3Listener();
+    await addIntentListener();
 }
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=fdc3-view.bundle.js.map
+//# sourceMappingURL=fdc3-intent-view.bundle.js.map

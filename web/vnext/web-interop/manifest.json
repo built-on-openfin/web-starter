@@ -14,23 +14,17 @@
 	],
 	"related_applications": [],
 	"custom_settings": {
-		"platform": {
-			"interop": {
-				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop/js/shared-worker.bundle.js",
-				"brokerUrl": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop/platform/iframe-broker.html",
-				"providerId": "web-interop",
-				"defaultContextGroup": "green"
-			},
-			"layout": {
-				"panels": {
-					"left": {
-						"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop/views/fdc3-panel.html",
-						"frameId": "left-panel"
+		"endpointProvider": {
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop/settings.json"
 					}
-				},
-				"layoutContainerId": "layout_container",
-				"defaultLayout": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop/layouts/default.layout.fin.json"
-			}
+				}
+			]
 		}
 	}
 }

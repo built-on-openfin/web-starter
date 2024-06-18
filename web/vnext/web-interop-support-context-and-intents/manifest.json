@@ -1,10 +1,10 @@
 {
-	"name": "OpenFin Web Interop",
-	"short_name": "OpenFinWebInterop",
+	"name": "OpenFin - Support Context and Intents",
+	"short_name": "OpenFinSupportInteropContextAndIntents",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing a implementation of the OpenFin Web Interop Library.",
+	"description": "An example showing a implementation of the OpenFin Core Web Library to support context and intents as well as layouts.",
 	"icons": [
 		{
 			"src": "common/images/icon-blue.png",
@@ -14,33 +14,17 @@
 	],
 	"related_applications": [],
 	"custom_settings": {
-		"platform": {
-			"interop": {
-				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/js/shared-worker.bundle.js",
-				"brokerUrl": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/platform/iframe-broker.html",
-				"providerId": "web-interop",
-				"defaultContextGroup": "green",
-				"overrideOptions": {
-					"intentResolver": {
-						"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/platform/intents/instance-picker.html",
-						"title": "Intent Resolver"
+		"endpointProvider": {
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/settings.json"
 					}
 				}
-			},
-			"layout": {
-				"addLayoutId": "add-layout",
-				"deleteLayoutId": "delete-layout",
-				"layoutContainerId": "layout_container",
-				"layoutSelectorId": "layout-selector",
-				"defaultLayout": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/layouts/default.layout.fin.json"
-			},
-			"app": {
-				"directory": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/apps.json",
-				"appResolver": {
-					"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/platform/apps/app-picker.html",
-					"title": "App Resolver"
-				}
-			}
+			]
 		}
 	}
 }
