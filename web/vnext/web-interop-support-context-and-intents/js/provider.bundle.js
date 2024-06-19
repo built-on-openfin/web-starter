@@ -33499,7 +33499,7 @@ exports.AppResolverHelper = AppResolverHelper;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.bringAppToFront = exports.launch = exports.getApps = exports.getApp = void 0;
 const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
-const settings_1 = __webpack_require__(/*! ../settings */ "./client/src/platform/settings.ts");
+const settings_1 = __webpack_require__(/*! ../settings/settings */ "./client/src/platform/settings/settings.ts");
 let cachedApps;
 /**
  * The the app by its id.
@@ -35501,10 +35501,107 @@ exports.makeOverride = makeOverride;
 
 /***/ }),
 
-/***/ "./client/src/platform/settings.ts":
-/*!*****************************************!*\
-  !*** ./client/src/platform/settings.ts ***!
-  \*****************************************/
+/***/ "./client/src/platform/settings/settings-resolver-helper.ts":
+/*!******************************************************************!*\
+  !*** ./client/src/platform/settings/settings-resolver-helper.ts ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SettingsResolverHelper = void 0;
+const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings/settings.ts");
+/**
+ * An helper for updating and resolving settings.
+ */
+class SettingsResolverHelper {
+    /**
+     * Create an instance of the Settings Resolver Helper.
+     * @param settingsResolverOptions options for the helper
+     * @param logger the logger to use.
+     */
+    constructor(settingsResolverOptions, logger) {
+        this._dialogElement = null;
+        this._dialogClient = null;
+        this._defaultSettingsResolverHeight = 715;
+        this._defaultSettingsResolverWidth = 665;
+        this._settingsResolverOptions = {
+            height: this._defaultSettingsResolverHeight,
+            width: this._defaultSettingsResolverWidth,
+            ...settingsResolverOptions
+        };
+        this._logger = logger;
+        this._dialogElement = document.createElement("dialog");
+        this._dialogElement.id = "settings-resolver-dialog";
+        this._dialogElement.style.height = `${this._settingsResolverOptions.height}px`;
+        this._dialogElement.style.width = `${this._settingsResolverOptions.width}px`;
+        this._dialogElement.style.padding = "0px";
+        this._dialogElement.style.backgroundColor = "var(--brand-background)";
+        // Create a new iframe element
+        const settingsResolver = document.createElement("iframe");
+        // Set the source of the iframe
+        settingsResolver.src = settingsResolverOptions.url;
+        settingsResolver.style.height = "99%";
+        settingsResolver.style.width = "100%";
+        // Append the iframe to the dialog
+        this._dialogElement.append(settingsResolver);
+        // Append the dialog to the body
+        document.body.append(this._dialogElement);
+    }
+    /**
+     * Launch the settings resolver.
+     * @returns nothing.
+     */
+    async showSettings() {
+        if (this._dialogElement) {
+            this._dialogElement.showModal();
+        }
+        if (!this._dialogClient && this._dialogClient === null) {
+            const settingsResolverChannel = "settings-resolver";
+            console.log("Connecting to settings resolver", settingsResolverChannel);
+            this._dialogClient = await fin.InterApplicationBus.Channel.connect(settingsResolverChannel);
+            // eslint-disable-next-line @typescript-eslint/await-thenable
+            await this._dialogClient.register("settings-resolver-response", async (payload, sender) => {
+                const response = payload;
+                if (response.settingsResolverResponse) {
+                    if (response.settingsResolverResponse.action === "save-reload" &&
+                        response.settingsResolverResponse.settings) {
+                        await (0, settings_1.saveSettings)(response.settingsResolverResponse.settings);
+                        location.reload();
+                    }
+                    else if (response.settingsResolverResponse.action === "reset-reload") {
+                        await (0, settings_1.clearSettings)();
+                        location.reload();
+                    }
+                }
+                else if (response.errorMessage) {
+                    this._logger.error(response.errorMessage);
+                }
+                if (this._dialogElement) {
+                    this._dialogElement.close();
+                }
+            });
+        }
+        if (this._dialogElement && this._dialogClient) {
+            const settings = await (0, settings_1.getSettings)();
+            await this._dialogClient.dispatch("apply-settings", {
+                customData: {
+                    settings
+                }
+            });
+        }
+    }
+}
+exports.SettingsResolverHelper = SettingsResolverHelper;
+
+
+/***/ }),
+
+/***/ "./client/src/platform/settings/settings.ts":
+/*!**************************************************!*\
+  !*** ./client/src/platform/settings/settings.ts ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -36841,13 +36938,13 @@ const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modu
 const app_resolver_helper_1 = __webpack_require__(/*! ./platform/apps/app-resolver-helper */ "./client/src/platform/apps/app-resolver-helper.ts");
 const interop_override_1 = __webpack_require__(/*! ./platform/broker/interop-override */ "./client/src/platform/broker/interop-override.ts");
 const layout_override_1 = __webpack_require__(/*! ./platform/layout/layout-override */ "./client/src/platform/layout/layout-override.ts");
-const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
+const settings_1 = __webpack_require__(/*! ./platform/settings/settings */ "./client/src/platform/settings/settings.ts");
+const settings_resolver_helper_1 = __webpack_require__(/*! ./platform/settings/settings-resolver-helper */ "./client/src/platform/settings/settings-resolver-helper.ts");
 const utils_1 = __webpack_require__(/*! ./utils */ "./client/src/utils.ts");
 /**
  * Attach listeners to elements.
- * @param fin passing the fin api for use.
  */
-async function attachListeners(fin) {
+async function attachListeners() {
     // Get the required settings
     const settings = await (0, settings_1.getSettings)();
     if (settings !== undefined) {
@@ -36877,42 +36974,9 @@ async function attachListeners(fin) {
             });
         }
         if (settingsButton !== null) {
-            const dialogElement = document.createElement("dialog");
-            dialogElement.id = "settings-dialog";
-            dialogElement.style.height = `${settings?.platform?.ui?.settingsResolver?.height ?? 700}px`;
-            dialogElement.style.width = `${settings?.platform?.ui?.settingsResolver?.width ?? 600}px`;
-            dialogElement.style.padding = "0px";
-            dialogElement.style.backgroundColor = "var(--brand-background)";
-            // Create a new iframe element
-            const settingsUI = document.createElement("iframe");
-            // Set the source of the iframe
-            settingsUI.src = settings.platform.ui.settingsResolver.url;
-            settingsUI.style.height = "99%";
-            settingsUI.style.width = "100%";
-            // Append the iframe to the dialog
-            dialogElement.append(settingsUI);
-            // Append the dialog to the body
-            document.body.append(dialogElement);
+            const settingsResolverHelper = new settings_resolver_helper_1.SettingsResolverHelper(settings.platform.ui.settingsResolver, console);
             settingsButton.addEventListener("click", async () => {
-                dialogElement.showModal();
-            });
-            const platformDialogSettings = await fin.me.interop.joinSessionContextGroup("platform/settings/dialog");
-            await platformDialogSettings.addContextHandler(async (context) => {
-                if (context.type === "platform.settings.dialog.action" && context?.id?.action === "close") {
-                    dialogElement.close();
-                }
-                if (context.type === "platform.settings.dialog.action" && context?.id?.action === "save-reload") {
-                    const settingsToSave = context.settings;
-                    // get the current layout
-                    const currentLayout = fin.Platform.Layout.getCurrentLayoutManagerSync();
-                    settingsToSave.platform.layout.defaultLayout = await currentLayout?.getLayoutSnapshot();
-                    await (0, settings_1.saveSettings)(settingsToSave);
-                    location.reload();
-                }
-                if (context.type === "platform.settings.dialog.action" && context?.id?.action === "reset-reload") {
-                    await (0, settings_1.clearSettings)();
-                    location.reload();
-                }
+                await settingsResolverHelper.showSettings();
             });
         }
     }
@@ -37041,7 +37105,7 @@ async function init() {
             containerId: settings.platform.layout.layoutContainerId
         });
         // setup listeners now that everything has been initialized
-        await attachListeners(fin);
+        await attachListeners();
     }
 }
 init()
