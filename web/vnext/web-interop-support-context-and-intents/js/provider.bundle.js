@@ -34471,13 +34471,6 @@ class IntentResolverHelper {
      * @returns The response from the intent resolver.
      */
     async launchIntentResolver(launchOptions, clientIdentity) {
-        // launch a new window and optionally pass the available intents as customData.apps as part of the window
-        // options the window can then use raiseIntent against a specific app (the selected one). this logic runs in
-        // the provider so we are using it as a way of determining the root (so it works with root hosting and
-        // subdirectory based hosting if a url is not provided)
-        // try {
-        let resolveAppSelection;
-        let rejectAppSelection;
         if (this._dialogElement) {
             this._dialogElement.showModal();
         }
@@ -34489,14 +34482,17 @@ class IntentResolverHelper {
             await this._dialogClient.register("intent-resolver-response", async (payload, sender) => {
                 const response = payload;
                 this._logger.info("Received intent resolver message", payload);
-                if (response.errorMessage) {
-                    rejectAppSelection(response.errorMessage);
+                if (this._rejectAppSelection === undefined || this._resolveAppSelection === undefined) {
+                    this._logger.error("No resolve or reject function set for intent resolver");
+                }
+                else if (response.errorMessage) {
+                    this._rejectAppSelection(response.errorMessage);
                 }
                 else if (response.intentResolverResponse === undefined) {
-                    rejectAppSelection(fdc3_errors_1.RESOLVE_ERROR.ResolverUnavailable);
+                    this._rejectAppSelection(fdc3_errors_1.RESOLVE_ERROR.ResolverUnavailable);
                 }
                 else {
-                    resolveAppSelection(response.intentResolverResponse);
+                    this._resolveAppSelection(response.intentResolverResponse);
                 }
                 if (this._dialogElement) {
                     this._dialogElement.close();
@@ -34514,8 +34510,8 @@ class IntentResolverHelper {
             });
         }
         return new Promise((resolve, reject) => {
-            resolveAppSelection = resolve;
-            rejectAppSelection = reject;
+            this._resolveAppSelection = resolve;
+            this._rejectAppSelection = reject;
         });
     }
 }
