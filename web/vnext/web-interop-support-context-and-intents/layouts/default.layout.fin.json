@@ -394,12 +394,11 @@
 					"content": [
 						{
 							"type": "row",
-							"height": 46.71052631578947,
+							"height": 50,
 							"content": [
 								{
 									"type": "stack",
-									"width": 59.303313508920986,
-									"height": 100,
+									"width": 50,
 									"content": [
 										{
 											"type": "component",
@@ -417,7 +416,7 @@
 								},
 								{
 									"type": "stack",
-									"width": 40.696686491079014,
+									"width": 50,
 									"content": [
 										{
 											"type": "component",
@@ -449,7 +448,7 @@
 						},
 						{
 							"type": "stack",
-							"height": 53.289473684210535,
+							"height": 50,
 							"content": [
 								{
 									"type": "component",
