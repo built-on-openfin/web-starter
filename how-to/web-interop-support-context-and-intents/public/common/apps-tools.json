@@ -1,0 +1,33 @@
+{
+	"applications": [
+		{
+			"appId": "custom-tab",
+			"name": "custom-tab",
+			"title": "Custom Tab",
+			"description": "A custom tab app that lets you preview a url and navigate to it if it can be loaded. A tool to quickly test a url before adding it as an app.",
+			"categories": ["view", "tool"],
+			"version": "1.0.0",
+			"tooltip": "Add a custom tab to preview urls.",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "http://localhost:6060/favicon.ico"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "http://localhost:6060/images/previews/preview-app-custom-tab.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "http://localhost:6060/platform/custom-tab/custom-tab.html"
+			},
+			"interop": {
+			}
+		}
+	]
+}

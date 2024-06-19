@@ -147,7 +147,7 @@ export interface HostManifests {
 		type?: string;
 
 		/**
-		 * this can be a path to a manifest file specific to this type of it can be the manifest object itself if
+		 * this can be a path to a manifest file specific to this type or it can be the manifest object itself if
 		 * using an inline type or extending the details from the root.
 		 */
 		details?: unknown;
