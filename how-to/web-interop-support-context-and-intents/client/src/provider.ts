@@ -4,16 +4,15 @@ import { connect } from "@openfin/core-web";
 import { AppResolverHelper } from "./platform/apps/app-resolver-helper";
 import { getConstructorOverride } from "./platform/broker/interop-override";
 import { makeOverride } from "./platform/layout/layout-override";
-import { clearSettings, getDefaultLayout, getSettings, saveSettings } from "./platform/settings";
-import type { PlatformLayoutSnapshot } from "./shapes/layout-shapes";
+import { getDefaultLayout, getSettings } from "./platform/settings/settings";
+import { SettingsResolverHelper } from "./platform/settings/settings-resolver-helper";
 import type { Settings } from "./shapes/setting-shapes";
 import { sanitizeString } from "./utils";
 
 /**
  * Attach listeners to elements.
- * @param fin passing the fin api for use.
  */
-async function attachListeners(fin: OpenFin.Fin<OpenFin.EntityType>): Promise<void> {
+async function attachListeners(): Promise<void> {
 	// Get the required settings
 	const settings = await getSettings();
 	if (settings !== undefined) {
@@ -44,45 +43,12 @@ async function attachListeners(fin: OpenFin.Fin<OpenFin.EntityType>): Promise<vo
 			});
 		}
 		if (settingsButton !== null) {
-			const dialogElement = document.createElement("dialog");
-			dialogElement.id = "settings-dialog";
-			dialogElement.style.height = `${settings?.platform?.ui?.settingsResolver?.height ?? 700}px`;
-			dialogElement.style.width = `${settings?.platform?.ui?.settingsResolver?.width ?? 600}px`;
-			dialogElement.style.padding = "0px";
-			dialogElement.style.backgroundColor = "var(--brand-background)";
-			// Create a new iframe element
-			const settingsUI = document.createElement("iframe");
-
-			// Set the source of the iframe
-			settingsUI.src = settings.platform.ui.settingsResolver.url;
-			settingsUI.style.height = "99%";
-			settingsUI.style.width = "100%";
-
-			// Append the iframe to the dialog
-			dialogElement.append(settingsUI);
-
-			// Append the dialog to the body
-			document.body.append(dialogElement);
+			const settingsResolverHelper = new SettingsResolverHelper(
+				settings.platform.ui.settingsResolver,
+				console
+			);
 			settingsButton.addEventListener("click", async () => {
-				dialogElement.showModal();
-			});
-			const platformDialogSettings = await fin.me.interop.joinSessionContextGroup("platform/settings/dialog");
-			await platformDialogSettings.addContextHandler(async (context) => {
-				if (context.type === "platform.settings.dialog.action" && context?.id?.action === "close") {
-					dialogElement.close();
-				}
-				if (context.type === "platform.settings.dialog.action" && context?.id?.action === "save-reload") {
-					const settingsToSave: Settings = (context as unknown as { settings: Settings }).settings;
-					// get the current layout
-					const currentLayout = fin.Platform.Layout.getCurrentLayoutManagerSync<PlatformLayoutSnapshot>();
-					settingsToSave.platform.layout.defaultLayout = await currentLayout?.getLayoutSnapshot();
-					await saveSettings(settingsToSave);
-					location.reload();
-				}
-				if (context.type === "platform.settings.dialog.action" && context?.id?.action === "reset-reload") {
-					await clearSettings();
-					location.reload();
-				}
+				await settingsResolverHelper.showSettings();
 			});
 		}
 	}
@@ -246,7 +212,7 @@ async function init(): Promise<void> {
 			containerId: settings.platform.layout.layoutContainerId
 		});
 		// setup listeners now that everything has been initialized
-		await attachListeners(fin);
+		await attachListeners();
 	}
 }
 

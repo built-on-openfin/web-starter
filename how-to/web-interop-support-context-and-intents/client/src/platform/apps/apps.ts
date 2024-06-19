@@ -1,7 +1,7 @@
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import { isEmpty, randomUUID } from "../../utils";
-import { getSettings } from "../settings";
+import { getSettings } from "../settings/settings";
 
 let cachedApps: PlatformApp[] | undefined;
 

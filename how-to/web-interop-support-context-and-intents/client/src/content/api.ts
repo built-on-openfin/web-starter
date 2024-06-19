@@ -1,5 +1,5 @@
 import { connect, type BaseConnectionOptions } from "@openfin/core-web";
-import { getSettings } from "../platform/settings";
+import { getSettings } from "../platform/settings/settings";
 
 /**
  * Initializes the OpenFin Web Broker connection.

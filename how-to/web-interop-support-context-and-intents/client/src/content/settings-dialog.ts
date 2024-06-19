@@ -1,4 +1,4 @@
-import { getSettings } from "../platform/settings";
+import type { Settings } from "../shapes/setting-shapes";
 
 window.addEventListener("DOMContentLoaded", async () => {
 	if (window.fdc3) {
@@ -14,14 +14,6 @@ window.addEventListener("DOMContentLoaded", async () => {
  * Initialize the settings.
  */
 async function init(): Promise<void> {
-	const settings = await getSettings();
-	if (settings === undefined) {
-		console.error(
-			"Unable to run the example as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section."
-		);
-		return;
-	}
-
 	// platform settings
 	const title = document.querySelector<HTMLInputElement>("#title");
 	const subTitle = document.querySelector<HTMLInputElement>("#subTitle");
@@ -52,51 +44,76 @@ async function init(): Promise<void> {
 		sourceDisplayName === null ||
 		saveButton === null ||
 		resetButton === null ||
-		cancelButton === null
+		cancelButton === null ||
+		window.fin === undefined
 	) {
 		console.error("Unable to use settings as there are missing input fields/buttons.");
 		return;
 	}
 
-	title.value = settings?.platform?.ui?.title;
-	subTitle.value = settings?.platform?.ui?.subTitle;
-	logo.value = settings?.platform?.ui?.logo;
-	userId.value = settings?.platform.cloudInterop?.connectParams?.userId;
-	password.value = settings?.platform.cloudInterop?.connectParams?.password;
-	platformId.value = settings?.platform.cloudInterop?.connectParams?.platformId;
-	cloudUrl.value = settings?.platform.cloudInterop?.connectParams?.url;
-	sourceId.value = settings?.platform.cloudInterop?.connectParams.sourceId ?? "";
-	sourceDisplayName.value = settings?.platform.cloudInterop?.connectParams.sourceDisplayName ?? "";
+	const settingsResolverChannel = "settings-resolver";
+	console.log("Settings dialog initialized", settingsResolverChannel);
 
-	const channel = "platform/settings/dialog";
-	const appChannel = await window.fdc3.getOrCreateChannel(channel);
+	const settingsResolverService =
+		await window.fin.InterApplicationBus.Channel.create(settingsResolverChannel);
+
+	let appliedSettings: Settings | undefined;
+
+	console.log("Registering apply-settings handler...");
+	settingsResolverService.register("apply-settings", async (data) => {
+		const settings = (data as { customData: { settings: Settings } }).customData.settings;
+		title.value = settings?.platform?.ui?.title;
+		subTitle.value = settings?.platform?.ui?.subTitle;
+		logo.value = settings?.platform?.ui?.logo;
+		userId.value = settings?.platform.cloudInterop?.connectParams?.userId;
+		password.value = settings?.platform.cloudInterop?.connectParams?.password;
+		platformId.value = settings?.platform.cloudInterop?.connectParams?.platformId;
+		cloudUrl.value = settings?.platform.cloudInterop?.connectParams?.url;
+		sourceId.value = settings?.platform.cloudInterop?.connectParams.sourceId ?? "";
+		sourceDisplayName.value = settings?.platform.cloudInterop?.connectParams.sourceDisplayName ?? "";
+		appliedSettings = settings;
+	});
 
 	saveButton.addEventListener("click", async () => {
-		settings.platform.ui.title = title.value;
-		settings.platform.ui.subTitle = subTitle.value;
-		settings.platform.ui.logo = logo.value;
-		settings.platform.cloudInterop.connectParams.userId = userId.value;
-		settings.platform.cloudInterop.connectParams.password = password.value;
-		settings.platform.cloudInterop.connectParams.platformId = platformId.value;
-		settings.platform.cloudInterop.connectParams.url = cloudUrl.value;
-		settings.platform.cloudInterop.connectParams.sourceId = sourceId.value;
-		settings.platform.cloudInterop.connectParams.sourceDisplayName = sourceDisplayName.value;
+		if (appliedSettings === undefined) {
+			console.error("Unable to save settings as they are not defined.");
+			return;
+		}
+		appliedSettings.platform.ui.title = title.value;
+		appliedSettings.platform.ui.subTitle = subTitle.value;
+		appliedSettings.platform.ui.logo = logo.value;
+		appliedSettings.platform.cloudInterop.connectParams.userId = userId.value;
+		appliedSettings.platform.cloudInterop.connectParams.password = password.value;
+		appliedSettings.platform.cloudInterop.connectParams.platformId = platformId.value;
+		appliedSettings.platform.cloudInterop.connectParams.url = cloudUrl.value;
+		appliedSettings.platform.cloudInterop.connectParams.sourceId = sourceId.value;
+		appliedSettings.platform.cloudInterop.connectParams.sourceDisplayName = sourceDisplayName.value;
 
-		// an example of using an app channel.
-		await appChannel.broadcast({
-			type: "platform.settings.dialog.action",
-			id: { action: "save-reload" },
-			settings
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		settingsResolverService.publish("settings-resolver-response", {
+			settingsResolverResponse: {
+				action: "save-reload",
+				settings: appliedSettings
+			}
 		});
 	});
 
 	resetButton.addEventListener("click", async () => {
 		// an example of using an app channel.
-		await appChannel.broadcast({ type: "platform.settings.dialog.action", id: { action: "reset-reload" } });
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		settingsResolverService.publish("settings-resolver-response", {
+			settingsResolverResponse: {
+				action: "reset-reload"
+			}
+		});
 	});
 
 	cancelButton.addEventListener("click", async () => {
-		// an example of using an app channel.
-		await appChannel.broadcast({ type: "platform.settings.dialog.action", id: { action: "close" } });
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		settingsResolverService.publish("settings-resolver-response", {
+			settingsResolverResponse: {
+				action: "close"
+			}
+		});
 	});
 }

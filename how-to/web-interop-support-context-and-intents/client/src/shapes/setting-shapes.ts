@@ -66,6 +66,21 @@ export interface SettingsResolverOptions {
 }
 
 /**
+ * The response from the settings resolver.
+ */
+export interface SettingsResolverResponse {
+	/**
+	 * The action to take.
+	 */
+	action: "save-reload" | "reset-reload" | "close";
+
+	/**
+	 * The the settings if it was to save.
+	 */
+	settings?: Settings;
+}
+
+/**
  * Settings for the client
  */
 export interface Settings {

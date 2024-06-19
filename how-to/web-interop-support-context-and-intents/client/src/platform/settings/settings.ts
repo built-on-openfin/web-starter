@@ -1,5 +1,5 @@
 import type { WebLayoutSnapshot } from "@openfin/core-web";
-import type { ManifestSettings, Settings } from "../shapes/setting-shapes";
+import type { ManifestSettings, Settings } from "../../shapes/setting-shapes";
 
 /**
  * Fetches the settings for the application.
