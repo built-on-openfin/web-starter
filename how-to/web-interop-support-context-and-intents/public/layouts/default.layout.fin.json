@@ -94,10 +94,10 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "http://localhost:6060/views/fdc3-intent-view.html",
-												"name": "local-interop-intent-view/54a8ef85-a775-4234-be46-9d52e88fsb74"
+												"url": "http://localhost:6060/views/interop-intent-view.html",
+												"name": "local-interop-intent-view/54a8ef86-a775-4234-be46-9d52e88fsb74"
 											},
-											"title": "FDC3 Local Interop Intent"
+											"title": "Interop Local Intent"
 										}
 									]
 								}

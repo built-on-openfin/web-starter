@@ -11,10 +11,14 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/common/favicon-32x32.png"
+					"src": "http://localhost:6060/favicon.ico"
 				}
 			],
-			"screenshots": [],
+			"screenshots": [
+				{
+					"src": "http://localhost:6060/images/previews/preview-fdc3-local-context-view.jpeg"
+				}
+			],
 			"contactEmail": "sales@openfin.co",
 			"supportEmail": "support@openfin.co",
 			"publisher": "OpenFin",
@@ -35,10 +39,14 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/common/favicon-32x32.png"
+					"src": "http://localhost:6060/favicon.ico"
 				}
 			],
-			"screenshots": [],
+			"screenshots": [
+				{
+					"src": "http://localhost:6060/images/previews/preview-interop-local-context-view.jpeg"
+				}
+			],
 			"contactEmail": "sales@openfin.co",
 			"supportEmail": "support@openfin.co",
 			"publisher": "OpenFin",
@@ -59,10 +67,14 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/common/favicon-32x32.png"
+					"src": "http://localhost:6060/favicon.ico"
 				}
 			],
-			"screenshots": [],
+			"screenshots": [
+				{
+					"src": "http://localhost:6060/images/previews/preview-fdc3-local-intent-view.jpeg"
+				}
+			],
 			"contactEmail": "sales@openfin.co",
 			"supportEmail": "support@openfin.co",
 			"publisher": "OpenFin",
@@ -92,10 +104,14 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/common/favicon-32x32.png"
+					"src": "http://localhost:6060/favicon.ico"
 				}
 			],
-			"screenshots": [],
+			"screenshots": [
+				{
+					"src": "http://localhost:6060/images/previews/preview-interop-local-intent-view.jpeg"
+				}
+			],
 			"contactEmail": "sales@openfin.co",
 			"supportEmail": "support@openfin.co",
 			"publisher": "OpenFin",
