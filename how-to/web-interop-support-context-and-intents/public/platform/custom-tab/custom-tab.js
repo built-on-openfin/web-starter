@@ -40,7 +40,7 @@ function setPreviewEnabledState(urlToValidate) {
  */
 async function actionQuery() {
 	const targetUrl = url.value;
-	if(isValueAUrl(targetUrl)) {
+	if (isValueAUrl(targetUrl)) {
 		location.href = url.value;
 	}
 }
@@ -67,7 +67,7 @@ async function init() {
 	cancelBtn.addEventListener('click', () => {
 		urlContainer.style.display = 'block';
 		previewContainer.style.display = 'none';
-		previewFrame.src = "about:blank";
+		previewFrame.src = 'about:blank';
 		cancelBtn.style.display = 'none';
 		previewBtn.style.display = 'block';
 		actionBtn.style.display = 'none';

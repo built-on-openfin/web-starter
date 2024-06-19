@@ -26,8 +26,7 @@
 			"details": {
 				"url": "http://localhost:6060/platform/custom-tab/custom-tab.html"
 			},
-			"interop": {
-			}
+			"interop": {}
 		}
 	]
 }
