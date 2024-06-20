@@ -21,6 +21,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
 												"name": "fdc3-context-view-2-0/e7fe7df3-6f64-4235-899f-4e91af2cb32d"
 											},
+											"reorderEnabled": false,
 											"title": "Developer FDC3 Context"
 										},
 										{
@@ -30,6 +31,7 @@
 												"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/views/fdc3-view.html",
 												"name": "local-fdc3-context-view/e7fe7df3-6f64-4235-899f-4e91af2cb32d2"
 											},
+											"reorderEnabled": false,
 											"title": "FDC3 Local Context"
 										},
 										{
@@ -39,6 +41,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/intent/2-0/fdc3-intent-view.html",
 												"name": "fdc3-intent-view-2-0/54a8ef85-a885-4234-be46-9d52e88fcb74"
 											},
+											"reorderEnabled": false,
 											"title": "Developer FDC3 Intent"
 										},
 										{
@@ -48,6 +51,7 @@
 												"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/views/fdc3-intent-view.html",
 												"name": "local-fdc3-intent-view/54a8ef85-a885-4234-be46-9d52e88fsb74"
 											},
+											"reorderEnabled": false,
 											"title": "FDC3 Local Intent"
 										}
 									]
@@ -70,6 +74,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "interop-broadcast-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac97"
 											},
+											"reorderEnabled": false,
 											"title": "Developer Interop Context"
 										},
 										{
@@ -79,6 +84,7 @@
 												"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/views/interop-view.html",
 												"name": "local-interop-context-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac92"
 											},
+											"reorderEnabled": false,
 											"title": "Interop Local Context"
 										},
 										{
@@ -88,6 +94,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/intent/interop-intent-view.html",
 												"name": "interop-intent-view-2-0/2d9a3624-fd0e-4e0a-b681-a79a9616b871"
 											},
+											"reorderEnabled": false,
 											"title": "Developer Interop Intent"
 										},
 										{
@@ -97,6 +104,7 @@
 												"url": "https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/views/interop-intent-view.html",
 												"name": "local-interop-intent-view/54a8ef86-a775-4234-be46-9d52e88fsb74"
 											},
+											"reorderEnabled": false,
 											"title": "Interop Local Intent"
 										}
 									]
@@ -146,7 +154,8 @@
 												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/keeping-track/index.html",
 												"componentName": "view"
 											},
-											"title": "Keeping Track"
+											"title": "Keeping Track",
+											"reorderEnabled": false
 										},
 										{
 											"type": "component",
@@ -156,7 +165,8 @@
 												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/annual-leave/index.html",
 												"componentName": "view"
 											},
-											"title": "Annual Leave"
+											"title": "Annual Leave",
+											"reorderEnabled": false
 										},
 										{
 											"type": "component",
@@ -166,7 +176,8 @@
 												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/360-feedback/index.html",
 												"componentName": "view"
 											},
-											"title": "360 Feedback"
+											"title": "360 Feedback",
+											"reorderEnabled": false
 										}
 									]
 								},
@@ -206,7 +217,8 @@
 														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/company-comms/index.html",
 														"componentName": "view"
 													},
-													"title": "Company News"
+													"title": "Company News",
+													"reorderEnabled": false
 												},
 												{
 													"type": "component",
@@ -216,7 +228,8 @@
 														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/company-cal/index.html",
 														"componentName": "view"
 													},
-													"title": "Company Calendar"
+													"title": "Company Calendar",
+													"reorderEnabled": false
 												},
 												{
 													"type": "component",
@@ -226,7 +239,8 @@
 														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/franchise-comms/index.html",
 														"componentName": "view"
 													},
-													"title": "Franchise Comms"
+													"title": "Franchise Comms",
+													"reorderEnabled": false
 												}
 											]
 										}
@@ -361,8 +375,8 @@
 																"name": "internal-generated-view-9b0bdbff-3de4-4b86-8abb-be1df6876a66"
 															},
 															"isClosable": true,
-															"reorderEnabled": true,
-															"title": "Participant History"
+															"title": "Participant History",
+															"reorderEnabled": false
 														},
 														{
 															"type": "component",
@@ -372,7 +386,7 @@
 																"name": "internal-generated-view-9b0bdbff-3de4-4b86-8abb-be1df6876a36"
 															},
 															"isClosable": true,
-															"reorderEnabled": true,
+															"reorderEnabled": false,
 															"title": "Participant Selection"
 														}
 													]
@@ -428,7 +442,8 @@
 													"currentContextGroup": "green"
 												}
 											},
-											"title": "Details"
+											"title": "Details",
+											"reorderEnabled": false
 										},
 										{
 											"type": "component",
@@ -440,7 +455,8 @@
 													"currentContextGroup": "green"
 												}
 											},
-											"title": "Summary"
+											"title": "Summary",
+											"reorderEnabled": false
 										}
 									]
 								}
