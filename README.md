@@ -24,6 +24,10 @@ We recommend:
 - Running **npm install** from the root folder
 - Running **npm run build** from the root folder - this will ensure every sample has all of it's dependencies and builds correctly (you can then open a terminal window or two at e.g. how-to/web-interop-basic to build that specific sample or run sample specific commands)
 
+## Known Issues
+
+Known issues are covered in our [Known Issues document](./docs/known-issues.md).
+
 ## What you can do with this repository
 
 This repository contains examples showing you how to use our web npm packages and their related APIs.
