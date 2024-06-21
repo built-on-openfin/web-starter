@@ -30935,7 +30935,7 @@ var exports = __webpack_exports__;
   \********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.swapLayout = void 0;
+exports.removeThisLayout = exports.addLayout = exports.readLayouts = exports.saveLayout = void 0;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
 let PARENT_CONTAINER;
@@ -30968,10 +30968,124 @@ function setupPanels(settings) {
  * Attach listeners to elements.
  */
 async function attachListeners() {
-    const swapButton = document.querySelector("#swap-layouts");
-    swapButton?.addEventListener("click", async () => {
-        await swapLayout();
+    const addLayoutBtn = document.querySelector("#add-layout");
+    addLayoutBtn?.addEventListener("click", async () => {
+        await addLayout();
     });
+}
+/**
+ * Attaches Listeners to Tab Click Events.
+ * @param tabName the name of the tab to add the event to.
+ */
+async function attachTabListener(tabName) {
+    const tabBtn = document.querySelector(`#${tabName}`);
+    tabBtn?.addEventListener("click", async () => {
+        await selectTab(tabName);
+    });
+}
+/**
+ * Creates a new tab in the tab row given a specific tab/layout name.
+ */
+async function createTabBtn(tabName) {
+    const tabRow = document.querySelector("#tabs");
+    const newTab = document.createElement("div");
+    newTab.id = `tab-${tabName}`;
+    newTab.className = "tab";
+    newTab.style.display = "block";
+    newTab.append(document.createTextNode(`${tabName}`));
+    const closeBtn = document.createElement("span");
+    closeBtn.className = "close-btn";
+    closeBtn.innerHTML = "X";
+    closeBtn.addEventListener("click", async (e) => {
+        await removeTab(tabName);
+        e.stopPropagation();
+    });
+    newTab.append(closeBtn);
+    if (tabRow) {
+        tabRow.append(newTab);
+        if (document.querySelector(`#tab-${tabName}`)) {
+            await attachTabListener(newTab.id);
+            await selectTab(tabName);
+        }
+    }
+}
+/**
+ * Makes a layout and tab active.
+ */
+async function selectTab(tabName, removedTabName) {
+    console.log(`Tab ${tabName} selected`);
+    let actualName = tabName;
+    if (tabName.includes("tab")) {
+        const split = tabName.split("-");
+        actualName = split[1];
+    }
+    const currentOrder = window.localStorage.getItem("order");
+    if (currentOrder !== "") {
+        const layoutsArr = currentOrder?.split(",");
+        if (layoutsArr) {
+            for (const tab of layoutsArr) {
+                if (actualName !== removedTabName) {
+                    if (tab === actualName) {
+                        await showTab(tab);
+                    }
+                    else {
+                        await hideTab(tab);
+                    }
+                }
+            }
+        }
+    }
+}
+/**
+ * Makes a layout and tab hidden.
+ */
+async function showTab(tabName) {
+    console.log(`Tab ${tabName} showing...`);
+    const currentTab = document.querySelector(`#${tabName}`);
+    if (currentTab) {
+        currentTab.style.display = "block";
+    }
+}
+/**
+ * Makes a layout and tab hidden.
+ */
+async function hideTab(tabName) {
+    console.log(`Tab ${tabName} hiding...`);
+    const currentTab = document.querySelector(`#${tabName}`);
+    if (currentTab) {
+        currentTab.style.display = "none";
+    }
+}
+/**
+ * Removes a layout & tab from the page.
+ */
+async function removeTab(tabName) {
+    console.log(`Removing Tab & Layout ${tabName}`);
+    const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+    await lm?.removeLayout({ layoutName: tabName });
+    const tabToRemove = document.querySelector(`#tab-${tabName}`);
+    tabToRemove?.remove();
+    const currentOrder = window.localStorage.getItem("order");
+    if (currentOrder !== "") {
+        const layouts = currentOrder?.split(",");
+        const newOrder = layouts?.filter((e) => e !== tabName);
+        if (newOrder && newOrder.length > 0) {
+            window.localStorage.setItem("order", newOrder.toString());
+        }
+        else {
+            window.localStorage.setItem("order", "");
+        }
+        if (newOrder) {
+            if (newOrder.length > 0) {
+                await selectTab(newOrder[0], tabName);
+            }
+            else {
+                console.log("There are no layouts loaded.");
+                // eslint-disable-next-line no-alert
+                alert("There are no layouts loaded.  Please add one.");
+            }
+        }
+    }
 }
 /**
  * A Create function for layouts.
@@ -30989,15 +31103,12 @@ async function createLayout(fin, layoutName, layout, order) {
     PARENT_CONTAINER?.append(container);
     // Normally you can use state here, but just tracking the order of layouts in localStorage.
     const currentOrder = window.localStorage.getItem("order");
-    if (!currentOrder) {
-        window.localStorage.setItem("order", "");
-    }
     let newOrder = "";
-    if (order === 0) {
+    if (!currentOrder || currentOrder === "") {
         newOrder = layoutName;
     }
     else {
-        newOrder = currentOrder ? currentOrder.concat(",", layoutName) : "";
+        newOrder = currentOrder?.concat(",", layoutName);
     }
     window.localStorage.setItem("order", newOrder);
     // Finally, call the Layout.create() function to apply the snapshot layout to the div we just created.
@@ -31026,38 +31137,88 @@ function makeOverride(fin, layoutContainerId) {
              * @param snapshot The layouts object containing the fixed set of available layouts.
              */
             async applyLayoutSnapshot(snapshot) {
-                console.log(`Does this exist? ${Boolean(this.layoutContainer)}`);
+                console.log(`[Apply Layout] Does this exist? ${Boolean(this.layoutContainer)}`);
                 if (this.layoutContainer !== null && this.layoutContainer !== undefined) {
-                    setTimeout(() => Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) => createLayout(fin, layoutName, layout, i)), 1000);
-                    console.log("Layouts loaded");
+                    for (const [key, value] of Object.entries(snapshot.layouts)) {
+                        this.layoutMapArray.push({ layoutName: key, layout: value, container: this.layoutContainer });
+                    }
+                    setTimeout(() => Object.entries(snapshot.layouts).map(async ([layoutName, layout], i) => {
+                        await createLayout(fin, layoutName, layout, i);
+                        await createTabBtn(layoutName);
+                    }), 1000);
+                    console.log("[Apply Layout] Layouts loaded");
+                    console.log(`[Apply Layout] Layouts are: ${JSON.stringify(this.layoutMapArray)}`);
+                    window.localStorage.setItem("currentLayout", JSON.stringify(this.layoutMapArray));
                 }
+            }
+            /**
+             * Remove Layout - You guessed it, it removes a layout from the existing array of layouts.
+             * @param id The name of the layout you want removed.
+             */
+            async removeLayout(id) {
+                const index = this.layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
+                console.log(`[LM Override] Removing Layout ${id.layoutName}`);
+                console.log(`[LM Override] Found layout at index ${index}`);
+                await removeThisLayout(id.layoutName);
             }
         };
     };
 }
 /**
- * Returns a layout from the settings with a provided name.
- * @returns The default layout from the settings.
+ * Saves the list of layout items to Local Storage.
+ * @param updatedLayoutContents List of Layouts to save.
  */
-async function swapLayout() {
-    // Get that order of created div ids from storage, or state, or wherever you want to save them.
-    const currentOrder = window.localStorage.getItem("order");
-    const layouts = currentOrder?.split(",");
-    // This is a simple swap between two, but you can do this anyway you like.
-    const firstLayout = document.querySelector(`#${layouts ? layouts[0] : null}`);
-    const secondLayout = document.querySelector(`#${layouts ? layouts[1] : null}`);
-    if (firstLayout && secondLayout) {
-        if (secondLayout.style.display === "block") {
-            firstLayout.style.display = "block";
-            secondLayout.style.display = "none";
-        }
-        else {
-            firstLayout.style.display = "none";
-            secondLayout.style.display = "block";
-        }
+async function saveLayout(updatedLayoutContents) {
+    window.localStorage.setItem("currentLayout", JSON.stringify(updatedLayoutContents));
+}
+exports.saveLayout = saveLayout;
+/**
+ *	Reads a list of layouts from Local Storage.
+ *	@returns List of Layouts.
+ */
+function readLayouts() {
+    const currentLayouts = window.localStorage.getItem("currentLayout");
+    if (currentLayouts) {
+        return JSON.parse(currentLayouts);
+    }
+    return [];
+}
+exports.readLayouts = readLayouts;
+/**
+ * Adds another layout.
+ */
+async function addLayout() {
+    const secondLayoutToAdd = await (0, settings_1.getSecondLayout)();
+    console.log("[Add Layout] Grabbing Secondary layout file...");
+    if (secondLayoutToAdd !== undefined) {
+        const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+        console.log("[Add Layout] Adding layout");
+        await lm?.applyLayoutSnapshot(secondLayoutToAdd);
+    }
+    else {
+        console.log("[Add Layout] Error adding Layout.  No Secondary Layout exists.");
     }
 }
-exports.swapLayout = swapLayout;
+exports.addLayout = addLayout;
+/**
+ * Click function to remove a layout by name.
+ * @param layoutName the name of a layout.
+ */
+async function removeThisLayout(layoutName) {
+    // remove layout from state.
+    const layoutsBefore = readLayouts();
+    let layoutsRemoved = [];
+    const layoutNameElement = document.querySelector(`#${layoutName}`);
+    if (layoutsBefore.length > 0 && layoutNameElement !== null) {
+        const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
+        layoutsRemoved = layoutsBefore.splice(idx, 1);
+        console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsRemoved)}`);
+        await saveLayout(layoutsBefore);
+        console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
+        layoutNameElement.remove();
+    }
+}
+exports.removeThisLayout = removeThisLayout;
 /**
  * Initializes the OpenFin Web Broker connection.
  */
@@ -31091,6 +31252,7 @@ async function init() {
         connectionInheritance: "enabled",
         platform: { layoutSnapshot }
     });
+    window.fin = fin;
     if (fin) {
         const layoutManagerOverride = makeOverride(fin, settings.platform.layout.layoutContainerId);
         // You may now use the `fin` object to initialize the broker and the layout.
