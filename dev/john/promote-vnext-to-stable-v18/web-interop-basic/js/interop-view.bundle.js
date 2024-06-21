@@ -29921,7 +29921,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.init = void 0;
+exports.init = init;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
 /**
@@ -29954,7 +29954,6 @@ async function init() {
         window.dispatchEvent(event);
     }
 }
-exports.init = init;
 
 
 /***/ }),
@@ -29968,7 +29967,7 @@ exports.init = init;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
+exports.getSettings = getSettings;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -29983,7 +29982,6 @@ async function getSettings() {
         }
     };
 }
-exports.getSettings = getSettings;
 
 
 /***/ }),

@@ -29921,7 +29921,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
+exports.getSettings = getSettings;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -29936,7 +29936,6 @@ async function getSettings() {
         }
     };
 }
-exports.getSettings = getSettings;
 
 
 /***/ }),

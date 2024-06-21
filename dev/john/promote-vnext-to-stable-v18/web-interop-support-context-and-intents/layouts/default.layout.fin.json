@@ -18,7 +18,7 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
 												"name": "fdc3-context-view-2-0/e7fe7df3-6f64-4235-899f-4e91af2cb32d"
 											},
 											"reorderEnabled": false,
@@ -38,7 +38,7 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/fdc3/intent/2-0/fdc3-intent-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
 												"name": "fdc3-intent-view-2-0/54a8ef85-a885-4234-be46-9d52e88fcb74"
 											},
 											"reorderEnabled": false,
@@ -71,7 +71,7 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/context/interop-broadcast-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "interop-broadcast-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac97"
 											},
 											"reorderEnabled": false,
@@ -91,7 +91,7 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/vnext/interop/interop-api/intent/interop-intent-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/intent/interop-intent-view.html",
 												"name": "interop-intent-view-2-0/2d9a3624-fd0e-4e0a-b681-a79a9616b871"
 											},
 											"reorderEnabled": false,

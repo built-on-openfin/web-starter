@@ -29921,7 +29921,8 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDefaultLayout = exports.getSettings = void 0;
+exports.getSettings = getSettings;
+exports.getDefaultLayout = getDefaultLayout;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -29933,7 +29934,6 @@ async function getSettings() {
     }
     return settings;
 }
-exports.getSettings = getSettings;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -29951,7 +29951,6 @@ async function getDefaultLayout() {
     }
     return settings.platform.layout.defaultLayout;
 }
-exports.getDefaultLayout = getDefaultLayout;
 /**
  * Returns the settings from the manifest file.
  * @returns customSettings for this example

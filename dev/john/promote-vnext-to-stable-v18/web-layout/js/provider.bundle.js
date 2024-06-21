@@ -29921,7 +29921,9 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSecondLayout = exports.getDefaultLayout = exports.getSettings = void 0;
+exports.getSettings = getSettings;
+exports.getDefaultLayout = getDefaultLayout;
+exports.getSecondLayout = getSecondLayout;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -29933,7 +29935,6 @@ async function getSettings() {
     }
     return settings;
 }
-exports.getSettings = getSettings;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -29951,7 +29952,6 @@ async function getDefaultLayout() {
     }
     return settings.platform.layout.defaultLayout;
 }
-exports.getDefaultLayout = getDefaultLayout;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -29969,7 +29969,6 @@ async function getSecondLayout() {
     }
     return settings.platform.layout.secondLayout;
 }
-exports.getSecondLayout = getSecondLayout;
 /**
  * Returns the settings from the manifest file.
  * @returns customSettings for this example
@@ -30935,7 +30934,7 @@ var exports = __webpack_exports__;
   \********************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.swapLayout = void 0;
+exports.swapLayout = swapLayout;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
 let PARENT_CONTAINER;
@@ -31057,7 +31056,6 @@ async function swapLayout() {
         }
     }
 }
-exports.swapLayout = swapLayout;
 /**
  * Initializes the OpenFin Web Broker connection.
  */

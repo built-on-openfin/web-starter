@@ -29921,7 +29921,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.init = void 0;
+exports.init = init;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.js");
 const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
 /**
@@ -29970,7 +29970,6 @@ async function init(inherit = true) {
         window.dispatchEvent(event);
     }
 }
-exports.init = init;
 
 
 /***/ }),
@@ -29984,7 +29983,9 @@ exports.init = init;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSecondLayout = exports.getDefaultLayout = exports.getSettings = void 0;
+exports.getSettings = getSettings;
+exports.getDefaultLayout = getDefaultLayout;
+exports.getSecondLayout = getSecondLayout;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -29996,7 +29997,6 @@ async function getSettings() {
     }
     return settings;
 }
-exports.getSettings = getSettings;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -30014,7 +30014,6 @@ async function getDefaultLayout() {
     }
     return settings.platform.layout.defaultLayout;
 }
-exports.getDefaultLayout = getDefaultLayout;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -30032,7 +30031,6 @@ async function getSecondLayout() {
     }
     return settings.platform.layout.secondLayout;
 }
-exports.getSecondLayout = getSecondLayout;
 /**
  * Returns the settings from the manifest file.
  * @returns customSettings for this example

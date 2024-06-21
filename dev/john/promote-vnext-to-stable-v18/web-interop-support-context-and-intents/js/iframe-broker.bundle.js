@@ -21,7 +21,10 @@ const e="web-broker-ports-ready",t="worker-initialize-connection",r="create-fall
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.saveSettings = exports.clearSettings = exports.getDefaultLayout = exports.getSettings = void 0;
+exports.getSettings = getSettings;
+exports.getDefaultLayout = getDefaultLayout;
+exports.clearSettings = clearSettings;
+exports.saveSettings = saveSettings;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -48,7 +51,6 @@ async function getSettings() {
     const settingsJson = (await platformSettings.json());
     return settingsJson;
 }
-exports.getSettings = getSettings;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -66,7 +68,6 @@ async function getDefaultLayout() {
     }
     return settings.platform.layout.defaultLayout;
 }
-exports.getDefaultLayout = getDefaultLayout;
 /**
  * Returns the settings from the manifest file.
  * @returns customSettings for this example
@@ -88,7 +89,6 @@ async function clearSettings() {
     const settingsId = getSavedSettingsId();
     localStorage.removeItem(settingsId);
 }
-exports.clearSettings = clearSettings;
 /**
  * Saves the settings.
  * @param settings The settings to save.
@@ -97,7 +97,6 @@ async function saveSettings(settings) {
     const settingsId = getSavedSettingsId();
     localStorage.setItem(settingsId, JSON.stringify(settings));
 }
-exports.saveSettings = saveSettings;
 /**
  * Retrieves saved settings from local storage.
  * @returns The saved settings.

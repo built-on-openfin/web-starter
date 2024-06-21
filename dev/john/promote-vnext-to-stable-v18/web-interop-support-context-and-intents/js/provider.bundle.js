@@ -33497,7 +33497,10 @@ exports.AppResolverHelper = AppResolverHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.bringAppToFront = exports.launch = exports.getApps = exports.getApp = void 0;
+exports.getApp = getApp;
+exports.getApps = getApps;
+exports.launch = launch;
+exports.bringAppToFront = bringAppToFront;
 const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
 const settings_1 = __webpack_require__(/*! ../settings/settings */ "./client/src/platform/settings/settings.ts");
 let cachedApps;
@@ -33511,7 +33514,6 @@ async function getApp(appId) {
     const foundApp = apps.find((app) => app.appId === appId || (app.type === "web" && app.details.url === appId));
     return foundApp;
 }
-exports.getApp = getApp;
 /**
  * Get the list of applications and filter if requested.
  * @returns The list of application.
@@ -33533,7 +33535,6 @@ async function getApps() {
     cachedApps = [];
     return cachedApps;
 }
-exports.getApps = getApps;
 /**
  * Launch an application in the way specified by its manifest type.
  * @param platformApp The application to launch or it's id.
@@ -33570,7 +33571,6 @@ async function launch(platformApp) {
     }
     return undefined;
 }
-exports.launch = launch;
 /**
  * Brings the targeted app to front.
  * @param platformApp The app to bring to front.
@@ -33585,7 +33585,6 @@ async function bringAppToFront(platformApp, targets) {
         }
     }
 }
-exports.bringAppToFront = bringAppToFront;
 /**
  * Get the layout for the application.
  * @param platformApp The application to get the layout for.
@@ -33922,7 +33921,8 @@ exports.AppIntentHelper = AppIntentHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.mapToAppMetaData = exports.getAppsMetaData = void 0;
+exports.getAppsMetaData = getAppsMetaData;
+exports.mapToAppMetaData = mapToAppMetaData;
 /**
  * Gets app meta data in the right format based on the version.
  * @param apps the apps to get the meta data for.
@@ -33942,7 +33942,6 @@ async function getAppsMetaData(apps, findInstances) {
     }
     return appsMetaData;
 }
-exports.getAppsMetaData = getAppsMetaData;
 /**
  * Map the platform app to app metadata.
  * @param app The application to map.
@@ -33963,7 +33962,6 @@ function mapToAppMetaData(app, resultType) {
     };
     return appMetaData;
 }
-exports.mapToAppMetaData = mapToAppMetaData;
 
 
 /***/ }),
@@ -34529,7 +34527,7 @@ exports.IntentResolverHelper = IntentResolverHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getConstructorOverride = void 0;
+exports.getConstructorOverride = getConstructorOverride;
 const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
 const apps_1 = __webpack_require__(/*! ../apps/apps */ "./client/src/platform/apps/apps.ts");
 const app_id_helper_1 = __webpack_require__(/*! ./app-id-helper */ "./client/src/platform/broker/app-id-helper.ts");
@@ -35268,7 +35266,6 @@ async function constructorOverride(options) {
 async function getConstructorOverride(options) {
     return constructorOverride(options);
 }
-exports.getConstructorOverride = getConstructorOverride;
 
 
 /***/ }),
@@ -35282,7 +35279,7 @@ exports.getConstructorOverride = getConstructorOverride;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.makeOverride = void 0;
+exports.makeOverride = makeOverride;
 /**
  * MakeOverride assists in loading the Fin object before the applyLayoutSnapshot Manager call.
  * @param fin the fin object.
@@ -35496,7 +35493,6 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
         };
     };
 }
-exports.makeOverride = makeOverride;
 
 
 /***/ }),
@@ -35607,7 +35603,10 @@ exports.SettingsResolverHelper = SettingsResolverHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.saveSettings = exports.clearSettings = exports.getDefaultLayout = exports.getSettings = void 0;
+exports.getSettings = getSettings;
+exports.getDefaultLayout = getDefaultLayout;
+exports.clearSettings = clearSettings;
+exports.saveSettings = saveSettings;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -35634,7 +35633,6 @@ async function getSettings() {
     const settingsJson = (await platformSettings.json());
     return settingsJson;
 }
-exports.getSettings = getSettings;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -35652,7 +35650,6 @@ async function getDefaultLayout() {
     }
     return settings.platform.layout.defaultLayout;
 }
-exports.getDefaultLayout = getDefaultLayout;
 /**
  * Returns the settings from the manifest file.
  * @returns customSettings for this example
@@ -35674,7 +35671,6 @@ async function clearSettings() {
     const settingsId = getSavedSettingsId();
     localStorage.removeItem(settingsId);
 }
-exports.clearSettings = clearSettings;
 /**
  * Saves the settings.
  * @param settings The settings to save.
@@ -35683,7 +35679,6 @@ async function saveSettings(settings) {
     const settingsId = getSavedSettingsId();
     localStorage.setItem(settingsId, JSON.stringify(settings));
 }
-exports.saveSettings = saveSettings;
 /**
  * Retrieves saved settings from local storage.
  * @returns The saved settings.
@@ -35718,7 +35713,21 @@ function getSavedSettingsId() {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getCommandLineArgs = exports.sanitizeString = exports.formatError = exports.randomUUID = exports.deepMerge = exports.deepEqual = exports.objectClone = exports.isInteger = exports.isBoolean = exports.isNumberValue = exports.isNumber = exports.isStringValue = exports.isString = exports.isObject = exports.isEmpty = void 0;
+exports.isEmpty = isEmpty;
+exports.isObject = isObject;
+exports.isString = isString;
+exports.isStringValue = isStringValue;
+exports.isNumber = isNumber;
+exports.isNumberValue = isNumberValue;
+exports.isBoolean = isBoolean;
+exports.isInteger = isInteger;
+exports.objectClone = objectClone;
+exports.deepEqual = deepEqual;
+exports.deepMerge = deepMerge;
+exports.randomUUID = randomUUID;
+exports.formatError = formatError;
+exports.sanitizeString = sanitizeString;
+exports.getCommandLineArgs = getCommandLineArgs;
 /**
  * Test if a value is a undefined or null.
  * @param value The value to test.
@@ -35728,7 +35737,6 @@ function isEmpty(value) {
     // eslint-disable-next-line no-restricted-syntax
     return value === undefined || value === null;
 }
-exports.isEmpty = isEmpty;
 /**
  * Test if a value is an object.
  * @param value The value to test.
@@ -35738,7 +35746,6 @@ function isObject(value) {
     // eslint-disable-next-line no-restricted-syntax
     return value !== undefined && value !== null && typeof value === "object" && !Array.isArray(value);
 }
-exports.isObject = isObject;
 /**
  * Test if a value is a string.
  * @param value The value to test.
@@ -35748,7 +35755,6 @@ function isString(value) {
     // eslint-disable-next-line no-restricted-syntax
     return value !== undefined && value !== null && typeof value === "string";
 }
-exports.isString = isString;
 /**
  * Test if a value is a string that is not empty.
  * @param value The value to test.
@@ -35757,7 +35763,6 @@ exports.isString = isString;
 function isStringValue(value) {
     return isString(value) && value.trim().length > 0;
 }
-exports.isStringValue = isStringValue;
 /**
  * Test if a value is a number.
  * @param value The value to test.
@@ -35767,7 +35772,6 @@ function isNumber(value) {
     // eslint-disable-next-line no-restricted-syntax
     return value !== undefined && value !== null && typeof value === "number";
 }
-exports.isNumber = isNumber;
 /**
  * Test if a value is a number with a real value i.e. not NaN or Infinite.
  * @param value The value to test.
@@ -35776,7 +35780,6 @@ exports.isNumber = isNumber;
 function isNumberValue(value) {
     return isNumber(value) && !Number.isNaN(value) && Number.isFinite(value);
 }
-exports.isNumberValue = isNumberValue;
 /**
  * Test if a value is a boolean.
  * @param value The value to test.
@@ -35786,7 +35789,6 @@ function isBoolean(value) {
     // eslint-disable-next-line no-restricted-syntax
     return value !== undefined && value !== null && typeof value === "boolean";
 }
-exports.isBoolean = isBoolean;
 /**
  * Test if a value is an integer.
  * @param value The value to test.
@@ -35795,7 +35797,6 @@ exports.isBoolean = isBoolean;
 function isInteger(value) {
     return isNumber(value) && Number.isInteger(value);
 }
-exports.isInteger = isInteger;
 /**
  * Deep clone an object.
  * @param obj The object to clone.
@@ -35805,7 +35806,6 @@ function objectClone(obj) {
     // eslint-disable-next-line no-restricted-syntax
     return obj === undefined ? undefined : JSON.parse(JSON.stringify(obj));
 }
-exports.objectClone = objectClone;
 /**
  * Do a deep comparison of the objects.
  * @param obj1 The first object to compare.
@@ -35846,7 +35846,6 @@ function deepEqual(obj1, obj2, matchPropertyOrder = true) {
     }
     return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
-exports.deepEqual = deepEqual;
 /**
  * Deep merge two objects.
  * @param target The object to be merged into.
@@ -35892,7 +35891,6 @@ function deepMerge(target, ...sources) {
     }
     return deepMerge(target, ...sources);
 }
-exports.deepMerge = deepMerge;
 /**
  * Polyfills randomUUID if running in a non-secure context.
  * @returns The random UUID.
@@ -35919,7 +35917,6 @@ function randomUUID() {
     }
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }
-exports.randomUUID = randomUUID;
 /**
  * Format an error to a readable string.
  * @param err The error to format.
@@ -35940,7 +35937,6 @@ function formatError(err) {
     }
     return JSON.stringify(err);
 }
-exports.formatError = formatError;
 /**
  * A basic string sanitize function that removes angle brackets <> from a string.
  * @param content the content to sanitize
@@ -35958,7 +35954,6 @@ function sanitizeString(content) {
     }
     return "";
 }
-exports.sanitizeString = sanitizeString;
 /**
  * Get the command line arguments from a command line string.
  * Examples of command line strings: arg1 key1=value1 key2="value with spaces" key3='value3' key4='value with more spaces'`.
@@ -35975,7 +35970,6 @@ function getCommandLineArgs(commandLine) {
     }
     return matches;
 }
-exports.getCommandLineArgs = getCommandLineArgs;
 
 
 /***/ }),
