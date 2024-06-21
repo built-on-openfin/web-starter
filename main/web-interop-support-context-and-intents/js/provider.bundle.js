@@ -35504,6 +35504,7 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsResolverHelper = void 0;
+const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
 const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings/settings.ts");
 /**
  * An helper for updating and resolving settings.
@@ -35560,7 +35561,10 @@ class SettingsResolverHelper {
                 if (response.settingsResolverResponse) {
                     if (response.settingsResolverResponse.action === "save-reload" &&
                         response.settingsResolverResponse.settings) {
-                        await (0, settings_1.saveSettings)(response.settingsResolverResponse.settings);
+                        const settingsToSave = (0, utils_1.objectClone)(response.settingsResolverResponse.settings);
+                        const layoutManager = fin.Platform.Layout.getCurrentLayoutManagerSync();
+                        settingsToSave.platform.layout.defaultLayout = await layoutManager.getLayoutSnapshot();
+                        await (0, settings_1.saveSettings)(settingsToSave);
                         location.reload();
                     }
                     else if (response.settingsResolverResponse.action === "reset-reload") {
@@ -37061,6 +37065,7 @@ async function init() {
         console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
         return;
     }
+    listenForConfigRequests(settings);
     // Connect to the OpenFin Web Broker and pass the default layout.
     // It is good practice to specify providerId even if content is explicitly specifying it for cases where
     // this provider uses our layout system and content uses inheritance. currentContextGroup
@@ -37076,7 +37081,6 @@ async function init() {
         connectionInheritance: "enabled",
         platform: { layoutSnapshot }
     });
-    listenForConfigRequests(settings);
     if (fin) {
         // Store the fin object in the window object for easy access.
         window.fin = fin;
