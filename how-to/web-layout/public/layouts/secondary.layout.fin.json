@@ -1,6 +1,6 @@
 {
 	"layouts": {
-		"new": {
+		"default": {
 			"content": [
 				{
 					"type": "row",
