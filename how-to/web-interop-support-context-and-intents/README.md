@@ -23,7 +23,7 @@ The platform also supports:
 
 ## Layout
 
-To show so much content we implemented a layout override so that we can:
+To show so much content we implemented a layoutManagerOverride so that we can:
 
 - Add and remove layouts
 - Load a saved collection of layouts
