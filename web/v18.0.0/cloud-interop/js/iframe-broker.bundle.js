@@ -21,7 +21,8 @@ const e="web-broker-ports-ready",t="worker-initialize-connection",r="create-fall
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDefaultLayout = exports.getSettings = void 0;
+exports.getSettings = getSettings;
+exports.getDefaultLayout = getDefaultLayout;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -33,7 +34,6 @@ async function getSettings() {
     }
     return settings;
 }
-exports.getSettings = getSettings;
 /**
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
@@ -51,7 +51,6 @@ async function getDefaultLayout() {
     }
     return settings.platform.layout.defaultLayout;
 }
-exports.getDefaultLayout = getDefaultLayout;
 /**
  * Returns the settings from the manifest file.
  * @returns customSettings for this example
@@ -97,7 +96,7 @@ async function getManifestSettings() {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it uses a non-standard name for the exports (exports).
 (() => {
 var exports = __webpack_exports__;
 /*!**********************************************!*\

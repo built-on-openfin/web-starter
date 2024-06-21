@@ -21,7 +21,7 @@ const e="web-broker-ports-ready",t="worker-initialize-connection",r="create-fall
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
+exports.getSettings = getSettings;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -36,7 +36,6 @@ async function getSettings() {
         }
     };
 }
-exports.getSettings = getSettings;
 
 
 /***/ })
@@ -69,7 +68,7 @@ exports.getSettings = getSettings;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it uses a non-standard name for the exports (exports).
 (() => {
 var exports = __webpack_exports__;
 /*!**********************************************!*\
