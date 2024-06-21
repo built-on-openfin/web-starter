@@ -14,7 +14,7 @@ The platform also supports:
 
 ## FDC3 Related
 
-- Reading multiple fdc3 app directories endpoints to create a list of applications
+- Reading multiple fdc3 app directories' endpoints to create a list of applications
 - The ability to launch an app using fdc3.open
 - The ability to raise intents or raise intents by context
 - The ability to find instances of applications and target them when raising an intent.
