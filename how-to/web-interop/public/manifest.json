@@ -14,23 +14,17 @@
 	],
 	"related_applications": [],
 	"custom_settings": {
-		"platform": {
-			"interop": {
-				"sharedWorkerUrl": "http://localhost:6060/js/shared-worker.bundle.js",
-				"brokerUrl": "http://localhost:6060/platform/iframe-broker.html",
-				"providerId": "web-interop",
-				"defaultContextGroup": "green"
-			},
-			"layout": {
-				"panels": {
-					"left": {
-						"url": "http://localhost:6060/views/fdc3-panel.html",
-						"frameId": "left-panel"
+		"endpointProvider": {
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "http://localhost:6060/settings.json"
 					}
-				},
-				"layoutContainerId": "layout_container",
-				"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
-			}
+				}
+			]
 		}
 	}
 }

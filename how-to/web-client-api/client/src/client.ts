@@ -25,6 +25,67 @@ interface APIOptions {
 }
 
 /**
+ * When requesting connection options from a parent window this message will be sent with no connectOptions but will be passed
+ * back with the connection options filled in.
+ */
+export interface ConnectOptionsRequestContext {
+	/**
+	 * The type of context.
+	 */
+	type: "openfin.coreWeb.connectConfig";
+	/**
+	 * Connect Config to be returned to the requestor
+	 */
+	connectConfig?: ConnectConfig;
+}
+
+/**
+ * If you do not know the connect options and you know that inheritance is not available or you want to try
+ * and request the connect options if inheritance fails then this setting can do this by sending a JSON object
+ * via postMessage upwards:
+ * {
+ * type: "openfin.coreWeb.connectConfig"
+ * }.
+ * The host should return that message back with the connection options:
+ * {
+ * type: "openfin.coreWeb.connectConfig",
+ * connectConfig: // this is the ConnectConfig type from @openfin/core-web
+ * }
+ */
+interface RequestConnectOptions {
+	/**
+	 * The target window to send the postMessage to. The default is top to cover child iframes as well.
+	 */
+	target?: "parent" | "top";
+	/**
+	 * The origin you are going to request connection details from. The default is * to cover all origins.
+	 * Generally for security you should specify the origin of the parent window you are targeting. If your
+	 * content can be hosted in multiple origins (dev, uat, prod or even different domains) then you should
+	 * restrict where your content can be loaded from using X-Frame-Options: ALLOW-FROM or
+	 * Content-Security-Policy: frame-ancestors.
+	 */
+	targetOrigin?: string;
+	/**
+	 * The origin you are going to receive connection details from. The default is * to cover all origins.
+	 * Generally for security you should specify the origin you expect to receive connection details from.
+	 * If your content can be hosted in multiple origins (dev, uat, prod or even different domains) then
+	 * you should restrict where your content can be loaded from using X-Frame-Options: ALLOW-FROM or
+	 * Content-Security-Policy: frame-ancestors.
+	 */
+	receivingOrigin?: string[];
+
+	/**
+	 * Do you just want to request if no connection details are passed or request if connection inheritance is not available or fails.
+	 */
+	strategy: "request" | "request-on-failure";
+
+	/**
+	 * The timeout in milliseconds to wait for a response. The default is 3000 milliseconds.
+	 */
+	timeout?: number;
+}
+
+/**
  * Options for the client API.
  */
 interface ClientOptions<T> {
@@ -50,6 +111,21 @@ interface ClientOptions<T> {
 	 * an OpenFin Web Layout.
 	 */
 	connectOptions?: ConnectConfig;
+
+	/**
+	 * If you do not know the connect options and you know that inheritance is not available or you want to try
+	 * and request the connect options if inheritance fails then this setting can do this by sending a JSON object
+	 * via postMessage upwards:
+	 * {
+	 * type: "openfin.coreWeb.connectConfig"
+	 * }.
+	 * The host should return that message back with the connection options:
+	 * {
+	 * type: "openfin.coreWeb.connectConfig",
+	 * connectConfig: // this is the ConnectConfig type from @openfin/core-web
+	 * }
+	 */
+	requestConnectOptions?: RequestConnectOptions;
 }
 
 const DEFAULT_LOGGER = {
@@ -69,6 +145,46 @@ const DEFAULT_OPTIONS: APIOptions = {
 };
 
 /**
+ * Requests the connection options from the parent window.
+ * @param options - The options to use when requesting the connection options.
+ * @returns A promise that resolves with the connection options.
+ */
+async function requestConnectOptions(options: RequestConnectOptions): Promise<ConnectConfig> {
+	return new Promise((resolve, reject) => {
+		const requestContext: ConnectOptionsRequestContext = {
+			type: "openfin.coreWeb.connectConfig"
+		};
+		const timer = setTimeout(() => {
+			reject(new Error("Timed out waiting for connection options."));
+		}, options.timeout ?? 3000);
+		/**
+		 * Handles the message event and resolves the promise with the connection options.
+		 * @param event - The message event.
+		 */
+		async function messageHandler(event: MessageEvent<ConnectOptionsRequestContext>): Promise<void> {
+			if (Array.isArray(options.receivingOrigin) && !options.receivingOrigin.includes(event.origin)) {
+				reject(new Error(`Received message from unexpected origin: ${event.origin}`));
+			} else if (event.data && event.data.type === "openfin.coreWeb.connectConfig") {
+				window.removeEventListener("message", messageHandler);
+				const connectConfig = event.data.connectConfig;
+				if (connectConfig === undefined) {
+					reject(new Error("No connection options were provided."));
+				} else {
+					clearTimeout(timer);
+					resolve(connectConfig);
+				}
+			}
+		}
+		window.addEventListener("message", messageHandler);
+		let target = window.top ?? window.parent;
+		if (options.target === "parent") {
+			target = window.parent;
+		}
+		target.postMessage(requestContext, options.targetOrigin ?? "*");
+	});
+}
+
+/**
  * Initializes (if required) and returns the fin and fdc3 API objects based on the options provided.
  * @param options - The options to use when initializing the API objects.
  * @returns A promise that resolves with the fin and fdc3 API objects.
@@ -86,9 +202,6 @@ export async function getAPI<FDC3 = typeof OpenFin.FDC3.v2_0>(
 	if (options.logger === undefined) {
 		options.logger = DEFAULT_LOGGER;
 	}
-	if (options.connectOptions === undefined) {
-		options.connectOptions = DEFAULT_CONNECT_OPTIONS;
-	}
 	if (options.api.fin) {
 		if (typeof window !== "undefined" && typeof (window as unknown as { fin: _Fin }).fin === "object") {
 			options.logger.info(
@@ -96,19 +209,61 @@ export async function getAPI<FDC3 = typeof OpenFin.FDC3.v2_0>(
 			);
 			response.fin = (window as unknown as { fin: _Fin }).fin;
 		} else {
+			let newFin: _Fin | undefined;
 			try {
 				options.logger.info(
-					`Creating Fin API instance through @openfin/core-web connect using the following options: ${JSON.stringify(options.connectOptions)}.`
+					`Creating Fin API instance through @openfin/core-web connect using the following options. 
+					Connect Options: 
+					${JSON.stringify(options.connectOptions)} 
+					Request Connect Options:
+					${JSON.stringify(options.requestConnectOptions)}`
 				);
-				const newFin = (await connect(options.connectOptions)) as unknown as _Fin;
-				response.fin = newFin;
-				finInitialized = true;
+				if (options.connectOptions !== undefined) {
+					newFin = (await connect(options.connectOptions)) as unknown as _Fin;
+				} else if (
+					options.requestConnectOptions !== undefined &&
+					options.requestConnectOptions.strategy === "request"
+				) {
+					const connectConfig = await requestConnectOptions(options.requestConnectOptions);
+					newFin = (await connect(connectConfig)) as unknown as _Fin;
+				} else {
+					newFin = (await connect(DEFAULT_CONNECT_OPTIONS)) as unknown as _Fin;
+				}
 			} catch (err) {
-				options.logger.error(
-					`Error creating Fin API instance through @openfin/core-web connect using the following options: ${JSON.stringify(options.connectOptions)}.`,
-					err as Error
-				);
+				if (
+					err instanceof Error &&
+					err.message.includes("Broker URL was not specified nor provided by a platform container") &&
+					options.requestConnectOptions?.strategy === "request-on-failure"
+				) {
+					try {
+						const requestedConnectConfig = await requestConnectOptions(options.requestConnectOptions);
+						newFin = (await connect(requestedConnectConfig)) as unknown as _Fin;
+					} catch (requestError) {
+						options.logger.error(
+							`Error creating Fin API instance through @openfin/core-web connect using the following options: 
+							Connect Options: 
+							${JSON.stringify(options.connectOptions)} 
+							Request Connect Options:
+							${JSON.stringify(options.requestConnectOptions)}`,
+							requestError as Error
+						);
+					}
+				} else {
+					options.logger.error(
+						`Error creating Fin API instance through @openfin/core-web connect using the following options: 
+						Connect Options: 
+						${JSON.stringify(options.connectOptions)} 
+						Request Connect Options:
+						${JSON.stringify(options.requestConnectOptions)}`,
+						err as Error
+					);
+				}
 			}
+			if (newFin === undefined) {
+				throw new Error("Failed to create a fin API instance.");
+			}
+			response.fin = newFin;
+			finInitialized = true;
 		}
 	}
 

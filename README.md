@@ -24,6 +24,10 @@ We recommend:
 - Running **npm install** from the root folder
 - Running **npm run build** from the root folder - this will ensure every sample has all of it's dependencies and builds correctly (you can then open a terminal window or two at e.g. how-to/web-interop-basic to build that specific sample or run sample specific commands)
 
+## Known Issues
+
+Known issues are covered in our [Known Issues document](./docs/known-issues.md).
+
 ## What you can do with this repository
 
 This repository contains examples showing you how to use our web npm packages and their related APIs.
@@ -36,6 +40,7 @@ Want to learn how to use our Channel API, Interop API or FDC3 API inside of a de
 | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Web Interop Basic](./how-to/web-interop-basic) | This basic how-to provides a way of configuring a a webpage with a number of framed applications that share contextual information.                                                                |          [Example](https://built-on-openfin.github.io/web-starter/web/v18.0.0/web-interop-basic/platform/provider.html)                                                                                                                                                                                                                                                                             |
 | [Web Interop](./how-to/web-interop) | This example how-to provides a way of configuring a a webpage with a number of framed applications using our layout system as well as a left hand panel so show that you can combine layout and iframe based content.                                                                |          [Example](https://built-on-openfin.github.io/web-starter/web/v18.0.0/web-interop/platform/provider.html)                                                                                                                                                                                                                                                                             |
+| [Web Interop - Support Context and Intents](./how-to/web-interop-support-context-and-intents) | This is an example of a platform that has utilized the options of having a custom interop broker and a custom layout override to implement a platform that supports FDC3 as well as enhanced layout capabilities..                                                                |          [Example](https://built-on-openfin.github.io/web-starter/web/v18.0.0/web-interop-support-context-and-intents/platform/provider.html)                                                                                                                                                                                                                                                                             |
 
 ### Cloud Interop
 
