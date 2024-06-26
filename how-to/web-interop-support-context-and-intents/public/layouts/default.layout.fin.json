@@ -21,7 +21,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
 												"name": "fdc3-context-view-2-0/e7fe7df3-6f64-4235-899f-4e91af2cb32d"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer FDC3 Context"
 										},
 										{
@@ -31,7 +31,7 @@
 												"url": "http://localhost:6060/views/fdc3-view.html",
 												"name": "local-fdc3-context-view/e7fe7df3-6f64-4235-899f-4e91af2cb32d2"
 											},
-											"reorderEnabled": false,
+
 											"title": "FDC3 Local Context"
 										},
 										{
@@ -41,7 +41,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
 												"name": "fdc3-intent-view-2-0/54a8ef85-a885-4234-be46-9d52e88fcb74"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer FDC3 Intent"
 										},
 										{
@@ -51,7 +51,7 @@
 												"url": "http://localhost:6060/views/fdc3-intent-view.html",
 												"name": "local-fdc3-intent-view/54a8ef85-a885-4234-be46-9d52e88fsb74"
 											},
-											"reorderEnabled": false,
+
 											"title": "FDC3 Local Intent"
 										}
 									]
@@ -74,7 +74,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "interop-broadcast-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac97"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer Interop Context"
 										},
 										{
@@ -84,7 +84,7 @@
 												"url": "http://localhost:6060/views/interop-view.html",
 												"name": "local-interop-context-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac92"
 											},
-											"reorderEnabled": false,
+
 											"title": "Interop Local Context"
 										},
 										{
@@ -94,7 +94,7 @@
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/intent/interop-intent-view.html",
 												"name": "interop-intent-view-2-0/2d9a3624-fd0e-4e0a-b681-a79a9616b871"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer Interop Intent"
 										},
 										{
@@ -104,7 +104,7 @@
 												"url": "http://localhost:6060/views/interop-intent-view.html",
 												"name": "local-interop-intent-view/54a8ef86-a775-4234-be46-9d52e88fsb74"
 											},
-											"reorderEnabled": false,
+
 											"title": "Interop Local Intent"
 										}
 									]
@@ -184,7 +184,7 @@
 								{
 									"type": "row",
 									"isClosable": false,
-									"reorderEnabled": false,
+
 									"title": "",
 									"height": 50,
 									"content": [
@@ -386,7 +386,7 @@
 																"name": "internal-generated-view-9b0bdbff-3de4-4b86-8abb-be1df6876a36"
 															},
 															"isClosable": true,
-															"reorderEnabled": false,
+
 															"title": "Participant Selection"
 														}
 													]

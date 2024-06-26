@@ -20,11 +20,11 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/cloud-interop": "0.38.55",
-		"@openfin/core-web": "0.38.55"
+		"@openfin/cloud-interop": "0.38.59",
+		"@openfin/core-web": "0.38.59"
 	},
 	"devDependencies": {
-		"@openfin/core": "38.82.55",
+		"@openfin/core": "38.82.59",
 		"copy-webpack-plugin": "^12.0.2",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
