@@ -14,7 +14,7 @@ The platform also supports:
 
 ## FDC3 Related
 
-- Reading multiple fdc3 app directories endpoints to create a list of applications
+- Reading multiple fdc3 app directories' endpoints to create a list of applications
 - The ability to launch an app using fdc3.open
 - The ability to raise intents or raise intents by context
 - The ability to find instances of applications and target them when raising an intent.
@@ -23,7 +23,7 @@ The platform also supports:
 
 ## Layout
 
-To show so much content we implemented a layout override so that we can:
+To show content in a multi-layout UI we implemented a layoutManagerOverride so that we can:
 
 - Add and remove layouts
 - Load a saved collection of layouts
@@ -35,7 +35,7 @@ To show so much content we implemented a layout override so that we can:
 
 We bring in a number of apps from our workspace platform starter and dev tools. We also include 4 basic apps that support context and intents (using the fdc3 and Interop API).
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/vnext/web-interop-support-context-and-intents/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v18.0.0/web-interop-support-context-and-intents/platform/provider.html)
 
 ## Getting Started
 

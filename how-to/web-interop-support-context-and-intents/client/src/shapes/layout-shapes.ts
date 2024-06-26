@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { WebLayoutSnapshot } from "@openfin/core-web";
+import type { WebLayoutOptions, WebLayoutSnapshot } from "@openfin/core-web";
 
 /**
  * Type of the parameter passed into the layoutManagerOverride function.
@@ -35,7 +35,7 @@ export interface LayoutManagerItem {
 	/**
 	 * Layout settings, and content options.
 	 */
-	layout: OpenFin.LayoutOptions;
+	layout: WebLayoutOptions;
 	/**
 	 * Layout element to bind the layout creation to.
 	 */

@@ -1,6 +1,12 @@
 import type OpenFin from "@openfin/core";
+import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
-import type { SettingsResolverOptions, SettingsResolverResponse } from "../../shapes/setting-shapes";
+import type {
+	Settings,
+	SettingsResolverOptions,
+	SettingsResolverResponse
+} from "../../shapes/setting-shapes";
+import { objectClone } from "../../utils";
 import { clearSettings, getSettings, saveSettings } from "./settings";
 
 /**
@@ -78,7 +84,10 @@ export class SettingsResolverHelper {
 						response.settingsResolverResponse.action === "save-reload" &&
 						response.settingsResolverResponse.settings
 					) {
-						await saveSettings(response.settingsResolverResponse.settings);
+						const settingsToSave = objectClone<Settings>(response.settingsResolverResponse.settings);
+						const layoutManager = fin.Platform.Layout.getCurrentLayoutManagerSync<PlatformLayoutSnapshot>();
+						settingsToSave.platform.layout.defaultLayout = await layoutManager.getLayoutSnapshot();
+						await saveSettings(settingsToSave);
 						location.reload();
 					} else if (response.settingsResolverResponse.action === "reset-reload") {
 						await clearSettings();

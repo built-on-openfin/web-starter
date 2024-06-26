@@ -8,7 +8,7 @@
 
 #### Layout containing a section with more than one view
 
-If you have more than one tab in a section you set reorderEnabled to false as it will be fully supported in a future release.
+If you have more than one tab in a section, you must set reorderEnabled to false as it will be fully supported in a future release.
 
 ```js
 {

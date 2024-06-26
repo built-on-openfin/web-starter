@@ -74,7 +74,6 @@ export function makeOverride(
 			 * @param snapshot The layouts object containing the fixed set of available layouts.
 			 */
 			public async applyLayoutSnapshot(snapshot: WebLayoutSnapshot): Promise<void> {
-				console.log(`[Apply Layout] Does this exist? ${Boolean(this._layoutContainer)}`);
 				if (this._layoutContainer !== null && this._layoutContainer !== undefined) {
 					const platformLayoutSnapshot = snapshot as PlatformLayoutSnapshot;
 					for (const [key, value] of Object.entries(snapshot.layouts)) {
@@ -119,10 +118,10 @@ export function makeOverride(
 				const layoutContainers = document.querySelectorAll<HTMLElement>("div.layout-container");
 				for (const layoutContainer of layoutContainers) {
 					if (layoutContainer.id === layoutName) {
-						layoutContainer.style.display = "block";
+						layoutContainer.classList.remove("hidden");
 						this._selectedLayout = layoutName;
 					} else {
-						layoutContainer.style.display = "none";
+						layoutContainer.classList.add("hidden");
 					}
 				}
 			}
@@ -133,8 +132,8 @@ export function makeOverride(
 			 */
 			public async removeLayout(id: OpenFin.LayoutIdentity): Promise<void> {
 				const index = this._layoutMapArray.findIndex((x) => x.layoutName === id.layoutName);
-				console.log(`[LM Override] Removing Layout ${id.layoutName}`);
-				console.log(`[LM Override] Found layout at index ${index}`);
+				console.log(`[Remove Layout] Removing Layout ${id.layoutName}`);
+				console.log(`[Remove Layout] Found layout at index ${index}`);
 				await this.removeThisLayout(id.layoutName, index);
 			}
 
@@ -219,9 +218,9 @@ export function makeOverride(
 				// Create a new div container for the layout.
 				const container = document.createElement("div");
 				container.id = layoutName;
-				container.className = "col fill layout-container";
-				container.style.display = "none";
+				container.className = "col fill layout-container hidden";
 				this._layoutContainer?.append(container);
+				await fin.Platform.Layout.create({ layoutName, layout, container });
 				if (entry === length) {
 					this.bindLayoutSelector(selectedLayout ?? layoutName);
 					await this.showLayout({
@@ -230,8 +229,6 @@ export function makeOverride(
 						name: fin.me.name
 					});
 				}
-				// Finally, call the Layout.create() function to apply the snapshot layout to the div we just created.
-				await fin.Platform.Layout.create({ layoutName, layout, container });
 			}
 
 			/**

@@ -167,6 +167,8 @@ async function init(): Promise<void> {
 		return;
 	}
 
+	listenForConfigRequests(settings);
+
 	// Connect to the OpenFin Web Broker and pass the default layout.
 	// It is good practice to specify providerId even if content is explicitly specifying it for cases where
 	// this provider uses our layout system and content uses inheritance. currentContextGroup
@@ -182,8 +184,6 @@ async function init(): Promise<void> {
 		connectionInheritance: "enabled",
 		platform: { layoutSnapshot }
 	});
-
-	listenForConfigRequests(settings);
 
 	if (fin) {
 		// Store the fin object in the window object for easy access.
