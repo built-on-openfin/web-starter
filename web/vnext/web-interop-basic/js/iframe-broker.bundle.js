@@ -21,7 +21,7 @@ const e="web-broker-ports-ready",t="worker-initialize-connection",r="create-fall
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = void 0;
+exports.getSettings = getSettings;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
@@ -36,7 +36,6 @@ async function getSettings() {
         }
     };
 }
-exports.getSettings = getSettings;
 
 
 /***/ })
