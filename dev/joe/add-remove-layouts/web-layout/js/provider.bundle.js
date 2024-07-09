@@ -31216,6 +31216,7 @@ async function removeThisLayout(layoutName) {
         await saveLayout(layoutsBefore);
         console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
         layoutNameElement.remove();
+        await fin.Platform.Layout.destroy({ layoutName, uuid: fin.me.uuid, name: fin.me.name });
     }
 }
 exports.removeThisLayout = removeThisLayout;
