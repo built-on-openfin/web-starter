@@ -970,3 +970,10 @@ td,
 	color: var(--brand-text-secondary);
 	cursor: pointer;
 }
+
+.main-container {
+	display: flex;
+	justify-content: stretch;
+	align-items: stretch;
+	/* overflow: hidden; */
+}
