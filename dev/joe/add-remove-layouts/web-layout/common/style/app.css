@@ -975,5 +975,6 @@ td,
 	display: flex;
 	justify-content: stretch;
 	align-items: stretch;
+	height: 100%;
 	/* overflow: hidden; */
 }
