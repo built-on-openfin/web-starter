@@ -288,6 +288,10 @@ export async function addLayout(): Promise<void> {
 	} else {
 		console.log("[Add Layout] Error adding Layout.  No Secondary Layout exists.");
 	}
+	const addBtn = document.querySelector<HTMLElement>("#add-layout");
+	if (addBtn) {
+		addBtn.setAttribute("disabled", "disabled");
+	}
 }
 
 /**
@@ -307,6 +311,12 @@ export async function removeThisLayout(layoutName: string): Promise<void> {
 		console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
 		layoutNameElement.remove();
 		await fin.Platform.Layout.destroy({ layoutName, uuid: fin.me.uuid, name: fin.me.name });
+		if (layoutName === "new") {
+			const addBtn = document.querySelector<HTMLElement>("#add-layout");
+			if (addBtn) {
+				addBtn.removeAttribute("disabled");
+			}
+		}
 	}
 }
 /**

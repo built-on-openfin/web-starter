@@ -71,6 +71,7 @@ body {
 	margin: 0;
 	background-color: var(--brand-background);
 	color: var(--brand-text);
+	width: 100%;
 }
 
 body.border {
@@ -705,6 +706,10 @@ em {
 	flex: 2;
 }
 
+.fill_3 {
+	flex: 3;
+}
+
 .scroll {
 	overflow: auto;
 }
@@ -976,5 +981,5 @@ td,
 	justify-content: stretch;
 	align-items: stretch;
 	height: 100%;
-	/* overflow: hidden; */
+	width: 100%;
 }
