@@ -71,6 +71,7 @@ body {
 	margin: 0;
 	background-color: var(--brand-background);
 	color: var(--brand-text);
+	width: 100%;
 }
 
 body.border {
@@ -705,6 +706,10 @@ em {
 	flex: 2;
 }
 
+.fill_3 {
+	flex: 3;
+}
+
 .scroll {
 	overflow: auto;
 }
@@ -942,4 +947,39 @@ td,
 
 .nowrap {
 	white-space: nowrap;
+}
+
+.tabs {
+	display: inline-flex;
+	height: 30px;
+	width: 100%;
+}
+
+.tab {
+	min-width: 120px;
+    min-height: 30px;
+    padding: 5px;
+    border: 2px solid var(--brand-border);
+	font-weight: 300;
+	border-top: 2px solid var(--tab-border-top-color);
+    background-color: var(--tab-background-active-color);
+    opacity: 100%;
+	cursor: pointer;
+}
+
+.close-btn {
+	float: right;
+	font-size: 1em;
+	max-height: 18px;
+	content: var(--tab-close-button-url);
+	color: var(--brand-text-secondary);
+	cursor: pointer;
+}
+
+.main-container {
+	display: flex;
+	justify-content: stretch;
+	align-items: stretch;
+	height: 100%;
+	width: 100%;
 }
