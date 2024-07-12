@@ -33,7 +33,8 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+												"name": "internal-generated-view-secondary-2"
 											},
 											"title": "FDC3 Different Domain",
 											"isClosable": true
