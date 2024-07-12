@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-interop-support-context-and-intents",
-	"version": "18.0.0",
+	"version": "19.0.0",
 	"description": "OpenFin Web Starter -- Web Interop - Support Context and Intents",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {

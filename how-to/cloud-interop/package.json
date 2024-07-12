@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--cloud-interop",
-	"version": "18.0.0",
+	"version": "19.0.0",
 	"description": "OpenFin Web Starter -- Cloud Interop",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
