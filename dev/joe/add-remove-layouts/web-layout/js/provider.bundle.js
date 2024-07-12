@@ -31198,6 +31198,10 @@ async function addLayout() {
     else {
         console.log("[Add Layout] Error adding Layout.  No Secondary Layout exists.");
     }
+    const addBtn = document.querySelector("#add-layout");
+    if (addBtn) {
+        addBtn.setAttribute("disabled", "disabled");
+    }
 }
 exports.addLayout = addLayout;
 /**
@@ -31217,6 +31221,12 @@ async function removeThisLayout(layoutName) {
         console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);
         layoutNameElement.remove();
         await fin.Platform.Layout.destroy({ layoutName, uuid: fin.me.uuid, name: fin.me.name });
+        if (layoutName === "new") {
+            const addBtn = document.querySelector("#add-layout");
+            if (addBtn) {
+                addBtn.removeAttribute("disabled");
+            }
+        }
     }
 }
 exports.removeThisLayout = removeThisLayout;
