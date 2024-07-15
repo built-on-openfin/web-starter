@@ -18,10 +18,10 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
 												"name": "fdc3-context-view-2-0/e7fe7df3-6f64-4235-899f-4e91af2cb32d"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer FDC3 Context"
 										},
 										{
@@ -31,17 +31,17 @@
 												"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/fdc3-view.html",
 												"name": "local-fdc3-context-view/e7fe7df3-6f64-4235-899f-4e91af2cb32d2"
 											},
-											"reorderEnabled": false,
+
 											"title": "FDC3 Local Context"
 										},
 										{
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/fdc3/intent/2-0/fdc3-intent-view.html",
 												"name": "fdc3-intent-view-2-0/54a8ef85-a885-4234-be46-9d52e88fcb74"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer FDC3 Intent"
 										},
 										{
@@ -51,7 +51,7 @@
 												"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/fdc3-intent-view.html",
 												"name": "local-fdc3-intent-view/54a8ef85-a885-4234-be46-9d52e88fsb74"
 											},
-											"reorderEnabled": false,
+
 											"title": "FDC3 Local Intent"
 										}
 									]
@@ -71,10 +71,10 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/context/interop-broadcast-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "interop-broadcast-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac97"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer Interop Context"
 										},
 										{
@@ -84,17 +84,17 @@
 												"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/interop-view.html",
 												"name": "local-interop-context-view/64a8efd7-3d92-42ae-8fae-dffcc0fdac92"
 											},
-											"reorderEnabled": false,
+
 											"title": "Interop Local Context"
 										},
 										{
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v18.0.0/interop/interop-api/intent/interop-intent-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/interop-api/intent/interop-intent-view.html",
 												"name": "interop-intent-view-2-0/2d9a3624-fd0e-4e0a-b681-a79a9616b871"
 											},
-											"reorderEnabled": false,
+
 											"title": "Developer Interop Intent"
 										},
 										{
@@ -104,7 +104,7 @@
 												"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/interop-intent-view.html",
 												"name": "local-interop-intent-view/54a8ef86-a775-4234-be46-9d52e88fsb74"
 											},
-											"reorderEnabled": false,
+
 											"title": "Interop Local Intent"
 										}
 									]
@@ -129,7 +129,7 @@
 									"componentName": "view",
 									"componentState": {
 										"name": "internal-generated-view-b9880bc2-2983-4b3c-a496-77d94783cb7e",
-										"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/my-team/index.html",
+										"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/my-team/index.html",
 										"componentName": "view"
 									},
 									"title": "My Team"
@@ -151,7 +151,7 @@
 											"componentName": "view",
 											"componentState": {
 												"name": "internal-generated-view-0dd98149-16fb-4cf0-9b2a-d5bff2519d9b",
-												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/keeping-track/index.html",
+												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/keeping-track/index.html",
 												"componentName": "view"
 											},
 											"title": "Keeping Track",
@@ -162,7 +162,7 @@
 											"componentName": "view",
 											"componentState": {
 												"name": "internal-generated-view-ef70ccee-2613-4f99-8a01-8cfba31064ba",
-												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/annual-leave/index.html",
+												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/annual-leave/index.html",
 												"componentName": "view"
 											},
 											"title": "Annual Leave",
@@ -173,7 +173,7 @@
 											"componentName": "view",
 											"componentState": {
 												"name": "internal-generated-view-f898522a-5d85-4e9e-93eb-378179f0f909",
-												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/360-feedback/index.html",
+												"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/360-feedback/index.html",
 												"componentName": "view"
 											},
 											"title": "360 Feedback",
@@ -184,7 +184,7 @@
 								{
 									"type": "row",
 									"isClosable": false,
-									"reorderEnabled": false,
+
 									"title": "",
 									"height": 50,
 									"content": [
@@ -198,7 +198,7 @@
 													"componentName": "view",
 													"componentState": {
 														"name": "internal-generated-view-b38f525a-77a9-48d9-bd02-b895cfbbf074",
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/manager-paths/index.html",
+														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/manager-paths/index.html",
 														"componentName": "view"
 													},
 													"title": "Manager Paths"
@@ -214,7 +214,7 @@
 													"componentName": "view",
 													"componentState": {
 														"name": "internal-generated-view-5292442d-4d19-4d71-bcf1-ca9081ec50b0",
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/company-comms/index.html",
+														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/company-comms/index.html",
 														"componentName": "view"
 													},
 													"title": "Company News",
@@ -225,7 +225,7 @@
 													"componentName": "view",
 													"componentState": {
 														"name": "internal-generated-view-5292442d-4d19-4d71-bcf1-ca9081ec50b1",
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/company-cal/index.html",
+														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/company-cal/index.html",
 														"componentName": "view"
 													},
 													"title": "Company Calendar",
@@ -236,7 +236,7 @@
 													"componentName": "view",
 													"componentState": {
 														"name": "internal-generated-view-935bb258-ded4-4a85-ad92-0f2a742d4d42",
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/manager-portal/franchise-comms/index.html",
+														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/franchise-comms/index.html",
 														"componentName": "view"
 													},
 													"title": "Franchise Comms",
@@ -287,7 +287,7 @@
 													"type": "component",
 													"componentName": "view",
 													"componentState": {
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/contact/participant-summary/index.html",
+														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/contact/participant-summary/index.html",
 														"componentName": "view",
 														"name": "internal-generated-view-f65f3aa0-7499-4d8a-b477-8e04ab7db493"
 													},
@@ -310,7 +310,7 @@
 													"type": "component",
 													"componentName": "view",
 													"componentState": {
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/contact/investments-and-models/index.html",
+														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/contact/investments-and-models/index.html",
 														"componentName": "view",
 														"name": "internal-generated-view-5ad7e692-dd6a-48b8-bbc6-4f284f1bcc3d"
 													},
@@ -333,7 +333,7 @@
 													"type": "component",
 													"componentName": "view",
 													"componentState": {
-														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/contact/call-app/index.html",
+														"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/contact/call-app/index.html",
 														"name": "call-app/1f458d7d-22a1-40fa-b793-c7eb2d4d84a6"
 													},
 													"isClosable": true,
@@ -371,7 +371,7 @@
 															"type": "component",
 															"componentName": "view",
 															"componentState": {
-																"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/contact/participant-history/index.html",
+																"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/contact/participant-history/index.html",
 																"name": "internal-generated-view-9b0bdbff-3de4-4b86-8abb-be1df6876a66"
 															},
 															"isClosable": true,
@@ -382,11 +382,11 @@
 															"type": "component",
 															"componentName": "view",
 															"componentState": {
-																"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v18.0.0/workspace-platform-starter/common/views/contact/participant-selection/index.html",
+																"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/contact/participant-selection/index.html",
 																"name": "internal-generated-view-9b0bdbff-3de4-4b86-8abb-be1df6876a36"
 															},
 															"isClosable": true,
-															"reorderEnabled": false,
+
 															"title": "Participant Selection"
 														}
 													]
