@@ -33502,6 +33502,7 @@ exports.getApps = getApps;
 exports.launch = launch;
 exports.bringAppToFront = bringAppToFront;
 const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+const layout_utils_1 = __webpack_require__(/*! ../layout/layout-utils */ "./client/src/platform/layout/layout-utils.ts");
 const settings_1 = __webpack_require__(/*! ../settings/settings */ "./client/src/platform/settings/settings.ts");
 let cachedApps;
 /**
@@ -33558,9 +33559,9 @@ async function launch(platformApp) {
     }
     const appSnapshot = getAppLayout(appToLaunch, layoutId, `${appToLaunch.appId}/${(0, utils_1.randomUUID)()}`);
     await currentLayout?.applyLayoutSnapshot(appSnapshot);
-    const layoutElement = await getLayoutElement(layoutId);
+    const layoutElement = await (0, layout_utils_1.getLayoutElement)(layoutId);
     if (layoutElement !== null) {
-        const ofViewElement = layoutElement.querySelector("of-view");
+        const ofViewElement = await (0, layout_utils_1.getViewElementFromLayout)(layoutElement);
         if (ofViewElement !== null) {
             const name = ofViewElement.getAttribute("of-name");
             const uuid = ofViewElement.getAttribute("of-uuid");
@@ -33631,34 +33632,6 @@ function getAppLayout(platformApp, layoutId, viewName) {
     appSnapshot.layoutTitles[layoutId] = platformApp.title ?? "App Layout";
     return appSnapshot;
 }
-/**
- * Wait for the layout and view to be ready.
- * @param layoutId The selector to wait for.
- * @returns The element when it is ready.
- */
-async function getLayoutElement(layoutId) {
-    return new Promise((resolve, reject) => {
-        const layoutIdSelector = `#${layoutId}`;
-        const element = document.querySelector(layoutIdSelector);
-        if (element) {
-            resolve(element);
-            return;
-        }
-        const observer = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                const nodes = Array.from(mutation.addedNodes);
-                for (const node of nodes) {
-                    if (node instanceof Element && node.matches?.(layoutIdSelector)) {
-                        observer.disconnect();
-                        resolve(node);
-                        return;
-                    }
-                }
-            }
-        });
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-    });
-}
 
 
 /***/ }),
@@ -33674,6 +33647,7 @@ async function getLayoutElement(layoutId) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppIdHelper = void 0;
 const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+const layout_utils_1 = __webpack_require__(/*! ../layout/layout-utils */ "./client/src/platform/layout/layout-utils.ts");
 /**
  * The AppIdHelper class provides helpful functions related to app ids.
  */
@@ -33700,11 +33674,19 @@ class AppIdHelper {
         let appIdOrUrl;
         if (name.startsWith("internal-generated-")) {
             try {
-                const ofView = document.querySelector(`of-view[of-name="${clientIdentity.name}"]`);
-                if (!(0, utils_1.isEmpty)(ofView)) {
-                    const src = ofView.getAttribute("src");
-                    if (!(0, utils_1.isEmpty)(src)) {
-                        appIdOrUrl = src;
+                const layouts = await (0, layout_utils_1.getAllLayouts)();
+                if (layouts.length === 0) {
+                    this._logger.warn("No layouts found in the document.");
+                    return;
+                }
+                for (const layout of layouts) {
+                    const view = await (0, layout_utils_1.getViewElementFromLayout)(layout, name);
+                    if (!(0, utils_1.isEmpty)(view)) {
+                        const src = view.getAttribute("src");
+                        if (!(0, utils_1.isEmpty)(src)) {
+                            appIdOrUrl = src;
+                            break;
+                        }
                     }
                 }
             }
@@ -35394,9 +35376,9 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
              * @throws Error if the view is not found in any layout.
              */
             getLayoutIdentityForView(viewIdentity) {
-                const viewElement = document.querySelector(`of-view[of-name="${viewIdentity.name}"]`);
+                const viewElement = document.querySelector(`div[of-name="${viewIdentity.name}"]`);
                 if (viewElement !== null) {
-                    const layoutElement = viewElement.closest(".layout-container");
+                    const layoutElement = viewElement.closest("[data-openfin-layout-name]");
                     if (layoutElement !== null) {
                         return { layoutName: layoutElement.id, uuid: fin.me.uuid, name: fin.me.name };
                     }
@@ -35489,6 +35471,76 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
             }
         };
     };
+}
+
+
+/***/ }),
+
+/***/ "./client/src/platform/layout/layout-utils.ts":
+/*!****************************************************!*\
+  !*** ./client/src/platform/layout/layout-utils.ts ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getLayoutElement = getLayoutElement;
+exports.getAllLayouts = getAllLayouts;
+exports.getViewElementFromLayout = getViewElementFromLayout;
+/**
+ * Wait for the layout and view to be ready.
+ * @param layoutId The selector to wait for.
+ * @returns The element when it is ready.
+ */
+async function getLayoutElement(layoutId) {
+    return new Promise((resolve, reject) => {
+        const layoutIdSelector = `#${layoutId}`;
+        const element = document.querySelector(layoutIdSelector);
+        if (element) {
+            resolve(element);
+            return;
+        }
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                const nodes = Array.from(mutation.addedNodes);
+                for (const node of nodes) {
+                    if (node instanceof Element && node.matches?.(layoutIdSelector)) {
+                        observer.disconnect();
+                        resolve(node);
+                        return;
+                    }
+                }
+            }
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+    });
+}
+/**
+ * Gets all the layouts available in the document.
+ * @returns an array of layout elements
+ */
+async function getAllLayouts() {
+    const layouts = document.querySelectorAll("[data-openfin-layout-name]");
+    if (layouts === null) {
+        return [];
+    }
+    return Array.from(layouts);
+}
+/**
+ * Gets a view element either from a specific layout or it searches all available layouts.
+ * @param layoutElement the layout to check for the view element
+ * @param name the name of the view to search for otherwise it will return the first view found
+ * @returns the view element if found
+ */
+async function getViewElementFromLayout(layoutElement, name) {
+    const containingChild = layoutElement?.lastElementChild;
+    if (containingChild?.shadowRoot) {
+        const query = name ? `of-view[of-name="${name}"]` : "of-view";
+        const existingView = containingChild.shadowRoot.querySelector(query);
+        return existingView;
+    }
+    return null;
 }
 
 
