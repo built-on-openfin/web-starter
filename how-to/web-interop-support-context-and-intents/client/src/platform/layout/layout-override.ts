@@ -144,9 +144,9 @@ export function makeOverride(
 			 * @throws Error if the view is not found in any layout.
 			 */
 			public getLayoutIdentityForView(viewIdentity: OpenFin.Identity): OpenFin.LayoutIdentity {
-				const viewElement = document.querySelector<HTMLElement>(`of-view[of-name="${viewIdentity.name}"]`);
+				const viewElement = document.querySelector<HTMLElement>(`div[of-name="${viewIdentity.name}"]`);
 				if (viewElement !== null) {
-					const layoutElement = viewElement.closest(".layout-container");
+					const layoutElement = viewElement.closest("[data-openfin-layout-name]");
 					if (layoutElement !== null) {
 						return { layoutName: layoutElement.id, uuid: fin.me.uuid, name: fin.me.name };
 					}

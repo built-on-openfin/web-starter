@@ -2,6 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { PlatformApp } from "../../shapes/app-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
 import { isEmpty } from "../../utils";
+import { getAllLayouts, getViewElementFromLayout } from "../layout/layout-utils";
 /**
  * The AppIdHelper class provides helpful functions related to app ids.
  */
@@ -36,11 +37,19 @@ export class AppIdHelper {
 		let appIdOrUrl: string | undefined;
 		if (name.startsWith("internal-generated-")) {
 			try {
-				const ofView = document.querySelector(`of-view[of-name="${clientIdentity.name}"]`);
-				if (!isEmpty(ofView)) {
-					const src = ofView.getAttribute("src");
-					if (!isEmpty(src)) {
-						appIdOrUrl = src;
+				const layouts = await getAllLayouts();
+				if (layouts.length === 0) {
+					this._logger.warn("No layouts found in the document.");
+					return;
+				}
+				for (const layout of layouts) {
+					const view = await getViewElementFromLayout(layout, name);
+					if (!isEmpty(view)) {
+						const src = view.getAttribute("src");
+						if (!isEmpty(src)) {
+							appIdOrUrl = src;
+							break;
+						}
 					}
 				}
 			} catch {

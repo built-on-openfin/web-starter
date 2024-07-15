@@ -1,6 +1,7 @@
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import { isEmpty, randomUUID } from "../../utils";
+import { getLayoutElement, getViewElementFromLayout } from "../layout/layout-utils";
 import { getSettings } from "../settings/settings";
 
 let cachedApps: PlatformApp[] | undefined;
@@ -66,7 +67,7 @@ export async function launch(
 	await currentLayout?.applyLayoutSnapshot(appSnapshot);
 	const layoutElement = await getLayoutElement(layoutId);
 	if (layoutElement !== null) {
-		const ofViewElement = layoutElement.querySelector("of-view");
+		const ofViewElement = await getViewElementFromLayout(layoutElement);
 		if (ofViewElement !== null) {
 			const name = ofViewElement.getAttribute("of-name");
 			const uuid = ofViewElement.getAttribute("of-uuid");
@@ -141,36 +142,4 @@ function getAppLayout(platformApp: PlatformApp, layoutId: string, viewName: stri
 	};
 	appSnapshot.layoutTitles[layoutId] = platformApp.title ?? "App Layout";
 	return appSnapshot;
-}
-
-/**
- * Wait for the layout and view to be ready.
- * @param layoutId The selector to wait for.
- * @returns The element when it is ready.
- */
-async function getLayoutElement(layoutId: string): Promise<Element> {
-	return new Promise((resolve, reject) => {
-		const layoutIdSelector = `#${layoutId}`;
-		const element = document.querySelector(layoutIdSelector);
-
-		if (element) {
-			resolve(element);
-			return;
-		}
-
-		const observer = new MutationObserver((mutations) => {
-			for (const mutation of mutations) {
-				const nodes = Array.from(mutation.addedNodes);
-				for (const node of nodes) {
-					if (node instanceof Element && node.matches?.(layoutIdSelector)) {
-						observer.disconnect();
-						resolve(node);
-						return;
-					}
-				}
-			}
-		});
-
-		observer.observe(document.documentElement, { childList: true, subtree: true });
-	});
 }
