@@ -4,6 +4,10 @@
 
 ## OpenFin Core Web - Known Issues
 
+### [0.38.64](https://www.npmjs.com/package/@openfin/core-web/v/0.38.64)
+
+- No known issues.
+
 ### [0.38.55](https://www.npmjs.com/package/@openfin/core-web/v/0.38.55)
 
 #### Layout containing a section with more than one view
