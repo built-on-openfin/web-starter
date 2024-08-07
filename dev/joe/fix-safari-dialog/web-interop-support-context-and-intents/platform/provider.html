@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>OpenFin - Support Context & Intents</title>
+		<link rel="icon" id="favicon" type="image/x-icon" href="../favicon.ico" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../style/core-web-styles.css" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/provider.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1 id="title">OpenFin - Support Context & Intents</h1>
+				<h1 id="subTitle" class="tag">
+					Demonstrate how OpenFin's FDC3 Context and Intents support can be utilized and combined with
+					OpenFin's Layout support.
+				</h1>
+			</div>
+			<div class="row middle gap20">
+				<label for="layout-selector">Layout</label>
+				<select id="layout-selector"></select>
+				<button type="button" id="add-layout" class="small" title="Add Layout">
+					<img src="../images/plus.svg" alt="Add Layout" height="20px" />
+				</button>
+				<button type="button" id="delete-layout" class="small" title="Delete Layout">
+					<img src="../images/trash.svg" alt="Delete Layout" height="20px" />
+				</button>
+				<button type="button" id="settings" class="small" title="Settings">
+					<img src="../images/gear.svg" alt="Update Settings" height="20px" />
+				</button>
+				<img id="logo" src="../common/images/icon-blue.png" alt="OpenFin" height="40px" />
+			</div>
+		</header>
+		<main class="row fill gap10">
+			<div class="row fill" id="main-page">
+				<div id="layout_container" class="col fill"></div>
+			</div>
+		</main>
+	</body>
+</html>
