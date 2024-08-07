@@ -75,6 +75,7 @@ async function init(): Promise<void> {
 	});
 
 	saveButton.addEventListener("click", async () => {
+		console.log(`And appliedSettings is.... ${appliedSettings}`);
 		if (appliedSettings === undefined) {
 			console.error("Unable to save settings as they are not defined.");
 			return;
@@ -115,5 +116,7 @@ async function init(): Promise<void> {
 				action: "close"
 			}
 		});
+		const dialog = document.querySelector<HTMLDialogElement>("#settings-resolver-dialog");
+		dialog?.close();
 	});
 }
