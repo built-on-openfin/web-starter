@@ -1,0 +1,111 @@
+{
+	"applications": [
+		{
+			"appId": "interop-intent-view-2-0",
+			"name": "interop-intent-view-2-0",
+			"title": "Intents using Interop API",
+			"description": "This view allows you to experiment with the raising and listening of intents using the interop api.",
+			"categories": ["developer tools", "tools", "training"],
+			"version": "2.0.0",
+			"tooltip": "Intents using Interop API",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/images/previews/view-context-interop-api.png",
+					"label": "Intents using FDC3"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/interop-api/intent/interop-intent-view.html"
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"StartCall": {
+							"displayName": "Start a Call",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						"StartChat": {
+							"displayName": "Start a Chat",
+							"contexts": ["fdc3.contact", "fdc3.contactList"]
+						},
+						"ViewChart": {
+							"displayName": "View Chart",
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"]
+						},
+						"ViewContact": {
+							"displayName": "View Contact Details",
+							"contexts": ["fdc3.contact"]
+						},
+						"ViewProfile": {
+							"displayName": "View Profile",
+							"contexts": ["fdc3.contact"]
+						},
+						"ViewQuote": {
+							"displayName": "View Quote",
+							"contexts": ["fdc3.instrument"]
+						},
+						"ViewNews": {
+							"displayName": "View News",
+							"contexts": [
+								"fdc3.country",
+								"fdc3.instrument",
+								"fdc3.instrumentList",
+								"fdc3.organization",
+								"fdc3.portfolio"
+							]
+						},
+						"ViewAnalysis": {
+							"displayName": "View Analysis",
+							"contexts": ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"]
+						},
+						"ViewInstrument": {
+							"displayName": "View Instrument",
+							"contexts": ["fdc3.instrument", "fdc3.instrumentList"]
+						}
+					}
+				},
+				"userChannels": {},
+				"appChannels": []
+			}
+		},
+		{
+			"appId": "interop-broadcast-view",
+			"name": "interop-broadcast-view",
+			"title": "Context using Interop API",
+			"description": "This view allows you to experiment with the broadcasting and listening of contexts using the Interop API.",
+			"categories": ["developer tools", "tools", "training"],
+			"version": "2.0.0",
+			"tooltip": "Context using Interop",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/images/previews/view-context-interop-api.png",
+					"label": "Contexts using Interop API"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/interop/interop-api/context/interop-broadcast-view.html"
+			},
+			"interop": {}
+		}
+	]
+}
