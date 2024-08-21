@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-client-api",
-	"version": "19.0.0",
+	"version": "19.1.0",
 	"description": "OpenFin Web Starter -- Web Client API",
 	"main": "public/js/web.client.api.bundle.js",
 	"scripts": {
