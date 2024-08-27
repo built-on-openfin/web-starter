@@ -1,0 +1,2 @@
+(()=>{"use strict";void 0===window.fin&&(async()=>{try{const e="https://built-on-openfin.github.io/web-starter/web/v19.0.0/web-client-api/js/web.client.api.bundle.js",t=await import(e);await t.getAPI({target:window,requestConnectOptions:{strategy:"request-on-failure"}})}catch(e){console.error("Failed to load the OpenFin API shim. Please note this is an example and you should implement your own approach for production.",e)}})()})();
+//# sourceMappingURL=shim-connect-fallback.api.bundle.js.map

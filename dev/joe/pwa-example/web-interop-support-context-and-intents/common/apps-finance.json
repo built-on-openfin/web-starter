@@ -1,0 +1,116 @@
+{
+	"applications": [
+		{
+			"appId": "finance-chart",
+			"name": "finance-chart",
+			"title": "Finance Chart",
+			"description": "A demo chart that supports a number of instruments",
+			"categories": ["finance", "view", "chart", "interop"],
+			"version": "2.0.0",
+			"tooltip": "Finance Chart",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/demos/images/preview/preview-finance-chart.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://workspace-mobile.openfin.co/chart/"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "finance-summary",
+			"name": "finance-summary",
+			"title": "Finance Summary",
+			"description": "A sample application providing a summary for a number of instruments.",
+			"categories": ["finance", "view", "summary", "interop"],
+			"version": "2.0.0",
+			"tooltip": "Finance Summary",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/demos/images/preview/preview-finance-summary.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://workspace-mobile.openfin.co/summary/"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "finance-portfolio",
+			"name": "finance-portfolio",
+			"title": "Finance Portfolio",
+			"description": "A sample application providing a list of instruments for selection that will trigger a response from the other finance sample applications.",
+			"categories": ["finance", "view", "portfolio", "interop"],
+			"version": "2.0.0",
+			"tooltip": "Finance Portfolio",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/demos/images/preview/preview-finance-portfolio.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://workspace-mobile.openfin.co/summary/"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "finance-instrument-details",
+			"name": "finance-instrument-details",
+			"title": "Finance Instrument Details",
+			"description": "An example app that provides details for a selected instrument.",
+			"categories": ["finance", "view", "details", "interop"],
+			"version": "2.0.0",
+			"tooltip": "Finance Instrument Details",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/common/favicon-32x32.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.0.0/demos/images/preview/preview-finance-instrument-details.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://workspace-mobile.openfin.co/instrument/"
+			},
+			"interop": {}
+		}
+	]
+}
