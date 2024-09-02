@@ -111,8 +111,6 @@ async function init() {
                 action: "close"
             }
         });
-        const dialog = document.querySelector("#settings-resolver-dialog");
-        dialog?.close();
     });
 }
 
