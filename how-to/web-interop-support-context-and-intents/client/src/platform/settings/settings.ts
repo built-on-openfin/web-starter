@@ -1,4 +1,4 @@
-import type { WebLayoutSnapshot } from "@openfin/core-web";
+import type { OpenFin } from "@openfin/core";
 import type { ManifestSettings, Settings } from "../../shapes/setting-shapes";
 
 /**
@@ -41,7 +41,7 @@ export async function getSettings(): Promise<Settings | undefined> {
  * Returns a default layout from the settings if provided.
  * @returns The default layout from the settings.
  */
-export async function getDefaultLayout(): Promise<WebLayoutSnapshot | undefined> {
+export async function getDefaultLayout(): Promise<OpenFin.LayoutSnapshot | undefined> {
 	const settings = await getSettings();
 	if (settings?.platform?.layout?.defaultLayout === undefined) {
 		console.error(
@@ -51,7 +51,7 @@ export async function getDefaultLayout(): Promise<WebLayoutSnapshot | undefined>
 	}
 	if (typeof settings.platform.layout.defaultLayout === "string") {
 		const layoutResponse = await fetch(settings.platform.layout.defaultLayout);
-		const layoutJson = (await layoutResponse.json()) as WebLayoutSnapshot;
+		const layoutJson = (await layoutResponse.json()) as OpenFin.LayoutSnapshot;
 		return layoutJson;
 	}
 	return settings.platform.layout.defaultLayout;

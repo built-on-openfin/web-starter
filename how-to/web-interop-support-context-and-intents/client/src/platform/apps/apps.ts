@@ -1,7 +1,6 @@
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import { isEmpty, randomUUID } from "../../utils";
-import { getLayoutElement, getViewElementFromLayout } from "../layout/layout-utils";
 import { getSettings } from "../settings/settings";
 
 let cachedApps: PlatformApp[] | undefined;
@@ -49,34 +48,28 @@ export async function getApps(): Promise<PlatformApp[]> {
 export async function launch(
 	platformApp: PlatformApp | string
 ): Promise<PlatformAppIdentifier[] | undefined> {
-	// until we have an ability to addViews to a layout we will add a new layout for each app
-	// we are currently using the dom to find the of-view to get the name of the view in order
-	// to return the identity until the addView api is available
-	const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
-	const layoutId = `tab-${randomUUID()}`;
-	let appToLaunch: PlatformApp | undefined;
-	if (typeof platformApp === "string") {
-		appToLaunch = await getApp(platformApp);
-	} else {
-		appToLaunch = platformApp;
-	}
-	if (!appToLaunch) {
+	try {
+		const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+		const layoutId = `tab-${randomUUID()}`;
+		let appToLaunch: PlatformApp | undefined;
+		if (typeof platformApp === "string") {
+			appToLaunch = await getApp(platformApp);
+		} else {
+			appToLaunch = platformApp;
+		}
+		if (!appToLaunch) {
+			return undefined;
+		}
+		const name = `${appToLaunch.appId}/${randomUUID()}`;
+		const uuid = fin.me.identity.uuid;
+		const appId = appToLaunch.appId;
+		const appSnapshot = getAppLayout(appToLaunch, layoutId, name);
+		await currentLayout?.applyLayoutSnapshot(appSnapshot);
+		return [{ name, uuid, appId }];
+	} catch (error) {
+		console.error("Error launching app", error);
 		return undefined;
 	}
-	const appSnapshot = getAppLayout(appToLaunch, layoutId, `${appToLaunch.appId}/${randomUUID()}`);
-	await currentLayout?.applyLayoutSnapshot(appSnapshot);
-	const layoutElement = await getLayoutElement(layoutId);
-	if (layoutElement !== null) {
-		const ofViewElement = await getViewElementFromLayout(layoutElement);
-		if (ofViewElement !== null) {
-			const name = ofViewElement.getAttribute("of-name");
-			const uuid = ofViewElement.getAttribute("of-uuid");
-			if (name !== null && uuid !== null) {
-				return [{ name, uuid, appId: appToLaunch.appId }];
-			}
-		}
-	}
-	return undefined;
 }
 
 /**
@@ -92,7 +85,11 @@ export async function bringAppToFront(
 	if (!isEmpty(currentLayout)) {
 		for (const target of targets) {
 			const targetLayout = currentLayout.getLayoutIdentityForView(target);
-			await currentLayout.showLayout(targetLayout);
+			if (targetLayout === undefined) {
+				console.error("Target layout for view not found");
+			} else {
+				await currentLayout.showLayout(targetLayout);
+			}
 		}
 	}
 }

@@ -1,6 +1,6 @@
 import { cloudInteropOverride } from "@openfin/cloud-interop";
 import type { OpenFin } from "@openfin/core";
-import { connect } from "@openfin/core-web";
+import { connect, type WebLayoutSnapshot } from "@openfin/core-web";
 import { AppResolverHelper } from "./platform/apps/app-resolver-helper";
 import { getConstructorOverride } from "./platform/broker/interop-override";
 import { makeOverride } from "./platform/layout/layout-override";
@@ -182,7 +182,7 @@ async function init(): Promise<void> {
 			}
 		},
 		connectionInheritance: "enabled",
-		platform: { layoutSnapshot }
+		platform: { layoutSnapshot: layoutSnapshot as WebLayoutSnapshot }
 	});
 
 	if (fin) {
