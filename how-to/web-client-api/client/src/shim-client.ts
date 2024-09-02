@@ -7,11 +7,11 @@ import type { ClientOptions, DefaultAPIContainerShape } from "./client-shapes";
  */
 export async function init(options: ClientOptions): Promise<void> {
 	if (window.fin === undefined) {
-		console.log("Fin is not available. Loading the OpenFin API shim.");
+		console.log("Fin is not available. Importing the OpenFin API shim.");
 		const url =
 			"https://built-on-openfin.github.io/web-starter/web/v19.1.0/web-client-api/js/web.client.api.bundle.js";
 		const webClient = await import(/* webpackIgnore: true */ url);
-		console.log("OpenFin API shim loaded.");
+		console.log("OpenFin API shim script imported.");
 		console.log("Checking to see if the document is ready before requesting the API.");
 		if (document.readyState === "loading") {
 			console.log("Document is still loading. Waiting for it to be ready using DOMContentLoaded.");
