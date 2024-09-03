@@ -7,6 +7,7 @@
 		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 		<link rel="stylesheet" href="../common/style/app.css" />
 		<script defer="defer" src="../js/fdc3-view.bundle.js"></script>
+		<script defer="defer" type="module" src="../common/lib/wc-fin/wc-fin.esm.js"></script>
 		<link rel="manifest" href="../manifest.json" />
 	</head>
 
@@ -21,6 +22,15 @@
 			</div>
 		</header>
 		<main class="fill col scroll-vertical gap10">
+			<fieldset>
+				<label>Context Group</label>
+				<fin-context-group-picker
+					show-list-on-click="false"
+					bind-self="true"
+					bind-views="false"
+					is-monitoring-enabled="true"
+				></fin-context-group-picker>
+			</fieldset>
 			<fieldset>
 				<label for="contextType">Context Type</label>
 				<span id="contextType"></span>

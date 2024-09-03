@@ -31,6 +31,8 @@ async function attachListeners(): Promise<void> {
 			const observer = new MutationObserver(() => {
 				// Update the enabled state of the trash button based on the number of options
 				deleteButton.disabled = !(layoutSelector.options.length > 1);
+				const refreshEvent = new CustomEvent("refresh-context-group");
+				window.dispatchEvent(refreshEvent);
 			});
 
 			// Start observing the select element with the configured parameters
@@ -211,6 +213,16 @@ async function init(): Promise<void> {
 			layoutManagerOverride,
 			containerId: settings.platform.layout.layoutContainerId
 		});
+		// now that everything has been setup notify others of globals
+		const finReadyEvent = new CustomEvent("finReady");
+		window.dispatchEvent(finReadyEvent);
+		if (window.fdc3 === undefined && window?.fin?.me.interop?.getFDC3Sync !== undefined) {
+			window.fdc3 = fin.me.interop.getFDC3Sync("2.0");
+			console.log("Finished initializing the fdc3 API.");
+			// Create and dispatch the FDC3Ready event
+			const fdc3ReadyEvent = new CustomEvent("fdc3Ready");
+			window.dispatchEvent(fdc3ReadyEvent);
+		}
 		// setup listeners now that everything has been initialized
 		await attachListeners();
 	}
