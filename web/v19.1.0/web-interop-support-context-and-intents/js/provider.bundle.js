@@ -10884,6 +10884,12 @@ class AppResolverHelper {
                 }
                 else {
                     this._logger.info("The following app was selected: ", response.appResolverResponse);
+                    if (window.fdc3 !== undefined && response.target === undefined) {
+                        await window.fdc3.open(response.appResolverResponse);
+                    }
+                    else if (response.appResolverResponse?.appId) {
+                        await (0, apps_1.launch)(response.appResolverResponse.appId, response.target);
+                    }
                 }
                 if (this._dialogElement) {
                     this._dialogElement.close();
@@ -10956,12 +10962,12 @@ async function getApps() {
 /**
  * Launch an application in the way specified by its manifest type.
  * @param platformApp The application to launch or it's id.
+ * @param target The target layout to launch the app in.
+ * @param target.layout target the current layout
  * @returns Identifiers specific to the type of application launched.
  */
-async function launch(platformApp) {
+async function launch(platformApp, target) {
     try {
-        const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
-        const layoutId = `tab-${(0, utils_1.randomUUID)()}`;
         let appToLaunch;
         if (typeof platformApp === "string") {
             appToLaunch = await getApp(platformApp);
@@ -10975,8 +10981,18 @@ async function launch(platformApp) {
         const name = `${appToLaunch.appId}/${(0, utils_1.randomUUID)()}`;
         const uuid = fin.me.identity.uuid;
         const appId = appToLaunch.appId;
-        const appSnapshot = getAppLayout(appToLaunch, layoutId, name);
-        await currentLayout?.applyLayoutSnapshot(appSnapshot);
+        if (target?.layout) {
+            await window?.fin?.Platform.Layout.getCurrentSync().addView({
+                name,
+                url: appToLaunch.details.url
+            });
+        }
+        else {
+            const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+            const layoutId = `tab-${(0, utils_1.randomUUID)()}`;
+            const appSnapshot = getAppLayout(appToLaunch, layoutId, name);
+            await currentLayout?.applyLayoutSnapshot(appSnapshot);
+        }
         return [{ name, uuid, appId }];
     }
     catch (error) {
