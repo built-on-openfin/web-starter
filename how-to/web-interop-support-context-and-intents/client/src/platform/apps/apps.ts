@@ -43,14 +43,15 @@ export async function getApps(): Promise<PlatformApp[]> {
 /**
  * Launch an application in the way specified by its manifest type.
  * @param platformApp The application to launch or it's id.
+ * @param target The target layout to launch the app in.
+ * @param target.layout target the current layout
  * @returns Identifiers specific to the type of application launched.
  */
 export async function launch(
-	platformApp: PlatformApp | string
+	platformApp: PlatformApp | string,
+	target?: { layout: boolean }
 ): Promise<PlatformAppIdentifier[] | undefined> {
 	try {
-		const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
-		const layoutId = `tab-${randomUUID()}`;
 		let appToLaunch: PlatformApp | undefined;
 		if (typeof platformApp === "string") {
 			appToLaunch = await getApp(platformApp);
@@ -60,11 +61,22 @@ export async function launch(
 		if (!appToLaunch) {
 			return undefined;
 		}
+
 		const name = `${appToLaunch.appId}/${randomUUID()}`;
 		const uuid = fin.me.identity.uuid;
 		const appId = appToLaunch.appId;
-		const appSnapshot = getAppLayout(appToLaunch, layoutId, name);
-		await currentLayout?.applyLayoutSnapshot(appSnapshot);
+
+		if (target?.layout) {
+			await window?.fin?.Platform.Layout.getCurrentSync().addView({
+				name,
+				url: appToLaunch.details.url
+			});
+		} else {
+			const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+			const layoutId = `tab-${randomUUID()}`;
+			const appSnapshot = getAppLayout(appToLaunch, layoutId, name);
+			await currentLayout?.applyLayoutSnapshot(appSnapshot);
+		}
 		return [{ name, uuid, appId }];
 	} catch (error) {
 		console.error("Error launching app", error);

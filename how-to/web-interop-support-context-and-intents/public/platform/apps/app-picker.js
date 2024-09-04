@@ -1,6 +1,7 @@
 import { createOptionEntry, setElementVisibility } from '../util/helper.js';
 
 let launchBtn;
+let addToLayoutBtn;
 let cancelSelectionBtn;
 let appsContainer;
 let appSelectionContainer;
@@ -34,6 +35,7 @@ async function init() {
 	appSummaryContainer = document.querySelector('#summary');
 	setElementVisibility(appSummaryContainer, false);
 	launchBtn = document.querySelector('#launch');
+	addToLayoutBtn = document.querySelector('#addToLayout');
 	cancelSelectionBtn.addEventListener('click', async () => {
 		if (appResolverService !== undefined && appResolverService !== null) {
 			// no app selection was made.
@@ -53,7 +55,22 @@ async function init() {
 			await appResolverService.publish('app-resolver-response', {
 				appResolverResponse: { appId }
 			});
-			await window.fdc3.open({ appId });
+		}
+	});
+
+	addToLayoutBtn.addEventListener('click', async () => {
+		const appId = appsContainer.value;
+		if (
+			appId !== undefined &&
+			appId !== null &&
+			appId !== '' &&
+			appResolverService !== undefined &&
+			appResolverService !== null
+		) {
+			await appResolverService.publish('app-resolver-response', {
+				appResolverResponse: { appId },
+				target: { layout: true }
+			});
 		}
 	});
 
