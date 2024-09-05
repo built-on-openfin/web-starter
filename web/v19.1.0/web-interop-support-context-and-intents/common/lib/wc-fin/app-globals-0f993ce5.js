@@ -1,2 +1,1 @@
-const o = () => {};
-export { o as g };
+const o=()=>{};export{o as g}
