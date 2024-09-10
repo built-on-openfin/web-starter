@@ -172,7 +172,7 @@ main {
 	height: var(--header-height);
 }
 
-.container-without-header {
+.workspace-container {
 	height: calc(100dvh - var(--header-height));
 }
 
