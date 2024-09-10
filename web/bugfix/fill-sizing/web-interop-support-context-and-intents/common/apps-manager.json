@@ -1,0 +1,144 @@
+{
+	"applications": [
+		{
+			"appId": "my-team",
+			"name": "my-team",
+			"title": "My Team",
+			"description": "View my team.",
+			"categories": ["view", "manager", "fcd3"],
+			"version": "2.0.0",
+			"tooltip": "View my team.",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/icon-blue.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-my-team.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/my-team/index.html"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "annual-leave",
+			"name": "annual-leave",
+			"title": "Annual Leave",
+			"description": "View the annual leave for a team member.",
+			"categories": ["view", "manager", "fcd3"],
+			"version": "2.0.0",
+			"tooltip": "View the annual leave for a team member.",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/icon-blue.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-annual-leave.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/annual-leave/index.html"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "manager-paths",
+			"name": "manager-paths",
+			"title": "Manager Paths",
+			"description": "View the manager paths for a team member.",
+			"categories": ["view", "manager", "fcd3"],
+			"version": "2.0.0",
+			"tooltip": "View Manager Paths",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/icon-blue.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-manager-paths.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/manager-paths/index.html"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "company-comms",
+			"name": "company-comms",
+			"title": "Company Comms",
+			"description": "View the communications for the company.",
+			"categories": ["view", "manager", "fcd3"],
+			"version": "2.0.0",
+			"tooltip": "Company Communications",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/icon-blue.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-company-comms.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/company-comms/index.html"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "company-cal",
+			"name": "company-cal",
+			"title": "Company Calendar",
+			"description": "View the calendar for the company.",
+			"categories": ["view", "manager", "fcd3"],
+			"version": "2.0.0",
+			"tooltip": "Company Calendar",
+			"lang": "en-US",
+			"icons": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/icon-blue.png"
+				}
+			],
+			"screenshots": [
+				{
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/images/previews/manager/preview-manager-portal-company-calendar.jpeg"
+				}
+			],
+			"contactEmail": "sales@openfin.co",
+			"supportEmail": "support@openfin.co",
+			"publisher": "OpenFin",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v19.0.0/workspace-platform-starter/common/views/manager-portal/company-cal/index.html"
+			},
+			"interop": {}
+		}
+	]
+}

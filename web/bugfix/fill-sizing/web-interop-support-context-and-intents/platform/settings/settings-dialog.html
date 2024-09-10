@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Settings</title>
+		<link rel="icon" type="image/x-icon" href="../../../favicon.ico" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="https://built-on-openfin.github.io/web-starter/web/v19.0.0/web-client-api/js/shim-connect-fallback.api.bundle.js"></script>
+		<script type="module" src="../../js/settings-dialog.bundle.js"></script>
+		<link rel="stylesheet" href="../../common/style/app.css" />
+		<link rel="manifest" href="../../manifest.json" />
+	</head>
+
+	<body class="border">
+		<main class="fill col">
+			<header class="row spread middle drag">
+				<div class="col">
+					<h1>Settings</h1>
+				</div>
+			</header>
+			<div class="fill col scroll-vertical gap5">
+				<div class="pad10 row gap10">
+					<h2>Platform</h2>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="title" title="Title">Title</label>
+						<input id="title" type="text" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="subTitle" title="Sub Title">Sub Title</label>
+						<input id="subTitle" type="text" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="logo" title="Logo">Logo</label>
+						<input id="logo" type="url" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10 row gap10">
+					<h2>Cloud Interop</h2>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="userId" title="UserId">UserId</label>
+						<input id="userId" type="text" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="password" title="Password">Password</label>
+						<input id="password" type="password" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="platformId" title="Platform Id - Used to link platforms together.">Platform Id</label>
+						<input id="platformId" type="text" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="cloudUrl" title="Cloud Url">Cloud Url</label>
+						<input id="cloudUrl" type="url" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="sourceId" title="Source Id">Source Id</label>
+						<input id="sourceId" type="text" style="width: 90%" />
+					</fieldset>
+				</div>
+				<div class="pad10">
+					<fieldset class="fill">
+						<label for="sourceDisplayName" title="Source Display Name">Source Display Name</label>
+						<input id="sourceDisplayName" type="text" style="width: 90%" />
+					</fieldset>
+				</div>
+			</div>
+			<footer class="row right gap10">
+				<button id="cancel" class="secondary">Cancel</button>
+				<button id="reset" class="secondary">Reset and Restart</button>
+				<button id="save">Save and Restart</button>
+			</footer>
+		</main>
+	</body>
+</html>
