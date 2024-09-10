@@ -10984,7 +10984,8 @@ async function launch(platformApp, target) {
         if (target?.layout) {
             await window?.fin?.Platform.Layout.getCurrentSync().addView({
                 name,
-                url: appToLaunch.details.url
+                url: appToLaunch.details.url,
+                title: appToLaunch.title // right now this title is read by the layout but it is not exposed by the type which is why it is cast.
             });
         }
         else {
