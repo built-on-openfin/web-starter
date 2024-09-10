@@ -166,9 +166,6 @@ p {
 
 main {
 	min-height: 100px;
-	/*max-height: 100dvh;*/
-	/*min-height: 0;*/
-	/*height: 80dvh; calc(100dvh - var(--header-height));*/
 }
 
 .header {
