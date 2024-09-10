@@ -12847,7 +12847,7 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
                 // Create a new div container for the layout.
                 const container = document.createElement("div");
                 container.id = layoutName;
-                container.className = "col fill layout-container hidden";
+                container.className = "col layout-container workspace-container hidden";
                 this._layoutContainer?.append(container);
                 await fin.Platform.Layout.create({ layoutName, layout, container });
                 if (entry === length) {
