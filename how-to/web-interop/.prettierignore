@@ -4,3 +4,4 @@ settings.schema.json
 reports
 *.exe
 *.zip
+**/wc-fin/*.js

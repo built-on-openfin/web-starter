@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web-starter",
-	"version": "19.0.0",
+	"version": "19.1.0",
 	"description": "OpenFin Web Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",

@@ -2,7 +2,7 @@ import type OpenFin from "@openfin/core";
 import type { PlatformApp } from "../../shapes/app-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
 import { isEmpty } from "../../utils";
-import { getAllLayouts, getViewElementFromLayout } from "../layout/layout-utils";
+
 /**
  * The AppIdHelper class provides helpful functions related to app ids.
  */
@@ -34,67 +34,46 @@ export class AppIdHelper {
 	 */
 	public async lookupAppId(clientIdentity: OpenFin.ClientIdentity): Promise<string | undefined> {
 		const name: string = clientIdentity.name;
-		let appIdOrUrl: string | undefined;
+		let appId: string | undefined;
 		if (name.startsWith("internal-generated-")) {
-			try {
-				const layouts = await getAllLayouts();
-				if (layouts.length === 0) {
-					this._logger.warn("No layouts found in the document.");
-					return;
-				}
-				for (const layout of layouts) {
-					const view = await getViewElementFromLayout(layout, name);
-					if (!isEmpty(view)) {
-						const src = view.getAttribute("src");
-						if (!isEmpty(src)) {
-							appIdOrUrl = src;
-							break;
-						}
-					}
-				}
-			} catch {
-				// dom element is likely not available yet return undefined
-				this._logger.debug("Dom element not available yet for lookupAppId");
-				return;
-			}
+			return;
+		}
+		const nameParts = name.split("/");
+		if (nameParts.length === 1 || nameParts.length === 2) {
+			appId = nameParts[0];
 		} else {
-			const nameParts = name.split("/");
-			if (nameParts.length === 1 || nameParts.length === 2) {
-				appIdOrUrl = nameParts[0];
-			} else {
-				appIdOrUrl = `${nameParts[0]}/${nameParts[1]}`;
-			}
+			appId = `${nameParts[0]}/${nameParts[1]}`;
 		}
 
-		if (!isEmpty(appIdOrUrl)) {
-			const appId = await this.validateApp(appIdOrUrl);
-			return appId;
+		if (!isEmpty(appId)) {
+			appId = await this.validateApp(appId);
 		}
+		return appId;
 	}
 
 	/**
 	 * Validates the app id or url.
-	 * @param appIdOrUrl The id of the app if it has been determined or the url of the app to be used as an alternative lookup.
+	 * @param appId The id of the app if it has been determined.
 	 * @returns The validated app id or undefined if there is no match.
 	 */
-	private async validateApp(appIdOrUrl: string): Promise<string | undefined> {
-		if (this._validatedAppIds.includes(appIdOrUrl)) {
-			return this._appMap.get(appIdOrUrl);
+	private async validateApp(appId: string): Promise<string | undefined> {
+		if (this._validatedAppIds.includes(appId)) {
+			return this._appMap.get(appId);
 		}
-		if (this._invalidAppIds.includes(appIdOrUrl)) {
+		if (this._invalidAppIds.includes(appId)) {
 			return;
 		}
 		// perform a lookup to validate the appId
-		const app = await this._getApp(appIdOrUrl);
+		const app = await this._getApp(appId);
 
 		if (!isEmpty(app)) {
-			this._validatedAppIds.push(appIdOrUrl);
-			this._appMap.set(appIdOrUrl, app.appId);
+			this._validatedAppIds.push(appId);
+			this._appMap.set(appId, app.appId);
 			return app.appId;
 		}
-		this._invalidAppIds.push(appIdOrUrl);
+		this._invalidAppIds.push(appId);
 		this._logger.warn(
-			`AppId ${appIdOrUrl} does not exist in the directory and we do not have an unregistered app fallback. No app id will be returned as it is unconfirmed.`
+			`AppId ${appId} does not exist in the directory and we do not have an unregistered app fallback. No app id will be returned as it is unconfirmed.`
 		);
 	}
 }

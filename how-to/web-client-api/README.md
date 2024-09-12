@@ -94,7 +94,7 @@ The module supports the following options:
 
 This is an FDC3 view similar to the one shown in web-interop and web-interop-basic examples. The only difference is that this one does not import the @openfin/core-web module. The [shim](./client/src/shim.ts) script is referenced in the [fdc3-view.html](./public/views/fdc3-view.html) page which is responsible for bringing in the fin and fdc3 api if the content is running outside of the container.
 
-The content will not run directly as it is not running inside of a layout and the code required to setup a platform and initialize a layout has not been added in order to reduce the amount of code in this example. You can reference the hosted fdc3 example <https://built-on-openfin.github.io/web-starter/web/v19.0.0/client-web-api/views/fdc3-view.html> or start the web server and reference the localhost version <http://localhost:6060/views/fdc3-view.html>.
+The content will not run directly as it is not running inside of a layout and the code required to setup a platform and initialize a layout has not been added in order to reduce the amount of code in this example. You can reference the hosted fdc3 example <https://built-on-openfin.github.io/web-starter/web/v19.1.0/client-web-api/views/fdc3-view.html> or start the web server and reference the localhost version <http://localhost:6060/views/fdc3-view.html>.
 
 # Alternatives
 

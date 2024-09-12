@@ -116,7 +116,5 @@ async function init(): Promise<void> {
 				action: "close"
 			}
 		});
-		const dialog = document.querySelector<HTMLDialogElement>("#settings-resolver-dialog");
-		dialog?.close();
 	});
 }

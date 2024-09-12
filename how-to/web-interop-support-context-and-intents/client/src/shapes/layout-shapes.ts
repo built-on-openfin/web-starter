@@ -1,5 +1,5 @@
 import type OpenFin from "@openfin/core";
-import type { WebLayoutOptions, WebLayoutSnapshot } from "@openfin/core-web";
+import type { WebLayoutOptions } from "@openfin/core-web";
 
 /**
  * Type of the parameter passed into the layoutManagerOverride function.
@@ -10,7 +10,7 @@ export type LayoutManagerConstructor = OpenFin.LayoutManagerConstructor<OpenFin.
 /**
  * Adds support for adding titles to go alongside the layouts
  */
-export type PlatformLayoutSnapshot = WebLayoutSnapshot & {
+export type PlatformLayoutSnapshot = OpenFin.LayoutSnapshot & {
 	layoutTitles: { [key: string]: string };
 	layoutSelected?: string;
 };

@@ -1,7 +1,7 @@
+import type { OpenFin } from "@openfin/core";
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import { isEmpty, randomUUID } from "../../utils";
-import { getLayoutElement, getViewElementFromLayout } from "../layout/layout-utils";
 import { getSettings } from "../settings/settings";
 
 let cachedApps: PlatformApp[] | undefined;
@@ -44,39 +44,46 @@ export async function getApps(): Promise<PlatformApp[]> {
 /**
  * Launch an application in the way specified by its manifest type.
  * @param platformApp The application to launch or it's id.
+ * @param target The target layout to launch the app in.
+ * @param target.layout target the current layout
  * @returns Identifiers specific to the type of application launched.
  */
 export async function launch(
-	platformApp: PlatformApp | string
+	platformApp: PlatformApp | string,
+	target?: { layout: boolean }
 ): Promise<PlatformAppIdentifier[] | undefined> {
-	// until we have an ability to addViews to a layout we will add a new layout for each app
-	// we are currently using the dom to find the of-view to get the name of the view in order
-	// to return the identity until the addView api is available
-	const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
-	const layoutId = `tab-${randomUUID()}`;
-	let appToLaunch: PlatformApp | undefined;
-	if (typeof platformApp === "string") {
-		appToLaunch = await getApp(platformApp);
-	} else {
-		appToLaunch = platformApp;
-	}
-	if (!appToLaunch) {
+	try {
+		let appToLaunch: PlatformApp | undefined;
+		if (typeof platformApp === "string") {
+			appToLaunch = await getApp(platformApp);
+		} else {
+			appToLaunch = platformApp;
+		}
+		if (!appToLaunch) {
+			return undefined;
+		}
+
+		const name = `${appToLaunch.appId}/${randomUUID()}`;
+		const uuid = fin.me.identity.uuid;
+		const appId = appToLaunch.appId;
+
+		if (target?.layout) {
+			await window?.fin?.Platform.Layout.getCurrentSync().addView({
+				name,
+				url: appToLaunch.details.url,
+				title: appToLaunch.title // right now this title is read by the layout but it is not exposed by the type which is why it is cast.
+			} as unknown as OpenFin.ViewOptions);
+		} else {
+			const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+			const layoutId = `tab-${randomUUID()}`;
+			const appSnapshot = getAppLayout(appToLaunch, layoutId, name);
+			await currentLayout?.applyLayoutSnapshot(appSnapshot);
+		}
+		return [{ name, uuid, appId }];
+	} catch (error) {
+		console.error("Error launching app", error);
 		return undefined;
 	}
-	const appSnapshot = getAppLayout(appToLaunch, layoutId, `${appToLaunch.appId}/${randomUUID()}`);
-	await currentLayout?.applyLayoutSnapshot(appSnapshot);
-	const layoutElement = await getLayoutElement(layoutId);
-	if (layoutElement !== null) {
-		const ofViewElement = await getViewElementFromLayout(layoutElement);
-		if (ofViewElement !== null) {
-			const name = ofViewElement.getAttribute("of-name");
-			const uuid = ofViewElement.getAttribute("of-uuid");
-			if (name !== null && uuid !== null) {
-				return [{ name, uuid, appId: appToLaunch.appId }];
-			}
-		}
-	}
-	return undefined;
 }
 
 /**
@@ -92,7 +99,11 @@ export async function bringAppToFront(
 	if (!isEmpty(currentLayout)) {
 		for (const target of targets) {
 			const targetLayout = currentLayout.getLayoutIdentityForView(target);
-			await currentLayout.showLayout(targetLayout);
+			if (targetLayout === undefined) {
+				console.error("Target layout for view not found");
+			} else {
+				await currentLayout.showLayout(targetLayout);
+			}
 		}
 	}
 }

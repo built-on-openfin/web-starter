@@ -1,7 +1,8 @@
+import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
 import type { PlatformApp, AppResolverResponse, AppResolverOptions } from "../../shapes/app-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
-import { getApps } from "./apps";
+import { getApps, launch } from "./apps";
 
 /**
  * An App Resolver Used for resolving app selection.
@@ -72,6 +73,9 @@ export class AppResolverHelper {
 				const response = payload as {
 					appResolverResponse?: AppResolverResponse;
 					errorMessage?: string;
+					target?: {
+						layout: boolean;
+					};
 				};
 				this._logger.info("Received app resolver message", payload);
 				if (response.errorMessage) {
@@ -80,6 +84,11 @@ export class AppResolverHelper {
 					this._logger.info("App Resolver response is undefined. No app was selected.");
 				} else {
 					this._logger.info("The following app was selected: ", response.appResolverResponse);
+					if (window.fdc3 !== undefined && response.target === undefined) {
+						await window.fdc3.open(response.appResolverResponse as AppIdentifier);
+					} else if (response.appResolverResponse?.appId) {
+						await launch(response.appResolverResponse.appId, response.target);
+					}
 				}
 				if (this._dialogElement) {
 					this._dialogElement.close();
