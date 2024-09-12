@@ -31100,7 +31100,7 @@ async function createLayout(fin, layoutName, layout, order) {
     // Create a new div container for the layout.
     const container = document.createElement("div");
     container.id = layoutName;
-    container.className = "col fill";
+    container.className = "col layout-container";
     container.style.display = order === 0 ? "block" : "none";
     PARENT_CONTAINER?.append(container);
     // Normally you can use state here, but just tracking the order of layouts in localStorage.

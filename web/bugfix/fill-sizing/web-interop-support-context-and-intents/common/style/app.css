@@ -19,6 +19,7 @@
 	accent-color: var(--brand-primary);
 
 	--header-height: 60px;
+	--body-padding: 20px;
 }
 
 .theme-light {
@@ -36,6 +37,14 @@
 	--brand-table-row-odd: var(--theme-background4, #c9cbd2);
 	--brand-error: var(--theme-status-critical, #be1d1f);
 	--brand-success: var(--theme-status-success, #35c759);
+}
+
+.layout-container {
+	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2));
+}
+
+.header {
+	height: var(--header-height);
 }
 
 .primary {
@@ -69,14 +78,14 @@ body {
 	justify-content: stretch;
 	align-items: stretch;
 	overflow: hidden;
-	padding: 20px;
+	padding: var(--body-padding);
 	margin: 0;
 	background-color: var(--brand-background);
 	color: var(--brand-text);
 }
 
 body.border {
-	padding: 20px;
+	padding: var(--body-padding);
 	margin: 0;
 	background-color: var(--brand-background);
 	color: var(--brand-text);
@@ -166,14 +175,6 @@ p {
 
 main {
 	min-height: 100px;
-}
-
-.header {
-	height: var(--header-height);
-}
-
-.workspace-container {
-	height: calc(100dvh - var(--header-height));
 }
 
 a {
