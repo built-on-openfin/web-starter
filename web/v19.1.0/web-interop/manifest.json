@@ -23,11 +23,11 @@
 			},
 			"layout": {
 				"panels": {
-						"left": {
-							"url": "https://built-on-openfin.github.io/web-starter/web/v19.1.0/web-interop/views/fdc3-panel.html",
-							"frameId": "left-panel",
-							"frameContainerId": "left-panel-container"
-						}
+					"left": {
+						"url": "https://built-on-openfin.github.io/web-starter/web/v19.1.0/web-interop/views/fdc3-panel.html",
+						"frameId": "left-panel",
+						"frameContainerId": "left-panel-container"
+					}
 				},
 				"layoutContainerId": "layout_container",
 				"defaultLayout": "https://built-on-openfin.github.io/web-starter/web/v19.1.0/web-interop/layouts/default.layout.fin.json"
