@@ -1,4 +1,3 @@
-import type { OpenFin } from "@openfin/core";
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import { isEmpty, randomUUID } from "../../utils";
@@ -71,8 +70,9 @@ export async function launch(
 			await window?.fin?.Platform.Layout.getCurrentSync().addView({
 				name,
 				url: appToLaunch.details.url,
-				title: appToLaunch.title // right now this title is read by the layout but it is not exposed by the type which is why it is cast.
-			} as unknown as OpenFin.ViewOptions);
+				// @ts-expect-error title will be exposed in the next release
+				title: appToLaunch.title
+			});
 		} else {
 			const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
 			const layoutId = `tab-${randomUUID()}`;

@@ -4,6 +4,19 @@
 
 ## OpenFin Core Web - Known Issues
 
+### [0.39.21](https://www.npmjs.com/package/@openfin/core-web/v/0.39.21)
+
+- If you wish to specify a title for your view when adding it to a layout (so it shows on the tab for the view on the layout) using the new addView API you will need to either cast the view options as unknown and then OpenFin.ViewOptions or use @ts-expect-error.
+
+```typescript
+await window?.fin?.Platform.Layout.getCurrentSync().addView({
+    name,
+    url,
+    // @ts-expect-error title will be exposed in the next release
+    title: "Title to show on the layout tab"
+   });
+```
+
 ### [0.38.64](https://www.npmjs.com/package/@openfin/core-web/v/0.38.64)
 
 - No known issues.

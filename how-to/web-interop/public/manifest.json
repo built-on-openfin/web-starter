@@ -23,11 +23,11 @@
 			},
 			"layout": {
 				"panels": {
-						"left": {
-							"url": "http://localhost:6060/views/fdc3-panel.html",
-							"frameId": "left-panel",
-							"frameContainerId": "left-panel-container"
-						}
+					"left": {
+						"url": "http://localhost:6060/views/fdc3-panel.html",
+						"frameId": "left-panel",
+						"frameContainerId": "left-panel-container"
+					}
 				},
 				"layoutContainerId": "layout_container",
 				"defaultLayout": "http://localhost:6060/layouts/default.layout.fin.json"
