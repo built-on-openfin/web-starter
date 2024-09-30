@@ -14,17 +14,24 @@
 	],
 	"related_applications": [],
 	"custom_settings": {
-		"endpointProvider": {
-			"endpoints": [
-				{
-					"id": "platform-settings",
-					"type": "fetch",
-					"options": {
-						"method": "GET",
-						"url": "https://built-on-openfin.github.io/web-starter/dev/joe/pwa-example/web-interop/settings.json"
-					}
-				}
-			]
+		"platform": {
+			"interop": {
+				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/dev/joe/pwa-example/web-interop/js/shared-worker.bundle.js",
+				"brokerUrl": "https://built-on-openfin.github.io/web-starter/dev/joe/pwa-example/web-interop/platform/iframe-broker.html",
+				"providerId": "support-context-and-intents",
+				"defaultContextGroup": "green"
+			},
+			"layout": {
+				"panels": {
+						"left": {
+							"url": "https://built-on-openfin.github.io/web-starter/dev/joe/pwa-example/web-interop/views/fdc3-panel.html",
+							"frameId": "left-panel",
+							"frameContainerId": "left-panel-container"
+						}
+				},
+				"layoutContainerId": "layout_container",
+				"defaultLayout": "https://built-on-openfin.github.io/web-starter/dev/joe/pwa-example/web-interop/layouts/default.layout.fin.json"
+			}
 		}
 	}
 }
