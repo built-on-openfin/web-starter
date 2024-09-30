@@ -17,6 +17,8 @@
 	--brand-success: var(--theme-status-success, #35c759);
 
 	accent-color: var(--brand-primary);
+
+	--header-height: 60px;
 }
 
 .theme-light {
@@ -164,6 +166,14 @@ p {
 
 main {
 	min-height: 100px;
+}
+
+.header {
+	height: var(--header-height);
+}
+
+.workspace-container {
+	height: calc(100dvh - var(--header-height));
 }
 
 a {
@@ -918,6 +928,14 @@ td,
 
 .form-group.large {
 	gap: 20px;
+}
+
+.width-viewport {
+	width: 100dvw;
+}
+
+.height-viewport {
+	height: 100dvh;
 }
 
 .width-full {
