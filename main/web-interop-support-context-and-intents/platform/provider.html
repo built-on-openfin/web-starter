@@ -10,9 +10,10 @@
 		<link rel="stylesheet" href="../style/core-web-styles.css" />
 		<link rel="stylesheet" href="../common/style/app.css" />
 		<script defer="defer" src="../js/provider.bundle.js"></script>
+		<script type="module" src="../common/lib/wc-fin/wc-fin.esm.js"></script>
 		<link rel="manifest" href="../manifest.json" />
 	</head>
-	<body class="col width-viewport height-viewport">
+	<body class="col gap20">
 		<header class="row spread middle header">
 			<div class="col">
 				<h1 id="title">OpenFin - Support Context & Intents</h1>
@@ -22,6 +23,12 @@
 				</h1>
 			</div>
 			<div class="row middle gap20">
+				<fin-context-group-picker
+					bind-self="false"
+					bind-views="true"
+					is-monitoring-enabled="true"
+					show-list-on-click="true"
+				></fin-context-group-picker>
 				<label for="layout-selector">Layout</label>
 				<select id="layout-selector"></select>
 				<button type="button" id="add-layout" class="small" title="Add Layout">
@@ -36,6 +43,8 @@
 				<img id="logo" src="../common/images/icon-blue.png" alt="OpenFin" height="40px" />
 			</div>
 		</header>
-		<main id="layout_container" class="col workspace-container"></main>
+		<main id="main-page">
+			<div id="layout_container"></div>
+		</main>
 	</body>
 </html>
