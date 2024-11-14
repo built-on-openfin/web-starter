@@ -11,12 +11,12 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.1.0/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.1.0/interop/images/previews/view-context-interop-api.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/images/previews/view-context-interop-api.png",
 					"label": "Intents using FDC3"
 				}
 			],
@@ -25,7 +25,7 @@
 			"publisher": "OpenFin",
 			"type": "web",
 			"details": {
-				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.1.0/interop/interop-api/intent/interop-intent-view.html"
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/interop-api/intent/interop-intent-view.html"
 			},
 			"interop": {
 				"intents": {
@@ -89,12 +89,12 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.1.0/common/favicon-32x32.png"
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/common/favicon-32x32.png"
 				}
 			],
 			"screenshots": [
 				{
-					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.1.0/interop/images/previews/view-context-interop-api.png",
+					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/images/previews/view-context-interop-api.png",
 					"label": "Contexts using Interop API"
 				}
 			],
@@ -103,7 +103,7 @@
 			"publisher": "OpenFin",
 			"type": "web",
 			"details": {
-				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.1.0/interop/interop-api/context/interop-broadcast-view.html"
+				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v19.2.0/interop/interop-api/context/interop-broadcast-view.html"
 			},
 			"interop": {}
 		}
