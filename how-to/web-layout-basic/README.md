@@ -8,7 +8,7 @@ This is a simple example that has a simple provider web page that acts as the ma
 
 This page has a very simple layout which is made up of four iframes loading an external website (example.com).
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v19.1.0/web-layout-basic/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v19.2.0/web-layout-basic/platform/provider.html)
 
 ![OpenFin Web Layout Basic Example](./docs/web-layout-basic.png)
 

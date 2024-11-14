@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-interop-basic",
-	"version": "19.1.0",
+	"version": "19.2.0",
 	"description": "OpenFin Web Starter -- Web Interop - Basic",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
