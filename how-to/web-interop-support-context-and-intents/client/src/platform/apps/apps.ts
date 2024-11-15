@@ -70,7 +70,6 @@ export async function launch(
 			await window?.fin?.Platform.Layout.getCurrentSync().addView({
 				name,
 				url: appToLaunch.details.url,
-				// @ts-expect-error title will be exposed in the next release
 				title: appToLaunch.title
 			});
 		} else {
