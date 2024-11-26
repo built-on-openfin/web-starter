@@ -1,0 +1,30 @@
+{
+	"name": "OpenFin - Support Context and Intents",
+	"short_name": "OpenFinSupportInteropContextAndIntents",
+	"start_url": "./platform/provider.html",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "An example showing a implementation of the OpenFin Core Web Library to support context and intents as well as layouts.",
+	"icons": [
+		{
+			"src": "common/images/icon-blue.png",
+			"sizes": "72x72",
+			"type": "image/png"
+		}
+	],
+	"related_applications": [],
+	"custom_settings": {
+		"endpointProvider": {
+			"endpoints": [
+				{
+					"id": "platform-settings",
+					"type": "fetch",
+					"options": {
+						"method": "GET",
+						"url": "https://built-on-openfin.github.io/web-starter/eoyewobi/DEVOP-881/updates-action-to-latest-node/web-interop-support-context-and-intents/settings.json"
+					}
+				}
+			]
+		}
+	}
+}
