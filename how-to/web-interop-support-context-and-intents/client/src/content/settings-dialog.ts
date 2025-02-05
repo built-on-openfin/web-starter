@@ -20,12 +20,11 @@ async function init(): Promise<void> {
 	const logo = document.querySelector<HTMLInputElement>("#logo");
 
 	// cloud settings
-	const userId = document.querySelector<HTMLInputElement>("#userId");
+	const username = document.querySelector<HTMLInputElement>("#username");
 	const password = document.querySelector<HTMLInputElement>("#password");
 	const platformId = document.querySelector<HTMLInputElement>("#platformId");
 	const cloudUrl = document.querySelector<HTMLInputElement>("#cloudUrl");
 	const sourceId = document.querySelector<HTMLInputElement>("#sourceId");
-	const sourceDisplayName = document.querySelector<HTMLInputElement>("#sourceDisplayName");
 
 	const saveButton = document.querySelector<HTMLButtonElement>("#save");
 	const resetButton = document.querySelector<HTMLButtonElement>("#reset");
@@ -36,12 +35,11 @@ async function init(): Promise<void> {
 		title === null ||
 		subTitle === null ||
 		logo === null ||
-		userId === null ||
+		username === null ||
 		password === null ||
 		platformId === null ||
 		cloudUrl === null ||
 		sourceId === null ||
-		sourceDisplayName === null ||
 		saveButton === null ||
 		resetButton === null ||
 		cancelButton === null ||
@@ -65,12 +63,11 @@ async function init(): Promise<void> {
 		title.value = settings?.platform?.ui?.title;
 		subTitle.value = settings?.platform?.ui?.subTitle;
 		logo.value = settings?.platform?.ui?.logo;
-		userId.value = settings?.platform.cloudInterop?.connectParams?.userId;
-		password.value = settings?.platform.cloudInterop?.connectParams?.password;
+		username.value = settings?.platform.cloudInterop?.connectParams?.basicAuthenticationParameters?.username;
+		password.value = settings?.platform.cloudInterop?.connectParams?.basicAuthenticationParameters?.password;
 		platformId.value = settings?.platform.cloudInterop?.connectParams?.platformId;
 		cloudUrl.value = settings?.platform.cloudInterop?.connectParams?.url;
 		sourceId.value = settings?.platform.cloudInterop?.connectParams.sourceId ?? "";
-		sourceDisplayName.value = settings?.platform.cloudInterop?.connectParams.sourceDisplayName ?? "";
 		appliedSettings = settings;
 	});
 
@@ -83,12 +80,13 @@ async function init(): Promise<void> {
 		appliedSettings.platform.ui.title = title.value;
 		appliedSettings.platform.ui.subTitle = subTitle.value;
 		appliedSettings.platform.ui.logo = logo.value;
-		appliedSettings.platform.cloudInterop.connectParams.userId = userId.value;
-		appliedSettings.platform.cloudInterop.connectParams.password = password.value;
+		appliedSettings.platform.cloudInterop.connectParams.basicAuthenticationParameters.username =
+			username.value;
+		appliedSettings.platform.cloudInterop.connectParams.basicAuthenticationParameters.password =
+			password.value;
 		appliedSettings.platform.cloudInterop.connectParams.platformId = platformId.value;
 		appliedSettings.platform.cloudInterop.connectParams.url = cloudUrl.value;
 		appliedSettings.platform.cloudInterop.connectParams.sourceId = sourceId.value;
-		appliedSettings.platform.cloudInterop.connectParams.sourceDisplayName = sourceDisplayName.value;
 
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		settingsResolverService.publish("settings-resolver-response", {

@@ -14,12 +14,14 @@ export async function getSettings(): Promise<Settings> {
 		},
 		cloud: {
 			connectParams: {
-				userId: "<PLEASE ASK OPENFIN FOR A USER ID>",
-				password: "<PLEASE ASK OPENFIN FOR A PASSWORD>",
 				platformId: "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
-				url: "<PLEASE ASK OPENFIN FOR A URL>",
 				sourceId: "cloud-interop-basic",
-				sourceDisplayName: "Cloud Interop Basic Example"
+				authenticationType: "basic",
+				basicAuthenticationParameters: {
+					username: "<PLEASE ASK OPENFIN FOR A USERNAME>",
+					password: "<PLEASE ASK OPENFIN FOR A PASSWORD>"
+				},
+				url: "<PLEASE ASK OPENFIN FOR A URL>"
 			}
 		}
 	};

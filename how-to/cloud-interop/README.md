@@ -17,7 +17,7 @@ This page has a very simple layout which is made up of four iframes that inherit
 
 It also has a left panel which is outside of the OpenFin Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v20.0.0/cloud-interop/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v20.1.0/cloud-interop/platform/provider.html)
 
 ![OpenFin Web Interop Example](./docs/web-interop.png)
 
@@ -98,16 +98,18 @@ async function init(): Promise<void> {
 
  // These settings may be subject to change as we get feedback from use cases. Please contact OpenFin for this information.
  const cloudConfig =  {
-    userId: "",
-    password: "",
-    platformId: "",
-    url: "",
-    sourceId: "",
-    sourceDisplayName: ""
+  platformId: "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
+  sourceId: "cloud-interop",
+  authenticationType: "basic",
+  basicAuthenticationParameters: {
+     username: "<PLEASE ASK OPENFIN FOR A USERNAME>",
+     password: "<PLEASE ASK OPENFIN FOR A PASSWORD>"
+  },
+  url: "<PLEASE ASK OPENFIN FOR A URL>"
  };
 
 // You may now use the `fin` object and initialize the Broker with support for cloud interop.
- await fin.Interop.init("cloud-interop-basic", [await cloudInteropOverride(cloudConfig)]);
+ await fin.Interop.init("cloud-interop", [await cloudInteropOverride(cloudConfig)]);
 
  // initialize the layout and pass it the dom element to bind to
  await fin.Platform.Layout.init({
@@ -240,12 +242,14 @@ To make it easier to update settings we store them in the web [manifest.json](./
     },
     "cloud": {
       "connectParams": {
-        "userId": "<PLEASE ASK OPENFIN FOR A USER ID>",
-        "password": "<PLEASE ASK OPENFIN FOR A PASSWORD>",
-        "platformId": "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
-        "url": "<PLEASE ASK OPENFIN FOR A URL>",
-        "sourceId": "cloud-interop",
-        "sourceDisplayName": "Cloud Interop Example"
+        "authenticationType": "basic",
+        "basicAuthenticationParameters": {
+          "username": "<PLEASE ASK OPENFIN/HERE FOR A USERNAME>",
+          "password": "<PLEASE ASK OPENFIN/HERE FOR A PASSWORD>"
+        },
+        "platformId": "<PLEASE ASK OPENFIN/HERE FOR A PLATFORM ID>",
+        "url": "<PLEASE ASK OPENFIN/HERE FOR A URL>",
+        "sourceId": "cloud-interop"
       }
     }
   }
