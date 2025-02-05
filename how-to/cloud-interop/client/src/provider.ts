@@ -48,19 +48,18 @@ async function getCloudSettings(settings: Settings): Promise<CloudInteropOverrid
 			reject(new Error("Running in local only mode as cloud interop settings have not been provided."));
 		});
 		btnSubmit?.addEventListener("click", async () => {
-			const userId = document.querySelector<HTMLInputElement>("#userId")?.value;
+			const username = document.querySelector<HTMLInputElement>("#username")?.value;
 			const password = document.querySelector<HTMLInputElement>("#password")?.value;
 			const platformId = document.querySelector<HTMLInputElement>("#platformId")?.value;
 			const url = document.querySelector<HTMLInputElement>("#url")?.value;
 			const sourceId = document.querySelector<HTMLInputElement>("#sourceId")?.value;
-			const sourceDisplayName = document.querySelector<HTMLInputElement>("#sourceDisplayName")?.value;
 			// Check if the inputs are valid
 			if (
-				userId === null ||
+				username === null ||
 				password === null ||
 				platformId === null ||
 				url === null ||
-				userId?.trim() === "" ||
+				username?.trim() === "" ||
 				password?.trim() === "" ||
 				platformId?.trim() === "" ||
 				url?.trim() === ""
@@ -72,12 +71,14 @@ async function getCloudSettings(settings: Settings): Promise<CloudInteropOverrid
 				);
 			}
 			const options = {
-				userId: userId ?? "",
-				password: password ?? "",
+				authenticationType: "basic",
+				basicAuthenticationParameters: {
+					username: username ?? "",
+					password: password ?? ""
+				},
 				platformId: platformId ?? "",
 				url: url ?? "",
-				sourceId: sourceId ?? "cloud-interop",
-				sourceDisplayName: sourceDisplayName ?? "Cloud Interop Example"
+				sourceId: sourceId ?? "cloud-interop"
 			};
 			cloudDetails?.classList.add("hidden");
 			mainPage?.classList.remove("hidden");
