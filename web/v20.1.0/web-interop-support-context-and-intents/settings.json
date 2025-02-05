@@ -22,12 +22,14 @@
 		},
 		"cloudInterop": {
 			"connectParams": {
-				"userId": "<PLEASE ASK OPENFIN FOR A USER ID>",
-				"password": "<PLEASE ASK OPENFIN FOR A PASSWORD>",
 				"platformId": "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
-				"url": "<PLEASE ASK OPENFIN FOR A URL>",
-				"sourceId": "cloud-interop-contents-and-intents",
-				"sourceDisplayName": "Cloud Interop Basic Example"
+				"sourceId": "cloud-interop-web-context-and-intents",
+				"authenticationType": "basic",
+				"basicAuthenticationParameters": {
+					"username": "<PLEASE ASK OPENFIN FOR A USERNAME>",
+					"password": "<PLEASE ASK OPENFIN FOR A PASSWORD>"
+				},
+				"url": "<PLEASE ASK OPENFIN FOR A URL>"
 			}
 		},
 		"layout": {
