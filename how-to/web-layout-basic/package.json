@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-layout-basic",
-	"version": "20.0.0",
+	"version": "20.1.0",
 	"description": "OpenFin Web Starter -- Web Layout Basic",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {

@@ -15,7 +15,7 @@ This page has a very simple layout which is made up of four iframes that inherit
 
 It also has a left panel which is outside of the OpenFin Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v20.0.0/web-interop/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v20.1.0/web-interop/platform/provider.html)
 
 ![OpenFin Web Interop Example](./docs/web-interop.png)
 
