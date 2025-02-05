@@ -105,7 +105,11 @@ async function getSavedSettings() {
     const settingsId = getSavedSettingsId();
     const settings = localStorage.getItem(settingsId);
     if (settings !== null) {
-        return JSON.parse(settings);
+        const resolvedSettings = JSON.parse(settings);
+        if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
+            resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
+        }
+        return resolvedSettings;
     }
 }
 /**
