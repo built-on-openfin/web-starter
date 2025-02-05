@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-interop-basic",
-	"version": "19.2.0",
+	"version": "20.0.0",
 	"description": "OpenFin Web Starter -- Web Interop - Basic",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
@@ -20,10 +20,10 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.39.21"
+		"@openfin/core-web": "0.40.31"
 	},
 	"devDependencies": {
-		"@openfin/core": "39.83.21",
+		"@openfin/core": "40.100.7",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

@@ -17,7 +17,7 @@ It also has a left panel which is outside of the OpenFin Layout and represents a
 
 Using Layouts, this demo also shows off a "Swap Layouts" function, which allows someone to quickly jump from one created layout (via a snapshot JSON definition) to another.
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v19.2.0/web-layout/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v20.0.0/web-layout/platform/provider.html)
 
 ![OpenFin Web Multi Layout Example](./docs/web-layout.png)
 
