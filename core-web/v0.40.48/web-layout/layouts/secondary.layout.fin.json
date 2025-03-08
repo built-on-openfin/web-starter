@@ -1,0 +1,50 @@
+{
+	"layouts": {
+		"new": {
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "column",
+							"width": 100,
+							"content": [
+								{
+									"type": "stack",
+									"width": 50,
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/web-starter/core-web/v0.40.48/web-layout/views/fdc3-view.html"
+											},
+											"title": "FDC3 Same Domain",
+											"isClosable": false
+										}
+									]
+								},
+								{
+									"type": "stack",
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html"
+											},
+											"title": "FDC3 Different Domain",
+											"isClosable": true
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+}
