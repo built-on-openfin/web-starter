@@ -70,7 +70,7 @@ async function getCloudSettings(settings: Settings): Promise<CloudInteropOverrid
 					)
 				);
 			}
-			const options = {
+			const options: CloudInteropOverrideParams = {
 				authenticationType: "basic",
 				basicAuthenticationParameters: {
 					username: username ?? "",
