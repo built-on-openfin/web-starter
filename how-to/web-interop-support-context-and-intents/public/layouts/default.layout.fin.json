@@ -1,6 +1,9 @@
 {
 	"layouts": {
 		"tab-developer-tools": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "row",
@@ -116,6 +119,9 @@
 			]
 		},
 		"tab-manager-portal": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "row",
@@ -247,6 +253,9 @@
 			]
 		},
 		"tab-crm": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "row",
@@ -395,6 +404,9 @@
 			]
 		},
 		"tab-finance": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "column",
