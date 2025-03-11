@@ -1,0 +1,87 @@
+{
+	"layouts": {
+		"default": {
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "column",
+							"width": 50,
+							"content": [
+								{
+									"type": "stack",
+									"width": 50,
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/web-starter/core-web/v0.40/web-interop/views/fdc3-view.html",
+												"name": "internal-generated-view-e7fe7df3-6f64-4235-899f-4e91af2cb32d"
+											},
+											"title": "FDC3 Same Domain"
+										}
+									]
+								},
+								{
+									"type": "stack",
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+												"name": "internal-generated-view-54a8ef85-a885-4234-be46-9d52e88fcb74"
+											},
+											"title": "FDC3 Different Domain"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "column",
+							"width": 50,
+							"content": [
+								{
+									"type": "stack",
+									"width": 50,
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/web-starter/core-web/v0.40/web-interop/views/interop-view.html",
+												"name": "internal-generated-view-64a8efd7-3d92-42ae-8fae-dffcc0fdac96"
+											},
+											"title": "Interop Same Domain"
+										}
+									]
+								},
+								{
+									"type": "stack",
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v20.1.0/interop/interop-api/context/interop-broadcast-view.html",
+												"name": "internal-generated-view-2d9a3624-fd0e-4e0a-b681-a79a9616b871"
+											},
+											"title": "Interop External Domain"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+}
