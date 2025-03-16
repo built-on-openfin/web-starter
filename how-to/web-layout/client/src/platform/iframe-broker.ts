@@ -14,7 +14,8 @@ async function init(): Promise<void> {
 		return;
 	}
 	return initBrokerConnection({
-		sharedWorkerUrl: settings.platform.interop.sharedWorkerUrl
+		sharedWorkerUrl: settings.platform.interop.sharedWorkerUrl,
+		logLevel: "info"
 	});
 }
 
