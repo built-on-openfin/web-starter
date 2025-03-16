@@ -1,6 +1,9 @@
 {
 	"layouts": {
 		"default": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "row",
@@ -84,6 +87,9 @@
 			]
 		},
 		"secondary": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "row",

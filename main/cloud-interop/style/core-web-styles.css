@@ -1,5 +1,6 @@
 .lm_root {
   position: relative;
+  overflow: hidden;
 }
 .lm_row > .lm_item {
   float: left;
