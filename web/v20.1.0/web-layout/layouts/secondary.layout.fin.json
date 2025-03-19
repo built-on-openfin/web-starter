@@ -1,6 +1,9 @@
 {
 	"layouts": {
 		"new": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "row",
