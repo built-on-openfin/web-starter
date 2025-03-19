@@ -358,7 +358,8 @@ async function init(): Promise<void> {
 			}
 		},
 		connectionInheritance: "enabled",
-		platform: { layoutSnapshot }
+		platform: { layoutSnapshot },
+		logLevel: "info"
 	});
 	window.fin = fin;
 	if (fin) {
