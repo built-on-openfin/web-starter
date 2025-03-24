@@ -1,0 +1,59 @@
+{
+	"platform": {
+		"ui": {
+			"logo": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/images/icon-blue.png",
+			"title": "OpenFin - Support Context and Intents",
+			"subTitle": "Demonstrate how OpenFin's FDC3 Context and Intents support can be utilized and combined with OpenFin's Layout support.",
+			"settingsResolver": {
+				"url": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/platform/settings/settings-dialog.html"
+			}
+		},
+		"interop": {
+			"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/js/shared-worker.bundle.js",
+			"brokerUrl": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/platform/iframe-broker.html",
+			"providerId": "support-context-and-intents",
+			"defaultContextGroup": "green",
+			"overrideOptions": {
+				"intentResolver": {
+					"url": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/platform/intents/instance-picker.html",
+					"title": "Intent Resolver"
+				}
+			}
+		},
+		"cloudInterop": {
+			"connectParams": {
+				"platformId": "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
+				"sourceId": "cloud-interop-web-context-and-intents",
+				"authenticationType": "basic",
+				"basicAuthenticationParameters": {
+					"username": "<PLEASE ASK OPENFIN FOR A USERNAME>",
+					"password": "<PLEASE ASK OPENFIN FOR A PASSWORD>"
+				},
+				"url": "<PLEASE ASK OPENFIN FOR A URL>"
+			}
+		},
+		"layout": {
+			"addLayoutId": "add-layout",
+			"deleteLayoutId": "delete-layout",
+			"layoutContainerId": "layout_container",
+			"layoutSelectorId": "layout-selector",
+			"defaultLayout": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/layouts/default.layout.fin.json"
+		},
+		"app": {
+			"directory": [
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/apps.json",
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/apps-tools.json",
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/apps.json",
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/apps-fdc3-2-0.json",
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/apps-interop.json",
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/apps-contact.json",
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/apps-manager.json",
+				"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/common/apps-finance.json"
+			],
+			"appResolver": {
+				"url": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-interop-support-context-and-intents/platform/apps/app-picker.html",
+				"title": "App Resolver"
+			}
+		}
+	}
+}
