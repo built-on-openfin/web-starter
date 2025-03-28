@@ -63,12 +63,13 @@
   position: absolute;
   right: 3px;
   display: flex;
+  height: 100%;
 }
 .lm_header .lm_controls > * {
   cursor: pointer;
   float: left;
   width: 18px;
-  height: 18px;
+  height: 100%;
   text-align: center;
 }
 .lm_header .lm_tabs {
@@ -672,12 +673,17 @@ div.placeholder_image img {
     color: var(--tab-font-color)
 }
 
+.lm_controls {
+    height: 100%;
+}
+
 .lm_controls li {
 	position: relative;
 	background-position: center center;
 	background-repeat: no-repeat;
 	opacity: .4;
-	transition: opacity 300ms ease
+	transition: opacity 300ms ease;
+  height: 100% !important;
 }
 
 .lm_controls li:hover {
