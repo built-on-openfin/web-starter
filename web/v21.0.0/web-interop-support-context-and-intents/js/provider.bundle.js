@@ -8525,6 +8525,19 @@ async function getApps() {
     return cachedApps;
 }
 /**
+ * Formats the app title and adds a count suffix to disambiguate the tabs.
+ * @param app The app for which to format the title
+ * @returns The formatted title, with a count suffix if multiple instances exist
+ */
+async function formatAppTitleWithSuffix(app) {
+    const layout = fin.Platform.Layout.getCurrentSync();
+    const views = await layout.getCurrentViews();
+    const existingInstances = views.filter((view) => view.identity.name.split("/")[0] === app.appId);
+    return existingInstances && existingInstances.length > 0
+        ? `${app.title} (${existingInstances.length})`
+        : app.title;
+}
+/**
  * Launch an application in the way specified by its manifest type.
  * @param platformApp The application to launch or it's id.
  * @param target The target layout to launch the app in.
@@ -8546,17 +8559,18 @@ async function launch(platformApp, target) {
         const name = `${appToLaunch.appId}/${(0, utils_1.randomUUID)()}`;
         const uuid = fin.me.identity.uuid;
         const appId = appToLaunch.appId;
+        const title = await formatAppTitleWithSuffix(appToLaunch);
         if (target?.layout) {
             await window?.fin?.Platform.Layout.getCurrentSync().addView({
                 name,
                 url: appToLaunch.details.url,
-                title: appToLaunch.title
+                title
             });
         }
         else {
             const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
             const layoutId = `tab-${(0, utils_1.randomUUID)()}`;
-            const appSnapshot = getAppLayout(appToLaunch, layoutId, name);
+            const appSnapshot = getAppLayout(appToLaunch, layoutId, name, title);
             await currentLayout?.applyLayoutSnapshot(appSnapshot);
         }
         return [{ name, uuid, appId }];
@@ -8590,9 +8604,10 @@ async function bringAppToFront(platformApp, targets) {
  * @param platformApp The application to get the layout for.
  * @param layoutId The id of the layout to create for the app.
  * @param viewName The name of the view to create.
+ * @param title Preferred title for the new tab, or otherwise will use document.title
  * @returns The layout options.
  */
-function getAppLayout(platformApp, layoutId, viewName) {
+function getAppLayout(platformApp, layoutId, viewName, title) {
     const appSnapshot = {
         layouts: {},
         layoutTitles: {}
@@ -8617,8 +8632,9 @@ function getAppLayout(platformApp, layoutId, viewName) {
                                         componentState: {
                                             url: platformApp.details.url,
                                             name: viewName
+                                            // titlePriority: "options" // Pending release
                                         },
-                                        title: platformApp.title
+                                        title
                                     }
                                 ]
                             }
