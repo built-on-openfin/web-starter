@@ -8563,8 +8563,9 @@ async function launch(platformApp, target) {
         if (target?.layout) {
             await window?.fin?.Platform.Layout.getCurrentSync().addView({
                 name,
-                url: appToLaunch.details.url
-                // title
+                url: appToLaunch.details.url,
+                titlePriority: "options",
+                title
             });
         }
         else {
@@ -8632,9 +8633,9 @@ function getAppLayout(platformApp, layoutId, viewName, title) {
                                         componentState: {
                                             url: platformApp.details.url,
                                             name: viewName,
-                                            titlePriority: "document" // Pending release
-                                        }
-                                        // title
+                                            titlePriority: "options"
+                                        },
+                                        title
                                     }
                                 ]
                             }
