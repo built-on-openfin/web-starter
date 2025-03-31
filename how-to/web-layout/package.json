@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-layout",
-	"version": "20.1.0",
+	"version": "21.0.0",
 	"description": "OpenFin Web Starter -- Web Layout",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
