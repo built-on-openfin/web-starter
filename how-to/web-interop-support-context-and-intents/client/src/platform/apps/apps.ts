@@ -1,4 +1,3 @@
-import type { OpenFin } from "@openfin/core";
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import { isEmpty, randomUUID } from "../../utils";
@@ -85,8 +84,8 @@ export async function launch(
 		if (target?.layout) {
 			await window?.fin?.Platform.Layout.getCurrentSync().addView({
 				name,
-				url: appToLaunch.details.url,
-				title
+				url: appToLaunch.details.url
+				// title
 			});
 		} else {
 			const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
@@ -160,10 +159,10 @@ function getAppLayout(
 										componentName: "view",
 										componentState: {
 											url: platformApp.details.url,
-											name: viewName
-											// titlePriority: "options" // Pending release
-										},
-										title
+											name: viewName,
+											titlePriority: "document" // Pending release
+										}
+										// title
 									}
 								]
 							}
