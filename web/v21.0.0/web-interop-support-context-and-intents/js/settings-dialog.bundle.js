@@ -62,8 +62,10 @@ async function init() {
         title.value = settings?.platform?.ui?.title;
         subTitle.value = settings?.platform?.ui?.subTitle;
         logo.value = settings?.platform?.ui?.logo;
-        username.value = settings?.platform.cloudInterop?.connectParams?.basicAuthenticationParameters?.username ?? "";
-        password.value = settings?.platform.cloudInterop?.connectParams?.basicAuthenticationParameters?.password ?? "";
+        username.value =
+            settings?.platform.cloudInterop?.connectParams?.basicAuthenticationParameters?.username ?? "";
+        password.value =
+            settings?.platform.cloudInterop?.connectParams?.basicAuthenticationParameters?.password ?? "";
         platformId.value = settings?.platform.cloudInterop?.connectParams?.platformId;
         cloudUrl.value = settings?.platform.cloudInterop?.connectParams?.url;
         sourceId.value = settings?.platform.cloudInterop?.connectParams.sourceId ?? "";
@@ -79,8 +81,10 @@ async function init() {
         appliedSettings.platform.ui.subTitle = subTitle.value;
         appliedSettings.platform.ui.logo = logo.value;
         if (appliedSettings.platform?.cloudInterop?.connectParams?.basicAuthenticationParameters) {
-            appliedSettings.platform.cloudInterop.connectParams.basicAuthenticationParameters.username = username.value;
-            appliedSettings.platform.cloudInterop.connectParams.basicAuthenticationParameters.password = password.value;
+            appliedSettings.platform.cloudInterop.connectParams.basicAuthenticationParameters.username =
+                username.value;
+            appliedSettings.platform.cloudInterop.connectParams.basicAuthenticationParameters.password =
+                password.value;
         }
         appliedSettings.platform.cloudInterop.connectParams.platformId = platformId.value;
         appliedSettings.platform.cloudInterop.connectParams.url = cloudUrl.value;
