@@ -84,8 +84,9 @@ export async function launch(
 		if (target?.layout) {
 			await window?.fin?.Platform.Layout.getCurrentSync().addView({
 				name,
-				url: appToLaunch.details.url
-				// title
+				url: appToLaunch.details.url,
+				titlePriority: "options",
+				title
 			});
 		} else {
 			const currentLayout = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
@@ -160,9 +161,9 @@ function getAppLayout(
 										componentState: {
 											url: platformApp.details.url,
 											name: viewName,
-											titlePriority: "document" // Pending release
-										}
-										// title
+											titlePriority: "options"
+										},
+										title
 									}
 								]
 							}
