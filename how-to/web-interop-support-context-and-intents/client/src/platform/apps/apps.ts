@@ -1,4 +1,3 @@
-import type { OpenFin } from "@openfin/core";
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import { isEmpty, randomUUID } from "../../utils";
@@ -86,6 +85,7 @@ export async function launch(
 			await window?.fin?.Platform.Layout.getCurrentSync().addView({
 				name,
 				url: appToLaunch.details.url,
+				titlePriority: "options",
 				title
 			});
 		} else {
@@ -160,8 +160,8 @@ function getAppLayout(
 										componentName: "view",
 										componentState: {
 											url: platformApp.details.url,
-											name: viewName
-											// titlePriority: "options" // Pending release
+											name: viewName,
+											titlePriority: "options"
 										},
 										title
 									}
