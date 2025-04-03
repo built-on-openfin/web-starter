@@ -20,8 +20,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.41.119",
-		"@openfin/cloud-interop": "0.41.119"
+		"@openfin/core-web": "0.41.120",
+		"@openfin/cloud-interop": "0.41.120"
 	},
 	"devDependencies": {
 		"@openfin/core": "41.100.117",
