@@ -33,10 +33,10 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
+												"titlePriority": "document",
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v21.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
 												"name": "internal-generated-view-54a8ef85-a885-4234-be46-9d52e88fcb74"
-											},
-											"title": "FDC3 Different Domain"
+											}
 										}
 									]
 								}
@@ -55,10 +55,20 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
+												"titlePriority": "options",
+												"title": "Interop Same Domain",
 												"url": "http://localhost:6060/views/interop-view.html",
 												"name": "internal-generated-view-64a8efd7-3d92-42ae-8fae-dffcc0fdac96"
-											},
-											"title": "Interop Same Domain"
+											}
+										},
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"titlePriority": "document",
+												"url": "http://localhost:6060/views/interop-view.html",
+												"name": "internal-generated-view-64a8efd7-3d92-42ae-8fae-dffcc0fdac96"
+											}
 										}
 									]
 								},
@@ -70,10 +80,11 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
+												"titlePriority": "options",
+												"title": "Interop External Domain",
 												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v21.0.0/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "internal-generated-view-2d9a3624-fd0e-4e0a-b681-a79a9616b871"
-											},
-											"title": "Interop External Domain"
+											}
 										}
 									]
 								}
