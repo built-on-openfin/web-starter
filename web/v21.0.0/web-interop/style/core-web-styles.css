@@ -59,6 +59,16 @@
 .lm_header [class^=lm_] {
   box-sizing: content-box !important;
 }
+.lm_header .addTabButton {
+  -webkit-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  padding: 0 6px;
+}
 .lm_header .lm_controls {
   position: absolute;
   right: 3px;
