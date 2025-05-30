@@ -8,6 +8,8 @@ export interface Settings {
 	 * Platform settings
 	 */
 	platform: {
+		platformIdentifier: string;
+		notificationServiceId: string;
 		interop: {
 			sharedWorkerUrl: string;
 			brokerUrl: string;

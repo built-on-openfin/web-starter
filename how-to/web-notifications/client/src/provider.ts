@@ -76,7 +76,7 @@ async function init(): Promise<void> {
 
 	await initNotificationCenter({
 		finContext: fin,
-		serviceId: "notification-center-service-channel",
+		serviceId: settings.platform.notificationServiceId,
 		container: notificationCenterContainer
 	});
 }

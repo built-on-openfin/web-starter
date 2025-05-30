@@ -1,24 +1,24 @@
 import { connect, type BaseConnectionOptions } from "@openfin/core-web";
+import { connectToNotifications } from "@openfin/web-notifications-client";
 import { getSettings } from "./settings";
 
 /**
  * Initializes the OpenFin Web Broker connection.
  * @param inherit Should we inherit settings from the host (available in the OpenFin layout system) or use settings? Default is true.
  */
-export async function init(inherit: boolean = true): Promise<void> {
+export async function init(inherit: boolean = false): Promise<void> {
 	// Set window.fin to the `fin` object.
 	let options: BaseConnectionOptions | undefined;
 	if (window.fin === undefined) {
-		if (!inherit) {
-			const settings = await getSettings();
-			if (settings === undefined) {
-				console.error(
-					"Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section."
-				);
-				return;
-			}
-			debugger;
+		const settings = await getSettings();
+		if (settings === undefined) {
+			console.error(
+				"Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section."
+			);
+			return;
+		}
 
+		if (!inherit) {
 			options = {
 				brokerUrl: settings.platform.interop.brokerUrl,
 				interopConfig: {
@@ -37,6 +37,16 @@ export async function init(inherit: boolean = true): Promise<void> {
 				connectionInheritance: "enabled"
 			});
 		}
+
+		// Connect to the notification center
+		await connectToNotifications({
+			id: settings.platform.platformIdentifier,
+			title: "Web notifications starter",
+			icon: "here.png",
+			serviceId: settings.platform.notificationServiceId, // Must match the serviceId used during initialization
+			finContext: window.fin
+		});
+
 		console.log("Finished initializing the fin API.");
 		// Create and dispatch the finReady event
 		const event = new CustomEvent("finReady");
