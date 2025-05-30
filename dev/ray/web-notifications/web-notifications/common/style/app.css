@@ -43,6 +43,17 @@
 	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2));
 }
 
+/* Define the position and size of the web notification center */
+#notification_center_container {
+	position: fixed;
+	width: 345px;
+	height: 100dvh;
+	right: 0;
+	top: 0;
+	align-self: center;
+	z-index: 100;
+}
+
 .header {
 	height: var(--header-height);
 }

@@ -7,7 +7,7 @@
 	"description": "An example showing the minimum setup for using the OpenFin Web Notifications.",
 	"icons": [
 		{
-			"src": "common/images/icon-blue.png",
+			"src": "common/images/here.png",
 			"sizes": "72x72",
 			"type": "image/png"
 		}
@@ -15,6 +15,8 @@
 	"related_applications": [],
 	"custom_settings": {
 		"platform": {
+			"platformIdentifier": "web-notifications-platform",
+			"notificationServiceId": "web-notification-service-channel",
 			"interop": {
 				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/dev/ray/web-notifications/web-notifications/js/shared-worker.bundle.js",
 				"brokerUrl": "https://built-on-openfin.github.io/web-starter/dev/ray/web-notifications/web-notifications/platform/iframe-broker.html",
