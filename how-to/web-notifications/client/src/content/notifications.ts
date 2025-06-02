@@ -1,4 +1,10 @@
-import { create, hide, type NotificationOptions, show } from "@openfin/web-notifications-client";
+import {
+	create,
+	hide,
+	IndicatorColor,
+	type NotificationOptions,
+	show
+} from "@openfin/web-notifications-client";
 import { init } from "../platform/api";
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -24,6 +30,11 @@ async function initializeDom(): Promise<void> {
 	if (btnNotificationSimple) {
 		btnNotificationSimple.addEventListener("click", async () => showSimpleNotification());
 	}
+
+	const btnNotificationInteractive = document.querySelector("#btnNotificationInteractive");
+	if (btnNotificationInteractive) {
+		btnNotificationInteractive.addEventListener("click", async () => showInteractiveNotification());
+	}
 }
 
 /**
@@ -47,14 +58,35 @@ async function showSimpleNotification(): Promise<void> {
 	const notification: NotificationOptions = {
 		title: "Simple Notification",
 		body: "This is a simple notification",
-		toast: "transient",
-		template: "markdown",
-		id: globalThis.crypto.randomUUID(),
-		soundOptions: {
-			mode: "silent"
-		},
 		platform: "web-notifications-platform"
 	};
+	await create(notification);
+}
 
+/**
+ * Display a
+ */
+async function showInteractiveNotification(): Promise<void> {
+	const notification: NotificationOptions = {
+		indicator: {
+			color: IndicatorColor.ORANGE,
+			fallback: IndicatorColor.ORANGE,
+			text: "News Alert"
+		},
+		icon: "https://cdn.openfin.co/examples/notifications/company-B.png",
+		title: "US added 138K jobs; Lower than target 185K",
+		body: "After more than a decade of growth, U.S. nonfarm payrolls shrunk by 701,000, and the unemployment rate rose to 4.4%...",
+		buttons: [
+			{
+				title: "Read More",
+				type: "button",
+				cta: true,
+				onClick: () => window.open("https://myexample.com/news/employment", "_blank")
+			}
+		],
+		soundOptions: {
+			mode: "silent"
+		}
+	};
 	await create(notification);
 }

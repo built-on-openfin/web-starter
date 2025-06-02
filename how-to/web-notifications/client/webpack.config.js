@@ -38,7 +38,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/content/view1.ts',
+		entry: './client/src/content/notifications.ts',
 		devtool: 'source-map',
 		module: {
 			rules
@@ -47,21 +47,7 @@ module.exports = [
 			extensions: ['.tsx', '.ts', '.js']
 		},
 		output: {
-			filename: 'view1.bundle.js',
-			path: path.resolve(__dirname, '..', 'public', 'js')
-		}
-	},
-	{
-		entry: './client/src/content/view2.ts',
-		devtool: 'source-map',
-		module: {
-			rules
-		},
-		resolve: {
-			extensions: ['.tsx', '.ts', '.js']
-		},
-		output: {
-			filename: 'view2.bundle.js',
+			filename: 'notifications.bundle.js',
 			path: path.resolve(__dirname, '..', 'public', 'js')
 		}
 	}
