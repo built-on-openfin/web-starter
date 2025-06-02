@@ -9,25 +9,10 @@
 							"type": "component",
 							"componentName": "view",
 							"componentState": {
-								"url": "https://built-on-openfin.github.io/web-starter/dev/ray/web-notifications/web-notifications/views/view1.html",
-								"name": "internal-generated-view-e7fe7df3-6f64-4235-899f-4e91af2cb32d",
-								"web": {
-									"frameName": "custom-name-disables-interop-inheritance-1"
-								}
+								"url": "https://built-on-openfin.github.io/web-starter/dev/ray/web-notifications/web-notifications/views/notifications.html",
+								"name": "internal-generated-view-e7fe7df3-6f64-4235-899f-4e91af2cb32d"
 							},
-							"title": "View1"
-						},
-						{
-							"type": "component",
-							"componentName": "view",
-							"componentState": {
-								"url": "https://built-on-openfin.github.io/web-starter/dev/ray/web-notifications/web-notifications/views/view2.html",
-								"name": "internal-generated-view-2d9a3624-fd0e-4e0a-b681-a79a9616b871",
-								"web": {
-									"frameName": "custom-name-disables-interop-inheritance-4"
-								}
-							},
-							"title": "View2"
+							"title": "Notifications"
 						}
 					]
 				}

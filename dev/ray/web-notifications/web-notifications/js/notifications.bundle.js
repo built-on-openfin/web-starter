@@ -8428,9 +8428,9 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!*************************************!*\
-  !*** ./client/src/content/view1.ts ***!
-  \*************************************/
+/*!*********************************************!*\
+  !*** ./client/src/content/notifications.ts ***!
+  \*********************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const web_notifications_client_1 = __webpack_require__(/*! @openfin/web-notifications-client */ "../../node_modules/@openfin/web-notifications-client/dist/client/index.js");
@@ -8455,6 +8455,10 @@ async function initializeDom() {
     if (btnNotificationSimple) {
         btnNotificationSimple.addEventListener("click", async () => showSimpleNotification());
     }
+    const btnNotificationInteractive = document.querySelector("#btnNotificationInteractive");
+    if (btnNotificationInteractive) {
+        btnNotificationInteractive.addEventListener("click", async () => showInteractiveNotification());
+    }
 }
 /**
  * Show the notification center
@@ -8475,13 +8479,34 @@ async function showSimpleNotification() {
     const notification = {
         title: "Simple Notification",
         body: "This is a simple notification",
-        toast: "transient",
-        template: "markdown",
-        id: globalThis.crypto.randomUUID(),
+        platform: "web-notifications-platform"
+    };
+    await (0, web_notifications_client_1.create)(notification);
+}
+/**
+ * Display a
+ */
+async function showInteractiveNotification() {
+    const notification = {
+        indicator: {
+            color: web_notifications_client_1.IndicatorColor.ORANGE,
+            fallback: web_notifications_client_1.IndicatorColor.ORANGE,
+            text: "News Alert"
+        },
+        icon: "https://cdn.openfin.co/examples/notifications/company-B.png",
+        title: "US added 138K jobs; Lower than target 185K",
+        body: "After more than a decade of growth, U.S. nonfarm payrolls shrunk by 701,000, and the unemployment rate rose to 4.4%...",
+        buttons: [
+            {
+                title: "Read More",
+                type: "button",
+                cta: true,
+                onClick: () => window.open("https://myexample.com/news/employment", "_blank")
+            }
+        ],
         soundOptions: {
             mode: "silent"
-        },
-        platform: "web-notifications-platform"
+        }
     };
     await (0, web_notifications_client_1.create)(notification);
 }
@@ -8490,4 +8515,4 @@ async function showSimpleNotification() {
 
 /******/ })()
 ;
-//# sourceMappingURL=view1.bundle.js.map
+//# sourceMappingURL=notifications.bundle.js.map
