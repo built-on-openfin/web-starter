@@ -1,0 +1,22 @@
+{
+	"layouts": {
+		"default": {
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"url": "http://localhost:6060/views/notifications.html",
+								"name": "internal-generated-view-e7fe7df3-6f64-4235-899f-4e91af2cb32d"
+							},
+							"title": "Notifications"
+						}
+					]
+				}
+			]
+		}
+	}
+}

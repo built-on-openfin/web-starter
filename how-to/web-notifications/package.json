@@ -1,0 +1,37 @@
+{
+	"name": "openfin-web--web-notifications",
+	"version": "21.0.0",
+	"description": "OpenFin Web Starter -- Web Notifications",
+	"main": "public/platform/provider.bundle.js",
+	"scripts": {
+		"client": "node ./scripts/launch.mjs",
+		"copy-core-web": "node ./scripts/copy-core-web.js",
+		"build-client": "npm run copy-core-web && webpack build --config ./client/webpack.config.js --mode=development",
+		"build": "npm run build-client",
+		"start": "npx --yes http-server ./public -p 6060 -c-1",
+		"setup": "npm install && npm run build",
+		"prettier": "prettier --config .prettierrc --write .",
+		"prettier-check": "prettier --config .prettierrc --check .",
+		"eslint": "eslint . --ext .js,.mjs,.ts",
+		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
+		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
+	},
+	"license": "SEE LICENSE IN LICENSE.MD",
+	"dependencies": {
+		"@finos/fdc3": "2.0.3",
+		"@openfin/core-web": "0.41.131",
+		"@openfin/web-notifications": "^2.11.0",
+		"@openfin/web-notifications-client": "^2.11.0"
+	},
+	"devDependencies": {
+		"@openfin/core": "41.102.1",
+		"eslint": "^9.25.0",
+		"markdownlint-cli": "0.39.0",
+		"prettier": "3.2.5",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.4.2",
+		"typescript-eslint": "^8.33.0",
+		"webpack": "^5.90.3",
+		"webpack-cli": "^5.1.4"
+	}
+}
