@@ -1,0 +1,32 @@
+{
+	"name": "OpenFin Web Notifications",
+	"short_name": "OpenFinWebNotifications",
+	"start_url": "./platform/provider.html",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "An example showing the minimum setup for using the OpenFin Web Notifications.",
+	"icons": [
+		{
+			"src": "common/images/here.png",
+			"sizes": "72x72",
+			"type": "image/png"
+		}
+	],
+	"related_applications": [],
+	"custom_settings": {
+		"platform": {
+			"platformIdentifier": "web-notifications-platform",
+			"notificationServiceId": "web-notification-service-channel",
+			"interop": {
+				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-notifications/js/shared-worker.bundle.js",
+				"brokerUrl": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-notifications/platform/iframe-broker.html",
+				"providerId": "web-interop",
+				"defaultContextGroup": "green"
+			},
+			"layout": {
+				"layoutContainerId": "layout_container",
+				"defaultLayout": "https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-notifications/layouts/default.layout.fin.json"
+			}
+		}
+	}
+}
