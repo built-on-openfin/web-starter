@@ -181,7 +181,7 @@ async function createLayout(
 	// Create a new div container for the layout.
 	const container = document.createElement("div");
 	container.id = layoutName;
-	container.className = "col layout-container";
+	container.className = "col openfin-layout";
 	container.style.display = order === 0 ? "block" : "none";
 	PARENT_CONTAINER?.append(container);
 

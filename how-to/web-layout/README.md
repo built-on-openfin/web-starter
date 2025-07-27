@@ -66,7 +66,7 @@ fin.Platform.Layout.init({ layoutManagerOverride, container: PARENT_CONTAINER })
 
 This allows us to call a function in the LayoutManager class called applyLayoutSnapshot that takes a container element, id string for its name, and a layout object to inject your snapshot layout in the desired container in the view.
 
-By overriding some of the existing layout functions that you might be used to if you've used our Platform API before, we can now pass an larger object (found in /public/layouts/default.layout.fin.json) with multiple layouts, and iterate the creation of them into the DOM.
+By overriding some of the existing layout functions that you might be used to if you've used our Platform API before, we can now pass a larger object (found in /public/layouts/default.layout.fin.json) with multiple layouts, and iterate the creation of them into the DOM.
 
 ```javascript
 function layoutManagerOverride(Base: LayoutManagerConstructor):
@@ -97,3 +97,13 @@ function layoutManagerOverride(Base: LayoutManagerConstructor):
      };
    };
 ```
+
+### Required CSS styles
+
+If the layout does not automatically resize to fill the viewport (both growing and shrinking), then the container does not have the correct css styles applied. 
+
+The parent of each layout must have defined dimensions - not proportional sizing such as flexbox or percentage values.
+
+In this example see the `.openfin-layout` class in [app.css](public/common/style/app.css) for how to achieve this. 
+
+![Required CSS](./docs/css-classes.png)
