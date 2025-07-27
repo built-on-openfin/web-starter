@@ -41,13 +41,14 @@
 	--brand-success: var(--theme-status-success, #35c759);
 }
 
-.left-panel {
-	width: var(--left-panel-width);
-}
-
-.layout-container {
+/* The parent of the lm_root class must have defined dimensions - not proportional sizing such as flexbox or percent values */
+.openfin-layout {
 	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2) - var(--tab-height));
 	width: calc(100dvw - var(--left-panel-width) - (var(--body-padding) * 2));
+}
+
+.left-panel {
+	width: var(--left-panel-width);
 }
 
 .header {
