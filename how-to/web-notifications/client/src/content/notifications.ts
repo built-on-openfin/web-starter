@@ -38,14 +38,14 @@ async function initializeDom(): Promise<void> {
 }
 
 /**
- * Show the notification center
+ * Show the notification center.
  */
 function showCenter(): void {
 	show();
 }
 
 /**
- * Hide the notification center
+ * Hide the notification center.
  */
 function hideCenter(): void {
 	hide();
@@ -64,7 +64,7 @@ async function showSimpleNotification(): Promise<void> {
 }
 
 /**
- * Display a
+ * Display an interactive notification.
  */
 async function showInteractiveNotification(): Promise<void> {
 	const notification: NotificationOptions = {
