@@ -40,13 +40,13 @@ Firstly, please read the docs: [Notification Center in a web browser](https://re
 
 Then follow the setup notes in [web-layout-basic](../web-layout-basic/README.md) to understand how a core-web project is structured.
 
-#### Peer dependencies
+### Peer dependencies
 
 `@openfin/web-notifications` and `@openfin/web-notifications-client` have peer dependencies. The npm install process should indicate which ones
 need to be added to your project.
 
-#### Required CSS
+### Required CSS
 
-See [public/common/style/app.css]() for css that the notification center needs to function correctly. 
+See [public/common/style/app.css](./public/common/style/app.css) for css that the notification center needs to function correctly.
 
 Note the `#notification_center_container` class which positions the component on your page. You can alter these styles to change its position or size.

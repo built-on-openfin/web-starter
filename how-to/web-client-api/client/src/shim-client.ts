@@ -9,18 +9,26 @@ export async function init(options: ClientOptions): Promise<void> {
 	if (window.fin === undefined) {
 		console.log("Fin is not available. Importing the OpenFin API shim.");
 		const url =
-			"https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-client-api/js/web.client.api.bundle.js";
-		const webClient = await import(/* webpackIgnore: true */ url);
-		console.log("OpenFin API shim script imported.");
-		console.log("Checking to see if the document is ready before requesting the API.");
-		if (document.readyState === "loading") {
-			console.log("Document is still loading. Waiting for it to be ready using DOMContentLoaded.");
-			document.addEventListener("DOMContentLoaded", async () => {
+			"https://built-on-openfin.github.io/web-starter/web/v22.0.0/web-client-api/js/web.client.api.bundle.js";
+		console.log(`Fetching the OpenFin API shim from ${url}`);
+		try {
+			const webClient = await import(/* webpackIgnore: true */ url);
+			console.log("OpenFin API shim script imported.");
+			console.log("Checking to see if the document is ready before requesting the API.");
+			if (document.readyState === "loading") {
+				console.log("Document is still loading. Waiting for it to be ready using DOMContentLoaded.");
+				document.addEventListener("DOMContentLoaded", async () => {
+					await initWhenReady(webClient, options);
+				});
+			} else {
+				console.log("Document is available. Requesting API.");
 				await initWhenReady(webClient, options);
-			});
-		} else {
-			console.log("Document is available. Requesting API.");
-			await initWhenReady(webClient, options);
+			}
+		} catch (error) {
+			console.error(
+				"Failed to load the OpenFin API shim. Please note this is an example and you should implement your own approach for production.",
+				error
+			);
 		}
 	}
 }

@@ -116,6 +116,7 @@ export async function getAPI<FDC3 = DefaultFDC3Type>(
 					options.logger.info("Creating Fin API instance using the default connect options.");
 					newFin = (await connect(DEFAULT_CONNECT_OPTIONS)) as unknown as DefaultFinType;
 				}
+				options.logger.info(`Fin API instance created successfully: ${newFin !== undefined}`);
 			} catch (err) {
 				if (
 					err instanceof Error &&
@@ -170,6 +171,7 @@ export async function getAPI<FDC3 = DefaultFDC3Type>(
 					`Creating fdc3 API through the @openfin/core-web getFDC3 function specifying version ${fdc3Version}.`
 				);
 				response.fdc3 = (await response.fin.me.interop.getFDC3(fdc3Version)) as FDC3;
+				options.logger.info(`fdc3 API instance created successfully: ${response.fdc3 !== undefined}`);
 				fdc3Initialized = true;
 			} catch (err) {
 				options.logger.error(

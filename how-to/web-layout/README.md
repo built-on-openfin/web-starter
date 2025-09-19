@@ -17,7 +17,7 @@ It also has a left panel which is outside of the OpenFin Layout and represents a
 
 Using Layouts, this demo also shows off a "Swap Layouts" function, which allows someone to quickly jump from one created layout (via a snapshot JSON definition) to another.
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v21.0.0/web-layout/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v22.0.0/web-layout/platform/provider.html)
 
 ![OpenFin Web Multi Layout Example](./docs/web-layout.png)
 
@@ -100,10 +100,10 @@ function layoutManagerOverride(Base: LayoutManagerConstructor):
 
 ### Required CSS styles
 
-If the layout does not automatically resize to fill the viewport (both growing and shrinking), then the container does not have the correct css styles applied. 
+If the layout does not automatically resize to fill the viewport (both growing and shrinking), then the container does not have the correct css styles applied.
 
 The parent of each layout must have defined dimensions - not proportional sizing such as flexbox or percentage values.
 
-In this example see the `.openfin-layout` class in [app.css](public/common/style/app.css) for how to achieve this. 
+In this example see the `.openfin-layout` class in [app.css](public/common/style/app.css) for how to achieve this.
 
 ![Required CSS](./docs/css-classes.png)
