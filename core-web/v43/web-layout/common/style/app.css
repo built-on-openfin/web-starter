@@ -18,10 +18,10 @@
 
 	accent-color: var(--brand-primary);
 
-    --layout-tab-overflow-fade-size: 24px;
-    --layout-tab-overflow-shadow-color: var(--brand-background);
-    --layout-tab-width: 180px;
-    --layout-tab-min-width: 120px;
+	--layout-tab-overflow-fade-size: 24px;
+	--layout-tab-overflow-shadow-color: var(--brand-background);
+	--layout-tab-width: 180px;
+	--layout-tab-min-width: 120px;
 
 	--header-height: 60px;
 	--left-panel-width: 300px;
