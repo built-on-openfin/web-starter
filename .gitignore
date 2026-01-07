@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 **/public/js/*.bundle.js
 **/public/js/*.bundle.js.map
+**/public/style/core-web-styles.css
 **/.DS_Store
 **/node_modules
 .idea
