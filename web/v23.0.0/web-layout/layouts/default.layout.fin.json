@@ -2,7 +2,8 @@
 	"layouts": {
 		"default": {
 			"settings": {
-				"showMaximiseIcon": true
+				"showMaximiseIcon": true,
+				"tabOverflowBehavior": "scroll"
 			},
 			"content": [
 				{
