@@ -29,17 +29,17 @@ import fs from 'fs/promises';
 import path from 'path';
 
 // ---------- Defaults (edit these before running if needed) ----------
-const DEFAULT_CORE = '42.100.107';
-const DEFAULT_CORE_WEB = '0.42.103';
-const DEFAULT_CLOUD_INTEROP = '0.42.103';
-const DEFAULT_PKG_VERSION = '22.0.0';
+const DEFAULT_CORE_WEB = '0.43.112';
+const DEFAULT_CORE = '43.101.1';
+const DEFAULT_CLOUD_INTEROP = '0.43.112';
+const DEFAULT_PKG_VERSION = '23.0.0';
 
 // Defaults for general find/replace (string literals)
 // These can be overridden via CLI flags:
 //   --WS_VERSION_STRING_FROM <string>
 //   --WS_VERSION_STRING_TO <string>
 const WS_VERSION_STRING_FROM = 'v22.0.0';
-const WS_VERSION_STRING_TO = 'v22.0.0';
+const WS_VERSION_STRING_TO = 'v23.0.0';
 
 // Directories to exclude from search/replace
 const DEFAULT_EXCLUDES = [
@@ -75,6 +75,7 @@ async function run() {
     skipInstall: args.skipInstall,
     skipAudit: args.skipAudit,
     skipBuild: args.skipBuild,
+    skipPrettier: args.skipPrettier,
     failFast: args.failFast
   }, null, 2));
 
@@ -121,6 +122,7 @@ async function run() {
     try {
       // 1) Update versions in package.json
       const pkgJson = await loadJson(pkgFile);
+      const pkgFileOriginalText = await fs.readFile(pkgFile, 'utf8');
       const before = JSON.stringify(pkgJson);
 
       const changes = updatePackageVersions(pkgJson, {
@@ -136,7 +138,7 @@ async function run() {
 
       const after = JSON.stringify(pkgJson);
       if (!args.dryRun && before !== after) {
-        await writeJson(pkgFile, pkgJson);
+        await writeJson(pkgFile, pkgJson, { originalText: pkgFileOriginalText });
       } else if (before !== after) {
         console.log(`[DRY-RUN] Would update ${pkgFile}`);
       }
@@ -168,6 +170,14 @@ async function run() {
           await runShellCmd('npm', ['run', 'build'], abs, args);
         } else {
           console.log('[INFO] No build script; skipping build');
+        }
+      }
+
+      // 4) Optional: run prettier if script exists in this project
+      if (!args.skipPrettier) {
+        const hasPrettier = !!(pkgJson?.scripts?.prettier);
+        if (hasPrettier) {
+          await runShellCmd('npm', ['run', 'prettier'], abs, args);
         }
       }
 
@@ -237,6 +247,7 @@ function parseArgs(argv) {
       case '--skip-install': set('skipInstall', true); break;
       case '--skip-audit': set('skipAudit', true); break;
       case '--skip-build': set('skipBuild', true); break;
+      case '--skip-prettier': set('skipPrettier', true); break;
       case '--fail-fast': set('failFast', true); break;
       case '--help':
       case '-h':
@@ -273,6 +284,7 @@ function parseArgs(argv) {
     skipInstall: !!map.get('skipInstall'),
     skipAudit: !!map.get('skipAudit'),
     skipBuild: !!map.get('skipBuild'),
+    skipPrettier: !!map.get('skipPrettier'),
     failFast: !!map.get('failFast')
   };
 }
@@ -295,6 +307,7 @@ function printHelp() {
     `  --skip-install           Skip npm install\n` +
     `  --skip-audit             Skip npm audit fix (note: audit is best-effort/non-fatal by default)\n` +
     `  --skip-build             Skip npm run build (if present)\n` +
+    `  --skip-prettier          Skip npm run prettier (if a prettier script exists)\n` +
     `  --fail-fast              Stop on first failure\n`);
 }
 
@@ -378,9 +391,37 @@ async function loadJson(filePath) {
   return JSON.parse(content);
 }
 
-async function writeJson(filePath, obj) {
-  const content = JSON.stringify(obj, null, 2) + '\n';
+async function writeJson(filePath, obj, options = {}) {
+  const indent = detectJsonIndent(options.originalText);
+  const eol = detectEol(options.originalText) ?? '\n';
+  const content = JSON.stringify(obj, null, indent) + eol;
   await fs.writeFile(filePath, content, 'utf8');
+}
+
+function detectJsonIndent(originalText) {
+  // Try to preserve current style; default to 2 spaces.
+  if (typeof originalText !== 'string' || originalText.length === 0) return 2;
+
+  // If the file uses tabs for indentation, keep it.
+  const tabIndented = /\n\t+"/.test(originalText) || /^\t+"/m.test(originalText);
+  if (tabIndented) return '\t';
+
+  // Otherwise infer the smallest indentation used for top-level properties.
+  const matches = originalText.matchAll(/\n( +)"/g);
+  let min = Infinity;
+  for (const m of matches) {
+    if (m[1].length > 0) min = Math.min(min, m[1].length);
+  }
+  if (Number.isFinite(min) && min > 0) return min;
+
+  return 2;
+}
+
+function detectEol(originalText) {
+  if (typeof originalText !== 'string') return undefined;
+  if (originalText.includes('\r\n')) return '\r\n';
+  if (originalText.includes('\n')) return '\n';
+  return undefined;
 }
 
 async function fileExists(filename) {

@@ -45,7 +45,7 @@ export async function init(inherit: boolean = false): Promise<void> {
 			icon: "here.png",
 			serviceId: settings.platform.notificationServiceId, // Must match the serviceId used during initialization
 			finContext: window.fin
-		});
+		} as unknown as Parameters<typeof connectToNotifications>[0]);
 
 		console.log("Finished initializing the fin API.");
 		// Create and dispatch the finReady event

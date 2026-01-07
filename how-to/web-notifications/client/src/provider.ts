@@ -78,7 +78,7 @@ async function init(): Promise<void> {
 		finContext: fin,
 		serviceId: settings.platform.notificationServiceId,
 		container: notificationCenterContainer
-	});
+	} as unknown as Parameters<typeof initNotificationCenter>[0]);
 }
 
 init()

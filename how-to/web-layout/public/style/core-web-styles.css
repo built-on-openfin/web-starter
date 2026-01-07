@@ -59,16 +59,6 @@
 .lm_header [class^='lm_'] {
 	box-sizing: content-box !important;
 }
-.lm_header .addTabButton {
-	-webkit-user-select: none;
-	user-select: none;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: bold;
-	padding: 0 6px;
-}
 .lm_header .lm_controls {
 	position: absolute;
 	right: 3px;
@@ -375,6 +365,17 @@
 	--tab-background-active-color: var(--tab-background-color);
 	--top-bar-button-hover-color: var(--tab-background-color);
 	--top-bar-button-active-color: var(--tab-button-active-color);
+
+	/*Layout overflow customization */
+	/* Dynamically calculated (0 to 1) but can be used to customize shadows
+    --layout-tab-overflow-fade-left
+    --layout-tab-overflow-fade-right
+    */
+	--layout-tab-overflow-fade-size: 16px;
+	--layout-tab-overflow-shadow-color: inherit; /* Default to initial to not break users that haven't set a color on tabs */
+	/* The next two are defined as initial because we need different values for the preview if they are not set */
+	--layout-tab-width: initial;
+	--layout-tab-min-width: var(--layout-tab-width, initial);
 
 	/* Measurements for various components */
 	--title-bar-height: 30px;
@@ -750,7 +751,7 @@ div.placeholder_image img {
 	margin-right: 7px;
 }
 
-.lm_tabs .newTabButton {
+.lm_header .newTabButton {
 	background-image: var(--new-tab-button-url);
 	filter: invert(0.3);
 	background-size: cover;
@@ -761,7 +762,7 @@ div.placeholder_image img {
 	cursor: pointer;
 }
 
-.lm_tabs .newTabButton:hover {
+.lm_header .newTabButton:hover {
 	filter: invert(0);
 }
 
@@ -803,4 +804,203 @@ div.placeholder_image img {
 
 :root.light-theme .lm_tabdropdown_list::-webkit-scrollbar-thumb {
 	background-color: #111214;
+}
+
+/**
+ * Tab Overflow Scroll Animation System
+ * 
+ * This CSS implements a scroll-driven animation system for overflowing tabs with dynamic fade effects.
+ * 
+ * How it works:
+ * 
+ * 1. CUSTOM PROPERTIES (@property):
+ *    - Defines --layout-tab-overflow-fade-left and --layout-tab-overflow-fade-right as animatable numbers
+ *    - These properties control the intensity of fade masks on each side (0 = no fade, 1 = full fade)
+ * 
+ * 2. SCROLL-DRIVEN ANIMATION (tabScrollFade):
+      - see https://css-tricks.com/modern-scroll-shadows-using-scroll-driven-animations/
+ *    - Uses CSS scroll-timeline to trigger animation based on scroll position
+ *    - At scroll start (0%): Left fade is 0 (no fade), right fade is 1 (active)
+ *    - During scroll (10%-90%): Both fades are active (1)
+ *    - At scroll end (100%): Right fade is 0 (no fade), left fade is 1 (active)
+ *    - --layout-tabs-overflowing acts as a [space-toggle](https://css-tricks.com/the-css-custom-property-toggle-trick/) boolean for overflow state detection
+ * 
+ * 3. MASK APPLICATION (.lm_tabs):
+ *    - linear-gradient mask creates transparent-to-opaque transitions on left/right edges
+ *    - Variables control the fade intensity.
+ *    - When fade value is 0, that side has no fade (fully opaque)
+ *    - When fade value is 1, that side fades from transparent to opaque over the fade-size distance
+ * 
+ * 4. SHADOW REVEAL:
+ *    - .lm_tabs_scroll_shadow has a background color (--layout-tab-overflow-shadow-color)
+ *    - As the mask reveals transparency, the shadow background becomes visible through the fade
+ *    - This creates a visual indicator showing there's more content to scroll
+ * 
+ * 5. DYNAMIC TAB SIZING:
+ *    - Uses --layout-tab-width and --layout-tab-min-width for flexible tab dimensions
+ *    - Internal variables provide defaults while allowing user overrides
+ *    - Possible gotchas when modifying:
+            - If a user wants to use container-queries for tab width, `lm_tab.width` must be set to an absolute value for lm_tab to be sized properly with the `container` property. This is why have the --layout-tab-width variable.
+            - The tab drop preview has no content so it needs to be initialized to something other than fit-content. 
+ */
+
+/** Define as global properties so that they can be used in the animation */
+@property --layout-tab-overflow-fade-left {
+	syntax: '<number>';
+	inherits: true;
+	initial-value: 0;
+}
+
+@property --layout-tab-overflow-fade-right {
+	syntax: '<number>';
+	inherits: true;
+	initial-value: 0;
+}
+
+@keyframes tabScrollFade {
+	0% {
+		/* Space toggle. Whitespace can be used as true/false Unused by us directly but should be exposed for environments that don't support if() (ie core-web on safari) */
+		--layout-tabs-overflowing: ;
+		--layout-tab-overflow-fade-left: 0;
+	}
+	10%,
+	100% {
+		--layout-tab-overflow-fade-left: 1;
+	}
+
+	0%,
+	90% {
+		--layout-tab-overflow-fade-right: 1;
+	}
+
+	100% {
+		/* Space toggle. Whitespace can be used as true/false */
+		--layout-tabs-overflowing: ;
+		--layout-tab-overflow-fade-right: 0;
+	}
+}
+
+.lm_goldenlayout[data-settings-tab-overflow='scroll'] {
+	/* Defining separate _internal variables because we need defaults but our drop preview needs to know if the user set styles */
+	--_internal-tab-width: var(--layout-tab-width, fit-content);
+	--_internal-tab-min-width: var(--layout-tab-min-width, var(--_internal-tab-width));
+
+	.lm_tab {
+		width: var(--_internal-tab-width);
+		min-width: var(--_internal-tab-min-width);
+	}
+
+	.lm_tabs_scroll_shadow {
+		width: unset;
+		display: flex;
+		position: relative;
+		flex: 0 1 auto;
+		overflow: hidden;
+		background: var(--layout-tab-overflow-shadow-color);
+
+		.lm_tabs {
+			position: unset;
+			--layout-tabs-overflowing: initial;
+			overflow-x: auto;
+			overflow-y: hidden;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+			scroll-timeline: --tab-scroll x;
+			animation: tabScrollFade linear both;
+			animation-timeline: --tab-scroll;
+			display: flex;
+
+			mask-image: linear-gradient(
+				to right,
+				rgba(0, 0, 0, calc(1 - var(--layout-tab-overflow-fade-left))) 0,
+				rgba(0, 0, 0, 1) var(--layout-tab-overflow-fade-size),
+				rgba(0, 0, 0, 1) calc(100% - var(--layout-tab-overflow-fade-size)),
+				rgba(0, 0, 0, calc(1 - var(--layout-tab-overflow-fade-right))) 100%
+			);
+			mask-mode: alpha;
+		}
+	}
+
+	.lm_header {
+		display: flex;
+	}
+
+	.lm_header .lm_controls {
+		position: unset;
+		flex: 0 0 auto;
+		/* for documentation purposes, ensure that we expect this not to shrink */
+		margin-left: auto;
+	}
+
+	.lm_drop_tab_placeholder {
+		/* Use the public facing variables here as the placeholder has no content */
+		width: var(--layout-tab-width, 100px);
+		min-width: var(--layout-tab-min-width, 100px);
+		float: unset;
+	}
+
+	.lm_header .newTabButton {
+		flex: 0 0 auto;
+	}
+}
+.lm_close {
+	display: none;
+}
+
+.lm_maximise {
+	opacity: 0.5;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.lm_maximise:hover {
+	opacity: 1;
+}
+
+.lm_tabdropdown {
+	/* Give caret a containing block */
+	position: relative;
+
+	&::before {
+		filter: invert(0.3); /* dark theme idle tint */
+		transform: translateY(2px); /* tweak to taste */
+
+		:root.light-theme & {
+			filter: invert(0.7);
+		}
+	}
+
+	&:hover::before {
+		filter: invert(0);
+	}
+}
+
+/* Tab isClosable setting */
+.lm_tab[data-is-closable='false'] {
+	.lm_close_tab {
+		display: none !important;
+	}
+}
+
+/* layout hasHeaders setting */
+[data-settings-has-headers='true'] {
+	.lm_header {
+		display: flex !important;
+		border-bottom: none !important;
+		min-width: 204px;
+	}
+
+	[class^='lm_'] {
+		box-sizing: border-box !important;
+	}
+
+	.lm_tab {
+		overflow-y: hidden !important;
+	}
+}
+
+[data-settings-prevent-splitter-resize='true'] {
+	.lm_splitter {
+		pointer-events: none;
+	}
 }
