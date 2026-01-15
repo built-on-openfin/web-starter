@@ -2,24 +2,23 @@
  * Upgrade versions across root and all nested workspaces.
  *
  * What it does per project (root + each workspace):
-  *  - Update @openfin/core-web version in package.json (if present)
-  *  - Update @openfin/cloud-interop version in package.json (if present)
-  *  - Update @openfin/core version in package.json (if present)
-  *  - Update top-level "version" in package.json
-  *  - Perform find/replace in .json and .md files (excluding package.json), skipping node_modules and common build/output dirs
-  *  - Run: npm install, npm audit fix, npm run build (if script exists)
-  *
-  * Defaults (can be overridden with CLI flags). These reflect current repo values and can be edited before running:
-  *   --core: 42.100.107
-  *   --cloud-interop: 0.42.103
-  *   --core-web: 0.42.103
-  *   --pkg-version: 22.0.0
-  *   --WS_VERSION_STRING_FROM/--WS_VERSION_STRING_TO: defaults provided; case-sensitive by default; excludes package.json by default
-  *
-  * CLI examples:
+ *  - Update @openfin/core-web version in package.json (if present)
+ *  - Update @openfin/cloud-interop version in package.json (if present)
+ *  - Update @openfin/core version in package.json (if present)
+ *  - Update top-level "version" in package.json
+ *  - Replace versioned URLs in files (.html, .json, .ts, .tsx, .js, .jsx, .md)
+ *  - Run: npm install, npm audit fix, npm run build (if script exists)
+ *
+ * URL versioning uses regex pattern matching - URLs like:
+ *   built-on-openfin.github.io/.../vX.X.X/
+ * are automatically updated to the target version (no --from needed).
+ *
+ * Defaults (can be overridden with CLI flags). Edit DEFAULT_VERSIONS below before running.
+ *
+ * CLI examples:
  *   node scripts/upgrade-versions.mjs --dry-run
- *   node scripts/upgrade-versions.mjs --core 42.101.1 --core-web 0.43.0 --pkg-version 22.1.0
- *   node scripts/upgrade-versions.mjs --from v21.0.0 --to v22.0.0
+ *   node scripts/upgrade-versions.mjs --core 43.101.1 --core-web 0.43.0 --pkg-version 23.1.0
+ *   node scripts/upgrade-versions.mjs --to v24.0.0
  *   node scripts/upgrade-versions.mjs --skip-audit --skip-build
  */
 
@@ -29,31 +28,33 @@ import fs from 'fs/promises';
 import path from 'path';
 
 // ---------- Defaults (edit these before running if needed) ----------
-const DEFAULT_CORE_WEB = '0.43.112';
-const DEFAULT_CORE = '43.101.1';
-const DEFAULT_CLOUD_INTEROP = '0.43.112';
-const DEFAULT_PKG_VERSION = '23.0.0';
+const DEFAULT_VERSIONS = {
+  major: '23.0.0',
+  'github-url': '23.0.0',
+  core: '43.101.1',
+  'core-web': '0.43.112',
+  'cloud-interop': '0.43.112'
+};
 
-// Defaults for general find/replace (string literals)
-// These can be overridden via CLI flags:
-//   --WS_VERSION_STRING_FROM <string>
-//   --WS_VERSION_STRING_TO <string>
-const WS_VERSION_STRING_FROM = 'v22.0.0';
-const WS_VERSION_STRING_TO = 'v23.0.0';
 
 // Directories to exclude from search/replace
-const DEFAULT_EXCLUDES = [
+const EXCLUDED_DIRECTORIES = [
   'node_modules',
   'dist',
   'build',
   'out',
   'coverage',
-  'public',
   '.next',
   '.cache',
+  '.git',
+  '.angular',
+  '.venv',
   'tmp',
   'logs'
 ];
+
+// File extensions to search for versioned URLs
+const VERSIONED_URL_EXTENSIONS = ['.html', '.json', '.ts', '.tsx', '.js', '.jsx', '.md'];
 
 async function run() {
   const args = parseArgs(process.argv.slice(2));
@@ -67,8 +68,7 @@ async function run() {
     cloudInterop: args.cloudInterop,
     coreWeb: args.coreWeb,
     pkgVersion: args.pkgVersion,
-    WS_VERSION_STRING_FROM: args.wsFrom,
-    WS_VERSION_STRING_TO: args.wsTo,
+    targetVersion: args.wsTo,
     caseInsensitive: args.caseInsensitive,
     includeRoot: args.includeRoot,
     dryRun: args.dryRun,
@@ -143,11 +143,9 @@ async function run() {
         console.log(`[DRY-RUN] Would update ${pkgFile}`);
       }
 
-      // 2) General find/replace in .json and .md (excluding package.json)
-      if (args.wsFrom !== undefined && args.wsTo !== undefined) {
-        const changedCount = await replaceInDocsAndJson(abs, args);
-        projectResult.filesChanged += changedCount;
-      }
+      // 2) Replace versioned URLs in files
+      const changedCount = await replaceVersionedUrls(abs, args);
+      projectResult.filesChanged += changedCount;
 
       // 3) npm install, audit fix, build
       if (!args.skipInstall) {
@@ -234,11 +232,6 @@ function parseArgs(argv) {
       case '--cloud-interop': set('cloudInterop', next); i += 1; break;
       case '--core-web': set('coreWeb', next); i += 1; break;
       case '--pkg-version': set('pkgVersion', next); i += 1; break;
-      // Preferred flags with defaults
-      case '--WS_VERSION_STRING_FROM': set('wsFrom', next); i += 1; break;
-      case '--WS_VERSION_STRING_TO': set('wsTo', next); i += 1; break;
-      // Legacy aliases (kept for compatibility)
-      case '--from': set('wsFrom', next); i += 1; break;
       case '--to': set('wsTo', next); i += 1; break;
       case '--case-insensitive':
       case '--ci': set('caseInsensitive', true); break;
@@ -260,24 +253,20 @@ function parseArgs(argv) {
     }
   }
 
-  const core = map.get('core') || DEFAULT_CORE;
-  const coreWeb = map.get('coreWeb') || DEFAULT_CORE_WEB;
-  const cloudInterop = map.get('cloudInterop') || DEFAULT_CLOUD_INTEROP;
-  const pkgVersion = map.get('pkgVersion') || DEFAULT_PKG_VERSION;
+  const core = map.get('core') || DEFAULT_VERSIONS.core;
+  const coreWeb = map.get('coreWeb') || DEFAULT_VERSIONS['core-web'];
+  const cloudInterop = map.get('cloudInterop') || DEFAULT_VERSIONS['cloud-interop'];
+  const pkgVersion = map.get('pkgVersion') || DEFAULT_VERSIONS.major;
 
-  const wsFrom = map.get('wsFrom') ?? WS_VERSION_STRING_FROM;
-  const wsTo = map.get('wsTo') ?? WS_VERSION_STRING_TO;
+  // wsTo defaults to github-url version; wsFrom is optional (regex handles any version)
+  const wsTo = map.get('wsTo') ?? `v${DEFAULT_VERSIONS['github-url']}`;
 
   return {
     core,
     coreWeb,
     cloudInterop,
     pkgVersion,
-    // expose both new and legacy names
-    wsFrom,
     wsTo,
-    from: wsFrom,
-    to: wsTo,
     caseInsensitive: !!map.get('caseInsensitive'),
     includeRoot: map.has('includeRoot') ? true : true, // Apply to root per user instruction
     dryRun: !!map.get('dryRun'),
@@ -292,15 +281,13 @@ function parseArgs(argv) {
 function printHelp() {
   console.log(`Usage: node scripts/upgrade-versions.mjs [options]\n\n` +
     `Version overrides (defaults reflect current repo):\n` +
-    `  --core <ver>             Set @openfin/core (default ${DEFAULT_CORE})\n` +
-    `  --cloud-interop <ver>    Set @openfin/cloud-interop (default ${DEFAULT_CLOUD_INTEROP})\n` +
-    `  --core-web <ver>         Set @openfin/core-web (default ${DEFAULT_CORE_WEB})\n` +
-    `  --pkg-version <ver>      Set top-level package.json \"version\" (default ${DEFAULT_PKG_VERSION})\n\n` +
-    `Find/replace in .json and .md (case-sensitive by default):\n` +
-    `  --WS_VERSION_STRING_FROM <string>   String to replace (default ${WS_VERSION_STRING_FROM})\n` +
-    `  --WS_VERSION_STRING_TO <string>     Replacement (default ${WS_VERSION_STRING_TO})\n` +
-    `  (Legacy aliases still accepted: --from, --to)\n` +
-    `  --ci | --case-insensitive  Case-insensitive replacement\n\n` +
+    `  --core <ver>             Set @openfin/core (default ${DEFAULT_VERSIONS.core})\n` +
+    `  --cloud-interop <ver>    Set @openfin/cloud-interop (default ${DEFAULT_VERSIONS['cloud-interop']})\n` +
+    `  --core-web <ver>         Set @openfin/core-web (default ${DEFAULT_VERSIONS['core-web']})\n` +
+    `  --pkg-version <ver>      Set top-level package.json \"version\" (default ${DEFAULT_VERSIONS.major})\n\n` +
+    `Find/replace versioned URLs in files (${VERSIONED_URL_EXTENSIONS.join(', ')}):\n` +
+    `  --to <string>            Target version (default v${DEFAULT_VERSIONS['github-url']})\n` +
+    `  URLs matching built-on-openfin.github.io/.../vX.X.X/ are automatically updated\n\n` +
     `Scope & behavior:\n` +
     `  --include-root           Include the root project (enabled by default)\n` +
     `  --dry-run                Show changes, do not write or run commands\n` +
@@ -339,25 +326,29 @@ function updatePackageVersions(pkgJson, versions) {
   return updates;
 }
 
-async function replaceInDocsAndJson(projectPath, args) {
-  const patterns = DEFAULT_EXCLUDES.map((e) => `**/${e}/**`);
-  // All json & md files under projectPath, excluding package.json
-  const files = await FastGlob(['**/*.json', '**/*.md', '!package.json', ...patterns.map((p) => `!${p}`)], {
+async function replaceVersionedUrls(projectPath, args) {
+  const excludePatterns = EXCLUDED_DIRECTORIES.map((e) => `!**/${e}/**`);
+  const includePatterns = VERSIONED_URL_EXTENSIONS.map((ext) => `**/*${ext}`);
+
+  const files = await FastGlob([...includePatterns, '!package.json', ...excludePatterns], {
     cwd: projectPath,
     dot: true
   });
 
   if (!files.length) return 0;
 
-  const from = args.wsFrom;
   const to = args.wsTo;
   const total = { changed: 0 };
+
+  // Regex pattern for versioned URLs (matches built-on-openfin.github.io/.../vX.X.X/)
+  const urlVersionPattern = /(built-on-openfin\.github\.io\/[^/]+\/[^/]+\/)v\d+\.\d+\.\d+\//g;
 
   for (const rel of files) {
     const abs = path.join(projectPath, rel);
     try {
       const content = await fs.readFile(abs, 'utf8');
-      const newContent = replaceAll(content, from, to, args.caseInsensitive);
+      const newContent = content.replace(urlVersionPattern, `$1${to}/`);
+
       if (newContent !== content) {
         total.changed += 1;
         if (!args.dryRun) {
@@ -373,17 +364,6 @@ async function replaceInDocsAndJson(projectPath, args) {
 
   console.log(`Find/replace updated ${total.changed} file(s) in ${projectPath}`);
   return total.changed;
-}
-
-function replaceAll(input, from, to, caseInsensitive) {
-  if (from === undefined || to === undefined) return input;
-  const flags = caseInsensitive ? 'gi' : 'g';
-  const re = new RegExp(escapeRegExp(from), flags);
-  return input.replace(re, to);
-}
-
-function escapeRegExp(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 async function loadJson(filePath) {
