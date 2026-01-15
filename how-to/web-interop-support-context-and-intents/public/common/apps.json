@@ -19,9 +19,9 @@
 					"src": "http://localhost:6060/images/previews/preview-fdc3-local-context-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "http://localhost:6060/views/fdc3-view.html"
@@ -47,9 +47,9 @@
 					"src": "http://localhost:6060/images/previews/preview-interop-local-context-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "http://localhost:6060/views/interop-view.html"
@@ -75,9 +75,9 @@
 					"src": "http://localhost:6060/images/previews/preview-fdc3-local-intent-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "http://localhost:6060/views/fdc3-intent-view.html"
@@ -112,9 +112,9 @@
 					"src": "http://localhost:6060/images/previews/preview-interop-local-intent-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "http://localhost:6060/views/interop-view.html"

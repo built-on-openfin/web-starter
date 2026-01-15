@@ -19,9 +19,9 @@
 					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/demos/images/preview/preview-finance-chart.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://workspace-mobile.openfin.co/chart/"
@@ -47,9 +47,9 @@
 					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/demos/images/preview/preview-finance-summary.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://workspace-mobile.openfin.co/summary/"
@@ -75,9 +75,9 @@
 					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/demos/images/preview/preview-finance-portfolio.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://workspace-mobile.openfin.co/summary/"
@@ -103,9 +103,9 @@
 					"src": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/demos/images/preview/preview-finance-instrument-details.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://workspace-mobile.openfin.co/instrument/"

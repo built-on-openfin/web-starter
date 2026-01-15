@@ -1,10 +1,10 @@
 {
-	"name": "OpenFin - Support Context and Intents",
-	"short_name": "OpenFinSupportInteropContextAndIntents",
+	"name": "HERE - Support Context and Intents",
+	"short_name": "HERESupportInteropContextAndIntents",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing a implementation of the OpenFin Core Web Library to support context and intents as well as layouts.",
+	"description": "An example showing a implementation of the HERE Core Web Library to support context and intents as well as layouts.",
 	"icons": [
 		{
 			"src": "common/images/icon.png",

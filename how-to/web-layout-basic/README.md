@@ -1,8 +1,8 @@
-![OpenFin Web Interop Basic Example](../../assets/openfin-web-starter.png)
+![HERE Web Interop Basic Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin Web Layout Basic
+# HERE Web Layout Basic
 
 This is a simple example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker and a layout using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
 
@@ -10,7 +10,7 @@ This page has a very simple layout which is made up of four iframes loading an e
 
 [Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-layout-basic/platform/provider.html)
 
-![OpenFin Web Layout Basic Example](./docs/web-layout-basic.png)
+![HERE Web Layout Basic Example](./docs/web-layout-basic.png)
 
 ## Getting Started
 
@@ -96,11 +96,11 @@ The host html page [provider.html](./public/platform/provider.html) then:
 - brings in required content through the @openfin/core-web layout system.
 - brings in the required css for the @openfin/core-web layout system.
 
-The host page initializes the OpenFin layout system and brings in a required css file that styles the layout system. This styles.css is brought in from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package. This style is copied to the public/style folder as core-web-styles.css using our [scripts/copy-core-web.js](./scripts/copy-core-web.js) script. It runs as part of the build process.
+The host page initializes the HERE layout system and brings in a required css file that styles the layout system. This styles.css is brought in from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package. This style is copied to the public/style folder as core-web-styles.css using our [scripts/copy-core-web.js](./scripts/copy-core-web.js) script. It runs as part of the build process.
 
 ### IFrame Broker
 
-This is the iframe that is referenced by the Host and Content Providers (if they want to use the OpenFin API). The iframe broker html page and the shared-webworker.js file have to reside on the same domain as the **host**.
+This is the iframe that is referenced by the Host and Content Providers (if they want to use the HERE API). The iframe broker html page and the shared-webworker.js file have to reside on the same domain as the **host**.
 
 The [iframe broker html page](./public/platform/iframe-broker.html) uses the shared-webworker.js file that comes as part of the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package. This script is copied to the public/js folder as shared-worker.bundle.js using our [scripts/copy-core-web.js](./scripts/copy-core-web.js) script. It runs as part of the build process.
 
@@ -124,11 +124,11 @@ async function init(): Promise<void> {
 
 ### Content
 
-We simply load example.com in this example as the focus is on the layout and not content. If you wish to see how Content can use the OpenFin API please see the [web-interop-basic](../web-interop-basic/README.md) and [web-interop](../web-interop/README.md) examples.
+We simply load example.com in this example as the focus is on the layout and not content. If you wish to see how Content can use the HERE API please see the [web-interop-basic](../web-interop-basic/README.md) and [web-interop](../web-interop/README.md) examples.
 
 #### Frame Name / Content Window Name
 
-One thing we do show is how to set the iframe's window.name through meta data in your component state (this setting is ignored by the OpenFin Container but is used by the OpenFin Web Layout system). If you do set the frameName this will override OpenFin Layout naming and disable interop setting inheritance (if your content uses that).
+One thing we do show is how to set the iframe's window.name through meta data in your component state (this setting is ignored by the HERE Container but is used by the HERE Web Layout system). If you do set the frameName this will override OpenFin Layout naming and disable interop setting inheritance (if your content uses that).
 
 Your content can still connect to the Web Broker, it just means the content needs to provide the broker related details instead of inheriting them from the platform when calling connect.
 

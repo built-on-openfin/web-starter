@@ -49,14 +49,14 @@ export interface PlatformApp {
 	lang?: string;
 
 	/**
-	 * Holds Icons used for the application, This icon could be used for entries in the OpenFin Workspace HOME, DOCK or
+	 * Holds Icons used for the application, This icon could be used for entries in the HERE Core HOME, DOCK or
 	 * STORE Components
 	 */
 	icons?: AppIcon[];
 
 	/**
 	 * Array of images to show the user when they are looking at app description. Each image can have an optional
-	 * description/tooltip. These images could be used in the OpenFin Workspace STORE and HOME components or it could be
+	 * description/tooltip. These images could be used in the HERE Core STORE and HOME components or it could be
 	 * used by an Intent Resolver to provide a visual queue as to the application that will handle the intent.
 	 */
 	screenshots?: Screenshot[];

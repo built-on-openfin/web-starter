@@ -16,7 +16,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
 	},
-	"author": "joe.ransegnola@openfin.co",
+	"author": "joe.ransegnola@here.io",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",

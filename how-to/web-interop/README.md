@@ -1,23 +1,23 @@
-![OpenFin Web Interop Basic Example](../../assets/openfin-web-starter.png)
+![HERE Web Interop Basic Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin Web Interop
+# HERE Web Interop
 
 This is a simple example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker and a layout using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
 
 This page has a very simple layout which is made up of four iframes that inherit the interop settings they should use to connect to the web broker:
 
 - Local - An FDC3 View - This uses the FDC3 API to add a context listener and to broadcast a hardcoded context object.
-- Local - An Interop View - This uses the OpenFin Interop API to add a context listener and to set context using a hardcoded context object.
+- Local - An Interop View - This uses the HERE Interop API to add a context listener and to set context using a hardcoded context object.
 - External - An FDC3 Tool used in our workspace platform starters that lets you experiment with context sharing using the FDC3 APIs.
-- External - An Interop Tool used in our workspace platform starters that lets you experiment with context sharing using the OpenFin Interop API.
+- External - An Interop Tool used in our workspace platform starters that lets you experiment with context sharing using the HERE Interop API.
 
-It also has a left panel which is outside of the OpenFin Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
+It also has a left panel which is outside of the HERE Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
 
 [Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-interop/platform/provider.html)
 
-![OpenFin Web Interop Example](./docs/web-interop.png)
+![HERE Web Interop Example](./docs/web-interop.png)
 
 ## Getting Started
 
@@ -105,7 +105,7 @@ The host html page [provider.html](./public/platform/provider.html) then:
 - brings in required content through the @openfin/core-web layout system.
 - brings in the required css for the @openfin/core-web layout system.
 
-The host page initializes the OpenFin layout system and brings in a required css file that styles the layout system. This styles.css is brought in from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package. This style is copied to the public/style folder as core-web-styles.css using our [scripts/copy-core-web.js](./scripts/copy-core-web.js) script. It runs as part of the build process.
+The host page initializes the HERE layout system and brings in a required css file that styles the layout system. This styles.css is brought in from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package. This style is copied to the public/style folder as core-web-styles.css using our [scripts/copy-core-web.js](./scripts/copy-core-web.js) script. It runs as part of the build process.
 
 ### IFrame Broker
 
@@ -141,7 +141,7 @@ Some things to note about the content provider setup:
 - You do not need to assign fdc3 or fin to the window object but we have done so for consistency with our workspace and container starter examples.
 - The snippet below is the init function from the [api.ts](./client/src/platform/api.ts) file (although the settings function has been replaced with hard coded values for simplicity) that is imported and called.
 - Content initializes the API and then runs code normally like it would inside of a workspace platform or container platform.
-- the **finReady** event shown below is an example and doesn't exist in the OpenFin container as the API is injected into the document. We added **finReady** to have similar behavior to the **fdc3Ready** event that we also raise.
+- the **finReady** event shown below is an example and doesn't exist in the HERE container as the API is injected into the document. We added **finReady** to have similar behavior to the **fdc3Ready** event that we also raise.
 
 ```javascript
 import { connect } from "@openfin/core-web";
@@ -223,7 +223,7 @@ To make it easier to update settings we store them in the web [manifest.json](./
 
 ## A visual representation
 
-We've covered the key pieces. We have a host, one or more pieces of content and a common iframe broker html page that is used to tie them altogether. We also use the OpenFin Layout system to render a layout that is compatible with the OpenFin container. This layout means that content doesn't need to know specific details about the host and it can inherit them. We also demonstrate content outside of the layout system by having a left panel example. This left panel specifies connection details.
+We've covered the key pieces. We have a host, one or more pieces of content and a common iframe broker html page that is used to tie them altogether. We also use the HERE Layout system to render a layout that is compatible with the HERE container. This layout means that content doesn't need to know specific details about the host and it can inherit them. We also demonstrate content outside of the layout system by having a left panel example. This left panel specifies connection details.
 
 This diagram is here to provide a rough visual guide to support the content above and the example:
-![OpenFin Web Interop Rough Visual Guide](./docs/web-interop-visualization.png)
+![HERE Web Interop Rough Visual Guide](./docs/web-interop-visualization.png)

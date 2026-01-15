@@ -1,16 +1,16 @@
-![OpenFin Web Interop Basic Example](../../assets/openfin-web-starter.png)
+![HERE Web Interop Basic Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin Web Client API
+# HERE Web Client API
 
-This example is slightly different from the other examples. It isn't intended to be run directly but it is more an example of how content could reference a script/module provided by a platform that instantiates the fin and FDC3 API for them only if they happen to be running outside of the OpenFin container.
+This example is slightly different from the other examples. It isn't intended to be run directly but it is more an example of how content could reference a script/module provided by a platform that instantiates the fin and FDC3 API for them only if they happen to be running outside of the HERE container.
 
 ## Shim
 
 The [shim](./client/src/shim.ts) script is small script that checks for the fin API and if it doesn't exist it imports a JavaScript module so that the fin and FDC3 APIs can be initialized.
 
-The shim accepts the defaults apart from target. It passes a target to the JavaScript module (the window object) so that the fin and FDC3 API are assigned to the window so that code built for the OpenFin container will continue to run without change.
+The shim accepts the defaults apart from target. It passes a target to the JavaScript module (the window object) so that the fin and FDC3 API are assigned to the window so that code built for the HERE container will continue to run without change.
 
 ## Shim With Connect Fallback
 
@@ -20,7 +20,7 @@ The shim accepts the defaults apart from target and requestConnectOptions.
 
 ### Target
 
-It passes a target to the JavaScript module (the window object) so that the fin and FDC3 API are assigned to the window so that code built for the OpenFin container will continue to run without change.
+It passes a target to the JavaScript module (the window object) so that the fin and FDC3 API are assigned to the window so that code built for the HERE container will continue to run without change.
 
 ### Request Connect Options
 
@@ -78,7 +78,7 @@ window.addEventListener(
 
 ## Client
 
-The [client](./client/src/client.ts) module is to be brought in when you are not running inside of an OpenFin container.
+The [client](./client/src/client.ts) module is to be brought in when you are not running inside of a HERE container.
 
 The client bundles the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package and instantiates the fin and FDC3 API.
 
@@ -122,8 +122,8 @@ npm run start
 
 ## A visual representation
 
-We've covered the key pieces. We have a small shim that only imports additional code when running outside of an OpenFin Container and we have an example html page that takes advantage of the shim.
+We've covered the key pieces. We have a small shim that only imports additional code when running outside of a HERE Container and we have an example html page that takes advantage of the shim.
 
 This diagram is here to provide a rough visual guide to support the content above and the example:
 
-![OpenFin Web Client API Rough Visual Guide](./docs/web-client-api-visualization.png)
+![HERE Web Client API Rough Visual Guide](./docs/web-client-api-visualization.png)

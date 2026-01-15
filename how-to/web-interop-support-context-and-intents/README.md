@@ -1,14 +1,14 @@
-![OpenFin Support Context and Intents Example](../../assets/openfin-web-starter.png)
+![HERE Support Context and Intents Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin - Support Context and Intents
+# HERE - Support Context and Intents
 
 This is a richer example of an implementation of an interop broker override and layout override showing to support an fdc3 app directory with support for context and intents.
 
 It uses the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
 
-The platform supports multiple layouts and brings in a number of OpenFin sample applications that are used in our workspace platform starter examples.
+The platform supports multiple layouts and brings in a number of HERE sample applications that are used in our workspace platform starter examples.
 
 The platform also supports:
 
@@ -77,12 +77,12 @@ To make it easier to update settings we include a definition of where to fetch s
 
 ```json
 {
-  "name": "OpenFin - Support Context and Intents",
-  "short_name": "OpenFinSupportInteropContextAndIntents",
+  "name": "HERE - Support Context and Intents",
+  "short_name": "HERESupportInteropContextAndIntents",
   "start_url": "./platform/provider.html",
   "display": "standalone",
   "background_color": "#fff",
-  "description": "An example showing a implementation of the OpenFin Core Web Library to support context and intents as well as layouts.",
+  "description": "An example showing a implementation of the HERE Core Web Library to support context and intents as well as layouts.",
   "icons": [
     {
       "src": "common/images/icon.png",
