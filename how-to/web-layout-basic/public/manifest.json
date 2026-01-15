@@ -7,7 +7,7 @@
 	"description": "An example showing the minimum setup for using the OpenFin Web Layout.",
 	"icons": [
 		{
-			"src": "common/images/icon-blue.png",
+			"src": "common/images/icon.png",
 			"sizes": "72x72",
 			"type": "image/png"
 		}

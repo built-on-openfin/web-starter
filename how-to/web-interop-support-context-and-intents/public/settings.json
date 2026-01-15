@@ -1,7 +1,7 @@
 {
 	"platform": {
 		"ui": {
-			"logo": "http://localhost:6060/common/images/icon-blue.png",
+			"logo": "http://localhost:6060/common/images/icon.png",
 			"title": "OpenFin - Support Context and Intents",
 			"subTitle": "Demonstrate how OpenFin's FDC3 Context and Intents support can be utilized and combined with OpenFin's Layout support.",
 			"settingsResolver": {

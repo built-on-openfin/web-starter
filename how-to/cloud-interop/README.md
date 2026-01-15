@@ -215,7 +215,7 @@ To make it easier to update settings we store them in the web [manifest.json](./
   "description": "An example showing a implementation of the OpenFin Web Interop Library.",
   "icons": [
     {
-      "src": "common/images/icon-blue.png",
+      "src": "common/images/icon.png",
       "sizes": "72x72",
       "type": "image/png"
     }

@@ -85,7 +85,7 @@ To make it easier to update settings we include a definition of where to fetch s
   "description": "An example showing a implementation of the OpenFin Core Web Library to support context and intents as well as layouts.",
   "icons": [
     {
-      "src": "common/images/icon-blue.png",
+      "src": "common/images/icon.png",
       "sizes": "72x72",
       "type": "image/png"
     }
