@@ -1,9 +1,9 @@
 {
 	"platform": {
 		"ui": {
-			"logo": "https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-interop-support-context-and-intents/common/images/icon-blue.png",
-			"title": "OpenFin - Support Context and Intents",
-			"subTitle": "Demonstrate how OpenFin's FDC3 Context and Intents support can be utilized and combined with OpenFin's Layout support.",
+			"logo": "https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-interop-support-context-and-intents/common/images/icon.png",
+			"title": "HERE - Support Context and Intents",
+			"subTitle": "Demonstrate how HERE's FDC3 Context and Intents support can be utilized and combined with HERE's Layout support.",
 			"settingsResolver": {
 				"url": "https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-interop-support-context-and-intents/platform/settings/settings-dialog.html"
 			}
@@ -22,14 +22,14 @@
 		},
 		"cloudInterop": {
 			"connectParams": {
-				"platformId": "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
+				"platformId": "<PLEASE ASK HERE FOR A PLATFORM ID>",
 				"sourceId": "cloud-interop-web-context-and-intents",
 				"authenticationType": "basic",
 				"basicAuthenticationParameters": {
-					"username": "<PLEASE ASK OPENFIN FOR A USERNAME>",
-					"password": "<PLEASE ASK OPENFIN FOR A PASSWORD>"
+					"username": "<PLEASE ASK HERE FOR A USERNAME>",
+					"password": "<PLEASE ASK HERE FOR A PASSWORD>"
 				},
-				"url": "<PLEASE ASK OPENFIN FOR A URL>"
+				"url": "<PLEASE ASK HERE FOR A URL>"
 			}
 		},
 		"layout": {

@@ -11,7 +11,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon-blue.png"
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon.png"
 				}
 			],
 			"screenshots": [
@@ -19,9 +19,9 @@
 					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/previews/contact/call-app.png"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/views/contact/call-app/index.html"
@@ -52,7 +52,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon-blue.png"
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon.png"
 				}
 			],
 			"screenshots": [
@@ -60,9 +60,9 @@
 					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/previews/contact/participant-selection.png"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/views/contact/participant-selection/index.html"
@@ -80,7 +80,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon-blue.png"
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon.png"
 				}
 			],
 			"screenshots": [
@@ -88,9 +88,9 @@
 					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/previews/contact/participant-history.png"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/views/contact/participant-history/index.html"
@@ -108,7 +108,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon-blue.png"
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon.png"
 				}
 			],
 			"screenshots": [
@@ -116,9 +116,9 @@
 					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/previews/contact/investments-and-models.png"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/views/contact/investments-and-models/index.html"
@@ -145,7 +145,7 @@
 			"lang": "en-US",
 			"icons": [
 				{
-					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon-blue.png"
+					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/icon.png"
 				}
 			],
 			"screenshots": [
@@ -153,9 +153,9 @@
 					"src": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/images/previews/contact/participant-summary-view.png"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/workspace-starter/workspace/v22.0.0/workspace-platform-starter/common/views/contact/participant-summary/index.html"

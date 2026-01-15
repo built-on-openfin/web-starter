@@ -1,13 +1,13 @@
 {
-	"name": "OpenFin Cloud Interop",
-	"short_name": "OpenFinCloudInterop",
+	"name": "HERE Cloud Interop",
+	"short_name": "HERECloudInterop",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing a implementation of the OpenFin Web Interop & Cloud Interop Library.",
+	"description": "An example showing a implementation of the HERE Web Interop & Cloud Interop Library.",
 	"icons": [
 		{
-			"src": "common/images/icon-blue.png",
+			"src": "common/images/icon.png",
 			"sizes": "72x72",
 			"type": "image/png"
 		}
@@ -36,11 +36,11 @@
 			"connectParams": {
 				"authenticationType": "basic",
 				"basicAuthenticationParameters": {
-					"username": "<PLEASE ASK OPENFIN/HERE FOR A USERNAME>",
-					"password": "<PLEASE ASK OPENFIN/HERE FOR A PASSWORD>"
+					"username": "<PLEASE ASK HERE/HERE FOR A USERNAME>",
+					"password": "<PLEASE ASK HERE/HERE FOR A PASSWORD>"
 				},
-				"platformId": "<PLEASE ASK OPENFIN/HERE FOR A PLATFORM ID>",
-				"url": "<PLEASE ASK OPENFIN/HERE FOR A URL>",
+				"platformId": "<PLEASE ASK HERE/HERE FOR A PLATFORM ID>",
+				"url": "<PLEASE ASK HERE/HERE FOR A URL>",
 				"sourceId": "cloud-interop"
 			}
 		}

@@ -7,7 +7,7 @@
 	"description": "An example showing an example of importing a shim that adds the fin and fdc3 api to the window object.",
 	"icons": [
 		{
-			"src": "common/images/icon-blue.png",
+			"src": "common/images/icon.png",
 			"sizes": "72x72",
 			"type": "image/png"
 		}

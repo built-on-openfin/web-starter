@@ -20,9 +20,9 @@
 					"label": "Intents using FDC3"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/interop-api/intent/interop-intent-view.html"
@@ -98,9 +98,9 @@
 					"label": "Contexts using Interop API"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/interop-api/context/interop-broadcast-view.html"
