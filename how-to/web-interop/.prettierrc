@@ -10,6 +10,13 @@
 			}
 		},
 		{
+			"files": ["public/style/core-web-styles.css"],
+			"options": {
+				"parser": "css",
+				"printWidth": 9999
+			}
+		},
+		{
 			"files": ["*.ts"],
 			"options": {
 				"singleQuote": false
