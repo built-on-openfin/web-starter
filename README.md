@@ -18,7 +18,7 @@ Read more about our [recommended development environment](https://developers.ope
 
 We recommend:
 
-- Using [Node.Js 18+](https://nodejs.org/en/about/previous-releases)
+- Using [Node.js 22+](https://nodejs.org/en/about/previous-releases)
 - Cloning this repo using: **git clone <https://github.com/built-on-openfin/web-starter.git> --depth=1** -As you only need the main branch to get started (it will always reflect the latest stable release).
 - Opening the root web-starter folder in Visual Studio Code (instead of opening a how-to subfolder directly in Visual Studio Code) - this will give you access to all the samples.
 - Running **npm install** from the root folder
