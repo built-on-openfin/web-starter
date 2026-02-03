@@ -8812,14 +8812,14 @@ async function initializeDom() {
 /**
  * Show the notification center.
  */
-function showCenter() {
-    (0, notifications_1.show)();
+async function showCenter() {
+    await (0, notifications_1.show)();
 }
 /**
  * Hide the notification center.
  */
-function hideCenter() {
-    (0, notifications_1.hide)();
+async function hideCenter() {
+    await (0, notifications_1.hide)();
 }
 /**
  * Display a very basic simple notification.
