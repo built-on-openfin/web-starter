@@ -31,9 +31,9 @@ import path from 'path';
 const DEFAULT_VERSIONS = {
   major: '23.0.0',
   'github-url': '23.0.0',
-  core: '43.101.1',
-  'core-web': '0.43.112',
-  'cloud-interop': '0.43.112'
+  core: '43.101.2',
+  'core-web': '0.43.113',
+  'cloud-interop': '0.43.113'
 };
 
 
