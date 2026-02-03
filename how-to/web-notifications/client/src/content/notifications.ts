@@ -1,10 +1,4 @@
-import {
-	create,
-	hide,
-	IndicatorColor,
-	type NotificationOptions,
-	show
-} from "@openfin/web-notifications-client";
+import { create, hide, IndicatorColor, type NotificationOptions, show } from "@openfin/notifications";
 import { init } from "../platform/api";
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -40,15 +34,15 @@ async function initializeDom(): Promise<void> {
 /**
  * Show the notification center.
  */
-function showCenter(): void {
-	show();
+async function showCenter(): Promise<void> {
+	await show();
 }
 
 /**
  * Hide the notification center.
  */
-function hideCenter(): void {
-	hide();
+async function hideCenter(): Promise<void> {
+	await hide();
 }
 
 /**

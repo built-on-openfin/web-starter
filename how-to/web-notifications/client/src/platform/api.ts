@@ -1,5 +1,5 @@
 import { connect, type BaseConnectionOptions } from "@openfin/core-web";
-import { connectToNotifications } from "@openfin/web-notifications-client";
+import { register } from "@openfin/notifications";
 import { getSettings } from "./settings";
 
 /**
@@ -39,13 +39,15 @@ export async function init(inherit: boolean = false): Promise<void> {
 		}
 
 		// Connect to the notification center
-		await connectToNotifications({
-			id: settings.platform.platformIdentifier,
-			title: "Web notifications starter",
-			icon: "here.png",
-			serviceId: settings.platform.notificationServiceId, // Must match the serviceId used during initialization
-			finContext: window.fin
-		} as unknown as Parameters<typeof connectToNotifications>[0]);
+		await register({
+			externalProviderConfig: {
+				id: settings.platform.platformIdentifier,
+				title: "Web notifications starter",
+				icon: "here.png",
+				serviceId: settings.platform.notificationServiceId, // Must match the serviceId used during initialization
+				finContext: window.fin
+			}
+		});
 
 		console.log("Finished initializing the fin API.");
 		// Create and dispatch the finReady event
