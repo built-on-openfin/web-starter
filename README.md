@@ -1,4 +1,4 @@
-![HERE Web Starter](./assets/openfin-web-starter.png)
+![HERE Web Starter](./assets/HERO-STARTER-WEB.png)
 
 > **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
