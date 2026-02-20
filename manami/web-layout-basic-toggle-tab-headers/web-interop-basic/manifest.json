@@ -1,0 +1,16 @@
+{
+	"name": "OpenFin Web Interop Basic",
+	"short_name": "OpenFinWebInteropBasic",
+	"start_url": "./platform/provider.html",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "An example showing a basic implementation of the OpenFin Web Interop Library.",
+	"icons": [
+		{
+			"src": "common/images/icon-blue.png",
+			"sizes": "72x72",
+			"type": "image/png"
+		}
+	],
+	"related_applications": []
+}
