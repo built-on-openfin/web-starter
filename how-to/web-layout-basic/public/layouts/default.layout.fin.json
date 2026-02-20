@@ -1,6 +1,10 @@
 {
 	"layouts": {
 		"default": {
+			"settings": {
+				"hasHeaders": true,
+				"showMaximiseIcon": true
+			},
 			"content": [
 				{
 					"type": "row",
