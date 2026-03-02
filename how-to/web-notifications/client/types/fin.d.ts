@@ -1,4 +1,4 @@
-import type { OpenFin } from "@openfin/core";
+import type { OpenFin } from "@openfin/core-web";
 import type { DesktopAgent } from "@finos/fdc3";
 
 declare global {
