@@ -981,3 +981,7 @@ div.placeholder_image img {
          pointer-events: none;
      }
  }
+
+div[id^='openfin-layout-shadow-container'] {
+    line-height: 0;
+}
