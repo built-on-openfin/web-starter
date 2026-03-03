@@ -89,7 +89,21 @@ module.exports = [
 			extensions: ['.tsx', '.ts', '.js']
 		},
 		output: {
-			filename: 'fdc3-broadast-view.bundle.js',
+			filename: 'fdc3-broadcast-view.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
+		entry: './client/src/content/interop-broadcast-view.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'interop-broadcast-view.bundle.js',
 			path: path.resolve(__dirname, '..', 'public', 'js')
 		}
 	}

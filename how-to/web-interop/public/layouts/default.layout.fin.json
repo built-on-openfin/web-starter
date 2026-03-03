@@ -82,7 +82,7 @@
 											"componentState": {
 												"titlePriority": "options",
 												"title": "Interop External Domain",
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/interop-api/context/interop-broadcast-view.html",
+												"url": "http://localhost:6060/views/interop-broadcast-view.html",
 												"name": "internal-generated-view-2d9a3624-fd0e-4e0a-b681-a79a9616b871"
 											}
 										}

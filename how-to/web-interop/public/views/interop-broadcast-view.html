@@ -3,34 +3,31 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Context using FDC3 (v2.0)</title>
+		<title>Context using Interop API</title>
 		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 		<link rel="stylesheet" href="../common/style/app.css" />
-		<script defer="defer" src="../js/fdc3-broadcast-view.bundle.js"></script>
+		<script defer="defer" src="../js/interop-broadcast-view.bundle.js"></script>
 		<link rel="manifest" href="../manifest.json" />
 	</head>
 
 	<body class="col fill gap20">
 		<header class="row spread middle">
 			<div class="col">
-				<h1>
-					Context using FDC3
-					<span id="fdc3Version"></span>
-				</h1>
-				<h1 class="tag">Broadcast and Listen To Context</h1>
+				<h1>Context using Interop API</h1>
+				<h1 class="tag">Set and Listen To Context</h1>
 			</div>
 		</header>
 		<main class="fill col scroll-vertical gap10">
 			<fieldset>
 				<label
-					for="channelType"
-					title="There are different types of channel you can broadcast and listen against. User Channels defined by the platform (generally color coded) and custom application channels."
+					for="contextGroupType"
+					title="There are different types of context groups you can set and listen against. System Context Groups are defined by the platform and Session Context Groups are custom application channels."
 				>
-					Channel Type
+					Context Group Type
 				</label>
-				<select name="channelType" id="channelType">
-					<option value="userChannel">User Channel</option>
-					<option value="appChannel">App Channel</option>
+				<select name="contextGroupType" id="contextGroupType">
+					<option value="systemContextGroup">System Context Group</option>
+					<option value="sessionContextGroup">Session Context Group</option>
 				</select>
 			</fieldset>
 			<fieldset>
@@ -65,7 +62,7 @@
 			</fieldset>
 		</main>
 		<footer>
-			<button id="btnBroadcast">Execute</button>
+			<button id="btnSetContext">Execute</button>
 		</footer>
 	</body>
 </html>
