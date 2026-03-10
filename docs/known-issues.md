@@ -4,6 +4,15 @@
 
 ## HERE Core Web - Known Issues
 
+
+
+### [0.43.115](https://cdn.openfin.co/versions/?product=Core%20Web#0.43.115)
+
+Due to Chrome's Local Network Access (LNA) restrictions, if you have a page served from localhost that embeds content via an iframe from an external HTTPS URL (or vice versa), this setup is now subject to LNA restrictions.
+This will not pose a problem in production. Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter). 
+
+https://developer.chrome.com/release-notes/142#local_network_access_restrictions
+
 ### [0.40.31](https://www.npmjs.com/package/@openfin/core-web/v/0.40.31)
 
 - title is now a supported type.

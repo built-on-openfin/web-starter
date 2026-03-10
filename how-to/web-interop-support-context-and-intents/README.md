@@ -71,6 +71,14 @@ There are a few things to note before trying to use @openfin/core-web:
 - You will need to copy the shared-worker.js file from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-core-web.js](./scripts/copy-core-web.js) script to do this and it is referenced in the build-client npm command.
 - You will need to copy the styles.css file for styling the layout from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-core-web.js](./scripts/copy-core-web.js) script to do this and it is referenced in the build-client npm command.
 
+### Running locally
+
+Due to Chrome's Local Network Access (LNA) restrictions, if you have a page served from localhost that embeds content via an iframe from an external HTTPS URL (or vice versa), this setup is now subject to LNA restrictions.
+
+Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter) 
+
+https://developer.chrome.com/release-notes/142#local_network_access_restrictions
+
 ## Settings
 
 To make it easier to update settings we include a definition of where to fetch settings in our web [manifest.json](./public/manifest.json) inside of _custom_settings_.
