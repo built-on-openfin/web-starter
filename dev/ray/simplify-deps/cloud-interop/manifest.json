@@ -1,0 +1,48 @@
+{
+	"name": "HERE Cloud Interop",
+	"short_name": "CloudInterop",
+	"start_url": "./platform/provider.html",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "An example showing a implementation of the HERE Web Interop & Cloud Interop Library.",
+	"icons": [
+		{
+			"src": "common/images/icon.png",
+			"sizes": "72x72",
+			"type": "image/png"
+		}
+	],
+	"related_applications": [],
+	"custom_settings": {
+		"platform": {
+			"interop": {
+				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/dev/ray/simplify-deps/cloud-interop/js/shared-worker.bundle.js",
+				"brokerUrl": "https://built-on-openfin.github.io/web-starter/dev/ray/simplify-deps/cloud-interop/platform/iframe-broker.html",
+				"providerId": "cloud-interop",
+				"defaultContextGroup": "green"
+			},
+			"layout": {
+				"panels": {
+					"left": {
+						"url": "https://built-on-openfin.github.io/web-starter/dev/ray/simplify-deps/cloud-interop/views/fdc3-panel.html",
+						"frameId": "left-panel"
+					}
+				},
+				"layoutContainerId": "layout_container",
+				"defaultLayout": "https://built-on-openfin.github.io/web-starter/dev/ray/simplify-deps/cloud-interop/layouts/default.layout.fin.json"
+			}
+		},
+		"cloud": {
+			"connectParams": {
+				"authenticationType": "basic",
+				"basicAuthenticationParameters": {
+					"username": "<PLEASE ASK HERE/HERE FOR A USERNAME>",
+					"password": "<PLEASE ASK HERE/HERE FOR A PASSWORD>"
+				},
+				"platformId": "<PLEASE ASK HERE/HERE FOR A PLATFORM ID>",
+				"url": "<PLEASE ASK HERE/HERE FOR A URL>",
+				"sourceId": "cloud-interop"
+			}
+		}
+	}
+}
