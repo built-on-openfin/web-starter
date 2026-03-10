@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-process-exit */
 import { exec } from 'child_process';
 
 /**

@@ -5,3 +5,5 @@ reports
 *.exe
 *.zip
 **/wc-fin/*.js
+eslint.config.mjs
+public/style/core-web-styles.css

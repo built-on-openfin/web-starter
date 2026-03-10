@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import { clearSettings, getExperimentalPanelSettings, getSettings, saveSettings } from "./settings";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
 import type {
@@ -8,7 +9,6 @@ import type {
 } from "../../shapes/setting-shapes";
 import { objectClone } from "../../utils";
 import { getApps } from "../apps/apps";
-import { clearSettings, getExperimentalPanelSettings, getSettings, saveSettings } from "./settings";
 
 /**
  * An helper for updating and resolving settings.
@@ -108,7 +108,7 @@ export class SettingsResolverHelper {
 			if (settings?.platform?.ui) {
 				settings.platform.ui.experimentalPanel = await getExperimentalPanelSettings();
 			}
-let apps: { appId: string; title: string }[] = [];
+			let apps: { appId: string; title: string }[] = [];
 			try {
 				const allApps = await getApps();
 				apps = allApps
