@@ -12,7 +12,6 @@
 		"prettier": "node ./scripts/workspaces.mjs prettier",
 		"prettier-check": "node ./scripts/workspaces.mjs prettier-check",
 		"eslint": "node ./scripts/workspaces.mjs eslint",
-		"markdownlint": "node ./scripts/workspaces.mjs markdownlint",
 		"validate": "node ./scripts/workspaces.mjs validate",
 		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
 		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x fkill*,node-emoji,@openfin/core,@openfin/cloud-interop,@openfin/core-web,eslint-plugin-import",
@@ -21,7 +20,8 @@
 		"upgrade-versions": "node scripts/upgrade-versions.mjs"
 	},
 	"workspaces": [
-		"how-to/*"
+		"how-to/*",
+		"packages/*"
 	],
 	"packageExclude": [
 		"how-to/hints-and-tips",

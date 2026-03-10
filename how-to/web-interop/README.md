@@ -57,7 +57,7 @@ There are a few things to note before trying to use @openfin/core-web:
 
 Due to Chrome's Local Network Access (LNA) restrictions, if you have a page served from localhost that embeds content via an iframe from an external HTTPS URL (or vice versa), this setup is now subject to LNA restrictions.
 
-Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter) 
+Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter)
 
 https://developer.chrome.com/release-notes/142#local_network_access_restrictions
 
