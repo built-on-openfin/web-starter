@@ -1,6 +1,6 @@
 {
 	"name": "HERE Web Interop Basic",
-	"short_name": "HEREWebInteropBasic",
+	"short_name": "WebInteropBasic",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",

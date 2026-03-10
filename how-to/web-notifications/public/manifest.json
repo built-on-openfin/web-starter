@@ -1,6 +1,6 @@
 {
 	"name": "HERE Web Notifications",
-	"short_name": "HEREWebNotifications",
+	"short_name": "WebNotifications",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",

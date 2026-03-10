@@ -1,6 +1,6 @@
 {
 	"name": "HERE Web Layouts",
-	"short_name": "HEREFinWebLayouts",
+	"short_name": "WebLayouts",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",

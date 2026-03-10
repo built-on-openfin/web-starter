@@ -1,6 +1,6 @@
 {
-	"name": "OpenFin Web Layout Basic",
-	"short_name": "OpenFinWebLayoutBasic",
+	"name": "HERE Web Layout Basic",
+	"short_name": "WebLayoutBasic",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",

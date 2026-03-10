@@ -1,6 +1,6 @@
 {
-	"name": "OpenFin Web Client API",
-	"short_name": "OpenFinWebClientAPI",
+	"name": "HERE Web Client API",
+	"short_name": "WebClientAPI",
 	"start_url": "./views/fdc3-view.html",
 	"display": "standalone",
 	"background_color": "#fff",

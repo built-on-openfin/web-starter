@@ -85,8 +85,8 @@ To make it easier to update settings we include a definition of where to fetch s
 
 ```json
 {
-  "name": "HERE - Support Context and Intents",
-  "short_name": "HERESupportInteropContextAndIntents",
+  "name": "HERE Support Context and Intents",
+  "short_name": "SupportInteropContextAndIntents",
   "start_url": "./platform/provider.html",
   "display": "standalone",
   "background_color": "#fff",

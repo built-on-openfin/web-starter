@@ -1,6 +1,6 @@
 {
-	"name": "HERE - Support Context and Intents",
-	"short_name": "HERESupportInteropContextAndIntents",
+	"name": "HERE Support Context and Intents",
+	"short_name": "SupportInteropContextAndIntents",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",

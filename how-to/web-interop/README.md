@@ -192,8 +192,8 @@ To make it easier to update settings we store them in the web [manifest.json](./
 
 ```json
 {
-  "name": "OpenFin Web Interop",
-  "short_name": "OpenFinWebInterop",
+  "name": "HERE Web Interop",
+  "short_name": "WebInterop",
   "start_url": "./platform/provider.html",
   "display": "standalone",
   "background_color": "#fff",
