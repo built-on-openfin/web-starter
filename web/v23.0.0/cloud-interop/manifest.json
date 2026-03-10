@@ -1,6 +1,6 @@
 {
 	"name": "HERE Cloud Interop",
-	"short_name": "HERECloudInterop",
+	"short_name": "CloudInterop",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
