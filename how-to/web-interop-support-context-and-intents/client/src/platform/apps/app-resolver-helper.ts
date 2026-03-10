@@ -1,8 +1,8 @@
 import type { AppIdentifier } from "@finos/fdc3";
 import type OpenFin from "@openfin/core";
+import { getApps, launch } from "./apps";
 import type { PlatformApp, AppResolverResponse, AppResolverOptions } from "../../shapes/app-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
-import { getApps, launch } from "./apps";
 
 /**
  * An App Resolver Used for resolving app selection.
