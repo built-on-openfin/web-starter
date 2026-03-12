@@ -5,7 +5,7 @@ This repo is an npm-workspaces monorepo:
 - Workspaces: `how-to/*` (each how-to is its own package)
 
 No test runner is currently configured (no Jest/Vitest/Mocha/Playwright/Cypress).
-Agent changes should focus on build + lint + format + markdownlint.
+Agent changes should focus on build + lint + format.
 
 ## Prereqs
 - Node.js: 22+ recommended (CI workflows use Node 22)
@@ -17,7 +17,6 @@ Agent changes should focus on build + lint + format + markdownlint.
   - `package.json` scripts (build/start/lint)
   - ESLint config: `how-to/*/.eslintrc.js`
   - Prettier config: `how-to/*/.prettierrc`
-  - markdownlint config: `how-to/*/.markdownlint.json`
   - TS configs: `how-to/*/tsconfig.eslint.json`, `how-to/*/client/tsconfig.json`
 
 ## Commands (root)
@@ -32,7 +31,6 @@ Build all how-tos:
 Lint/format all how-tos:
 - `npm run prettier-check` (check-only)
 - `npm run eslint`
-- `npm run markdownlint`
 - `npm run validate`
   - NOTE: per-workspace `validate` runs `prettier` (writes files). Prefer check-only in CI.
 
@@ -56,7 +54,6 @@ Dev server (serves `public/`):
 Lint/format:
 - `npm -w how-to/web-interop-basic run prettier-check`
 - `npm -w how-to/web-interop-basic run eslint`
-- `npm -w how-to/web-interop-basic run markdownlint`
 - `npm -w how-to/web-interop-basic run validate` (writes)
 
 ## CI Guidance
@@ -66,7 +63,6 @@ Recommended check-only pipeline:
 - `npm run build`
 - `npm run prettier-check`
 - `npm run eslint`
-- `npm run markdownlint`
 
 Avoid `npm run validate` in CI (it formats/writes).
 
@@ -152,14 +148,6 @@ Primary sources:
 - JSDoc is heavily enforced (`plugin:jsdoc/recommended` + rules)
 - Public functions/classes/methods typically require doc blocks
 - In TS, prefer TS types over JSDoc types (many JSDoc type usages are disallowed)
-
-## Markdown
-- Use `npm run markdownlint` / workspace `markdownlint`
-- `how-to/*/.markdownlint.json` disables:
-  - line-length
-  - descriptive-link-text
-  - ordered-list-marker style
-  - "first line must be a heading"
 
 ## When editing
 - Preserve existing patterns in the specific how-to you're working in.

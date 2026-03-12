@@ -1,4 +1,5 @@
 import type OpenFin from "@openfin/core";
+import { clearSettings, getSettings, saveSettings } from "./settings";
 import type { PlatformLayoutSnapshot } from "../../shapes/layout-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
 import type {
@@ -7,7 +8,6 @@ import type {
 	SettingsResolverResponse
 } from "../../shapes/setting-shapes";
 import { objectClone } from "../../utils";
-import { clearSettings, getSettings, saveSettings } from "./settings";
 
 /**
  * An helper for updating and resolving settings.
