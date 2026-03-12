@@ -19,9 +19,9 @@
 					"src": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/images/previews/preview-fdc3-local-context-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/fdc3-view.html"
@@ -47,9 +47,9 @@
 					"src": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/images/previews/preview-interop-local-context-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/interop-view.html"
@@ -75,9 +75,9 @@
 					"src": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/images/previews/preview-fdc3-local-intent-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/fdc3-intent-view.html"
@@ -112,9 +112,9 @@
 					"src": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/images/previews/preview-interop-local-intent-view.jpeg"
 				}
 			],
-			"contactEmail": "sales@openfin.co",
-			"supportEmail": "support@openfin.co",
-			"publisher": "OpenFin",
+			"contactEmail": "sales@here.io",
+			"supportEmail": "support@here.io",
+			"publisher": "HERE",
 			"type": "web",
 			"details": {
 				"url": "https://built-on-openfin.github.io/web-starter/main/web-interop-support-context-and-intents/views/interop-view.html"

@@ -1,13 +1,13 @@
 {
-	"name": "OpenFin Web Layouts",
-	"short_name": "OpenFinWebLayouts",
+	"name": "HERE Web Layouts",
+	"short_name": "WebLayouts",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing a implementation of the OpenFin Web Layouts Feature.",
+	"description": "An example showing a implementation of the HERE Web Layouts Feature.",
 	"icons": [
 		{
-			"src": "common/images/icon-blue.png",
+			"src": "common/images/icon.png",
 			"sizes": "72x72",
 			"type": "image/png"
 		}
