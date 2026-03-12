@@ -1,13 +1,13 @@
 {
-	"name": "OpenFin Web Interop Basic",
-	"short_name": "OpenFinWebInteropBasic",
+	"name": "HERE Web Interop Basic",
+	"short_name": "WebInteropBasic",
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing a basic implementation of the OpenFin Web Interop Library.",
+	"description": "An example showing a basic implementation of the HERE Web Interop Library.",
 	"icons": [
 		{
-			"src": "common/images/icon-blue.png",
+			"src": "common/images/icon.png",
 			"sizes": "72x72",
 			"type": "image/png"
 		}

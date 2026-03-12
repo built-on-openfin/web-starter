@@ -9,7 +9,7 @@ export async function init(options: ClientOptions): Promise<void> {
 	if (window.fin === undefined) {
 		console.log("Fin is not available. Importing the OpenFin API shim.");
 		const url =
-			"https://built-on-openfin.github.io/web-starter/web/v22.0.0/web-client-api/js/web.client.api.bundle.js";
+			"https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-client-api/js/web.client.api.bundle.js";
 		console.log(`Fetching the OpenFin API shim from ${url}`);
 		try {
 			const webClient = await import(/* webpackIgnore: true */ url);

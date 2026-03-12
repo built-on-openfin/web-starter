@@ -40,7 +40,7 @@
 }
 
 #layout_container {
-	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2));
+	height: 100%;
 }
 
 /* Define the position and size of the web notification center */
@@ -186,6 +186,8 @@ p {
 
 main {
 	min-height: 100px;
+	flex: 1;
+	overflow: hidden;
 }
 
 a {

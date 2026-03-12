@@ -91,6 +91,15 @@ function packageItems(cliArgs) {
 			}
 			targetDir = [publishDir, item].join('/');
 			fs.copySync(sourceDir, targetDir);
+
+			// Check for remote layout override
+			const remoteLayoutSource = [sourceDir, 'layouts', 'remote.layout.fin.json'].join('/');
+			const defaultLayoutTarget = [targetDir, 'layouts', 'default.layout.fin.json'].join('/');
+
+			if (fs.existsSync(remoteLayoutSource)) {
+				console.log(`Replacing default.layout.fin.json with remote.layout.fin.json for ${item}`);
+				fs.copySync(remoteLayoutSource, defaultLayoutTarget);
+			}
 		}
 
 		try {

@@ -1,14 +1,14 @@
-![OpenFin Support Context and Intents Example](../../assets/openfin-web-starter.png)
+![HERE Support Context and Intents Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin - Support Context and Intents
+# HERE - Support Context and Intents
 
 This is a richer example of an implementation of an interop broker override and layout override showing to support an fdc3 app directory with support for context and intents.
 
 It uses the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
 
-The platform supports multiple layouts and brings in a number of OpenFin sample applications that are used in our workspace platform starter examples.
+The platform supports multiple layouts and brings in a number of HERE sample applications that are used in our workspace platform starter examples.
 
 The platform also supports:
 
@@ -35,7 +35,7 @@ To show content in a multi-layout UI we implemented a layoutManagerOverride so t
 
 We bring in a number of apps from our workspace platform starter and dev tools. We also include 4 basic apps that support context and intents (using the fdc3 and Interop API).
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v22.0.0/web-interop-support-context-and-intents/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-interop-support-context-and-intents/platform/provider.html)
 
 ## Getting Started
 
@@ -71,21 +71,29 @@ There are a few things to note before trying to use @openfin/core-web:
 - You will need to copy the shared-worker.js file from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-core-web.js](./scripts/copy-core-web.js) script to do this and it is referenced in the build-client npm command.
 - You will need to copy the styles.css file for styling the layout from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-core-web.js](./scripts/copy-core-web.js) script to do this and it is referenced in the build-client npm command.
 
+### Running locally
+
+Due to Chrome's Local Network Access (LNA) restrictions, if you have a page served from localhost that embeds content via an iframe from an external HTTPS URL (or vice versa), this setup is now subject to LNA restrictions.
+
+Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter) 
+
+https://developer.chrome.com/release-notes/142#local_network_access_restrictions
+
 ## Settings
 
 To make it easier to update settings we include a definition of where to fetch settings in our web [manifest.json](./public/manifest.json) inside of _custom_settings_.
 
 ```json
 {
-  "name": "OpenFin - Support Context and Intents",
-  "short_name": "OpenFinSupportInteropContextAndIntents",
+  "name": "HERE Support Context and Intents",
+  "short_name": "SupportInteropContextAndIntents",
   "start_url": "./platform/provider.html",
   "display": "standalone",
   "background_color": "#fff",
-  "description": "An example showing a implementation of the OpenFin Core Web Library to support context and intents as well as layouts.",
+  "description": "An example showing a implementation of the HERE Core Web Library to support context and intents as well as layouts.",
   "icons": [
     {
-      "src": "common/images/icon-blue.png",
+      "src": "common/images/icon.png",
       "sizes": "72x72",
       "type": "image/png"
     }

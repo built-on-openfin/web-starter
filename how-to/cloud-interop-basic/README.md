@@ -1,17 +1,17 @@
 ![OpenFin Cloud Interop Basic Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin Cloud Interop Basic
+# HERE Cloud Interop Basic
 
 This is a very basic example that extends the [Web Interop Basic Example](../web-interop-basic/README.md). This is a simple provider web page that acts as the main/index page. This page wires up the interop broker using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library and creates a cloud compatible [interop override](https://developer.openfin.co/docs/javascript/stable/classes/OpenFin.InteropBroker.html) using our [@openfin/cloud-interop](https://www.npmjs.com/package/@openfin/cloud-interop) npm package.
 
 This page has a very simple layout which is made up of two iframes:
 
 - An FDC3 View - This uses the FDC3 API to add a context listener and to broadcast a hardcoded context object.
-- An Interop View - This uses the OpenFin Interop API to add a context listener and to set context using a hardcoded context object.
+- An Interop View - This uses the HERE Interop API to add a context listener and to set context using a hardcoded context object.
 
-![OpenFin Web Interop Basic Example](./docs/web-interop-basic.png)
+![HERE Web Interop Basic Example](./docs/web-interop-basic.png)
 
 ## Getting Started
 
@@ -45,7 +45,7 @@ There are a few things to note before trying to use @openfin/core-web:
 
 - If your [tsconfig](./client/tsconfig.json) file is using **node** for moduleResolution it will need to use **Node16** instead as export/imports are defined in the package.json of the @openfin/core-web npm package. This is required for when you try to import @openfin/core-web/iframe-broker.
 - You will need to copy the shared-worker.js file from the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) npm package to your public folder. We have created a [copy-shared-worker.js](./scripts/copy-shared-worker.js) script to do this and it is referenced in the build-client npm command.
-- You will need to **contact OpenFin** to get the configuration information required to setup a cloud connection.
+- You will need to **contact HERE** to get the configuration information required to setup a cloud connection.
 
 ## How things are structured
 
@@ -73,16 +73,16 @@ async function init(): Promise<void> {
  // api available to libraries such as cloud interop.
  window.fin = fin;
 
- // These settings may be subject to change as we get feedback from use cases. Please contact OpenFin for this information.
+ // These settings may be subject to change as we get feedback from use cases. Please contact HERE for this information.
  const cloudConfig =  {
-    platformId: "<PLEASE ASK OPENFIN FOR A PLATFORM ID>",
+    platformId: "<PLEASE ASK HERE FOR A PLATFORM ID>",
     sourceId: "cloud-interop-basic",
     authenticationType: "basic",
     basicAuthenticationParameters: {
-     username: "<PLEASE ASK OPENFIN FOR A USERNAME>",
-     password: "<PLEASE ASK OPENFIN FOR A PASSWORD>"
+     username: "<PLEASE ASK HERE FOR A USERNAME>",
+     password: "<PLEASE ASK HERE FOR A PASSWORD>"
     },
-    url: "<PLEASE ASK OPENFIN FOR A URL>"
+    url: "<PLEASE ASK HERE FOR A URL>"
  };
 
 // You may now use the `fin` object and initialize the Broker with support for cloud interop.
@@ -129,7 +129,7 @@ Some things to note about the content provider setup:
 - You do not need to assign fdc3 or fin to the window object but we have done so for consistency with our workspace and container starter examples.
 - The snippet below is the init function from the [api.ts](./client/src/platform/api.ts) file (although the settings function has been replaced with hard coded values for simplicity) that is imported and called.
 - Content initializes the API and then runs code normally like it would inside of a workspace platform or container platform.
-- the **finReady** event shown below is an example and doesn't exist in the OpenFin container as the API is injected into the document. We added **finReady** to have similar behavior to the **fdc3Ready** event that we also raise.
+- the **finReady** event shown below is an example and doesn't exist in the HERE container as the API is injected into the document. We added **finReady** to have similar behavior to the **fdc3Ready** event that we also raise.
 
 ```javascript
 import { connect } from "@openfin/core-web";
@@ -168,7 +168,7 @@ export async function init(): Promise<void> {
 
 ### Cloud
 
-Once the extended interop broker initialized then a connection will be made to OpenFin's servers. Information shared across user channels (e.g. green) can then be made available to a second instance of this web platform (in another tab, on another browser or on another device) or a Workspace or Container based Platform (on the same machine or a different machine).
+Once the extended interop broker initialized then a connection will be made to HERE's servers. Information shared across user channels (e.g. green) can then be made available to a second instance of this web platform (in another tab, on another browser or on another device) or a Workspace or Container based Platform (on the same machine or a different machine).
 
 ## A visual representation
 
@@ -176,4 +176,4 @@ We've covered the key pieces. We have a host, one or more pieces of content and 
 
 This diagram is here to provide a rough visual guide to support the content above and the example:
 
-![OpenFin Web Interop Basic Rough Visual Guide](./docs/cloud-interop-basic-visualization.png)
+![HERE Web Interop Basic Rough Visual Guide](./docs/cloud-interop-basic-visualization.png)

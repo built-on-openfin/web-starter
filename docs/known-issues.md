@@ -1,8 +1,17 @@
-![OpenFin Web Starter](../assets/openfin-web-starter.png)
+![HERE Web Starter](../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the HERE npm packages is only granted pursuant to a license from HERE. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-## OpenFin Core Web - Known Issues
+## HERE Core Web - Known Issues
+
+
+
+### [0.43.115](https://cdn.openfin.co/versions/?product=Core%20Web#0.43.115)
+
+Due to Chrome's Local Network Access (LNA) restrictions, if you have a page served from localhost that embeds content via an iframe from an external HTTPS URL (or vice versa), this setup is now subject to LNA restrictions.
+This will not pose a problem in production. Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter). 
+
+https://developer.chrome.com/release-notes/142#local_network_access_restrictions
 
 ### [0.40.31](https://www.npmjs.com/package/@openfin/core-web/v/0.40.31)
 

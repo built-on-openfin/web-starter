@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-interop-basic",
-	"version": "22.0.0",
+	"version": "23.0.0",
 	"description": "OpenFin Web Starter -- Web Interop - Basic",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
@@ -16,14 +16,14 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
 	},
-	"author": "john.mandia@openfin.co",
+	"author": "john.mandia@here.io",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.42.103"
+		"@openfin/core-web": "0.43.115"
 	},
 	"devDependencies": {
-		"@openfin/core": "42.100.107",
+		"@openfin/core": "43.101.4",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
@@ -35,7 +35,7 @@
 		"eslint-plugin-simple-import-sort": "12.0.0",
 		"eslint-plugin-unicorn": "51.0.1",
 		"eslint-plugin-unused-imports": "3.1.0",
-		"markdownlint-cli": "0.39.0",
+		"markdownlint-cli": "0.47.0",
 		"prettier": "3.2.5",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.2",

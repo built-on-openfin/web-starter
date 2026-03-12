@@ -1,10 +1,10 @@
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the HERE npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
 [<- Back to Table Of Contents](../README.md)
 
 # [Create Workspace Mobile App](https://www.npmjs.com/package/@openfin/create-workspace-mobile-app)
 
-As part of OpenFin's strategy to be available across multiple hosts (Desktop via our container, Desktop Browser and Mobile) we have made a number of npm packages available and this article focuses on getting up and running quickly with our mobile offering.
+As part of HERE's strategy to be available across multiple hosts (Desktop via our container, Desktop Browser and Mobile) we have made a number of npm packages available and this article focuses on getting up and running quickly with our mobile offering.
 
 We are actively working on this initiative so please check to see the latest version available on npm and our [developer documentation](https://developers.openfin.co).
 
@@ -121,7 +121,7 @@ The generated example includes content (apps such as a ChartView) along with the
 You may wish to keep the two things distinct.
 
 - One codebase that represents the host (e.g. I am a desktop browser or mobile browser platform).
-- And a different codebase representing the content (I am the ChartView app that isn't tied to a particular host and can be loaded into a OpenFin mobile/desktop browser Workspace Platform or an OpenFin Container based Workspace Platform).
+- And a different codebase representing the content (I am the ChartView app that isn't tied to a particular host and can be loaded into a HERE mobile/desktop browser Workspace Platform or an OpenFin Container based Workspace Platform).
 
 If you want to add additional components to the generated example then you can add them to the src/components directory (e.g. see **src/components/PortfolioView** for an example of a component that sets contextual data using fin.me.interop.setContext).
 
@@ -305,7 +305,7 @@ At the time of writing you can change the following:
 
 We have tried to show where those things can be changed within this article.
 
-We are interested in your use cases so please reach out to OpenFin to cover your needs if you are looking to take the mobile support further.
+We are interested in your use cases so please reach out to HERE to cover your needs if you are looking to take the mobile support further.
 
 ## If I am loading external content how can the external content share contextual data or listen to contextual data?
 
@@ -313,15 +313,15 @@ The goal for content providers should be:
 
 - Create a [Micro Frontend](https://martinfowler.com/articles/micro-frontends.html) (if you know you are being loaded into multiple hosts then there may be things that can be hidden/omitted e.g. headers, footers, large menus).
 - Make your content responsive so it can react to different layouts.
-- Use progressive enhancement to detect whether or not you are capable of contextual data sharing or using the OpenFin API and react accordingly.
+- Use progressive enhancement to detect whether or not you are capable of contextual data sharing or using the HERE API and react accordingly.
 
-For the final point we will show how you could update your external content so that it could share context from within a Workspace Platform inside of an OpenFin container or a Workspace Platform within the desktop browser (e.g. Edge).
+For the final point we will show how you could update your external content so that it could share context from within a Workspace Platform inside of a HERE container or a HERE Core Platform within the desktop browser (e.g. Edge).
 
 ### Adding the Fin API to content loaded in a Desktop/Mobile Browser Dynamically
 
-When your content is loaded into an OpenFin Container (our desktop application) we automatically inject the **fin** API and it is always available. A desktop browser like Edge does not allow the injection of APIs from an iframe so your webpage will need to use our npm package to request the fin API.
+When your content is loaded into a HERE Container (our desktop application) we automatically inject the **fin** API and it is always available. A desktop browser like Edge does not allow the injection of APIs from an iframe so your webpage will need to use our npm package to request the fin API.
 
-Rather than bundle our mobile/desktop browser code into your webpage you may prefer to have some initialization logic that checks for the existence of the fin API. If the API doesn't exist then you dynamically import and initialize the OpenFin code (reducing what is included in your bundle to just the key pieces that are required dependant on the host).
+Rather than bundle our mobile/desktop browser code into your webpage you may prefer to have some initialization logic that checks for the existence of the fin API. If the API doesn't exist then you dynamically import and initialize the HERE code (reducing what is included in your bundle to just the key pieces that are required dependant on the host).
 
 Below we have an example webpage that you can create and drop in the public folder of the sample app or host on a different web server.
 

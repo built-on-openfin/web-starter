@@ -106,5 +106,61 @@ module.exports = [
 			filename: 'interop-intent-view.bundle.js',
 			path: path.resolve(__dirname, '..', 'public', 'js')
 		}
+	},
+	{
+		entry: './client/src/content/fdc3-broadcast-view.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'fdc3-broadcast-view.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
+		entry: './client/src/content/interop-broadcast-view.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'interop-broadcast-view.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
+		entry: './client/src/content/fdc3-intent-view-v2.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'fdc3-intent-view-v2.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
+	},
+	{
+		entry: './client/src/content/interop-intent-view-v2.ts',
+		devtool: 'source-map',
+		module: {
+			rules
+		},
+		resolve: {
+			extensions: ['.tsx', '.ts', '.js']
+		},
+		output: {
+			filename: 'interop-intent-view-v2.bundle.js',
+			path: path.resolve(__dirname, '..', 'public', 'js')
+		}
 	}
 ];

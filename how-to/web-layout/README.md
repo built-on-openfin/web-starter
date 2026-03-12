@@ -1,25 +1,25 @@
-![OpenFin Web Layouts Example](../../assets/openfin-web-starter.png)
+![HERE Web Layouts Example](../../assets/openfin-web-starter.png)
 
-> **_:information_source: OpenFin:_** [OpenFin](https://www.openfin.co/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.openfin.co/contact/) if you would like to request a developer evaluation key or to discuss a production license.
+> **_:information_source: HERE:_** [HERE](https://www.here.io/) libraries are a commercial product and this repo is for evaluation purposes. Use of the OpenFin npm packages is only granted pursuant to a license from OpenFin. Please [**contact us**](https://www.here.io/contact/) if you would like to request a developer evaluation key or to discuss a production license.
 
-# OpenFin Web Layouts
+# HERE Web Layouts
 
 This is a simple example that has a simple provider web page that acts as the main/index page. This page wires up the interop broker and a layout using the [@openfin/core-web](https://www.npmjs.com/package/@openfin/core-web) library.
 
 This page has a very simple layout which is made up of four iframes that inherit the interop settings they should use to connect to the web broker:
 
 - Local - An FDC3 View - This uses the FDC3 API to add a context listener and to broadcast a hardcoded context object.
-- Local - An Interop View - This uses the OpenFin Interop API to add a context listener and to set context using a hardcoded context object.
+- Local - An Interop View - This uses the HERE Interop API to add a context listener and to set context using a hardcoded context object.
 - External - An FDC3 Tool used in our workspace platform starters that lets you experiment with context sharing using the FDC3 APIs.
-- External - An Interop Tool used in our workspace platform starters that lets you experiment with context sharing using the OpenFin Interop API.
+- External - An Interop Tool used in our workspace platform starters that lets you experiment with context sharing using the HERE Interop API.
 
-It also has a left panel which is outside of the OpenFin Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
+It also has a left panel which is outside of the HERE Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
 
 Using Layouts, this demo also shows off a "Swap Layouts" function, which allows someone to quickly jump from one created layout (via a snapshot JSON definition) to another.
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v22.0.0/web-layout/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-layout/platform/provider.html)
 
-![OpenFin Web Multi Layout Example](./docs/web-layout.png)
+![HERE Web Multi Layout Example](./docs/web-layout.png)
 
 ## Getting Started
 

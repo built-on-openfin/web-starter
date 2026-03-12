@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web-starter",
-	"version": "22.0.0",
+	"version": "23.0.0",
 	"description": "OpenFin Web Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",
@@ -17,7 +17,8 @@
 		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
 		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x fkill*,node-emoji,@openfin/core,@openfin/cloud-interop,@openfin/core-web,eslint-plugin-import",
 		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf --glob **/package-lock.json",
-		"common-update": "node ./scripts/common-update.mjs"
+		"common-update": "node ./scripts/common-update.mjs",
+		"upgrade-versions": "node scripts/upgrade-versions.mjs"
 	},
 	"workspaces": [
 		"how-to/*"
@@ -28,7 +29,7 @@
 	],
 	"packageCustomFolder": "",
 	"contributors": [
-		"john.mandia@openfin.co"
+		"john.mandia@here.io"
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
