@@ -1,0 +1,22 @@
+{
+	"layouts": {
+		"default": {
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"url": "https://built-on-openfin.github.io/web-starter/dev/nick/toast-notifications/web-toast-notifications/views/toasts.html",
+								"name": "internal-generated-view-web-toast-notifications"
+							},
+							"title": "Toast Notifications"
+						}
+					]
+				}
+			]
+		}
+	}
+}
