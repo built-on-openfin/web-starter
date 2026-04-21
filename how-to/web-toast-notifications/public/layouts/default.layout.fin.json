@@ -1,0 +1,22 @@
+{
+	"layouts": {
+		"default": {
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"url": "http://localhost:6060/views/toasts.html",
+								"name": "internal-generated-view-web-toast-notifications"
+							},
+							"title": "Toast Notifications"
+						}
+					]
+				}
+			]
+		}
+	}
+}
