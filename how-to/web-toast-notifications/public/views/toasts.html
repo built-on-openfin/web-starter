@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title></title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/toasts.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+
+	<body class="col fill gap20 toasts-page">
+		<header class="row spread middle sample-header">
+			<div class="col">
+				<h1>Toast notifications</h1>
+				<h1 class="tag">
+					This page creates notifications with
+					<code>@openfin/web-notifications-client</code>
+					so you can compare toast behavior and Notification Center state in one place.
+				</h1>
+			</div>
+			<div class="row middle gap10">
+				<img src="../common/images/here.png" alt="HERE" height="40" />
+			</div>
+		</header>
+		<main class="fill col scroll-vertical gap20">
+			<div class="form-group large">
+				<h2>Try it</h2>
+				<p>Use these controls to test both toast types and open/close the Notification Center overlay.</p>
+				<ul class="demo-instructions">
+					<li>
+						<strong>Transient toast</strong>
+						appears briefly, then auto-dismisses.
+					</li>
+					<li>
+						<strong>Sticky toast</strong>
+						remains visible until dismissed by the user.
+					</li>
+					<li>
+						<strong>Hide/Show Notification Center</strong>
+						toggles center visibility without disabling toasts.
+					</li>
+				</ul>
+				<div class="col gap10 actions-stack">
+					<button id="btnToastTransient" class="secondary">Transient toast</button>
+					<button id="btnToastSticky" class="secondary">Sticky toast</button>
+					<button id="btnToggleCenter" class="secondary">Hide Notification Center</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<h3>Status</h3>
+				<p id="status" class="status status-info">Connecting to notifications client...</p>
+			</div>
+		</main>
+	</body>
+</html>
