@@ -1,86 +1,139 @@
-import { create, hide, IndicatorColor, type NotificationOptions, show } from "@openfin/notifications";
-import { init } from "../platform/api";
+import type { NotificationOptions } from "@openfin/web-notifications-client";
+import { getNotificationsClient, init } from "../platform/api";
+
+const NOTIFICATION_CENTER_EVENT = "notificationCenterSetOpen";
+const NOTIFICATION_CENTER_MESSAGE_TYPE = "notification-center-set-open";
+
+/**
+ * Sets status text for user feedback.
+ * @param message Status message.
+ * @param kind Status kind.
+ */
+function setStatus(message: string, kind: "info" | "error" | "success" = "info"): void {
+	const statusElement = document.querySelector<HTMLElement>("#status");
+	if (statusElement === null) {
+		return;
+	}
+
+	statusElement.textContent = message;
+	statusElement.classList.remove("status-info", "status-error", "status-success");
+	statusElement.classList.add(`status-${kind}`);
+}
+
+/**
+ * Creates a sample notification.
+ * @param notification Notification payload.
+ * @param toastType User-facing toast type label.
+ */
+async function sendNotification(
+	notification: NotificationOptions,
+	toastType: "transient" | "sticky"
+): Promise<void> {
+	try {
+		await getNotificationsClient().create(notification);
+		setStatus(`Created ${toastType} toast notification.`, "success");
+	} catch (error) {
+		setStatus(
+			error instanceof Error ? error.message : "Unable to create notification. Check browser console.",
+			"error"
+		);
+	}
+}
+
+/**
+ * Sends center visibility intent to the provider host.
+ * @param isOpen Should the notification center be open.
+ */
+function setNotificationCenterOpen(isOpen: boolean): void {
+	const visibilityEvent = new CustomEvent<boolean>(NOTIFICATION_CENTER_EVENT, {
+		detail: isOpen
+	});
+	window.dispatchEvent(visibilityEvent);
+	window.parent.dispatchEvent(visibilityEvent);
+	window.parent.postMessage(
+		{
+			type: NOTIFICATION_CENTER_MESSAGE_TYPE,
+			isOpen
+		},
+		window.location.origin
+	);
+}
+
+/**
+ * Binds button interactions.
+ */
+function initializeDom(): void {
+	const transientButton = document.querySelector<HTMLButtonElement>("#btnToastTransient");
+	const stickyButton = document.querySelector<HTMLButtonElement>("#btnToastSticky");
+	const toggleCenterButton = document.querySelector<HTMLButtonElement>("#btnToggleCenter");
+	let isNotificationCenterOpen = true;
+
+	/**
+	 * Keeps toggle button text aligned with center state.
+	 */
+	function syncToggleCenterButton(): void {
+		if (toggleCenterButton === null) {
+			return;
+		}
+		toggleCenterButton.textContent = isNotificationCenterOpen
+			? "Hide Notification Center"
+			: "Show Notification Center";
+	}
+
+	if (transientButton !== null) {
+		transientButton.addEventListener("click", () => {
+			sendNotification(
+				{
+					template: "markdown",
+					title: "Market price alert",
+					body: "AAPL moved 1.2% in the last five minutes.",
+					toast: "transient"
+				},
+				"transient"
+			).catch((error: unknown) => {
+				setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
+			});
+		});
+	}
+
+	if (stickyButton !== null) {
+		stickyButton.addEventListener("click", () => {
+			sendNotification(
+				{
+					template: "markdown",
+					title: "Approval required",
+					body: "NatWest FX trade 84372 needs a second approver before execution.",
+					toast: "sticky"
+				},
+				"sticky"
+			).catch((error: unknown) => {
+				setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
+			});
+		});
+	}
+
+	if (toggleCenterButton !== null) {
+		toggleCenterButton.addEventListener("click", () => {
+			isNotificationCenterOpen = !isNotificationCenterOpen;
+			setNotificationCenterOpen(isNotificationCenterOpen);
+			syncToggleCenterButton();
+			setStatus(
+				isNotificationCenterOpen ? "Notification Center opened." : "Notification Center hidden.",
+				"info"
+			);
+		});
+	}
+
+	syncToggleCenterButton();
+}
 
 window.addEventListener("DOMContentLoaded", async () => {
-	await init();
-	await initializeDom();
+	try {
+		await init();
+		setStatus("Connected to notifications client. Notification Center is visible by default.", "success");
+	} catch (error) {
+		setStatus(error instanceof Error ? error.message : "Unable to initialize notifications client.", "error");
+	}
+
+	initializeDom();
 });
-
-/**
- * Initialize the DOM elements.
- */
-async function initializeDom(): Promise<void> {
-	const btnShowCenter = document.querySelector("#btnShowCenter");
-	if (btnShowCenter) {
-		btnShowCenter.addEventListener("click", showCenter);
-	}
-
-	const btnHideCenter = document.querySelector("#btnHideCenter");
-	if (btnHideCenter) {
-		btnHideCenter.addEventListener("click", hideCenter);
-	}
-
-	const btnNotificationSimple = document.querySelector("#btnNotificationSimple");
-	if (btnNotificationSimple) {
-		btnNotificationSimple.addEventListener("click", async () => showSimpleNotification());
-	}
-
-	const btnNotificationInteractive = document.querySelector("#btnNotificationInteractive");
-	if (btnNotificationInteractive) {
-		btnNotificationInteractive.addEventListener("click", async () => showInteractiveNotification());
-	}
-}
-
-/**
- * Show the notification center.
- */
-async function showCenter(): Promise<void> {
-	await show();
-}
-
-/**
- * Hide the notification center.
- */
-async function hideCenter(): Promise<void> {
-	await hide();
-}
-
-/**
- * Display a very basic simple notification.
- */
-async function showSimpleNotification(): Promise<void> {
-	const notification: NotificationOptions = {
-		title: "Simple Notification",
-		body: "This is a simple notification",
-		platform: "web-notifications-platform"
-	};
-	await create(notification);
-}
-
-/**
- * Display an interactive notification.
- */
-async function showInteractiveNotification(): Promise<void> {
-	const notification: NotificationOptions = {
-		indicator: {
-			color: IndicatorColor.ORANGE,
-			fallback: IndicatorColor.ORANGE,
-			text: "News Alert"
-		},
-		icon: "https://cdn.openfin.co/examples/notifications/company-B.png",
-		title: "US added 138K jobs; Lower than target 185K",
-		body: "After more than a decade of growth, U.S. nonfarm payrolls shrunk by 701,000, and the unemployment rate rose to 4.4%...",
-		buttons: [
-			{
-				title: "Read More",
-				type: "button",
-				cta: true,
-				onClick: () => window.open("https://myexample.com/news/employment", "_blank")
-			}
-		],
-		soundOptions: {
-			mode: "silent"
-		}
-	};
-	await create(notification);
-}
