@@ -240,15 +240,7 @@ module.exports = {
 		'no-restricted-globals': ['error'],
 		'no-restricted-imports': ['error'],
 		'no-restricted-properties': ['error'],
-		'no-restricted-syntax': [
-			'error',
-			{
-				selector:
-					":matches(MemberExpression[object.name='crypto'][property.name='randomUUID'],MemberExpression[object.object.name='window'][object.property.name='crypto'][property.name='randomUUID'])",
-				message:
-					'window.crypto.randomUUID is not allowed because it is not available in non-secure contexts, use randomUUID from the uuid module instead'
-			}
-		],
+		'no-restricted-syntax': ['error'],
 		'no-return-assign': ['error'],
 		'no-return-await': ['off'],
 		'no-script-url': ['error'],
@@ -531,10 +523,9 @@ module.exports = {
 				'@typescript-eslint/await-thenable': ['error'],
 				'@typescript-eslint/ban-ts-comment': ['error'],
 				'@typescript-eslint/ban-tslint-comment': ['off'],
-				'@typescript-eslint/ban-types': ['error'],
 				'@typescript-eslint/brace-style': ['off'],
 				'@typescript-eslint/class-literal-property-style': ['error'],
-				'@typescript-eslint/comma-spacing': ['error'],
+				'comma-spacing': ['error'],
 				'@typescript-eslint/no-confusing-void-expression': ['off'],
 				'@typescript-eslint/consistent-generic-constructors': ['error'],
 				'@typescript-eslint/consistent-indexed-object-style': ['error', 'index-signature'],
@@ -559,13 +550,13 @@ module.exports = {
 					}
 				],
 				'@typescript-eslint/explicit-module-boundary-types': ['off'],
-				'@typescript-eslint/func-call-spacing': ['error'],
+				'func-call-spacing': ['error'],
 				'@typescript-eslint/indent': ['off'],
 				'@typescript-eslint/init-declarations': ['off'],
 				'@typescript-eslint/keyword-spacing': ['off'],
 				'@typescript-eslint/lines-around-comment': ['off'],
-				'@typescript-eslint/lines-between-class-members': ['error'],
-				'@typescript-eslint/member-delimiter-style': ['error'],
+				'lines-between-class-members': ['error'],
+				'@typescript-eslint/member-delimiter-style': ['off'],
 				'@typescript-eslint/member-ordering': ['error'],
 				'@typescript-eslint/method-signature-style': ['off'],
 				'@typescript-eslint/naming-convention': [
@@ -606,7 +597,7 @@ module.exports = {
 				'@typescript-eslint/no-explicit-any': ['error'],
 				'@typescript-eslint/no-extra-non-null-assertion': ['error'],
 				'@typescript-eslint/no-extra-parens': ['off'],
-				'@typescript-eslint/no-extra-semi': ['error'],
+				'no-extra-semi': ['error'],
 				'@typescript-eslint/no-extraneous-class': ['off'],
 				'@typescript-eslint/no-floating-promises': ['error'],
 				'@typescript-eslint/no-for-in-array': ['error'],
@@ -631,7 +622,7 @@ module.exports = {
 				'@typescript-eslint/no-require-imports': ['error'],
 				'@typescript-eslint/no-shadow': ['error'],
 				'@typescript-eslint/no-this-alias': ['error'],
-				'@typescript-eslint/no-throw-literal': ['error'],
+				'no-throw-literal': ['error'],
 				'@typescript-eslint/no-type-alias': ['off'],
 				'@typescript-eslint/no-unnecessary-boolean-literal-compare': ['error'],
 				'@typescript-eslint/no-unnecessary-condition': ['off'],
@@ -674,15 +665,15 @@ module.exports = {
 				'@typescript-eslint/prefer-string-starts-ends-with': ['error'],
 				'@typescript-eslint/prefer-ts-expect-error': ['error'],
 				'@typescript-eslint/promise-function-async': ['error'],
-				'@typescript-eslint/quotes': ['error', 'double', { avoidEscape: true }],
+				quotes: ['error', 'double', { avoidEscape: true }],
 				'@typescript-eslint/require-array-sort-compare': ['off'],
 				'@typescript-eslint/require-await': ['off'],
 				'@typescript-eslint/restrict-plus-operands': ['error'],
 				'@typescript-eslint/restrict-template-expressions': ['off'],
 				'@typescript-eslint/return-await': ['error'],
-				'@typescript-eslint/semi': ['error'],
+				semi: ['error'],
 				'@typescript-eslint/sort-type-constituents': ['off'],
-				'@typescript-eslint/space-before-function-paren': [
+				'space-before-function-paren': [
 					'error',
 					{
 						anonymous: 'never',
@@ -693,7 +684,7 @@ module.exports = {
 				'@typescript-eslint/strict-boolean-expressions': ['off'],
 				'@typescript-eslint/switch-exhaustiveness-check': ['error'],
 				'@typescript-eslint/triple-slash-reference': ['error'],
-				'@typescript-eslint/type-annotation-spacing': ['error'],
+				'@typescript-eslint/type-annotation-spacing': ['off'],
 				'@typescript-eslint/typedef': [
 					'error',
 					{

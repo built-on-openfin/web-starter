@@ -275,7 +275,7 @@ async function fireIntent(intent: string, context: Context, app: string | undefi
 		};
 		const intentResolver = await fin.me.interop.fireIntent(intentRequest);
 		if (intentResolver !== undefined) {
-			console.log("Intent resolver received:", intentResolver);
+			console.log("Intent resolver received", intentResolver);
 		}
 	}
 }
@@ -298,7 +298,7 @@ async function fireIntentForContext(context: Context, app: string | undefined): 
 
 		const intentResolver = await fin.me.interop.fireIntentForContext(context);
 		if (intentResolver !== undefined) {
-			console.log("Intent resolver received:", intentResolver);
+			console.log("Intent resolver received", intentResolver);
 		}
 	}
 }
@@ -309,7 +309,7 @@ async function fireIntentForContext(context: Context, app: string | undefined): 
  */
 async function addIntentListeners(intentList: string[]): Promise<void> {
 	if (window.fin !== undefined && intentList.length > 0) {
-		console.log("View Manifest/Defaults specified following intents:", intentList);
+		console.log("View Manifest/Defaults specified following intents", intentList);
 		try {
 			for (const intent of intentList) {
 				await fin.me.interop.registerIntentHandler((passedIntent) => {

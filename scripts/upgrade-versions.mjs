@@ -4,6 +4,8 @@
  * What it does per project (root + each workspace):
  *  - Update @openfin/core-web version in package.json (if present)
  *  - Update @openfin/core version in package.json (if present)
+ *  - Update @openfin/notifications version in package.json (if present)
+ *  - Update @openfin/web-notifications version in package.json (if present)
  *  - Update top-level "version" in package.json
  *  - Replace versioned URLs in files (.html, .json, .ts, .tsx, .js, .jsx, .md)
  *  - Run: npm install, npm audit fix, npm run build (if script exists)
@@ -16,7 +18,7 @@
  *
  * CLI examples:
  *   node scripts/upgrade-versions.mjs --dry-run
- *   node scripts/upgrade-versions.mjs --core 43.101.1 --core-web 0.43.0 --pkg-version 23.1.0
+ *   node scripts/upgrade-versions.mjs --core 43.101.1 --core-web 0.43.0 --web-notifications 2.14.1 --pkg-version 23.1.0
  *   node scripts/upgrade-versions.mjs --to v24.0.0
  *   node scripts/upgrade-versions.mjs --skip-audit --skip-build
  */
@@ -31,9 +33,10 @@ const DEFAULT_VERSIONS = {
   major: '24.0.0',
   'github-url': '24.0.0',
   core: '44.101.4',
-  'core-web': '0.44.112'
+  'core-web': '0.44.112',
+  notifications: '2.14.3',
+  'web-notifications': '2.14.3',
 };
-
 
 // Directories to exclude from search/replace
 const EXCLUDED_DIRECTORIES = [
@@ -64,6 +67,8 @@ async function run() {
   console.log('Options:', JSON.stringify({
     core: args.core,
     coreWeb: args.coreWeb,
+    notifications: args.notifications,
+    webNotifications: args.webNotifications,
     pkgVersion: args.pkgVersion,
     targetVersion: args.wsTo,
     caseInsensitive: args.caseInsensitive,
@@ -90,6 +95,15 @@ async function run() {
 
   // Include root project if requested
   const projectDirs = args.includeRoot ? ['.'].concat(workspaceDirs) : workspaceDirs;
+
+  // Run npm install once at the root level for the entire monorepo
+  if (!args.skipInstall && !args.dryRun) {
+    console.log();
+    console.log('--- Running npm install at root (covers all workspaces) ---');
+    await runShellCmd('npm', ['install'], rootDir, args);
+  } else if (!args.skipInstall && args.dryRun) {
+    console.log(`[DRY-RUN] Would run: npm install (cwd=${rootDir})`);
+  }
 
   const summary = [];
   for (const projectDir of projectDirs) {
@@ -125,6 +139,8 @@ async function run() {
       const changes = updatePackageVersions(pkgJson, {
         core: args.core,
         coreWeb: args.coreWeb,
+        notifications: args.notifications,
+        webNotifications: args.webNotifications,
         pkgVersion: args.pkgVersion
       });
 
@@ -143,10 +159,7 @@ async function run() {
       const changedCount = await replaceVersionedUrls(abs, args);
       projectResult.filesChanged += changedCount;
 
-      // 3) npm install, audit fix, build
-      if (!args.skipInstall) {
-        await runShellCmd('npm', ['install'], abs, args);
-      }
+      // 3) audit fix, build (npm install already ran at root)
       if (!args.skipAudit) {
         try {
           await runShellCmd('npm', ['audit', 'fix'], abs, args);
@@ -226,6 +239,8 @@ function parseArgs(argv) {
     switch (a) {
       case '--core': set('core', next); i += 1; break;
       case '--core-web': set('coreWeb', next); i += 1; break;
+      case '--notifications': set('notifications', next); i += 1; break;
+      case '--web-notifications': set('webNotifications', next); i += 1; break;
       case '--pkg-version': set('pkgVersion', next); i += 1; break;
       case '--to': set('wsTo', next); i += 1; break;
       case '--case-insensitive':
@@ -250,6 +265,8 @@ function parseArgs(argv) {
 
   const core = map.get('core') || DEFAULT_VERSIONS.core;
   const coreWeb = map.get('coreWeb') || DEFAULT_VERSIONS['core-web'];
+  const notifications = map.get('notifications') || DEFAULT_VERSIONS['notifications'];
+  const webNotifications = map.get('webNotifications') || DEFAULT_VERSIONS['web-notifications'];
   const pkgVersion = map.get('pkgVersion') || DEFAULT_VERSIONS.major;
 
   // wsTo defaults to github-url version; wsFrom is optional (regex handles any version)
@@ -258,6 +275,8 @@ function parseArgs(argv) {
   return {
     core,
     coreWeb,
+    notifications,
+    webNotifications,
     pkgVersion,
     wsTo,
     caseInsensitive: !!map.get('caseInsensitive'),
@@ -276,6 +295,8 @@ function printHelp() {
     `Version overrides (defaults reflect current repo):\n` +
     `  --core <ver>             Set @openfin/core (default ${DEFAULT_VERSIONS.core})\n` +
     `  --core-web <ver>         Set @openfin/core-web (default ${DEFAULT_VERSIONS['core-web']})\n` +
+    `  --notifications <ver>    Set @openfin/notifications (default ${DEFAULT_VERSIONS['notifications']})\n` +
+    `  --web-notifications <ver> Set @openfin/web-notifications (default ${DEFAULT_VERSIONS['web-notifications']})\n` +
     `  --pkg-version <ver>      Set top-level package.json \"version\" (default ${DEFAULT_VERSIONS.major})\n\n` +
     `Find/replace versioned URLs in files (${VERSIONED_URL_EXTENSIONS.join(', ')}):\n` +
     `  --to <string>            Target version (default v${DEFAULT_VERSIONS['github-url']})\n` +
@@ -307,6 +328,8 @@ function updatePackageVersions(pkgJson, versions) {
   for (const sec of sections) {
     setIfPresent(sec, '@openfin/core', versions.core);
     setIfPresent(sec, '@openfin/core-web', versions.coreWeb);
+    setIfPresent(sec, '@openfin/notifications', versions.notifications);
+    setIfPresent(sec, '@openfin/web-notifications', versions.webNotifications);
   }
 
   if (typeof pkgJson.version === 'string' && pkgJson.version !== versions.pkgVersion) {

@@ -1,9 +1,13 @@
 import { connect } from "@openfin/core-web";
-import { hide, initNotificationCenter, setTheme, show } from "@openfin/web-notifications";
-import { getDefaultLayout, getSettings } from "./platform/settings";
-
-const NOTIFICATION_CENTER_EVENT = "notificationCenterSetOpen";
-const NOTIFICATION_CENTER_MESSAGE_TYPE = "notification-center-set-open";
+import {
+	addNotificationCountListener,
+	addVisibilityListener,
+	hide,
+	initNotificationCenter,
+	setTheme,
+	show
+} from "@openfin/web-notifications";
+import { getDefaultLayout, getSettings } from "../settings";
 
 /**
  * Applies notification center color scheme.
@@ -19,20 +23,6 @@ async function applyScheme(isDark: boolean): Promise<void> {
  */
 function reportAsyncFailure(error: unknown): void {
 	console.error("Async notification center action failed.", error);
-}
-
-/**
- * Applies notification center state using API and overlay host chrome.
- * @param isOpen Should the notification center be visible.
- * @param sidebarEl Overlay host element to keep in sync.
- */
-async function applyNotificationCenterState(isOpen: boolean, sidebarEl: HTMLElement): Promise<void> {
-	sidebarEl.dataset.open = isOpen ? "true" : "false";
-	if (isOpen) {
-		await show().catch(reportAsyncFailure);
-		return;
-	}
-	await hide().catch(reportAsyncFailure);
 }
 
 /**
@@ -108,37 +98,33 @@ async function init(): Promise<void> {
 		}
 	});
 
-	let isNotificationCenterOpen = true;
-	await applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar);
+	const toggleButton = document.querySelector<HTMLButtonElement>("#btnToggleCenter");
+	const toggleLabel = document.querySelector<HTMLElement>("#toggleCenterLabel");
+	const countBadge = document.querySelector<HTMLElement>("#notificationCount");
+
+	addVisibilityListener((visible) => {
+		console.log("Notification Visibility changed to", visible);
+		centerVisible = visible;
+		notificationSidebar.dataset.open = visible ? "true" : "false";
+		if (toggleButton !== null && toggleLabel !== null) {
+			toggleButton.setAttribute("aria-pressed", String(visible));
+		}
+	});
+
+	addNotificationCountListener((count) => {
+		if (countBadge !== null) {
+			countBadge.textContent = String(count);
+		}
+	});
+
+	let centerVisible = false;
+
+	toggleButton?.addEventListener("click", () => {
+		const action = centerVisible ? hide() : show();
+		action.catch(reportAsyncFailure);
+	});
 
 	bindThemeSync();
-
-	window.addEventListener(NOTIFICATION_CENTER_EVENT, (event) => {
-		const customEvent = event as CustomEvent<boolean>;
-		if (typeof customEvent.detail !== "boolean" || customEvent.detail === isNotificationCenterOpen) {
-			return;
-		}
-		isNotificationCenterOpen = customEvent.detail;
-		applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar).catch(reportAsyncFailure);
-	});
-
-	window.addEventListener("message", (event) => {
-		if (event.origin !== window.location.origin) {
-			return;
-		}
-		if (event.data === null || typeof event.data !== "object") {
-			return;
-		}
-		const data = event.data as { type?: string; isOpen?: unknown };
-		if (data.type !== NOTIFICATION_CENTER_MESSAGE_TYPE || typeof data.isOpen !== "boolean") {
-			return;
-		}
-		if (data.isOpen === isNotificationCenterOpen) {
-			return;
-		}
-		isNotificationCenterOpen = data.isOpen;
-		applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar).catch(reportAsyncFailure);
-	});
 }
 
 init().catch((error) => {

@@ -1,13 +1,14 @@
 {
 	"name": "openfin-web--web-notifications",
 	"version": "24.0.0",
-	"description": "OpenFin Web Starter -- Web Notifications",
+	"description": "OpenFin Web Starter -- Web Toast Notifications",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
 		"client": "node ./scripts/launch.mjs",
 		"copy-core-web": "node ./scripts/copy-core-web.js",
 		"build-client": "npm run copy-core-web && webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
+		"prestart": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 6060 -c-1",
 		"setup": "npm install && npm run build",
 		"prettier": "prettier --config .prettierrc --write .",
@@ -20,8 +21,8 @@
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
 		"@openfin/core-web": "0.44.112",
-		"@openfin/notifications": "^2.13.1",
-		"@openfin/web-notifications": "^2.13.1"
+		"@openfin/notifications": "2.14.3",
+		"@openfin/web-notifications": "2.14.3"
 	},
 	"devDependencies": {
 		"@openfin/core": "44.101.4",
@@ -36,7 +37,7 @@
 		"eslint-plugin-simple-import-sort": "12.0.0",
 		"eslint-plugin-unicorn": "51.0.1",
 		"eslint-plugin-unused-imports": "3.1.0",
-		"markdownlint-cli": "0.48.0",
+		"markdownlint-cli": "0.49.0",
 		"prettier": "3.2.5",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.2",
