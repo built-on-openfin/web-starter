@@ -98,6 +98,7 @@ async function init(): Promise<void> {
 	await fin.Platform.Layout.init({ container: layoutContainer });
 
 	await initNotificationCenter({
+		// @ts-expect-error NPM workspace package version conflicts can cause "Two different types with this name exist, but they are unrelated."
 		finContext: fin,
 		serviceId: settings.platform.notificationServiceId,
 		container: notificationCenterContainer,

@@ -37,7 +37,7 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/fdc3/context/2-0/fdc3-broadcast-view.html",
 												"name": "internal-generated-view-primary-2"
 											},
 											"title": "FDC3 Different Domain"
@@ -74,7 +74,7 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/interop-api/context/interop-broadcast-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "internal-generated-view-primary-4"
 											},
 											"title": "Interop External Domain"
@@ -123,7 +123,7 @@
 											"type": "component",
 											"componentName": "view",
 											"componentState": {
-												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v22.0.0/interop/interop-api/context/interop-broadcast-view.html",
+												"url": "https://built-on-openfin.github.io/dev-extensions/extensions/v23.0.0/interop/interop-api/context/interop-broadcast-view.html",
 												"name": "internal-generated-view-primary-7"
 											},
 											"title": "Interop External Domain"

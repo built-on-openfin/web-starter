@@ -19,13 +19,13 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.43.117",
+		"@openfin/core-web": "0.44.108",
 		"@openfin/notifications": "2.13.1",
 		"@openfin/web-notifications": "2.14.1",
 		"@openfin/web-notifications-client": "2.14.1"
 	},
 	"devDependencies": {
-		"@openfin/core": "43.102.2",
+		"@openfin/core": "44.100.109",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

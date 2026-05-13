@@ -29,7 +29,8 @@
 	],
 	"packageCustomFolder": "",
 	"contributors": [
-		"john.mandia@here.io"
+		"john.mandia@here.io",
+		"ray.cashmore@here.io"
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"devDependencies": {
@@ -38,5 +39,7 @@
 		"replace-in-file": "7.1.0",
 		"yargs": "17.7.2"
 	},
-	"overrides": {}
+	"overrides": {
+		"@openfin/core": "44.100.109"
+	}
 }
