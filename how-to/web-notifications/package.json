@@ -20,8 +20,8 @@
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
 		"@openfin/core-web": "0.44.108",
-		"@openfin/notifications": "2.13.1",
-		"@openfin/web-notifications": "2.14.1",
+		"@openfin/notifications": "2.14.1",
+		"@openfin/web-notifications": "2.14.0-alpha-4526",
 		"@openfin/web-notifications-client": "2.14.1"
 	},
 	"devDependencies": {

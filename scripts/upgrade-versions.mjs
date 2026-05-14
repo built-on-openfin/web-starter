@@ -5,6 +5,7 @@
  *  - Update @openfin/core-web version in package.json (if present)
  *  - Update @openfin/cloud-interop version in package.json (if present)
  *  - Update @openfin/core version in package.json (if present)
+ *  - Update @openfin/notifications version in package.json (if present)
  *  - Update @openfin/web-notifications version in package.json (if present)
  *  - Update @openfin/web-notifications-client version in package.json (if present)
  *  - Update top-level "version" in package.json
@@ -36,6 +37,7 @@ const DEFAULT_VERSIONS = {
   core: '44.100.109',
   'core-web': '0.44.108',
   'cloud-interop': '0.44.108',
+  notifications: '2.14.1',
   'web-notifications': '2.14.1',
   'web-notifications-client': '2.14.1'
 };
@@ -71,6 +73,7 @@ async function run() {
     core: args.core,
     cloudInterop: args.cloudInterop,
     coreWeb: args.coreWeb,
+    notifications: args.notifications,
     webNotifications: args.webNotifications,
     webNotificationsClient: args.webNotificationsClient,
     pkgVersion: args.pkgVersion,
@@ -135,6 +138,7 @@ async function run() {
         core: args.core,
         cloudInterop: args.cloudInterop,
         coreWeb: args.coreWeb,
+        notifications: args.notifications,
         webNotifications: args.webNotifications,
         webNotificationsClient: args.webNotificationsClient,
         pkgVersion: args.pkgVersion
@@ -239,6 +243,7 @@ function parseArgs(argv) {
       case '--core': set('core', next); i += 1; break;
       case '--cloud-interop': set('cloudInterop', next); i += 1; break;
       case '--core-web': set('coreWeb', next); i += 1; break;
+      case '--notifications': set('notifications', next); i += 1; break;
       case '--web-notifications': set('webNotifications', next); i += 1; break;
       case '--web-notifications-client': set('webNotificationsClient', next); i += 1; break;
       case '--pkg-version': set('pkgVersion', next); i += 1; break;
@@ -266,6 +271,7 @@ function parseArgs(argv) {
   const core = map.get('core') || DEFAULT_VERSIONS.core;
   const coreWeb = map.get('coreWeb') || DEFAULT_VERSIONS['core-web'];
   const cloudInterop = map.get('cloudInterop') || DEFAULT_VERSIONS['cloud-interop'];
+  const notifications = map.get('notifications') || DEFAULT_VERSIONS['notifications'];
   const webNotifications = map.get('webNotifications') || DEFAULT_VERSIONS['web-notifications'];
   const webNotificationsClient = map.get('webNotificationsClient') || DEFAULT_VERSIONS['web-notifications-client'];
   const pkgVersion = map.get('pkgVersion') || DEFAULT_VERSIONS.major;
@@ -277,6 +283,7 @@ function parseArgs(argv) {
     core,
     coreWeb,
     cloudInterop,
+    notifications,
     webNotifications,
     webNotificationsClient,
     pkgVersion,
@@ -298,6 +305,7 @@ function printHelp() {
     `  --core <ver>             Set @openfin/core (default ${DEFAULT_VERSIONS.core})\n` +
     `  --cloud-interop <ver>    Set @openfin/cloud-interop (default ${DEFAULT_VERSIONS['cloud-interop']})\n` +
     `  --core-web <ver>         Set @openfin/core-web (default ${DEFAULT_VERSIONS['core-web']})\n` +
+    `  --notifications <ver>    Set @openfin/notifications (default ${DEFAULT_VERSIONS['notifications']})\n` +
     `  --web-notifications <ver> Set @openfin/web-notifications (default ${DEFAULT_VERSIONS['web-notifications']})\n` +
     `  --web-notifications-client <ver> Set @openfin/web-notifications-client (default ${DEFAULT_VERSIONS['web-notifications-client']})\n` +
     `  --pkg-version <ver>      Set top-level package.json \"version\" (default ${DEFAULT_VERSIONS.major})\n\n` +
@@ -332,6 +340,7 @@ function updatePackageVersions(pkgJson, versions) {
     setIfPresent(sec, '@openfin/core', versions.core);
     setIfPresent(sec, '@openfin/cloud-interop', versions.cloudInterop);
     setIfPresent(sec, '@openfin/core-web', versions.coreWeb);
+    setIfPresent(sec, '@openfin/notifications', versions.notifications);
     setIfPresent(sec, '@openfin/web-notifications', versions.webNotifications);
     setIfPresent(sec, '@openfin/web-notifications-client', versions.webNotificationsClient);
   }

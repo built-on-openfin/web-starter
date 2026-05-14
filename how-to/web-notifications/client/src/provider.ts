@@ -1,16 +1,34 @@
 import { connect } from "@openfin/core-web";
-import { hide, initNotificationCenter, setTheme, show } from "@openfin/web-notifications";
+import {
+	hide,
+	initNotificationCenter,
+	setTheme,
+	show,
+	type CustomPaletteSet
+} from "@openfin/web-notifications";
 import { getDefaultLayout, getSettings } from "./platform/settings";
 
 const NOTIFICATION_CENTER_EVENT = "notificationCenterSetOpen";
 const NOTIFICATION_CENTER_MESSAGE_TYPE = "notification-center-set-open";
+
+const DARK_PALETTE: CustomPaletteSet = {
+	brandPrimary: "#0E78E6",
+	brandSecondary: "#1E90FF",
+	backgroundPrimary: "#1A1A1A"
+};
+
+const LIGHT_PALETTE: CustomPaletteSet = {
+	brandPrimary: "#0E78E6",
+	brandSecondary: "#0066CC",
+	backgroundPrimary: "#FFFFFF"
+};
 
 /**
  * Applies notification center color scheme.
  * @param isDark Whether dark mode is active.
  */
 async function applyScheme(isDark: boolean): Promise<void> {
-	await setTheme({ scheme: isDark ? "dark" : "light" });
+	await setTheme({ palette: isDark ? DARK_PALETTE : LIGHT_PALETTE });
 }
 
 /**
@@ -98,7 +116,6 @@ async function init(): Promise<void> {
 	await fin.Platform.Layout.init({ container: layoutContainer });
 
 	await initNotificationCenter({
-		// @ts-expect-error NPM workspace package version conflicts can cause "Two different types with this name exist, but they are unrelated."
 		finContext: fin,
 		serviceId: settings.platform.notificationServiceId,
 		container: notificationCenterContainer,
