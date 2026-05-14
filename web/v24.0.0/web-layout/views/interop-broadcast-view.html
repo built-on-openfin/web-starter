@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Context using Interop API</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/interop-broadcast-view.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Context using Interop API</h1>
+				<h1 class="tag">Set and Listen To Context - Basic view (see <a href="https://github.com/built-on-openfin/web-starter" target="_blank">live launch</a> version for more options)</h1>
+			</div>
+		</header>
+		<main class="fill row gap20">
+			<div class="col fill scroll-vertical gap10">
+				<fieldset>
+					<label
+						for="contextGroupType"
+						title="There are different types of context groups you can set and listen against. System Context Groups are defined by the platform and Session Context Groups are custom application channels."
+					>
+						Context Group Type
+					</label>
+					<select name="contextGroupType" id="contextGroupType">
+						<option value="systemContextGroup">System Context Group</option>
+						<option value="sessionContextGroup">Session Context Group</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label
+						for="fdc3Type"
+						title="What type of context objects are you looking to send. We provide a list of the supported FDC3 types but you can define your own context objects."
+					>
+						Context Type
+					</label>
+					<select name="fdc3Type" id="fdc3Type">
+						<option value="fdc3.instrument">fdc3.instrument</option>
+						<option value="fdc3.contact">fdc3.contact</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label
+						for="fdc3Value"
+						title="We provide at least one example based on the context type selected. You can use this to see the default structure of these context types."
+					>
+						Sample Data
+					</label>
+					<select name="fdc3Value" id="fdc3Value"></select>
+				</fieldset>
+				<fieldset>
+					<label
+						for="context"
+						title="We populate this text area with the value selected from the dropdown above but you can also customize it to publish your own context types."
+					>
+						Context To Send
+					</label>
+					<textarea id="context" rows="10" style="width: 100%"></textarea>
+				</fieldset>
+			</div>
+			<div class="col fill gap10">
+				<fieldset class="fill">
+					<label>Received Context</label>
+					<pre id="contextBody" class="fill scroll-vertical"></pre>
+				</fieldset>
+			</div>
+		</main>
+		<footer>
+			<button id="btnSetContext">Execute</button>
+		</footer>
+	</body>
+</html>
