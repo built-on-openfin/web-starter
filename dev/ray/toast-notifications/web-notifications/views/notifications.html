@@ -3,50 +3,80 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<title></title>
+		<title>Notifications</title>
 		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 		<link rel="stylesheet" href="../common/style/app.css" />
 		<script defer="defer" src="../js/notifications.bundle.js"></script>
 		<link rel="manifest" href="../manifest.json" />
 	</head>
 
-	<body class="col fill gap20">
-		<header class="row spread middle">
-			<div class="col">
-				<h1>Notifications</h1>
-			</div>
-			<div class="row middle gap10">
-				<image src="../common/images/here.png" alt="HERE" height="40px"></image>
-			</div>
-		</header>
-		<main class="fill col scroll-vertical gap10">
-			<div class="form-group large">
-				<h2>Try it</h2>
-				<p>Use these controls to test both toast types and open/close the Notification Center overlay.</p>
-				<ul class="demo-instructions">
-					<li>
-						<strong>Transient toast</strong>
-						appears briefly, then auto-dismisses.
-					</li>
-					<li>
-						<strong>Sticky toast</strong>
-						remains visible until dismissed by the user.
-					</li>
-					<li>
-						<strong>Hide/Show Notification Center</strong>
-						toggles center visibility without disabling toasts.
-					</li>
-				</ul>
-				<div class="col gap10 actions-stack">
-					<button id="btnToastTransient" class="secondary">Transient toast</button>
-					<button id="btnToastSticky" class="secondary">Sticky toast</button>
-					<button id="btnToggleCenter" class="secondary">Hide Notification Center</button>
+	<body class="col fill gap20 notifications-view" style="background-color: var(--frame-background-color);">
+		<main class="fill notifications-layout">
+			<section class="card form-card" aria-labelledby="composeHeading">
+				<h2 id="composeHeading">Compose</h2>
+				<p class="card-hint">Fields map directly to the <code>NotificationOptions</code> passed to <code>create()</code>.</p>
+
+				<div class="field">
+					<label for="nTitle">Title</label>
+					<input id="nTitle" type="text" class="full" maxlength="80" value="Market price alert" />
+				</div>
+
+				<div class="field">
+					<label for="nBody">Body <span class="field-hint">(Markdown supported)</span></label>
+					<textarea id="nBody" class="full" rows="3">AAPL moved **1.2%** in the last five minutes.</textarea>
+				</div>
+
+				<div class="field-row">
+					<div class="field grow">
+						<label for="nToast">Toast mode</label>
+						<select id="nToast" class="full">
+							<option value="transient">transient — auto-dismiss</option>
+							<option value="sticky">sticky — until clicked</option>
+							<option value="none">none — center only</option>
+						</select>
+					</div>
+					<div class="field grow">
+						<label for="nPriority">Priority</label>
+						<select id="nPriority" class="full">
+							<option value="1">1 — Low</option>
+							<option value="2">2 — Normal</option>
+							<option value="3" selected>3 — High</option>
+							<option value="4">4 — Critical (alert)</option>
+						</select>
+					</div>
+				</div>
+
+				<label class="checkbox-field">
+					<input id="nIncludeButtons" type="checkbox" />
+					<span>Include <strong>Approve</strong> / <strong>Dismiss</strong> action buttons</span>
+				</label>
+
+				<div class="form-actions">
+					<button id="btnCreate">Create notification</button>
+					<button id="btnGetAll" class="secondary">List from this client</button>
+					<button id="btnClearAll" class="secondary">Clear all</button>
+					<button id="btnToggleCenter" class="secondary">Toggle Notification Center</button>
+				</div>
+			</section>
+
+			<section class="card log-card" aria-labelledby="logHeading">
+				<header class="card-header row spread middle">
+					<h2 id="logHeading">Event log</h2>
+					<button id="btnClearLog" class="link-button">Clear log</button>
+				</header>
+				<div id="eventLog" class="event-log" aria-live="polite" aria-atomic="false"></div>
+			</section>
+		</main>
+
+		<footer class="card status-card">
+			<div class="status-card-header">
+				<h3>Status</h3>
+				<div class="count-pill" aria-label="Notifications currently in center">
+					<span class="count-pill-label">In Center</span>
+					<span id="notificationCount" class="count-pill-value">0</span>
 				</div>
 			</div>
-			<div class="form-group">
-				<h3>Status</h3>
-				<p id="status" class="status status-info">Connecting to notifications client...</p>
-			</div>
-		</main>
+			<p id="status" class="status status-info">Connecting to notifications client...</p>
+		</footer>
 	</body>
 </html>

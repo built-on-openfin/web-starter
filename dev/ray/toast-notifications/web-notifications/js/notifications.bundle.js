@@ -6843,6 +6843,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.init = init;
 exports.getNotificationsClient = getNotificationsClient;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "./node_modules/@openfin/core-web/out/api-client.cjs.js");
+const web_notifications_client_1 = __webpack_require__(/*! @openfin/web-notifications-client */ "./node_modules/@openfin/web-notifications-client/dist/client/index.js");
 const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
 const CLIENT_ID = "web-notifications-main";
 const CLIENT_TITLE = "Web Notifications";
@@ -6873,8 +6874,7 @@ class NotificationsClient {
         }
         this._connecting = true;
         try {
-            const { connectToNotifications } = await __webpack_require__.e(/*! import() */ "vendors-node_modules_openfin_web-notifications-client_dist_client_index_js").then(__webpack_require__.t.bind(__webpack_require__, /*! @openfin/web-notifications-client */ "./node_modules/@openfin/web-notifications-client/dist/client/index.js", 23));
-            await connectToNotifications({
+            await (0, web_notifications_client_1.connectToNotifications)({
                 environment: "web",
                 finContext,
                 serviceId,
@@ -6892,35 +6892,74 @@ class NotificationsClient {
         }
     }
     /**
-     * Helper for creating markdown notifications quickly.
-     * @param title Notification title.
-     * @param body Notification body.
-     * @param toast Desktop toast mode.
-     */
-    async notify(title, body, toast = "transient") {
-        await this.create({
-            template: "markdown",
-            title,
-            body,
-            toast
-        });
-    }
-    /**
      * Creates a notification.
      * @param options Notification payload.
+     * @returns The created notification record.
      */
     async create(options) {
+        this.requireConnected();
+        return (0, web_notifications_client_1.create)(options);
+    }
+    /**
+     * Returns every notification this client has created that is still in the Notification Center.
+     * @returns Array of notifications.
+     */
+    async getAll() {
+        this.requireConnected();
+        return (0, web_notifications_client_1.getAll)();
+    }
+    /**
+     * Removes a single notification by id.
+     * @param id Notification id.
+     * @returns True if the notification was removed.
+     */
+    async clear(id) {
+        this.requireConnected();
+        return (0, web_notifications_client_1.clear)(id);
+    }
+    /**
+     * Removes every notification this client has created.
+     * @returns Count of notifications removed.
+     */
+    async clearAll() {
+        this.requireConnected();
+        return (0, web_notifications_client_1.clearAll)();
+    }
+    /**
+     * Number of notifications currently in the Notification Center (across all sources).
+     * @returns Notification count.
+     */
+    async getCount() {
+        this.requireConnected();
+        return (0, web_notifications_client_1.getNotificationsCount)();
+    }
+    /**
+     * Toggle Notification Center visibility through the SDK's RPC channel. The provider
+     * is expected to subscribe to addVisibilityListener and update its host chrome from
+     * there, so this is fire-and-forget from the producer's perspective.
+     */
+    async toggleCenter() {
+        this.requireConnected();
+        await (0, web_notifications_client_1.toggleNotificationCenter)();
+    }
+    /**
+     * Subscribe to a notification lifecycle event.
+     * @param type Event name.
+     * @param listener Listener that receives the typed event payload.
+     */
+    async on(type, listener) {
+        this.requireConnected();
+        // The SDK exposes a discriminated-union overload set; cast through unknown so we
+        // can dispatch any of the supported event names from one wrapper.
+        await web_notifications_client_1.addEventListener(type, listener);
+    }
+    /**
+     * Throws if the client hasn't connected yet. Producer-side calls all require a live broker channel.
+     * @throws {Error} Thrown when the notifications client is not connected.
+     */
+    requireConnected() {
         if (!this._connected) {
-            console.warn("Notifications client is not connected.");
-            return;
-        }
-        try {
-            const { create } = await __webpack_require__.e(/*! import() */ "vendors-node_modules_openfin_web-notifications-client_dist_client_index_js").then(__webpack_require__.t.bind(__webpack_require__, /*! @openfin/web-notifications-client */ "./node_modules/@openfin/web-notifications-client/dist/client/index.js", 23));
-            await create(options);
-        }
-        catch (error) {
-            console.error("Unable to create notification.", error);
-            throw error;
+            throw new Error("Notifications client is not connected.");
         }
     }
 }
@@ -7949,6 +7988,16 @@ var t=__webpack_require__(/*! ./main-0ca8f4a4.js */ "./node_modules/@openfin/cor
  var t; }async onViewDetached({viewIdentity:t}){this.reparentingViews.add(t.name),this.platformCloseView(t)}async destroy(){this.platformProvider.unregisterEmitter(this.identity.layoutName),this.goldenLayoutDestroyed||(this.goldenLayoutDestroyed=!0,this.layout.destroy()),this.iframeContainer.remove(),this.resizeController.destroy(),this.viewComponentsByContainerElement.clear()}setupListeners(){this.container.addEventListener("pointerdown",t=>{if(t.target instanceof HTMLElement){const e=t.target.classList;["lm_tab","lm_title","lm_splitter","lm_drag_handle"].some(t=>e.contains(t))&&(this.handleDragStart(),2===t.button&&t.stopPropagation())}},!0),document.addEventListener("pointerup",()=>this.handleDragEnd(),!0),this.layout.on("tabCreated",t=>{const e=t.componentItem.component;!1===e.componentState[`${Kt}isClosable`]&&t.element.setAttribute("data-is-closable","false"),t.element.setAttribute("data-view-name",e.identity.name),t.element.id=`tab-${e.identity.name}`,this.domEmitter.dispatchLocalEvent("tab-created",e.identity)}),this.layout.on("itemCreated",({target:t})=>{const e=t;if(Tt.isComponentItem(e)){const t=e.component;this.domEmitter.dispatchLocalEvent("container-created",t.identity)}Ft.isStack(e)&&(e.toggleMaximise=()=>this.toggleMaximise(e),this.ensureNewTabButton(e))}),this.layout.on("itemDestroyed",t=>{const e=t.target;if(Tt.isComponentItem(e)){const t=e.component;this.removeViewComponent(t)}}),this.layout.on("itemDropped",()=>{this.handleDragEnd()}),this.events.on("page-title-updated",({data:{identity:e,title:i}})=>{this.identity.uuid===e.uuid&&t.__classPrivateFieldGet(this,we,"m",Ce).call(this,e.name)?.setTitle(i)})}handleDragStart(){this.iframeContainer.style.pointerEvents="none"}handleDragEnd(){this.iframeContainer.style.pointerEvents=""}toggleMaximise(t){const e=(t,e)=>{const i=this.layout.findFirstComponentItemById(t.identity.name);return i&&i.parent&&i.parent.isStack&&i.parent.element===e},i=[...this.viewComponentsByContainerElement.values()].filter(i=>!e(i,t.element)),n=[...this.viewComponentsByContainerElement.values()].find(i=>i.isActive()&&e(i,t.element)),o=(t,e)=>{t&&t.toggleZIndex(e)},s=t=>{i.forEach(e=>{e&&e.setIsMinimised(t)})};t.isMaximised?(t.minimise(),o(n,!1),s(!1)):(s(!0),t.maximise(),o(n,!0))}removeViewComponent(t){t.destroy(),this.viewComponentsByContainerElement.delete(t.container.element),this.resizeController.unobserveContainer(t.container.element),this.reparentingViews.has(t.identity.name)?this.reparentingViews.delete(t.identity.name):this.platformProvider.closeView(t.identity.name);0===this.getCurrentViews().length&&(this.goldenLayoutDestroyed||(this.goldenLayoutDestroyed=!0,C.handleLastViewRemoved(this.layoutManager,this.identity)))}}we=new WeakSet,Ce=function(t){return[...this.viewComponentsByContainerElement.values()].find(e=>e.identity.name===t)};class Se{constructor(e,i,n,o){this.wire=e,this.connectConfig=i,this.provider=n,this.fallbackContainer=o,t.Logger.setGlobalLogLevel(i.logLevel)}async createLayout(t,e){if(!("container"in t)&&!this.fallbackContainer)throw new Error("Container property is not optional in web");const{layoutName:i}=t,n=t,o=this.provider.initLayoutViews(n),s=n.container??this.fallbackContainer,r={...this.wire.me,layoutName:i},a=new be(r,s,o,this.connectConfig,e,this.provider);C.registerLayout(e,i,a),this.fallbackContainer=null}async getLayoutSnapshot(t){return t.getLayoutSnapshot()}async handleLastViewRemoved(t){}getWire(){return this.wire}}class Ee{static async init(e){const i=e.getFin().InterApplicationBus.Channel,n=await i.create(`custom-frame-${e.me.uuid}`);n.setDefaultAction(async(t,{target:e,opts:i},o)=>{const s=n.connections.find(t=>t.name===e.name);if(s)return n.dispatch(s,t,{...i,target:e});throw new Error(`Client with name ${e.name} not found`)}),await t.relayChannelClientApi(n,"layout-relay");const o=await i.create(t.getDataChannelName(e));return new Ee(e,o)}constructor(t,e){this.wire=t,this.dataChannelProvider=e,this.emitters=new Map,this.viewNames=new Set,e.register("page-title-updated",t=>{[...this.emitters.values()].forEach(e=>{e.emit("page-title-updated",t)})})}registerEmitter(t,e){this.emitters.set(t,e)}unregisterEmitter(t){this.emitters.delete(t)}normalizeOptions(t,e="default"){const i=this.wire.me.uuid;let{name:o=`internal-generated-view-${n.v4()}`}=t;return o.match(/^internal-generated-view-/)&&this.viewNames.has(o)&&"duplicate"===e&&(o=`internal-generated-view-${n.v4()}`),this.viewNames.add(o),{...t,name:o,uuid:i}}closeView(t){this.viewNames.delete(t)}initLayoutViews({layout:t,multiInstanceViewBehavior:e}){return m(t=>{if("component"===t.type&&t.componentState){const i=this.normalizeOptions(t.componentState,e);return{...t,componentState:i}}return t},t)}}var xe;const Le=t=>t;xe=new WeakMap,exports.WebLayoutEntryPoint=class{constructor(e){xe.set(this,void 0),this.initLayoutManager=async(e,i,{container:n,layoutManagerOverride:o})=>{const s=await Ee.init(i),r=o??Le,a=new Se(i,t.__classPrivateFieldGet(this,xe,"f"),s,n),l=new(r(C.createClosedConstructor(a)));return await z(i,l),l},this.applyLayoutSnapshot=async(e,i,n)=>{await i.applyLayoutSnapshot(t.__classPrivateFieldGet(this,xe,"f").platform.layoutSnapshot)},this.createLayout=async(t,e)=>C.createLayout(t,e),this.destroyLayout=async(t,e)=>C.destroyLayout(t,e),t.__classPrivateFieldSet(this,xe,e,"f")}};
 
 
+/***/ },
+
+/***/ "./node_modules/@openfin/web-notifications-client/dist/client/index.js"
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@openfin/web-notifications-client/dist/client/index.js ***!
+  \*****************************************************************************/
+(module) {
+
+!function(e,t){ true?module.exports=t():0}(this,(()=>(()=>{"use strict";var e={7(e){var t,n="object"==typeof Reflect?Reflect:null,i=n&&"function"==typeof n.apply?n.apply:function(e,t,n){return Function.prototype.apply.call(e,t,n)};t=n&&"function"==typeof n.ownKeys?n.ownKeys:Object.getOwnPropertySymbols?function(e){return Object.getOwnPropertyNames(e).concat(Object.getOwnPropertySymbols(e))}:function(e){return Object.getOwnPropertyNames(e)};var o=Number.isNaN||function(e){return e!=e};function r(){r.init.call(this)}e.exports=r,e.exports.once=function(e,t){return new Promise((function(n,i){function o(n){e.removeListener(t,r),i(n)}function r(){"function"==typeof e.removeListener&&e.removeListener("error",o),n([].slice.call(arguments))}h(e,t,r,{once:!0}),"error"!==t&&function(e,t){"function"==typeof e.on&&h(e,"error",t,{once:!0})}(e,o)}))},r.EventEmitter=r,r.prototype._events=void 0,r.prototype._eventsCount=0,r.prototype._maxListeners=void 0;var a=10;function s(e){if("function"!=typeof e)throw new TypeError('The "listener" argument must be of type Function. Received type '+typeof e)}function c(e){return void 0===e._maxListeners?r.defaultMaxListeners:e._maxListeners}function l(e,t,n,i){var o,r,a,l;if(s(n),void 0===(r=e._events)?(r=e._events=Object.create(null),e._eventsCount=0):(void 0!==r.newListener&&(e.emit("newListener",t,n.listener?n.listener:n),r=e._events),a=r[t]),void 0===a)a=r[t]=n,++e._eventsCount;else if("function"==typeof a?a=r[t]=i?[n,a]:[a,n]:i?a.unshift(n):a.push(n),(o=c(e))>0&&a.length>o&&!a.warned){a.warned=!0;var u=new Error("Possible EventEmitter memory leak detected. "+a.length+" "+String(t)+" listeners added. Use emitter.setMaxListeners() to increase limit");u.name="MaxListenersExceededWarning",u.emitter=e,u.type=t,u.count=a.length,l=u,console&&console.warn&&console.warn(l)}return e}function u(){if(!this.fired)return this.target.removeListener(this.type,this.wrapFn),this.fired=!0,0===arguments.length?this.listener.call(this.target):this.listener.apply(this.target,arguments)}function d(e,t,n){var i={fired:!1,wrapFn:void 0,target:e,type:t,listener:n},o=u.bind(i);return o.listener=n,i.wrapFn=o,o}function f(e,t,n){var i=e._events;if(void 0===i)return[];var o=i[t];return void 0===o?[]:"function"==typeof o?n?[o.listener||o]:[o]:n?function(e){for(var t=new Array(e.length),n=0;n<t.length;++n)t[n]=e[n].listener||e[n];return t}(o):v(o,o.length)}function p(e){var t=this._events;if(void 0!==t){var n=t[e];if("function"==typeof n)return 1;if(void 0!==n)return n.length}return 0}function v(e,t){for(var n=new Array(t),i=0;i<t;++i)n[i]=e[i];return n}function h(e,t,n,i){if("function"==typeof e.on)i.once?e.once(t,n):e.on(t,n);else{if("function"!=typeof e.addEventListener)throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type '+typeof e);e.addEventListener(t,(function o(r){i.once&&e.removeEventListener(t,o),n(r)}))}}Object.defineProperty(r,"defaultMaxListeners",{enumerable:!0,get:function(){return a},set:function(e){if("number"!=typeof e||e<0||o(e))throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received '+e+".");a=e}}),r.init=function(){void 0!==this._events&&this._events!==Object.getPrototypeOf(this)._events||(this._events=Object.create(null),this._eventsCount=0),this._maxListeners=this._maxListeners||void 0},r.prototype.setMaxListeners=function(e){if("number"!=typeof e||e<0||o(e))throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received '+e+".");return this._maxListeners=e,this},r.prototype.getMaxListeners=function(){return c(this)},r.prototype.emit=function(e){for(var t=[],n=1;n<arguments.length;n++)t.push(arguments[n]);var o="error"===e,r=this._events;if(void 0!==r)o=o&&void 0===r.error;else if(!o)return!1;if(o){var a;if(t.length>0&&(a=t[0]),a instanceof Error)throw a;var s=new Error("Unhandled error."+(a?" ("+a.message+")":""));throw s.context=a,s}var c=r[e];if(void 0===c)return!1;if("function"==typeof c)i(c,this,t);else{var l=c.length,u=v(c,l);for(n=0;n<l;++n)i(u[n],this,t)}return!0},r.prototype.addListener=function(e,t){return l(this,e,t,!1)},r.prototype.on=r.prototype.addListener,r.prototype.prependListener=function(e,t){return l(this,e,t,!0)},r.prototype.once=function(e,t){return s(t),this.on(e,d(this,e,t)),this},r.prototype.prependOnceListener=function(e,t){return s(t),this.prependListener(e,d(this,e,t)),this},r.prototype.removeListener=function(e,t){var n,i,o,r,a;if(s(t),void 0===(i=this._events))return this;if(void 0===(n=i[e]))return this;if(n===t||n.listener===t)0==--this._eventsCount?this._events=Object.create(null):(delete i[e],i.removeListener&&this.emit("removeListener",e,n.listener||t));else if("function"!=typeof n){for(o=-1,r=n.length-1;r>=0;r--)if(n[r]===t||n[r].listener===t){a=n[r].listener,o=r;break}if(o<0)return this;0===o?n.shift():function(e,t){for(;t+1<e.length;t++)e[t]=e[t+1];e.pop()}(n,o),1===n.length&&(i[e]=n[0]),void 0!==i.removeListener&&this.emit("removeListener",e,a||t)}return this},r.prototype.off=r.prototype.removeListener,r.prototype.removeAllListeners=function(e){var t,n,i;if(void 0===(n=this._events))return this;if(void 0===n.removeListener)return 0===arguments.length?(this._events=Object.create(null),this._eventsCount=0):void 0!==n[e]&&(0==--this._eventsCount?this._events=Object.create(null):delete n[e]),this;if(0===arguments.length){var o,r=Object.keys(n);for(i=0;i<r.length;++i)"removeListener"!==(o=r[i])&&this.removeAllListeners(o);return this.removeAllListeners("removeListener"),this._events=Object.create(null),this._eventsCount=0,this}if("function"==typeof(t=n[e]))this.removeListener(e,t);else if(void 0!==t)for(i=t.length-1;i>=0;i--)this.removeListener(e,t[i]);return this},r.prototype.listeners=function(e){return f(this,e,!0)},r.prototype.rawListeners=function(e){return f(this,e,!1)},r.listenerCount=function(e,t){return"function"==typeof e.listenerCount?e.listenerCount(t):p.call(e,t)},r.prototype.listenerCount=p,r.prototype.eventNames=function(){return this._eventsCount>0?t(this._events):[]}},89(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.DeferredPromise=class{constructor(){const e=new Promise(((e,t)=>{this._resolve=e,this._reject=t}));this._promise=e}get promise(){return this._promise}get resolve(){return this._resolve}get reject(){return this._reject}}},777(e,t,n){Object.defineProperty(t,"__esModule",{value:!0});const i=n(89);async function o(e,t){let n=0;for(const i of e)await t(i,n,e),n++}async function r(e,t){await Promise.all(e.map(t))}function a(e,t,n){const o=new i.DeferredPromise,r=e.add(((...e)=>{t(...e)&&(r.remove(),o.resolve())}));return n&&n.catch((e=>{r.remove(),o.reject(e)})),s(o.promise)}function s(e){return e.catch((()=>{})),e}t.serialForEach=o,t.serialMap=async function(e,t){const n=[];return await o(e,(async(e,i,o)=>{n.push(await t(e,i,o))})),n},t.serialFilter=async function(e,t){const n=[];return await o(e,(async(e,i,o)=>{await t(e,i,o)&&n.push(e)})),n},t.parallelForEach=r,t.parallelMap=async function(e,t){const n=[];return await r(e,(async(e,i,o)=>{n[i]=await t(e,i,o)})),n},t.parallelFilter=async function(e,t){const n=[];return await r(e,(async(e,i,o)=>{n[i]=await t(e,i,o)})),e.filter(((e,t)=>n[t]))},t.withStrictTimeout=function(e,t,n){const i=new Promise(((t,i)=>setTimeout((()=>i(new Error(n))),e)));return s(Promise.race([i,t]))},t.withTimeout=function(e,t){const n=new Promise((t=>setTimeout((()=>t([!0,void 0])),e))),i=t.then((e=>[!1,e]));return Promise.race([n,i])},t.untilTrue=function(e,t,n){return t()?Promise.resolve():a(e,t,n)},t.untilSignal=a,t.allowReject=s},785(e,t,n){function i(e){for(var n in e)t.hasOwnProperty(n)||(t[n]=e[n])}Object.defineProperty(t,"__esModule",{value:!0}),i(n(777)),i(n(89))},471(e,t,n){var i=this&&this.__rest||function(e,t){var n={};for(var i in e)Object.prototype.hasOwnProperty.call(e,i)&&t.indexOf(i)<0&&(n[i]=e[i]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var o=0;for(i=Object.getOwnPropertySymbols(e);o<i.length;o++)t.indexOf(i[o])<0&&Object.prototype.propertyIsEnumerable.call(e,i[o])&&(n[i[o]]=e[i[o]])}return n};Object.defineProperty(t,"__esModule",{value:!0}),t.getEventRouter=t.eventEmitter=t.EventRouter=void 0;const o=n(7),r=n(902),a=n(349);class s{constructor(e){this._emitterProviders={},this._deserializers={},this._defaultEmitter=e}registerEmitterProvider(e,t){this._emitterProviders[e]=t}registerDeserializer(e,t){this._deserializers[e]=t}dispatchEvent(e){const{type:t,target:n}=e,o=i(e,["type","target"]);let s;if(!n)throw new Error("Invalid event, no target specified");if("default"===n)s=this._defaultEmitter;else{if(!this._emitterProviders[n.type])throw new Error(`Invalid target, no provider registered for '${n.type}'`);s=this._emitterProviders[n.type](n.id)}const c=Object.assign({type:t},o),l=this._deserializers[t];l?s.emit(t,l(c)):"notification-form-submitted"===t?function(e,t){let n=!1;e.preventDefault=()=>n=!0,t.emit("notification-form-submitted",e),n||(0,r.tryServiceDispatch)(a.APITopic.SET_FORM_STATUS_OPTIONS,{formStatus:"submitted",_notificationId:e.notification.id})}(c,s):s.emit(t,c)}}let c;t.EventRouter=s,t.eventEmitter=new o.EventEmitter,t.getEventRouter=function(){return c||(c=new s(t.eventEmitter)),c}},158(e,t){var n;Object.defineProperty(t,"__esModule",{value:!0}),t.ActionBodyClickType=t.ActionNoopType=t.ActionTrigger=void 0,(n=t.ActionTrigger||(t.ActionTrigger={})).CONTROL="control",n.SELECT="select",n.CLOSE="close",n.EXPIRE="expire",n.PROGRAMMATIC="programmatic",(t.ActionNoopType||(t.ActionNoopType={})).EVENT_DISMISS="event_dismiss",(t.ActionBodyClickType||(t.ActionBodyClickType={})).DISMISS_EVENT="dismiss_event"},793(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.getChannelClient=t.clearAwaitedChannelClient=t.initAwaitedChannelClient=t.ServiceConfig=void 0;const i=n(349),o=n(36),r=n(329);t.ServiceConfig={serviceChannel:i.SERVICE_CHANNEL,serviceUuid:i.SERVICE_IDENTITY.uuid,routingEnabled:!1};const a=async({wait:e})=>{await o.Log.info(`Connecting to Notifications (${t.ServiceConfig.serviceChannel})...`);const n=await r.finContext.InterApplicationBus.Channel.connect(t.ServiceConfig.serviceChannel,{wait:e,payload:{version:"2.14.0-alpha-4623"}});return await o.Log.info(`Successfully connected to Notifications (${t.ServiceConfig.serviceChannel}).`),n};let s,c;t.initAwaitedChannelClient=()=>s?{channelClientPromise:s,isInit:!1}:(s=a({wait:!0}),s.catch((e=>(0,t.clearAwaitedChannelClient)())),{channelClientPromise:s,isInit:!0}),t.clearAwaitedChannelClient=()=>{s=null},t.getChannelClient=async()=>s||(async()=>{if(!c){try{c=await a({wait:!1}),c.setDefaultAction((()=>!1))}catch(e){throw await o.Log.error('Could not find channel provider. Did you call "notifications.register()"?'),e}c.onDisconnection((()=>{c=null}))}return c})()},329(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.setFinContext=t.finContext=void 0,t.setFinContext=e=>{t.finContext=e}},578(e,t){Object.defineProperty(t,"__esModule",{value:!0})},610(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.defaultValidateEnvironment=t.defaultDispatch=void 0;const i=n(793),o=n(329);t.defaultDispatch=async function(e,t){return(await(0,i.getChannelClient)()).dispatch(e,t)},t.defaultValidateEnvironment=function(){if(void 0===o.finContext)throw new Error("fin is not defined. The openfin-notifications module is only intended for use in an OpenFin application.")}},902(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.setDispatchMethod=t.tryServiceDispatch=void 0,t.tryServiceDispatch=async(e,t)=>{throw new Error("Environment is not initialized..")},t.setDispatchMethod=e=>{t.tryServiceDispatch=e}},919(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.validateExternalProviderInfo=void 0,t.validateExternalProviderInfo=function(e){if(!e.id)throw new Error("id must be a non-zero length and must be a unique identifier of the provider.");if(!e.title)throw new Error("title must be a non-zero length.");if(!e.serviceId)throw new Error("serviceId must be a non-zero length and must match the service id of the Web Notification Center instance.")}},637(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.FieldType=void 0,t.FieldType={string:"string",number:"number",boolean:"boolean",date:"date",checkboxGroup:"checkboxGroup",radioGroup:"radioGroup",time:"time"}},2(e,t,n){var i=this&&this.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(t,n);o&&!("get"in o?!t.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,o)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),o=this&&this.__exportStar||function(e,t){for(var n in e)"default"===n||Object.prototype.hasOwnProperty.call(t,n)||i(t,e,n)};Object.defineProperty(t,"__esModule",{value:!0}),o(n(637),t),o(n(155),t)},155(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.WidgetType=t.TimeWidgetType=t.DateWidgetType=t.RadioGroupWidgetType=t.CheckboxGroupWidgetType=t.BooleanWidgetType=t.NumberWidgetType=t.StringWidgetType=void 0,t.StringWidgetType={Text:"Text",Dropdown:"Dropdown"},t.NumberWidgetType={Number:"Number"},t.BooleanWidgetType={Toggle:"Toggle",Checkbox:"Checkbox"},t.CheckboxGroupWidgetType={CheckboxGroup:"CheckboxGroup"},t.RadioGroupWidgetType={RadioGroup:"RadioGroup"},t.DateWidgetType={Date:"Date"},t.TimeWidgetType={Time:"Time"},t.WidgetType=Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({},t.StringWidgetType),t.NumberWidgetType),t.BooleanWidgetType),t.CheckboxGroupWidgetType),t.RadioGroupWidgetType),t.DateWidgetType),t.TimeWidgetType)},403(e,t){var n,i;Object.defineProperty(t,"__esModule",{value:!0}),t.IndicatorColor=t.IndicatorType=void 0,(i=t.IndicatorType||(t.IndicatorType={})).FAILURE="failure",i.WARNING="warning",i.SUCCESS="success",(n=t.IndicatorColor||(t.IndicatorColor={})).RED="red",n.GREEN="green",n.YELLOW="yellow",n.BLUE="blue",n.PURPLE="purple",n.GRAY="gray",n.ORANGE="orange",n.MAGENTA="magenta",n.TEAL="teal"},349(e,t){var n;Object.defineProperty(t,"__esModule",{value:!0}),t.eventTypes=t.APITopic=t.getChannelName=t.SERVICE_CHANNEL=t.SERVICE_IDENTITY=void 0,t.SERVICE_IDENTITY={uuid:"notifications-service",name:"notifications-service"},t.SERVICE_CHANNEL="of-notifications-service-v1",t.getChannelName=e=>e===t.SERVICE_IDENTITY.uuid?t.SERVICE_CHANNEL:`${e}-${t.SERVICE_CHANNEL}`,(n=t.APITopic||(t.APITopic={})).CREATE_NOTIFICATION="create-notification",n.UPDATE_NOTIFICATION="update-notification",n.CLEAR_NOTIFICATION="clear-notification",n.SET_REMINDER="set-reminder",n.CANCEL_REMINDER="cancel-reminder",n.GET_APP_NOTIFICATIONS="fetch-app-notifications",n.CLEAR_APP_NOTIFICATIONS="clear-app-notifications",n.TOGGLE_NOTIFICATION_CENTER="toggle-notification-center",n.ADD_EVENT_LISTENER="add-event-listener",n.REMOVE_EVENT_LISTENER="remove-event-listener",n.GET_PROVIDER_STATUS="get-provider-status",n.GET_NOTIFICATIONS_COUNT="get-notifications-count",n.SHOW_NOTIFICATION_CENTER="show-notification-center",n.HIDE_NOTIFICATION_CENTER="hide-notification-center",n.REGISTER_PLATFORM="register-notifications-platform",n.DEREGISTER_PLATFORM="deregister-notifications-platform",n.SET_FORM_STATUS_OPTIONS="set-form-status-options",n.SET_FORM_VALIDATION_ERRORS="set-form-validation-errors",n.GET_USER_SETTINGS_STATUS="get-user-settings-status",n.SET_DEFAULT_PLATFORM_SHORTCUT="set-default-platform-shortcut",n.SET_NOTIFICATION_SECURITY_RULE="set-notification-security-rule",t.eventTypes=["notification-created","notification-closed","notification-action","notification-form-submitted","notification-form-values-changed","notifications-count-changed","notification-sound-toggled","notification-reminder-created","notification-reminder-removed","notification-toast-dismissed"]},36(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.Log=void 0;const i=n(329);class o{static async error(e){try{const t=o.getPrefixedMessage(e);console.error(t),await i.finContext.System.log("error",t)}catch(e){o.handleError(e,"Failed to log error")}}static async warn(e){try{const t=o.getPrefixedMessage(e);console.warn(t),await i.finContext.System.log("warning",t)}catch(e){o.handleError(e,"Failed to log warning")}}static async info(e){try{const t=o.getPrefixedMessage(e);console.info(t),await i.finContext.System.log("info",t)}catch(e){o.handleError(e,"Failed to log info")}}static getPrefixedMessage(e){return`${o.LOG_PREFIX} ${e}`}static handleError(e,t){e instanceof Error?console.error(`${t} - ${e.name}: ${e.message}`):console.error(`${t} - ${JSON.stringify(e)}`)}}t.Log=o,o.LOG_PREFIX="[@openfin/notifications]"},405(e,t,n){var i=this&&this.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(t,n);o&&!("get"in o?!t.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,o)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),o=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)"default"!==n&&Object.prototype.hasOwnProperty.call(e,n)&&i(t,e,n);return o(t,e),t},a=this&&this.__exportStar||function(e,t){for(var n in e)"default"===n||Object.prototype.hasOwnProperty.call(t,n)||i(t,e,n)},s=this&&this.__rest||function(e,t){var n={};for(var i in e)Object.prototype.hasOwnProperty.call(e,i)&&t.indexOf(i)<0&&(n[i]=e[i]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var o=0;for(i=Object.getOwnPropertySymbols(e);o<i.length;o++)t.indexOf(i[o])<0&&Object.prototype.propertyIsEnumerable.call(e,i[o])&&(n[i[o]]=e[i[o]])}return n};Object.defineProperty(t,"__esModule",{value:!0}),t.setAllowedOrigins=t.getUserSettingStatus=t.UserSettings=t.getNotificationsCount=t.hide=t.show=t.setDefaultPlatformShortcut=t.toggleNotificationCenter=t.clearAll=t.getAll=t.cancelReminder=t.setReminder=t.clear=t.update=t.create=t.removeEventListener=t.addEventListener=t.VERSION=t.NotificationIndicatorType=t.IndicatorColor=t.NotificationIndicatorWithCustomColor=t.NotificationIndicator=t.NotificationOptions=t.provider=t.actions=void 0;const c=n(158),l=n(902),u=n(349),d=n(471),f=r(n(217));t.provider=f;const p=n(855),v=n(403);Object.defineProperty(t,"NotificationIndicator",{enumerable:!0,get:function(){return v.NotificationIndicator}}),Object.defineProperty(t,"NotificationIndicatorWithCustomColor",{enumerable:!0,get:function(){return v.NotificationIndicatorWithCustomColor}}),Object.defineProperty(t,"NotificationIndicatorType",{enumerable:!0,get:function(){return v.IndicatorType}}),Object.defineProperty(t,"IndicatorColor",{enumerable:!0,get:function(){return v.IndicatorColor}});const h=n(965);Object.defineProperty(t,"NotificationOptions",{enumerable:!0,get:function(){return h.NotificationOptions}});const g=r(n(158));t.actions=g,a(n(158),t),a(n(578),t),a(n(93),t),a(n(2),t),a(n(520),t),a(n(96),t),a(n(470),t),t.VERSION="2.14.0-alpha-4623";const m=(0,d.getEventRouter)();function y(e){const{notification:t}=e;return Object.assign(Object.assign({},e),{notification:Object.assign(Object.assign({},t),{date:new Date(t.date),expires:null!==t.expires?new Date(t.expires):null})})}m.registerDeserializer("notification-created",(e=>y(e))),m.registerDeserializer("notification-toast-dismissed",(e=>y(e))),m.registerDeserializer("notification-closed",(e=>y(e))),m.registerDeserializer("notification-action",(e=>{var t;const n=y(e),{controlSource:i,controlIndex:o}=n,r=s(n,["controlSource","controlIndex"]);return e.trigger===c.ActionTrigger.CONTROL?Object.assign(Object.assign({},r),{control:null===(t=e.notification[i])||void 0===t?void 0:t[o]}):r})),m.registerDeserializer("notifications-count-changed",(e=>e)),m.registerDeserializer("notification-reminder-created",(e=>{const t=y(e),{reminderDate:n}=t,i=s(t,["reminderDate"]);return Object.assign(Object.assign({},i),{reminderDate:new Date(n)})})),m.registerDeserializer("notification-reminder-removed",(e=>y(e))),m.registerDeserializer("notification-sound-toggled",(e=>e)),t.addEventListener=async function(e,t){(0,p.validateEnvironment)(),e=(0,p.sanitizeEventType)(e),t=(0,p.sanitizeFunction)(t);const n=d.eventEmitter.listenerCount(e);"notification-form-submitted"===e&&(t=function(e){return t=>{const n=t.notification.id;t.setFormStatus=e=>(0,l.tryServiceDispatch)(u.APITopic.SET_FORM_STATUS_OPTIONS,Object.assign(Object.assign({},e),{_notificationId:n})),e(t)}}(t)),"notification-form-values-changed"===e&&(t=function(e){return t=>{t.setErrors=e=>(0,l.tryServiceDispatch)(u.APITopic.SET_FORM_VALIDATION_ERRORS,{errors:e,notificationId:t.notification.id}),e(t)}}(t)),d.eventEmitter.addListener(e,t),0===n&&1===d.eventEmitter.listenerCount(e)&&await(0,l.tryServiceDispatch)(u.APITopic.ADD_EVENT_LISTENER,e)},t.removeEventListener=async function(e,t){(0,p.validateEnvironment)(),e=(0,p.sanitizeEventType)(e),t=(0,p.sanitizeFunction)(t),1===d.eventEmitter.listenerCount(e)&&d.eventEmitter.listeners(e)[0]===t&&await(0,l.tryServiceDispatch)(u.APITopic.REMOVE_EVENT_LISTENER,e),d.eventEmitter.removeListener(e,t)},t.create=async function(e,t){if("object"!=typeof e||null===e)throw new Error("Invalid argument passed to create: argument must be an object and must not be null");if(void 0!==e.date&&!(e.date instanceof Date))throw new Error('Invalid argument passed to create: "date" must be a valid Date object');if(void 0!==e.expires&&null!==e.expires&&!(e.expires instanceof Date))throw new Error('Invalid argument passed to create: "expires" must be null or a valid Date object');if(t&&t.reminderDate){if(!1===e.allowReminder)throw new Error('You must not specify a reminder date for a notification with "allowReminder" option set to false.');if(!(t.reminderDate instanceof Date))throw new Error('Invalid argument passed to reminder Options: "date" must a valid Date object');if(e.expires&&e.expires.getTime()<t.reminderDate.getTime())throw new Error("Expiration date must not be earlier than reminder date.")}void 0!==e.category&&null!==e.category||(e.category="default");const n=await(0,l.tryServiceDispatch)(u.APITopic.CREATE_NOTIFICATION,Object.assign(Object.assign({},e),{date:e.date&&e.date.getTime(),expires:e.expires&&e.expires.getTime(),reminder:(null==t?void 0:t.reminderDate)&&t.reminderDate.getTime()}));return Object.assign(Object.assign({},n),{date:new Date(n.date),expires:null!==n.expires?new Date(n.expires):null})},t.update=async function(e){if("object"!=typeof e||null===e)throw new Error("Invalid argument passed to create: argument must be an object and must not be null");if(!e.id)throw new Error('Invalid argument passed to create: "id" must be Id of previously created Notification');const t=await(0,l.tryServiceDispatch)(u.APITopic.UPDATE_NOTIFICATION,Object.assign({},e));return Object.assign({},t)},t.clear=async function(e){return(0,l.tryServiceDispatch)(u.APITopic.CLEAR_NOTIFICATION,{id:e})},t.setReminder=async function(e,t){if(!(t instanceof Date))throw new Error('Invalid argument passed to setReminder: "reminderDate" must a valid Date object');if(t.getTime()<Date.now())throw new Error('Invalid argument passed to setReminder: "reminderDate" was set to a Date in the past, must be a Date in the future.');const n=await(0,l.tryServiceDispatch)(u.APITopic.SET_REMINDER,{id:e,reminder:t.getTime()});return n?console.log(`[Client::setReminder] Reminder set for notification: ${e}`):console.log(`[Client::setReminder] Notification not found for id: ${e}`),n},t.cancelReminder=async function(e){const t=await(0,l.tryServiceDispatch)(u.APITopic.CANCEL_REMINDER,{id:e});return t?console.log(`[Client::cancelReminder] Reminder canceled for notification: ${e}`):console.log(`[Client::cancelReminder] Notification not found for id: ${e}`),t},t.getAll=async function(){return(await(0,l.tryServiceDispatch)(u.APITopic.GET_APP_NOTIFICATIONS,void 0)).map((e=>Object.assign(Object.assign({},e),{indicator:e.indicator||null,date:new Date(e.date),expires:null!==e.expires?new Date(e.expires):null})))},t.clearAll=async function(){return(0,l.tryServiceDispatch)(u.APITopic.CLEAR_APP_NOTIFICATIONS,void 0)},t.toggleNotificationCenter=async function(){return(0,l.tryServiceDispatch)(u.APITopic.TOGGLE_NOTIFICATION_CENTER,void 0)},t.setDefaultPlatformShortcut=function(e){return(0,l.tryServiceDispatch)(u.APITopic.SET_DEFAULT_PLATFORM_SHORTCUT,e)},t.show=async function(e){return(0,l.tryServiceDispatch)(u.APITopic.SHOW_NOTIFICATION_CENTER,e)},t.hide=async function(){return(0,l.tryServiceDispatch)(u.APITopic.HIDE_NOTIFICATION_CENTER,void 0)},t.getNotificationsCount=async function(){return(0,l.tryServiceDispatch)(u.APITopic.GET_NOTIFICATIONS_COUNT,void 0)},(t.UserSettings||(t.UserSettings={})).SOUND_ENABLED="soundEnabled",t.getUserSettingStatus=async function(e){return(0,l.tryServiceDispatch)(u.APITopic.GET_USER_SETTINGS_STATUS,e)},t.setAllowedOrigins=async e=>(0,l.tryServiceDispatch)(u.APITopic.SET_NOTIFICATION_SECURITY_RULE,{allowedOrigins:e})},217(e,t,n){var i=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0}),t.isConnectedToAtLeast=t.getStatus=void 0;const o=i(n(667)),r=n(785),a=n(902),s=n(349);function c(){return(0,r.withStrictTimeout)(500,(0,a.tryServiceDispatch)(s.APITopic.GET_PROVIDER_STATUS,void 0),"").catch((()=>({connected:!1,version:null,templateAPIVersion:null})))}t.getStatus=c,t.isConnectedToAtLeast=async function(e){const t=await c();if(t.connected&&null!==t.version){const n=(0,o.default)(t.version,e);if(0===n||1===n)return!0}return!1}},797(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.register=t.ChannelClientHandlers=void 0;const i=n(349),o=n(471),r=n(36),a=n(793),s=n(217),c=n(329);class l{}t.ChannelClientHandlers=l,l.handleDefaultAction=()=>!1,l.handleEventAction=e=>{(0,o.getEventRouter)().dispatchEvent(e)},l.handleWarnAction=async e=>{await r.Log.warn(e)},l.handleDisconnection=async()=>{(0,a.getChannelClient)()&&(await r.Log.warn("Disconnected from Notifications. Reconnecting..."),(0,a.clearAwaitedChannelClient)(),await f(),await p())};let u=null;t.register=async e=>{if(null==e?void 0:e.externalProviderConfig)throw new Error("It appears you are attempting to use an external provider configuration with the desktop client. This usually suggests that the Client API package version in use is deprecated.");if(u)return u;try{return u=d(e),await u}finally{u=null}};const d=async e=>{const t=e;if(null==t?void 0:t.routingOptions){const e=t.routingOptions.routerChannelName;if(!e)throw new Error("When a router config is provided, the router channel name must also be provided and cannot be an empty string.");r.Log.info(`Connecting to router channel: ${e}`),a.ServiceConfig.serviceChannel=e,a.ServiceConfig.routingEnabled=!0}else if(null==t?void 0:t.customManifest){const e=t.customManifest;if(r.Log.info(`Connecting to private instance: ${e.manifestUuid} at ${e.manifestUrl}`),!e.manifestUrl)throw new Error("When a custom manifest config is provided, the manifest url must be provided and cannot be an empty string.");if(!e.manifestUuid)throw new Error("When a custom manifest config is provided, the manifest UUID must be provided and cannot be an empty string.");a.ServiceConfig.serviceChannel=`${e.manifestUuid}-${i.SERVICE_CHANNEL}`,a.ServiceConfig.serviceUuid=e.manifestUuid,a.ServiceConfig.serviceManifestUrl=e.manifestUrl,await f()}else a.ServiceConfig.serviceChannel=i.SERVICE_CHANNEL,await f();return await p(),{clientAPIVersion:"2.14.0-alpha-4623",notificationsVersion:(await(0,s.getStatus)()).version||"unknown"}},f=async()=>{if(!a.ServiceConfig.routingEnabled)try{const e=a.ServiceConfig.serviceManifestUrl,t=window.navigator.userAgent.toLowerCase().includes("windows"),n=e||"fins://system-apps/notification-center";t?(await r.Log.info("Launching Notifications via fin.System.launchManifest..."),await c.finContext.System.launchManifest(n,{noUi:!0})):(await r.Log.info("Launching Notifications via fin.System.openUrlWithBrowser..."),await c.finContext.System.openUrlWithBrowser(n))}catch(e){throw e instanceof Error?await r.Log.error(`Failed to launch Notifications - ${e.name}: ${e.message}`):await r.Log.error(`Failed to launch Notifications - ${JSON.stringify(e)}`),e}},p=async()=>{try{const{channelClientPromise:e,isInit:t}=(0,a.initAwaitedChannelClient)(),n=await e;t&&(n.setDefaultAction(l.handleDefaultAction),n.register("event",l.handleEventAction),n.register("WARN",l.handleWarnAction),n.onDisconnection(l.handleDisconnection),!a.ServiceConfig.routingEnabled)&&c.finContext.Application.wrapSync({uuid:a.ServiceConfig.serviceUuid}).once("closed",l.handleDisconnection)}catch(e){throw e instanceof Error?await r.Log.error(`Failed to connect to Notifications - ${e.name}: ${e.message}`):await r.Log.error(`Failed to connect to Notifications - ${JSON.stringify(e)}`),e}}},520(e,t){Object.defineProperty(t,"__esModule",{value:!0})},93(e,t){Object.defineProperty(t,"__esModule",{value:!0})},96(e,t){Object.defineProperty(t,"__esModule",{value:!0})},134(e,t){Object.defineProperty(t,"__esModule",{value:!0})},468(e,t){Object.defineProperty(t,"__esModule",{value:!0})},470(e,t,n){var i=this&&this.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(t,n);o&&!("get"in o?!t.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,o)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),o=this&&this.__exportStar||function(e,t){for(var n in e)"default"===n||Object.prototype.hasOwnProperty.call(t,n)||i(t,e,n)};Object.defineProperty(t,"__esModule",{value:!0}),o(n(134),t),o(n(468),t),o(n(965),t),o(n(929),t)},965(e,t){Object.defineProperty(t,"__esModule",{value:!0}),t.TemplateFragmentNames=t.PresentationTemplateFragmentNames=t.ContainerTemplateFragmentNames=t.TemplateNames=void 0,t.TemplateNames={markdown:"markdown",list:"list",custom:"custom"},t.ContainerTemplateFragmentNames={container:"container"},t.PresentationTemplateFragmentNames={text:"text",image:"image",list:"list",actionableText:"actionableText"},t.TemplateFragmentNames=Object.assign(Object.assign({},t.ContainerTemplateFragmentNames),t.PresentationTemplateFragmentNames)},929(e,t){Object.defineProperty(t,"__esModule",{value:!0})},855(e,t){function n(e,t){let n;try{n=JSON.stringify(e)}catch(e){n=t}return n}Object.defineProperty(t,"__esModule",{value:!0}),t.setValidationMethod=t.validateEnvironment=t.safeStringify=t.sanitizeEventType=t.sanitizeFunction=void 0,t.sanitizeFunction=function(e){if("function"!=typeof e)throw new Error(`Invalid argument passed: ${n(e,"The provided value")} is not a valid function`);return e},t.sanitizeEventType=function(e){if("notification-action"===e||"notification-created"===e||"notification-toast-dismissed"===e||"notification-closed"===e||"notifications-count-changed"===e||"notification-form-submitted"===e||"notification-reminder-created"===e||"notification-reminder-removed"===e||"notification-form-values-changed"===e||"notification-sound-toggled"===e)return e;throw new Error(`Invalid argument passed: ${n(e,"The provided event type")} is not a valid Notifications event type`)},t.safeStringify=n,t.validateEnvironment=()=>{throw new Error("fin is not defined. The notifications module is only intended for use in an OpenFin application.")},t.setValidationMethod=e=>{t.validateEnvironment=e}},683(e,t,n){var i=this&&this.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(t,n);o&&!("get"in o?!t.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,o)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),o=this&&this.__exportStar||function(e,t){for(var n in e)"default"===n||Object.prototype.hasOwnProperty.call(t,n)||i(t,e,n)};Object.defineProperty(t,"__esModule",{value:!0}),t.connectToNotifications=void 0;const r=n(902),a=n(855),s=n(471),c=n(797),l=n(217),u=n(329),d=n(610),f=n(919);let p;o(n(405),t);const v=async(e,t)=>{if(!p)throw new Error("Not connected to the notification center. Did you call connectToNotifications()?.");return p.dispatch(e,t)};t.connectToNotifications=async function e(t){if(!t)throw new Error("Provider config must be provided.");if(!t.finContext)throw new Error("fin context must be provided.");if("desktop"===t.environment){if(!t.finContext.me.isOpenFin)throw new Error("You must be in Here environment when you provide a desktop config.");return(0,u.setFinContext)(t.finContext),(0,a.setValidationMethod)(d.defaultValidateEnvironment),(0,r.setDispatchMethod)(d.defaultDispatch),(0,c.register)(t)}{(0,f.validateExternalProviderInfo)(t),(0,a.setValidationMethod)((()=>{})),(0,r.setDispatchMethod)(v);const n={id:t.id,title:t.title,icon:t.icon};console.log("Connecting to the Notification Center..."),p=await t.finContext.InterApplicationBus.Channel.connect(t.serviceId,{wait:!0,payload:{version:"2.14.0-alpha-4623",providerInfo:n}}),console.log("Connected to the Notification Center.");const i=(0,s.getEventRouter)();return p.setDefaultAction((()=>!1)),p.register("WARN",(e=>console.warn(e))),p.register("event",(e=>{i.dispatchEvent(e)})),p.onDisconnection((()=>{console.warn("Disconnected from the Notification Center"),p=null,setTimeout((()=>{console.log("Attempting to reconnect to the Notification Center"),e(t)}),300)})),{clientAPIVersion:"2.14.0-alpha-4623",notificationsVersion:(await(0,l.getStatus)()).version||"unknown"}}}},667(e){e.exports=void 0}},t={};return function n(i){var o=t[i];if(void 0!==o)return o.exports;var r=t[i]={exports:{}};return e[i].call(r.exports,r,r.exports,n),r.exports}(683)})()));
+
 /***/ }
 
 /******/ 	});
@@ -7986,40 +8035,7 @@ var t=__webpack_require__(/*! ./main-0ca8f4a4.js */ "./node_modules/@openfin/cor
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/create fake namespace object */
-/******/ 	(() => {
-/******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
-/******/ 		var leafPrototypes;
-/******/ 		// create a fake namespace object
-/******/ 		// mode & 1: value is a module id, require it
-/******/ 		// mode & 2: merge all properties of value into the ns
-/******/ 		// mode & 4: return value when already ns object
-/******/ 		// mode & 16: return value when it's Promise-like
-/******/ 		// mode & 8|1: behave like require
-/******/ 		__webpack_require__.t = function(value, mode) {
-/******/ 			if(mode & 1) value = this(value);
-/******/ 			if(mode & 8) return value;
-/******/ 			if(typeof value === 'object' && value) {
-/******/ 				if((mode & 4) && value.__esModule) return value;
-/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
-/******/ 			}
-/******/ 			var ns = Object.create(null);
-/******/ 			__webpack_require__.r(ns);
-/******/ 			var def = {};
-/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
-/******/ 			for(var current = mode & 2 && value; (typeof current == 'object' || typeof current == 'function') && !~leafPrototypes.indexOf(current); current = getProto(current)) {
-/******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
-/******/ 			}
-/******/ 			def['default'] = () => (value);
-/******/ 			__webpack_require__.d(ns, def);
-/******/ 			return ns;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -8029,28 +8045,6 @@ var t=__webpack_require__(/*! ./main-0ca8f4a4.js */ "./node_modules/@openfin/cor
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/ensure chunk */
-/******/ 	(() => {
-/******/ 		__webpack_require__.f = {};
-/******/ 		// This file contains only the entry chunk.
-/******/ 		// The chunk loading function for additional chunks
-/******/ 		__webpack_require__.e = (chunkId) => {
-/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
-/******/ 				__webpack_require__.f[key](chunkId, promises);
-/******/ 				return promises;
-/******/ 			}, []));
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/get javascript chunk filename */
-/******/ 	(() => {
-/******/ 		// This function allow to reference async chunks
-/******/ 		__webpack_require__.u = (chunkId) => {
-/******/ 			// return url for filenames based on template
-/******/ 			return "" + chunkId + ".notifications.bundle.js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -8069,51 +8063,6 @@ var t=__webpack_require__(/*! ./main-0ca8f4a4.js */ "./node_modules/@openfin/cor
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/load script */
-/******/ 	(() => {
-/******/ 		var inProgress = {};
-/******/ 		var dataWebpackPrefix = "openfin-web--web-notifications:";
-/******/ 		// loadScript function to load a script via script tag
-/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
-/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
-/******/ 			var script, needAttach;
-/******/ 			if(key !== undefined) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				for(var i = 0; i < scripts.length; i++) {
-/******/ 					var s = scripts[i];
-/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
-/******/ 				}
-/******/ 			}
-/******/ 			if(!script) {
-/******/ 				needAttach = true;
-/******/ 				script = document.createElement('script');
-/******/ 		
-/******/ 				script.charset = 'utf-8';
-/******/ 				if (__webpack_require__.nc) {
-/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 				}
-/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
-/******/ 		
-/******/ 				script.src = url;
-/******/ 			}
-/******/ 			inProgress[url] = [done];
-/******/ 			var onScriptComplete = (prev, event) => {
-/******/ 				// avoid mem leaks in IE.
-/******/ 				script.onerror = script.onload = null;
-/******/ 				clearTimeout(timeout);
-/******/ 				var doneFns = inProgress[url];
-/******/ 				delete inProgress[url];
-/******/ 				script.parentNode && script.parentNode.removeChild(script);
-/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
-/******/ 				if(prev) return prev(event);
-/******/ 			}
-/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
-/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
-/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
-/******/ 			needAttach && document.head.appendChild(script);
-/******/ 		};
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
@@ -8136,119 +8085,6 @@ var t=__webpack_require__(/*! ./main-0ca8f4a4.js */ "./node_modules/@openfin/cor
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	(() => {
-/******/ 		var scriptUrl;
-/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
-/******/ 		var document = __webpack_require__.g.document;
-/******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT')
-/******/ 				scriptUrl = document.currentScript.src;
-/******/ 			if (!scriptUrl) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) {
-/******/ 					var i = scripts.length - 1;
-/******/ 					while (i > -1 && (!scriptUrl || !/^http(s?):/.test(scriptUrl))) scriptUrl = scripts[i--].src;
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
-/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
-/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/^blob:/, "").replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
-/******/ 		__webpack_require__.p = scriptUrl;
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"main": 0
-/******/ 		};
-/******/ 		
-/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
-/******/ 				// JSONP chunk loading for javascript
-/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
-/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
-/******/ 		
-/******/ 					// a Promise means "currently loading".
-/******/ 					if(installedChunkData) {
-/******/ 						promises.push(installedChunkData[2]);
-/******/ 					} else {
-/******/ 						if(true) { // all chunks have JS
-/******/ 							// setup Promise in chunk cache
-/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
-/******/ 							promises.push(installedChunkData[2] = promise);
-/******/ 		
-/******/ 							// start chunk loading
-/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
-/******/ 							// create error before stack unwound to get useful stacktrace later
-/******/ 							var error = new Error();
-/******/ 							var loadingEnded = (event) => {
-/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
-/******/ 									installedChunkData = installedChunks[chunkId];
-/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
-/******/ 									if(installedChunkData) {
-/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-/******/ 										var realSrc = event && event.target && event.target.src;
-/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
-/******/ 										error.name = 'ChunkLoadError';
-/******/ 										error.type = errorType;
-/******/ 										error.request = realSrc;
-/******/ 										installedChunkData[1](error);
-/******/ 									}
-/******/ 								}
-/******/ 							};
-/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						}
-/******/ 					}
-/******/ 				}
-/******/ 		};
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		// no on chunks loaded
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 		
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkopenfin_web_web_notifications"] = self["webpackChunkopenfin_web_web_notifications"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
@@ -8261,8 +8097,7 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const api_1 = __webpack_require__(/*! ../platform/api */ "./client/src/platform/api.ts");
-const NOTIFICATION_CENTER_EVENT = "notificationCenterSetOpen";
-const NOTIFICATION_CENTER_MESSAGE_TYPE = "notification-center-set-open";
+const MAX_LOG_ENTRIES = 50;
 /**
  * Sets status text for user feedback.
  * @param message Status message.
@@ -8278,86 +8113,238 @@ function setStatus(message, kind = "info") {
     statusElement.classList.add(`status-${kind}`);
 }
 /**
- * Creates a sample notification.
- * @param notification Notification payload.
- * @param toastType User-facing toast type label.
+ * Renders the running notification count badge.
+ * @param count Current count.
  */
-async function sendNotification(notification, toastType) {
+function setCount(count) {
+    const countElement = document.querySelector("#notificationCount");
+    if (countElement !== null) {
+        countElement.textContent = String(count);
+    }
+}
+/**
+ * Appends an entry to the event log, trimming history past MAX_LOG_ENTRIES.
+ * @param kind Log category, drives the row colour.
+ * @param message Pre-formatted message text.
+ */
+function logEvent(kind, message) {
+    const logElement = document.querySelector("#eventLog");
+    if (logElement === null) {
+        return;
+    }
+    const entry = document.createElement("div");
+    entry.className = `log-entry log-${kind}`;
+    const time = document.createElement("span");
+    time.className = "log-time";
+    time.textContent = new Date().toLocaleTimeString();
+    const label = document.createElement("span");
+    label.className = "log-kind";
+    label.textContent = kind;
+    const text = document.createElement("span");
+    text.className = "log-message";
+    text.textContent = message;
+    entry.append(time, label, text);
+    logElement.prepend(entry);
+    while (logElement.childElementCount > MAX_LOG_ENTRIES) {
+        logElement.lastElementChild?.remove();
+    }
+}
+/**
+ * Reads the create-notification form into a typed value object.
+ * @returns Current form values, or null if any required field is missing.
+ */
+function readForm() {
+    const titleInput = document.querySelector("#nTitle");
+    const bodyInput = document.querySelector("#nBody");
+    const toastInput = document.querySelector("#nToast");
+    const priorityInput = document.querySelector("#nPriority");
+    const buttonsInput = document.querySelector("#nIncludeButtons");
+    if (titleInput === null ||
+        bodyInput === null ||
+        toastInput === null ||
+        priorityInput === null ||
+        buttonsInput === null) {
+        return null;
+    }
+    const title = titleInput.value.trim();
+    const body = bodyInput.value.trim();
+    if (title === "" || body === "") {
+        setStatus("Title and body are required.", "error");
+        return null;
+    }
+    return {
+        title,
+        body,
+        toast: toastInput.value ?? "transient",
+        priority: Number.parseInt(priorityInput.value, 10) || 1,
+        includeButtons: buttonsInput.checked
+    };
+}
+/**
+ * Builds a markdown-template notification payload from the form values.
+ * Buttons carry an application-defined `onClick` payload so the action handler can
+ * tell which button fired without inspecting DOM state.
+ * @param values Form values from readForm().
+ * @returns A NotificationOptions ready for create().
+ */
+function buildNotification(values) {
+    const buttons = values.includeButtons
+        ? [
+            {
+                title: "Approve",
+                onClick: { task: "approve", source: "demo" }
+            },
+            {
+                title: "Dismiss",
+                onClick: { task: "dismiss", source: "demo" }
+            }
+        ]
+        : undefined;
+    const notification = {
+        template: "markdown",
+        title: values.title,
+        body: values.body,
+        toast: values.toast,
+        priority: values.priority
+    };
+    if (buttons !== undefined) {
+        notification.buttons = buttons;
+    }
+    return notification;
+}
+/**
+ * Starts an async task from a synchronous DOM callback.
+ * @param task Task to run.
+ */
+function runAsyncTask(task) {
+    task().catch((error) => {
+        console.error("Unexpected async handler failure.", error);
+    });
+}
+/**
+ * Subscribes to a notification event and reports non-fatal subscription failures.
+ * @param client Notifications client singleton.
+ * @param type Event type to subscribe to.
+ * @param handler Event handler.
+ */
+async function subscribeToNotificationEvent(client, type, handler) {
     try {
-        await (0, api_1.getNotificationsClient)().create(notification);
-        setStatus(`Created ${toastType} toast notification.`, "success");
+        await client.on(type, handler);
     }
     catch (error) {
-        setStatus(error instanceof Error ? error.message : "Unable to create notification. Check browser console.", "error");
+        console.error(`Unable to subscribe to ${type}.`, error);
     }
 }
 /**
- * Sends center visibility intent to the provider host.
- * @param isOpen Should the notification center be open.
+ * Creates a notification from the current form values.
  */
-function setNotificationCenterOpen(isOpen) {
-    const visibilityEvent = new CustomEvent(NOTIFICATION_CENTER_EVENT, {
-        detail: isOpen
+async function handleCreateClick() {
+    const values = readForm();
+    if (values === null) {
+        return;
+    }
+    try {
+        const payload = buildNotification(values);
+        await (0, api_1.getNotificationsClient)().create(payload);
+        setStatus(`Created ${values.toast} notification "${values.title}".`, "success");
+    }
+    catch (error) {
+        setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
+    }
+}
+/**
+ * Clears all notifications owned by this client.
+ */
+async function handleClearAllClick() {
+    try {
+        const count = await (0, api_1.getNotificationsClient)().clearAll();
+        setStatus(`Cleared ${count} notification(s) from this client.`, "success");
+        logEvent("info", `clearAll() removed ${count} notification(s).`);
+    }
+    catch (error) {
+        setStatus(error instanceof Error ? error.message : "Unable to clear notifications.", "error");
+    }
+}
+/**
+ * Reads all notifications and writes a short summary into the log.
+ */
+async function handleGetAllClick() {
+    try {
+        const notifications = await (0, api_1.getNotificationsClient)().getAll();
+        const titles = notifications.map((notification) => notification.title).join(", ");
+        const summary = notifications.length === 0 ? "(none)" : titles;
+        setStatus(`getAll() returned ${notifications.length} notification(s).`, "info");
+        logEvent("info", `getAll(): ${summary}`);
+    }
+    catch (error) {
+        setStatus(error instanceof Error ? error.message : "Unable to list notifications.", "error");
+    }
+}
+/**
+ * Toggles the Notification Center.
+ */
+async function handleToggleCenterClick() {
+    try {
+        await (0, api_1.getNotificationsClient)().toggleCenter();
+        setStatus("Toggled Notification Center.", "info");
+    }
+    catch (error) {
+        setStatus(error instanceof Error ? error.message : "Unable to toggle Notification Center.", "error");
+    }
+}
+/**
+ * Subscribes to every notification lifecycle event and renders them into the log.
+ * Failures during subscription are non-fatal — the rest of the demo still works.
+ */
+async function bindEventLog() {
+    const client = (0, api_1.getNotificationsClient)();
+    await subscribeToNotificationEvent(client, "notification-created", (event) => {
+        logEvent("create", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
     });
-    window.dispatchEvent(visibilityEvent);
-    window.parent.dispatchEvent(visibilityEvent);
-    window.parent.postMessage({
-        type: NOTIFICATION_CENTER_MESSAGE_TYPE,
-        isOpen
-    }, window.location.origin);
+    await subscribeToNotificationEvent(client, "notification-action", (event) => {
+        const buttonTitle = event.control && event.control.type === "button" ? event.control.title : "(non-button)";
+        const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
+        logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
+    });
+    await subscribeToNotificationEvent(client, "notification-closed", (event) => {
+        logEvent("closed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+    });
+    await subscribeToNotificationEvent(client, "notification-toast-dismissed", (event) => {
+        logEvent("toast-dismissed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+    });
+    await subscribeToNotificationEvent(client, "notifications-count-changed", (event) => {
+        setCount(event.count);
+        logEvent("count", `Notification center holds ${event.count} item(s).`);
+    });
 }
 /**
- * Binds button interactions.
+ * Wires up every form button and the log controls. Pure DOM glue — all async work
+ * funnels through the singleton client and surfaces success/failure on #status.
  */
-function initializeDom() {
-    const transientButton = document.querySelector("#btnToastTransient");
-    const stickyButton = document.querySelector("#btnToastSticky");
+function bindControls() {
+    const createButton = document.querySelector("#btnCreate");
+    const clearAllButton = document.querySelector("#btnClearAll");
+    const getAllButton = document.querySelector("#btnGetAll");
     const toggleCenterButton = document.querySelector("#btnToggleCenter");
-    let isNotificationCenterOpen = true;
-    /**
-     * Keeps toggle button text aligned with center state.
-     */
-    function syncToggleCenterButton() {
-        if (toggleCenterButton === null) {
-            return;
+    const clearLogButton = document.querySelector("#btnClearLog");
+    createButton?.addEventListener("click", () => {
+        runAsyncTask(handleCreateClick);
+    });
+    clearAllButton?.addEventListener("click", () => {
+        runAsyncTask(handleClearAllClick);
+    });
+    getAllButton?.addEventListener("click", () => {
+        runAsyncTask(handleGetAllClick);
+    });
+    toggleCenterButton?.addEventListener("click", () => {
+        runAsyncTask(handleToggleCenterClick);
+    });
+    clearLogButton?.addEventListener("click", () => {
+        const logElement = document.querySelector("#eventLog");
+        if (logElement !== null) {
+            logElement.textContent = "";
         }
-        toggleCenterButton.textContent = isNotificationCenterOpen
-            ? "Hide Notification Center"
-            : "Show Notification Center";
-    }
-    if (transientButton !== null) {
-        transientButton.addEventListener("click", () => {
-            sendNotification({
-                template: "markdown",
-                title: "Market price alert",
-                body: "AAPL moved 1.2% in the last five minutes.",
-                toast: "transient"
-            }, "transient").catch((error) => {
-                setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
-            });
-        });
-    }
-    if (stickyButton !== null) {
-        stickyButton.addEventListener("click", () => {
-            sendNotification({
-                template: "markdown",
-                title: "Approval required",
-                body: "NatWest FX trade 84372 needs a second approver before execution.",
-                toast: "sticky"
-            }, "sticky").catch((error) => {
-                setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
-            });
-        });
-    }
-    if (toggleCenterButton !== null) {
-        toggleCenterButton.addEventListener("click", () => {
-            isNotificationCenterOpen = !isNotificationCenterOpen;
-            setNotificationCenterOpen(isNotificationCenterOpen);
-            syncToggleCenterButton();
-            setStatus(isNotificationCenterOpen ? "Notification Center opened." : "Notification Center hidden.", "info");
-        });
-    }
-    syncToggleCenterButton();
+    });
 }
 window.addEventListener("DOMContentLoaded", async () => {
     try {
@@ -8366,8 +8353,17 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
     catch (error) {
         setStatus(error instanceof Error ? error.message : "Unable to initialize notifications client.", "error");
+        return;
     }
-    initializeDom();
+    bindControls();
+    try {
+        const initialCount = await (0, api_1.getNotificationsClient)().getCount();
+        setCount(initialCount);
+    }
+    catch (error) {
+        console.warn("Unable to read initial notification count.", error);
+    }
+    await bindEventLog();
 });
 
 })();

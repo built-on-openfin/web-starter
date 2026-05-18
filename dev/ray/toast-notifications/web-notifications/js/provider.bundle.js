@@ -11413,24 +11413,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "./node_modules/@openfin/core-web/out/api-client.cjs.js");
 const web_notifications_1 = __webpack_require__(/*! @openfin/web-notifications */ "../../node_modules/@openfin/web-notifications/dist/web/index.js");
 const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
-const NOTIFICATION_CENTER_EVENT = "notificationCenterSetOpen";
-const NOTIFICATION_CENTER_MESSAGE_TYPE = "notification-center-set-open";
-const DARK_PALETTE = {
-    brandPrimary: "#0E78E6",
-    brandSecondary: "#1E90FF",
-    backgroundPrimary: "#1A1A1A"
-};
-const LIGHT_PALETTE = {
-    brandPrimary: "#0E78E6",
-    brandSecondary: "#0066CC",
-    backgroundPrimary: "#FFFFFF"
-};
 /**
  * Applies notification center color scheme.
  * @param isDark Whether dark mode is active.
  */
 async function applyScheme(isDark) {
-    await (0, web_notifications_1.setTheme)({ palette: isDark ? DARK_PALETTE : LIGHT_PALETTE });
+    await (0, web_notifications_1.setTheme)({ scheme: isDark ? "dark" : "light" });
 }
 /**
  * Logs async failures from notification center UI actions.
@@ -11438,19 +11426,6 @@ async function applyScheme(isDark) {
  */
 function reportAsyncFailure(error) {
     console.error("Async notification center action failed.", error);
-}
-/**
- * Applies notification center state using API and overlay host chrome.
- * @param isOpen Should the notification center be visible.
- * @param sidebarEl Overlay host element to keep in sync.
- */
-async function applyNotificationCenterState(isOpen, sidebarEl) {
-    sidebarEl.dataset.open = isOpen ? "true" : "false";
-    if (isOpen) {
-        await (0, web_notifications_1.show)().catch(reportAsyncFailure);
-        return;
-    }
-    await (0, web_notifications_1.hide)().catch(reportAsyncFailure);
 }
 /**
  * Keep the notification center theme in sync with system light/dark preference.
@@ -11507,6 +11482,7 @@ async function init() {
     await fin.Interop.init(settings.platform.interop.providerId);
     await fin.Platform.Layout.init({ container: layoutContainer });
     await (0, web_notifications_1.initNotificationCenter)({
+        // @ts-expect-error In this npm workspace different versions of @openfin/core can be hoisted to the root causing typescript conflicts. You should not need this comment in your client project.
         finContext: fin,
         serviceId: settings.platform.notificationServiceId,
         container: notificationCenterContainer,
@@ -11516,34 +11492,11 @@ async function init() {
             duration: 5000
         }
     });
-    let isNotificationCenterOpen = true;
-    await applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar);
+    (0, web_notifications_1.addVisibilityListener)((visible) => {
+        notificationSidebar.dataset.open = visible ? "true" : "false";
+    });
+    await (0, web_notifications_1.show)().catch(reportAsyncFailure);
     bindThemeSync();
-    window.addEventListener(NOTIFICATION_CENTER_EVENT, (event) => {
-        const customEvent = event;
-        if (typeof customEvent.detail !== "boolean" || customEvent.detail === isNotificationCenterOpen) {
-            return;
-        }
-        isNotificationCenterOpen = customEvent.detail;
-        applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar).catch(reportAsyncFailure);
-    });
-    window.addEventListener("message", (event) => {
-        if (event.origin !== window.location.origin) {
-            return;
-        }
-        if (event.data === null || typeof event.data !== "object") {
-            return;
-        }
-        const data = event.data;
-        if (data.type !== NOTIFICATION_CENTER_MESSAGE_TYPE || typeof data.isOpen !== "boolean") {
-            return;
-        }
-        if (data.isOpen === isNotificationCenterOpen) {
-            return;
-        }
-        isNotificationCenterOpen = data.isOpen;
-        applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar).catch(reportAsyncFailure);
-    });
 }
 init().catch((error) => {
     console.error("Provider initialization failed.", error);
