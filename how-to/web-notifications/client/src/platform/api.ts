@@ -1,12 +1,20 @@
 import { connect, type BaseConnectionOptions } from "@openfin/core-web";
-import type {
-	Notification,
-	NotificationActionEvent,
-	NotificationClosedEvent,
-	NotificationCreatedEvent,
-	NotificationOptions,
-	NotificationsCountChanged,
-	NotificationToastDismissedEvent
+import {
+	addEventListener,
+	clear,
+	clearAll,
+	connectToNotifications,
+	create,
+	getAll,
+	getNotificationsCount,
+	toggleNotificationCenter,
+	type Notification,
+	type NotificationActionEvent,
+	type NotificationClosedEvent,
+	type NotificationCreatedEvent,
+	type NotificationOptions,
+	type NotificationsCountChanged,
+	type NotificationToastDismissedEvent
 } from "@openfin/web-notifications-client";
 import { getSettings } from "./settings";
 
@@ -17,10 +25,25 @@ const CLIENT_TITLE = "Web Notifications";
  * Event-name → payload mapping for listeners surfaced through the singleton.
  */
 export interface NotificationEventMap {
+	/**
+	 * Fired after a notification is created.
+	 */
 	"notification-created": NotificationCreatedEvent;
+	/**
+	 * Fired when a user interacts with a notification control.
+	 */
 	"notification-action": NotificationActionEvent;
+	/**
+	 * Fired when a notification closes.
+	 */
 	"notification-closed": NotificationClosedEvent;
+	/**
+	 * Fired when a toast is dismissed without removing the notification from the center.
+	 */
 	"notification-toast-dismissed": NotificationToastDismissedEvent;
+	/**
+	 * Fired when the Notification Center item count changes.
+	 */
 	"notifications-count-changed": NotificationsCountChanged;
 }
 
@@ -55,7 +78,6 @@ class NotificationsClient {
 
 		this._connecting = true;
 		try {
-			const { connectToNotifications } = await import("@openfin/web-notifications-client");
 			await connectToNotifications({
 				environment: "web",
 				finContext,
@@ -79,7 +101,6 @@ class NotificationsClient {
 	 */
 	public async create(options: NotificationOptions): Promise<Notification | undefined> {
 		this.requireConnected();
-		const { create } = await import("@openfin/web-notifications-client");
 		return create(options);
 	}
 
@@ -89,7 +110,6 @@ class NotificationsClient {
 	 */
 	public async getAll(): Promise<Notification[]> {
 		this.requireConnected();
-		const { getAll } = await import("@openfin/web-notifications-client");
 		return getAll();
 	}
 
@@ -100,7 +120,6 @@ class NotificationsClient {
 	 */
 	public async clear(id: string): Promise<boolean> {
 		this.requireConnected();
-		const { clear } = await import("@openfin/web-notifications-client");
 		return clear(id);
 	}
 
@@ -110,7 +129,6 @@ class NotificationsClient {
 	 */
 	public async clearAll(): Promise<number> {
 		this.requireConnected();
-		const { clearAll } = await import("@openfin/web-notifications-client");
 		return clearAll();
 	}
 
@@ -120,7 +138,6 @@ class NotificationsClient {
 	 */
 	public async getCount(): Promise<number> {
 		this.requireConnected();
-		const { getNotificationsCount } = await import("@openfin/web-notifications-client");
 		return getNotificationsCount();
 	}
 
@@ -131,7 +148,6 @@ class NotificationsClient {
 	 */
 	public async toggleCenter(): Promise<void> {
 		this.requireConnected();
-		const { toggleNotificationCenter } = await import("@openfin/web-notifications-client");
 		await toggleNotificationCenter();
 	}
 
@@ -145,7 +161,6 @@ class NotificationsClient {
 		listener: (event: NotificationEventMap[K]) => void
 	): Promise<void> {
 		this.requireConnected();
-		const { addEventListener } = await import("@openfin/web-notifications-client");
 		// The SDK exposes a discriminated-union overload set; cast through unknown so we
 		// can dispatch any of the supported event names from one wrapper.
 		await (addEventListener as unknown as (t: K, l: (e: NotificationEventMap[K]) => void) => Promise<void>)(
@@ -156,6 +171,7 @@ class NotificationsClient {
 
 	/**
 	 * Throws if the client hasn't connected yet. Producer-side calls all require a live broker channel.
+	 * @throws {Error} Thrown when the notifications client is not connected.
 	 */
 	private requireConnected(): void {
 		if (!this._connected) {

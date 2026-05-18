@@ -1,20 +1,40 @@
-import type {
-	ButtonOptions,
-	NotificationOptions,
-	TemplateMarkdown
-} from "@openfin/web-notifications-client";
+import type { ButtonOptions, NotificationOptions, TemplateMarkdown } from "@openfin/web-notifications-client";
 import { getNotificationsClient, init, type NotificationEventMap } from "../platform/api";
 
 const MAX_LOG_ENTRIES = 50;
 
+/**
+ * Controls whether a notification appears as a toast, stays visible, or skips toast display.
+ */
 type ToastMode = "transient" | "sticky" | "none";
+/**
+ * Categories used to style and label rows in the demo event log.
+ */
 type LogKind = "create" | "action" | "closed" | "toast-dismissed" | "count" | "info" | "error";
 
+/**
+ * Normalized form values used to build notification requests.
+ */
 interface NotificationFormValues {
+	/**
+	 * Notification title shown in the toast and Notification Center.
+	 */
 	title: string;
+	/**
+	 * Markdown body content rendered by the notification template.
+	 */
 	body: string;
+	/**
+	 * Toast display mode selected in the demo form.
+	 */
 	toast: ToastMode;
+	/**
+	 * Notification priority passed through to the API.
+	 */
 	priority: number;
+	/**
+	 * Whether to include the demo action buttons in the payload.
+	 */
 	includeButtons: boolean;
 }
 
@@ -90,7 +110,13 @@ function readForm(): NotificationFormValues | null {
 	const priorityInput = document.querySelector<HTMLSelectElement>("#nPriority");
 	const buttonsInput = document.querySelector<HTMLInputElement>("#nIncludeButtons");
 
-	if (titleInput === null || bodyInput === null || toastInput === null || priorityInput === null || buttonsInput === null) {
+	if (
+		titleInput === null ||
+		bodyInput === null ||
+		toastInput === null ||
+		priorityInput === null ||
+		buttonsInput === null
+	) {
 		return null;
 	}
 
@@ -147,42 +173,118 @@ function buildNotification(values: NotificationFormValues): NotificationOptions 
 }
 
 /**
+ * Starts an async task from a synchronous DOM callback.
+ * @param task Task to run.
+ */
+function runAsyncTask(task: () => Promise<void>): void {
+	task().catch((error) => {
+		console.error("Unexpected async handler failure.", error);
+	});
+}
+
+/**
+ * Subscribes to a notification event and reports non-fatal subscription failures.
+ * @param client Notifications client singleton.
+ * @param type Event type to subscribe to.
+ * @param handler Event handler.
+ */
+async function subscribeToNotificationEvent<K extends keyof NotificationEventMap>(
+	client: ReturnType<typeof getNotificationsClient>,
+	type: K,
+	handler: (event: NotificationEventMap[K]) => void
+): Promise<void> {
+	try {
+		await client.on(type, handler);
+	} catch (error) {
+		console.error(`Unable to subscribe to ${type}.`, error);
+	}
+}
+
+/**
+ * Creates a notification from the current form values.
+ */
+async function handleCreateClick(): Promise<void> {
+	const values = readForm();
+	if (values === null) {
+		return;
+	}
+
+	try {
+		const payload = buildNotification(values);
+		await getNotificationsClient().create(payload);
+		setStatus(`Created ${values.toast} notification "${values.title}".`, "success");
+	} catch (error) {
+		setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
+	}
+}
+
+/**
+ * Clears all notifications owned by this client.
+ */
+async function handleClearAllClick(): Promise<void> {
+	try {
+		const count = await getNotificationsClient().clearAll();
+		setStatus(`Cleared ${count} notification(s) from this client.`, "success");
+		logEvent("info", `clearAll() removed ${count} notification(s).`);
+	} catch (error) {
+		setStatus(error instanceof Error ? error.message : "Unable to clear notifications.", "error");
+	}
+}
+
+/**
+ * Reads all notifications and writes a short summary into the log.
+ */
+async function handleGetAllClick(): Promise<void> {
+	try {
+		const notifications = await getNotificationsClient().getAll();
+		const titles = notifications.map((notification) => notification.title).join(", ");
+		const summary = notifications.length === 0 ? "(none)" : titles;
+		setStatus(`getAll() returned ${notifications.length} notification(s).`, "info");
+		logEvent("info", `getAll(): ${summary}`);
+	} catch (error) {
+		setStatus(error instanceof Error ? error.message : "Unable to list notifications.", "error");
+	}
+}
+
+/**
+ * Toggles the Notification Center.
+ */
+async function handleToggleCenterClick(): Promise<void> {
+	try {
+		await getNotificationsClient().toggleCenter();
+		setStatus("Toggled Notification Center.", "info");
+	} catch (error) {
+		setStatus(error instanceof Error ? error.message : "Unable to toggle Notification Center.", "error");
+	}
+}
+
+/**
  * Subscribes to every notification lifecycle event and renders them into the log.
  * Failures during subscription are non-fatal — the rest of the demo still works.
  */
 async function bindEventLog(): Promise<void> {
 	const client = getNotificationsClient();
-	const subscribe = async <K extends keyof NotificationEventMap>(
-		type: K,
-		handler: (event: NotificationEventMap[K]) => void
-	): Promise<void> => {
-		try {
-			await client.on(type, handler);
-		} catch (error) {
-			console.error(`Unable to subscribe to ${type}.`, error);
-		}
-	};
 
-	await subscribe("notification-created", (event) => {
+	await subscribeToNotificationEvent(client, "notification-created", (event) => {
 		logEvent("create", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
 	});
 
-	await subscribe("notification-action", (event) => {
+	await subscribeToNotificationEvent(client, "notification-action", (event) => {
 		const buttonTitle =
 			event.control && event.control.type === "button" ? event.control.title : "(non-button)";
 		const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
 		logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
 	});
 
-	await subscribe("notification-closed", (event) => {
+	await subscribeToNotificationEvent(client, "notification-closed", (event) => {
 		logEvent("closed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
 	});
 
-	await subscribe("notification-toast-dismissed", (event) => {
+	await subscribeToNotificationEvent(client, "notification-toast-dismissed", (event) => {
 		logEvent("toast-dismissed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
 	});
 
-	await subscribe("notifications-count-changed", (event) => {
+	await subscribeToNotificationEvent(client, "notifications-count-changed", (event) => {
 		setCount(event.count);
 		logEvent("count", `Notification center holds ${event.count} item(s).`);
 	});
@@ -200,62 +302,19 @@ function bindControls(): void {
 	const clearLogButton = document.querySelector<HTMLButtonElement>("#btnClearLog");
 
 	createButton?.addEventListener("click", () => {
-		const values = readForm();
-		if (values === null) {
-			return;
-		}
-		const payload = buildNotification(values);
-		getNotificationsClient()
-			.create(payload)
-			.then(() => {
-				setStatus(`Created ${values.toast} notification "${values.title}".`, "success");
-			})
-			.catch((error: unknown) => {
-				setStatus(
-					error instanceof Error ? error.message : "Unable to create notification.",
-					"error"
-				);
-			});
+		runAsyncTask(handleCreateClick);
 	});
 
 	clearAllButton?.addEventListener("click", () => {
-		getNotificationsClient()
-			.clearAll()
-			.then((count) => {
-				setStatus(`Cleared ${count} notification(s) from this client.`, "success");
-				logEvent("info", `clearAll() removed ${count} notification(s).`);
-			})
-			.catch((error: unknown) => {
-				setStatus(error instanceof Error ? error.message : "Unable to clear notifications.", "error");
-			});
+		runAsyncTask(handleClearAllClick);
 	});
 
 	getAllButton?.addEventListener("click", () => {
-		getNotificationsClient()
-			.getAll()
-			.then((notifications) => {
-				const titles = notifications.map((n) => n.title).join(", ");
-				const summary = notifications.length === 0 ? "(none)" : titles;
-				setStatus(`getAll() returned ${notifications.length} notification(s).`, "info");
-				logEvent("info", `getAll(): ${summary}`);
-			})
-			.catch((error: unknown) => {
-				setStatus(error instanceof Error ? error.message : "Unable to list notifications.", "error");
-			});
+		runAsyncTask(handleGetAllClick);
 	});
 
 	toggleCenterButton?.addEventListener("click", () => {
-		getNotificationsClient()
-			.toggleCenter()
-			.then(() => {
-				setStatus("Toggled Notification Center.", "info");
-			})
-			.catch((error: unknown) => {
-				setStatus(
-					error instanceof Error ? error.message : "Unable to toggle Notification Center.",
-					"error"
-				);
-			});
+		runAsyncTask(handleToggleCenterClick);
 	});
 
 	clearLogButton?.addEventListener("click", () => {

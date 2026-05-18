@@ -531,7 +531,6 @@ module.exports = {
 				'@typescript-eslint/await-thenable': ['error'],
 				'@typescript-eslint/ban-ts-comment': ['error'],
 				'@typescript-eslint/ban-tslint-comment': ['off'],
-				'@typescript-eslint/no-restricted-types': ['error'],
 				'@typescript-eslint/brace-style': ['off'],
 				'@typescript-eslint/class-literal-property-style': ['error'],
 				'comma-spacing': ['error'],
