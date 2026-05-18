@@ -1,9 +1,28 @@
 import { connect, type BaseConnectionOptions } from "@openfin/core-web";
-import type { NotificationOptions } from "@openfin/web-notifications-client";
+import type {
+	Notification,
+	NotificationActionEvent,
+	NotificationClosedEvent,
+	NotificationCreatedEvent,
+	NotificationOptions,
+	NotificationsCountChanged,
+	NotificationToastDismissedEvent
+} from "@openfin/web-notifications-client";
 import { getSettings } from "./settings";
 
 const CLIENT_ID = "web-notifications-main";
 const CLIENT_TITLE = "Web Notifications";
+
+/**
+ * Event-name → payload mapping for listeners surfaced through the singleton.
+ */
+export interface NotificationEventMap {
+	"notification-created": NotificationCreatedEvent;
+	"notification-action": NotificationActionEvent;
+	"notification-closed": NotificationClosedEvent;
+	"notification-toast-dismissed": NotificationToastDismissedEvent;
+	"notifications-count-changed": NotificationsCountChanged;
+}
 
 /**
  * Singleton wrapper around @openfin/web-notifications-client.
@@ -54,39 +73,93 @@ class NotificationsClient {
 	}
 
 	/**
-	 * Helper for creating markdown notifications quickly.
-	 * @param title Notification title.
-	 * @param body Notification body.
-	 * @param toast Desktop toast mode.
+	 * Creates a notification.
+	 * @param options Notification payload.
+	 * @returns The created notification record.
 	 */
-	public async notify(
-		title: string,
-		body: string,
-		toast: "transient" | "sticky" | "none" = "transient"
-	): Promise<void> {
-		await this.create({
-			template: "markdown",
-			title,
-			body,
-			toast
-		});
+	public async create(options: NotificationOptions): Promise<Notification | undefined> {
+		this.requireConnected();
+		const { create } = await import("@openfin/web-notifications-client");
+		return create(options);
 	}
 
 	/**
-	 * Creates a notification.
-	 * @param options Notification payload.
+	 * Returns every notification this client has created that is still in the Notification Center.
+	 * @returns Array of notifications.
 	 */
-	public async create(options: NotificationOptions): Promise<void> {
+	public async getAll(): Promise<Notification[]> {
+		this.requireConnected();
+		const { getAll } = await import("@openfin/web-notifications-client");
+		return getAll();
+	}
+
+	/**
+	 * Removes a single notification by id.
+	 * @param id Notification id.
+	 * @returns True if the notification was removed.
+	 */
+	public async clear(id: string): Promise<boolean> {
+		this.requireConnected();
+		const { clear } = await import("@openfin/web-notifications-client");
+		return clear(id);
+	}
+
+	/**
+	 * Removes every notification this client has created.
+	 * @returns Count of notifications removed.
+	 */
+	public async clearAll(): Promise<number> {
+		this.requireConnected();
+		const { clearAll } = await import("@openfin/web-notifications-client");
+		return clearAll();
+	}
+
+	/**
+	 * Number of notifications currently in the Notification Center (across all sources).
+	 * @returns Notification count.
+	 */
+	public async getCount(): Promise<number> {
+		this.requireConnected();
+		const { getNotificationsCount } = await import("@openfin/web-notifications-client");
+		return getNotificationsCount();
+	}
+
+	/**
+	 * Toggle Notification Center visibility through the SDK's RPC channel. The provider
+	 * is expected to subscribe to addVisibilityListener and update its host chrome from
+	 * there, so this is fire-and-forget from the producer's perspective.
+	 */
+	public async toggleCenter(): Promise<void> {
+		this.requireConnected();
+		const { toggleNotificationCenter } = await import("@openfin/web-notifications-client");
+		await toggleNotificationCenter();
+	}
+
+	/**
+	 * Subscribe to a notification lifecycle event.
+	 * @param type Event name.
+	 * @param listener Listener that receives the typed event payload.
+	 */
+	public async on<K extends keyof NotificationEventMap>(
+		type: K,
+		listener: (event: NotificationEventMap[K]) => void
+	): Promise<void> {
+		this.requireConnected();
+		const { addEventListener } = await import("@openfin/web-notifications-client");
+		// The SDK exposes a discriminated-union overload set; cast through unknown so we
+		// can dispatch any of the supported event names from one wrapper.
+		await (addEventListener as unknown as (t: K, l: (e: NotificationEventMap[K]) => void) => Promise<void>)(
+			type,
+			listener
+		);
+	}
+
+	/**
+	 * Throws if the client hasn't connected yet. Producer-side calls all require a live broker channel.
+	 */
+	private requireConnected(): void {
 		if (!this._connected) {
-			console.warn("Notifications client is not connected.");
-			return;
-		}
-		try {
-			const { create } = await import("@openfin/web-notifications-client");
-			await create(options);
-		} catch (error) {
-			console.error("Unable to create notification.", error);
-			throw error;
+			throw new Error("Notifications client is not connected.");
 		}
 	}
 }

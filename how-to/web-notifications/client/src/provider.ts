@@ -1,15 +1,12 @@
 import { connect } from "@openfin/core-web";
 import {
-	hide,
+	addVisibilityListener,
 	initNotificationCenter,
 	setTheme,
 	show,
 	type CustomPaletteSet
 } from "@openfin/web-notifications";
 import { getDefaultLayout, getSettings } from "./platform/settings";
-
-const NOTIFICATION_CENTER_EVENT = "notificationCenterSetOpen";
-const NOTIFICATION_CENTER_MESSAGE_TYPE = "notification-center-set-open";
 
 const DARK_PALETTE: CustomPaletteSet = {
 	brandPrimary: "#0E78E6",
@@ -37,20 +34,6 @@ async function applyScheme(isDark: boolean): Promise<void> {
  */
 function reportAsyncFailure(error: unknown): void {
 	console.error("Async notification center action failed.", error);
-}
-
-/**
- * Applies notification center state using API and overlay host chrome.
- * @param isOpen Should the notification center be visible.
- * @param sidebarEl Overlay host element to keep in sync.
- */
-async function applyNotificationCenterState(isOpen: boolean, sidebarEl: HTMLElement): Promise<void> {
-	sidebarEl.dataset.open = isOpen ? "true" : "false";
-	if (isOpen) {
-		await show().catch(reportAsyncFailure);
-		return;
-	}
-	await hide().catch(reportAsyncFailure);
 }
 
 /**
@@ -127,37 +110,13 @@ async function init(): Promise<void> {
 		}
 	});
 
-	let isNotificationCenterOpen = true;
-	await applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar);
+	addVisibilityListener((visible) => {
+		notificationSidebar.dataset.open = visible ? "true" : "false";
+	});
+
+	await show().catch(reportAsyncFailure);
 
 	bindThemeSync();
-
-	window.addEventListener(NOTIFICATION_CENTER_EVENT, (event) => {
-		const customEvent = event as CustomEvent<boolean>;
-		if (typeof customEvent.detail !== "boolean" || customEvent.detail === isNotificationCenterOpen) {
-			return;
-		}
-		isNotificationCenterOpen = customEvent.detail;
-		applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar).catch(reportAsyncFailure);
-	});
-
-	window.addEventListener("message", (event) => {
-		if (event.origin !== window.location.origin) {
-			return;
-		}
-		if (event.data === null || typeof event.data !== "object") {
-			return;
-		}
-		const data = event.data as { type?: string; isOpen?: unknown };
-		if (data.type !== NOTIFICATION_CENTER_MESSAGE_TYPE || typeof data.isOpen !== "boolean") {
-			return;
-		}
-		if (data.isOpen === isNotificationCenterOpen) {
-			return;
-		}
-		isNotificationCenterOpen = data.isOpen;
-		applyNotificationCenterState(isNotificationCenterOpen, notificationSidebar).catch(reportAsyncFailure);
-	});
 }
 
 init().catch((error) => {
