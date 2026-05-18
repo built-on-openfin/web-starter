@@ -8,6 +8,7 @@
 		"copy-core-web": "node ./scripts/copy-core-web.js",
 		"build-client": "npm run copy-core-web && webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
+		"prestart": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 6060 -c-1",
 		"setup": "npm install && npm run build",
 		"prettier": "prettier --config .prettierrc --write .",
@@ -19,13 +20,13 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.44.108",
-		"@openfin/notifications": "2.14.1",
-		"@openfin/web-notifications": "2.14.1",
-		"@openfin/web-notifications-client": "2.14.1"
+		"@openfin/core-web": "0.44.110",
+		"@openfin/notifications": "2.14.0-alpha-4623",
+		"@openfin/web-notifications": "2.14.0-alpha-4623",
+		"@openfin/web-notifications-client": "2.14.0-alpha-4623"
 	},
 	"devDependencies": {
-		"@openfin/core": "44.100.109",
+		"@openfin/core": "44.101.2",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",

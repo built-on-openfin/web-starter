@@ -38,8 +38,5 @@
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",
 		"yargs": "17.7.2"
-	},
-	"overrides": {
-		"@openfin/core": "44.100.109"
 	}
 }
