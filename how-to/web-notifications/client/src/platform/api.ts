@@ -3,7 +3,7 @@ import {
 	addEventListener,
 	clear,
 	clearAll,
-	connectToNotifications,
+	register,
 	create,
 	getAll,
 	getNotificationsCount,
@@ -15,8 +15,11 @@ import {
 	type NotificationOptions,
 	type NotificationsCountChanged,
 	type NotificationToastDismissedEvent
-} from "@openfin/web-notifications-client";
+} from "@openfin/notifications";
 import { getSettings } from "./settings";
+
+/** The fin context returned by @openfin/core-web's connect(). */
+type FinContext = Awaited<ReturnType<typeof connect>>;
 
 const CLIENT_ID = "web-notifications-main";
 const CLIENT_TITLE = "Web Notifications";
@@ -48,7 +51,7 @@ export interface NotificationEventMap {
 }
 
 /**
- * Singleton wrapper around @openfin/web-notifications-client.
+ * Singleton wrapper around @openfin/notifications.
  */
 class NotificationsClient {
 	private static _instance: NotificationsClient | null = null;
@@ -71,21 +74,22 @@ class NotificationsClient {
 	 * @param finContext OpenFin context.
 	 * @param serviceId Notification center service identifier.
 	 */
-	public async connect(finContext: unknown, serviceId: string): Promise<void> {
+	public async connect(finContext: FinContext, serviceId: string): Promise<void> {
 		if (this._connected || this._connecting) {
 			return;
 		}
 
 		this._connecting = true;
 		try {
-			await connectToNotifications({
-				environment: "web",
-				finContext,
-				serviceId,
-				id: CLIENT_ID,
-				title: CLIENT_TITLE,
-				icon: "./common/images/here.png"
-			} as Parameters<typeof connectToNotifications>[0]);
+			await register({
+				externalProviderConfig: {
+					finContext,
+					serviceId,
+					id: CLIENT_ID,
+					title: CLIENT_TITLE,
+					icon: "./common/images/here.png"
+				}
+			});
 			this._connected = true;
 		} catch (error) {
 			console.error("Unable to connect notification client.", error);

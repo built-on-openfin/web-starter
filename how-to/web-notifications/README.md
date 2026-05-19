@@ -4,7 +4,7 @@
 
 # HERE Web Toast Notifications
 
-Demonstrates a provider-hosted Notification Center overlay plus toast surface, with notifications created from a page view using `@openfin/web-notifications-client`.
+Demonstrates a provider-hosted Notification Center overlay plus toast surface, with notifications created from a page view using `@openfin/notifications`.
 
 ## Getting Started
 
@@ -34,8 +34,8 @@ npm run client
 
 ## What This Sample Shows
 
-- Connecting a producer client with `connectToNotifications(...)`.
-- Creating notifications with `create(...)` from `@openfin/web-notifications-client`.
+- Connecting a producer client with `register(...)` via `externalProviderConfig`.
+- Creating notifications with `create(...)` from `@openfin/notifications`.
 - Initializing `@openfin/web-notifications.initNotificationCenter(...)` in the provider with dedicated center + toast containers.
 - Showing the Notification Center by default when the provider loads.
 - Toggling Notification Center visibility from the sample view with explicit `show()` / `hide()` calls.

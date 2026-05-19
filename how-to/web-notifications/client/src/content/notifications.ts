@@ -1,4 +1,4 @@
-import type { ButtonOptions, NotificationOptions, TemplateMarkdown } from "@openfin/web-notifications-client";
+import type { ButtonOptions, NotificationOptions, TemplateMarkdown } from "@openfin/notifications";
 import { getNotificationsClient, init, type NotificationEventMap } from "../platform/api";
 
 const MAX_LOG_ENTRIES = 50;
