@@ -12,6 +12,7 @@ import {
 	type NotificationActionEvent,
 	type NotificationClosedEvent,
 	type NotificationCreatedEvent,
+	type NotificationFormSubmittedEvent,
 	type NotificationOptions,
 	type NotificationsCountChanged,
 	type NotificationToastDismissedEvent
@@ -48,6 +49,10 @@ export interface NotificationEventMap {
 	 * Fired when the Notification Center item count changes.
 	 */
 	"notifications-count-changed": NotificationsCountChanged;
+	/**
+	 * Fired when a user submits a form notification.
+	 */
+	"notification-form-submitted": NotificationFormSubmittedEvent;
 }
 
 /**

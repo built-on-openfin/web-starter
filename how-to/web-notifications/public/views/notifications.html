@@ -4,8 +4,8 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
 		<title>Notifications</title>
-		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 		<link rel="stylesheet" href="../common/style/app.css" />
+		<link rel="stylesheet" href="./notifications.css" />
 		<script defer="defer" src="../js/notifications.bundle.js"></script>
 		<link rel="manifest" href="../manifest.json" />
 	</head>
@@ -13,6 +13,12 @@
 	<body class="col fill gap20 notifications-view" style="background-color: var(--frame-background-color);">
 		<main class="fill notifications-layout">
 			<section class="card form-card" aria-labelledby="composeHeading">
+				<div class="row middle">
+					<button id="btnToggleCenter" aria-pressed="true">Hide Notification Center</button>
+				</div>
+
+				<hr />
+
 				<h2 id="composeHeading">Compose</h2>
 				<p class="card-hint">Fields map directly to the <code>NotificationOptions</code> passed to <code>create()</code>.</p>
 
@@ -55,7 +61,24 @@
 					<button id="btnCreate">Create notification</button>
 					<button id="btnGetAll" class="secondary">List from this client</button>
 					<button id="btnClearAll" class="secondary">Clear all</button>
-					<button id="btnToggleCenter" class="secondary">Toggle Notification Center</button>
+				</div>
+
+				<hr />
+
+				<h2 id="examplesHeading">Examples</h2>
+				<div class="form-actions" style="flex-wrap: wrap;">
+					<button id="btnExBodyDismiss" class="secondary">Body dismiss</button>
+					<button id="btnExBodyDismissAction" class="secondary">Body dismiss + action</button>
+					<button id="btnExActionable" class="secondary">Actionable</button>
+					<button id="btnExForm" class="secondary">Form</button>
+					<button id="btnExFormAdvanced" class="secondary">Form advanced</button>
+					<button id="btnExUpdatable" class="secondary">Updatable</button>
+					<button id="btnExCustom" class="secondary">Custom template</button>
+					<button id="btnExSound" class="secondary">With sound</button>
+					<button id="btnExIndicator" class="secondary">Indicator</button>
+					<button id="btnExCustomIndicator" class="secondary">Custom indicator</button>
+					<button id="btnExReminder" class="secondary">Reminder</button>
+					<button id="btnExReminderCancel" class="secondary">Reminder + cancel</button>
 				</div>
 			</section>
 

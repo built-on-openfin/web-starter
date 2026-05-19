@@ -1,5 +1,19 @@
 import type { ButtonOptions, NotificationOptions, TemplateMarkdown } from "@openfin/notifications";
 import { getNotificationsClient, init, type NotificationEventMap } from "../platform/api";
+import {
+	showActionableNotification,
+	showBodyDismissActionNotification,
+	showBodyDismissNotification,
+	showCustomIndicatorNotification,
+	showCustomNotification,
+	showFormAdvancedNotification,
+	showFormNotification,
+	showIndicatorNotification,
+	showReminderCancelNotification,
+	showReminderNotification,
+	showSoundNotification,
+	showUpdatableNotification
+} from "./examples";
 
 const MAX_LOG_ENTRIES = 50;
 
@@ -173,12 +187,13 @@ function buildNotification(values: NotificationFormValues): NotificationOptions 
 }
 
 /**
- * Starts an async task from a synchronous DOM callback.
+ * Starts an async task from a synchronous DOM callback, surfacing errors in the status bar.
  * @param task Task to run.
  */
 function runAsyncTask(task: () => Promise<void>): void {
 	task().catch((error) => {
 		console.error("Unexpected async handler failure.", error);
+		setStatus(error instanceof Error ? error.message : "An error occurred.", "error");
 	});
 }
 
@@ -288,17 +303,61 @@ async function bindEventLog(): Promise<void> {
 		setCount(event.count);
 		logEvent("count", `Notification center holds ${event.count} item(s).`);
 	});
+
+	await subscribeToNotificationEvent(client, "notification-form-submitted", (event) => {
+		const data = event.form ? JSON.stringify(event.form) : "(none)";
+		logEvent("action", `Form submitted (id=${event.notification.id.slice(0, 8)}…) → ${data}`);
+	});
+}
+
+/** Wires up the Notification Center toggle button, tracking open/closed state locally. */
+function bindToggleButton(): void {
+	const toggleButton = document.querySelector<HTMLButtonElement>("#btnToggleCenter");
+	if (toggleButton === null) {
+		return;
+	}
+
+	toggleButton.addEventListener("click", () => {
+		runAsyncTask(handleToggleCenterClick);
+		const next = toggleButton.getAttribute("aria-pressed") !== "true";
+		toggleButton.setAttribute("aria-pressed", String(next));
+		toggleButton.textContent = next ? "Hide Notification Center" : "Show Notification Center";
+	});
 }
 
 /**
  * Wires up every form button and the log controls. Pure DOM glue — all async work
  * funnels through the singleton client and surfaces success/failure on #status.
  */
+function bindExamples(): void {
+	const exampleButtons: [string, () => Promise<void>][] = [
+		["#btnExBodyDismiss", showBodyDismissNotification],
+		["#btnExBodyDismissAction", showBodyDismissActionNotification],
+		["#btnExActionable", showActionableNotification],
+		["#btnExForm", showFormNotification],
+		["#btnExFormAdvanced", showFormAdvancedNotification],
+		["#btnExUpdatable", showUpdatableNotification],
+		["#btnExCustom", showCustomNotification],
+		["#btnExSound", showSoundNotification],
+		["#btnExIndicator", showIndicatorNotification],
+		["#btnExCustomIndicator", showCustomIndicatorNotification],
+		["#btnExReminder", showReminderNotification],
+		["#btnExReminderCancel", showReminderCancelNotification]
+	];
+	for (const [id, handler] of exampleButtons) {
+		document.querySelector<HTMLButtonElement>(id)?.addEventListener("click", () => {
+			runAsyncTask(handler);
+		});
+	}
+}
+
+/**
+ * Wires up the demo controls.
+ */
 function bindControls(): void {
 	const createButton = document.querySelector<HTMLButtonElement>("#btnCreate");
 	const clearAllButton = document.querySelector<HTMLButtonElement>("#btnClearAll");
 	const getAllButton = document.querySelector<HTMLButtonElement>("#btnGetAll");
-	const toggleCenterButton = document.querySelector<HTMLButtonElement>("#btnToggleCenter");
 	const clearLogButton = document.querySelector<HTMLButtonElement>("#btnClearLog");
 
 	createButton?.addEventListener("click", () => {
@@ -313,16 +372,15 @@ function bindControls(): void {
 		runAsyncTask(handleGetAllClick);
 	});
 
-	toggleCenterButton?.addEventListener("click", () => {
-		runAsyncTask(handleToggleCenterClick);
-	});
-
 	clearLogButton?.addEventListener("click", () => {
 		const logElement = document.querySelector<HTMLElement>("#eventLog");
 		if (logElement !== null) {
 			logElement.textContent = "";
 		}
 	});
+
+	bindToggleButton();
+	bindExamples();
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
