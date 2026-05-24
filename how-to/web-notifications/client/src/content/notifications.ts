@@ -2,8 +2,6 @@ import type { ButtonOptions, NotificationOptions, TemplateMarkdown } from "@open
 import { getNotificationsClient, init, type NotificationEventMap } from "../platform/api";
 import {
 	showActionableNotification,
-	showBodyDismissActionNotification,
-	showBodyDismissNotification,
 	showCustomIndicatorNotification,
 	showCustomNotification,
 	showFormAdvancedNotification,
@@ -331,8 +329,6 @@ function bindToggleButton(): void {
  */
 function bindExamples(): void {
 	const exampleButtons: [string, () => Promise<void>][] = [
-		["#btnExBodyDismiss", showBodyDismissNotification],
-		["#btnExBodyDismissAction", showBodyDismissActionNotification],
 		["#btnExActionable", showActionableNotification],
 		["#btnExForm", showFormNotification],
 		["#btnExFormAdvanced", showFormAdvancedNotification],

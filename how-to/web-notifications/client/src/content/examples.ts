@@ -1,5 +1,4 @@
 import {
-	ActionBodyClickType,
 	IndicatorColor,
 	cancelReminder,
 	setReminder,
@@ -23,31 +22,6 @@ let countdownTimerId: number | undefined;
 
 const cancelCountdownMap: { [id: string]: { secondsRemaining: number } } = {};
 let cancelCountdownTimerId: number | undefined;
-
-/** Show a notification where clicking the body dismisses it and fires a notification-action event. */
-export async function showBodyDismissNotification(): Promise<void> {
-	await getNotificationsClient().create({
-		title: "Simple Notification",
-		body: "This is a simple notification that can be dismissed by clicking the body",
-		toast: "transient",
-		template: "markdown",
-		id: randomUUID(),
-		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT }
-	});
-}
-
-/** Show a notification where clicking the body dismisses it and carries custom action data. */
-export async function showBodyDismissActionNotification(): Promise<void> {
-	await getNotificationsClient().create({
-		title: "Simple Notification",
-		body: "Click the body to dismiss and trigger a custom action",
-		toast: "transient",
-		template: "markdown",
-		id: randomUUID(),
-		onSelect: { BODY_CLICK: ActionBodyClickType.DISMISS_EVENT },
-		customData: { action: "custom-action", data: { message: "Body click custom action" } }
-	});
-}
 
 /** Show a notification with Acknowledge and Cancel action buttons. */
 export async function showActionableNotification(): Promise<void> {
