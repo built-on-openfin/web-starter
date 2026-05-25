@@ -7638,6 +7638,25 @@ module.exports = stubFalse;
 
 /***/ },
 
+/***/ "./client/src/config.ts"
+/*!******************************!*\
+  !*** ./client/src/config.ts ***!
+  \******************************/
+(__unused_webpack_module, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.APPS_URL = exports.LAYOUT_URL = exports.BROKER_URL = exports.SHARED_WORKER_URL = exports.PROVIDER_ID = void 0;
+exports.PROVIDER_ID = "web-layout-basic";
+exports.SHARED_WORKER_URL = `${window.location.origin}/js/shared-worker.bundle.js`;
+exports.BROKER_URL = `${window.location.origin}/platform/iframe-broker.html`;
+exports.LAYOUT_URL = `${window.location.origin}/layouts/default.layout.fin.json`;
+exports.APPS_URL = `${window.location.origin}/common/apps.json`;
+
+
+/***/ },
+
 /***/ "./client/src/content/api.ts"
 /*!***********************************!*\
   !*** ./client/src/content/api.ts ***!
@@ -7648,8 +7667,9 @@ module.exports = stubFalse;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.init = init;
+exports.waitForFdc3Ready = waitForFdc3Ready;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "./node_modules/@openfin/core-web/out/api-client.cjs.js");
-const settings_1 = __webpack_require__(/*! ../platform/settings/settings */ "./client/src/platform/settings/settings.ts");
+const config_1 = __webpack_require__(/*! ../config */ "./client/src/config.ts");
 /**
  * Initializes the OpenFin Web Broker connection.
  * @param inherit Should we inherit settings from the host (available in the OpenFin layout system) or use settings? Default is true.
@@ -7659,16 +7679,11 @@ async function init(inherit = true) {
     let options;
     if (window.fin === undefined) {
         if (!inherit) {
-            const settings = await (0, settings_1.getSettings)();
-            if (settings === undefined) {
-                console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
-                return;
-            }
             options = {
-                brokerUrl: settings.platform.interop.brokerUrl,
+                brokerUrl: config_1.BROKER_URL,
                 interopConfig: {
-                    providerId: settings.platform.interop.providerId,
-                    currentContextGroup: settings.platform.interop.defaultContextGroup
+                    providerId: "web-interop-basic-intents",
+                    currentContextGroup: "green"
                 }
             };
         }
@@ -7696,119 +7711,17 @@ async function init(inherit = true) {
         window.dispatchEvent(event);
     }
 }
-
-
-/***/ },
-
-/***/ "./client/src/platform/settings/settings.ts"
-/*!**************************************************!*\
-  !*** ./client/src/platform/settings/settings.ts ***!
-  \**************************************************/
-(__unused_webpack_module, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = getSettings;
-exports.getDefaultLayout = getDefaultLayout;
-exports.clearSettings = clearSettings;
-exports.saveSettings = saveSettings;
 /**
- * Fetches the settings for the application.
- * @returns The settings for the application.
+ * Waits for the fdc3 API to become available on the window.
+ * @returns A promise that resolves when fdc3 is ready.
  */
-async function getSettings() {
-    const savedSettings = await getSavedSettings();
-    if (savedSettings) {
-        return savedSettings;
-    }
-    const settings = await getManifestSettings();
-    if (!Array.isArray(settings?.endpointProvider?.endpoints)) {
-        console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+async function waitForFdc3Ready() {
+    if (window.fdc3) {
         return;
     }
-    const settingsEndpoint = settings.endpointProvider.endpoints.find((endpoint) => endpoint.id === "platform-settings");
-    if (settingsEndpoint === undefined ||
-        settingsEndpoint.type !== "fetch" ||
-        settingsEndpoint.options.method !== "GET" ||
-        settingsEndpoint.options.url === undefined) {
-        console.error("Unable to run the example as settings are required and we fetch them from the endpoint defined with the id: 'platform-settings' in the manifest. It needs to be of type fetch, performing a GET and it must have a url defined.");
-        return;
-    }
-    const platformSettings = await fetch(settingsEndpoint?.options.url);
-    const settingsJson = (await platformSettings.json());
-    return settingsJson;
-}
-/**
- * Returns a default layout from the settings if provided.
- * @returns The default layout from the settings.
- */
-async function getDefaultLayout() {
-    const settings = await getSettings();
-    if (settings?.platform?.layout?.defaultLayout === undefined) {
-        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
-        return;
-    }
-    if (typeof settings.platform.layout.defaultLayout === "string") {
-        const layoutResponse = await fetch(settings.platform.layout.defaultLayout);
-        const layoutJson = (await layoutResponse.json());
-        return layoutJson;
-    }
-    return settings.platform.layout.defaultLayout;
-}
-/**
- * Returns the settings from the manifest file.
- * @returns customSettings for this example
- */
-async function getManifestSettings() {
-    // Get the manifest link
-    const link = document.querySelector('link[rel="manifest"]');
-    if (link !== null) {
-        const manifestResponse = await fetch(link.href);
-        const manifestJson = (await manifestResponse.json());
-        return manifestJson.custom_settings;
-    }
-}
-/**
- * Clears any saved settings.
- * @returns The saved settings.
- */
-async function clearSettings() {
-    const settingsId = getSavedSettingsId();
-    localStorage.removeItem(settingsId);
-}
-/**
- * Saves the settings.
- * @param settings The settings to save.
- */
-async function saveSettings(settings) {
-    const settingsId = getSavedSettingsId();
-    localStorage.setItem(settingsId, JSON.stringify(settings));
-}
-/**
- * Retrieves saved settings from local storage.
- * @returns The saved settings.
- */
-async function getSavedSettings() {
-    const settingsId = getSavedSettingsId();
-    const settings = localStorage.getItem(settingsId);
-    if (settings !== null) {
-        const resolvedSettings = JSON.parse(settings);
-        if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
-            resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
-        }
-        return resolvedSettings;
-    }
-}
-/**
- * Get the Id used for saving and fetching settings from storage.
- * @returns The settings id.
- */
-function getSavedSettingsId() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const env = urlParams.get("env");
-    const settingsKey = env ? `${env}-settings` : "settings";
-    return settingsKey;
+    return new Promise((resolve) => {
+        window.addEventListener("fdc3Ready", () => resolve(), { once: true });
+    });
 }
 
 
@@ -8802,695 +8715,159 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!******************************************************!*\
-  !*** ./client/src/content/interop-intent-view-v2.ts ***!
-  \******************************************************/
+/*!***************************************!*\
+  !*** ./client/src/content/intents.ts ***!
+  \***************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const api_1 = __webpack_require__(/*! ./api */ "./client/src/content/api.ts");
-let contextData = {};
-let intentData;
+const INTENT_OPTIONS = [
+    {
+        value: "ViewContact",
+        label: "View Contact",
+        defaultContextType: "fdc3.contact",
+        defaultContextBody: JSON.stringify({
+            type: "fdc3.contact",
+            name: "Andy Young",
+            id: { email: "andy.young@example.com" }
+        }, null, 2)
+    },
+    {
+        value: "ViewQuote",
+        label: "View Quote",
+        defaultContextType: "fdc3.instrument",
+        defaultContextBody: JSON.stringify({
+            type: "fdc3.instrument",
+            name: "Tesla Inc.",
+            id: { ticker: "TSLA" }
+        }, null, 2)
+    }
+];
 window.addEventListener("DOMContentLoaded", async () => {
     await (0, api_1.init)(true);
-    await initializeDOM();
+    initializeDOM();
 });
 /**
- * Get the default context data.
- * @returns The data set keyed by FDC3 type.
+ * Parses a JSON string and returns an error message if invalid.
+ * @param json The JSON string to parse.
+ * @returns An error message if the JSON is invalid, or an empty string if valid.
  */
-function getDefaultFDC3ContextData() {
-    return {
-        "fdc3.instrument": [
-            {
-                type: "fdc3.instrument",
-                name: "Tesla Inc",
-                id: { ticker: "TSLA", BBG: "TSLA US Equity", ISIN: "US88160R1014" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "Apple Inc.",
-                id: { ticker: "AAPL", BBG: "AAPL US Equity", ISIN: "US0378331005" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "Microsoft Corporation",
-                id: { ticker: "MSFT", BBG: "MSFT US Equity", ISIN: "US5949181045" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "BAE Systems plc",
-                id: { ticker: "BA", BBG: "BA/ LN Equity", ISIN: "GB0002634946" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "Admiral Group plc",
-                id: { ticker: "ADM", BBG: "ADM LN Equity", ISIN: "GB00B02J6398" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "HSBC Holdings Plc",
-                id: { ticker: "HSBA", BBG: "HSBA LN Equity", ISIN: "GB0005405286" }
-            }
-        ],
-        "fdc3.instrumentList": [
-            {
-                type: "fdc3.instrumentList",
-                name: "Interesting instruments...",
-                id: { customId: "5464" },
-                instruments: [
-                    {
-                        type: "fdc3.instrument",
-                        id: {
-                            ticker: "AAPL",
-                            BBG: "AAPL US Equity",
-                            ISIN: "US0378331005"
-                        }
-                    },
-                    {
-                        type: "fdc3.instrument",
-                        id: {
-                            ticker: "MSFT",
-                            BBG: "MSFT US Equity",
-                            ISIN: "US5949181045"
-                        }
-                    }
-                ]
-            }
-        ],
-        "fdc3.position": [
-            {
-                type: "fdc3.position",
-                name: "My Apple shares",
-                id: { positionId: "6475" },
-                instrument: {
-                    type: "fdc3.instrument",
-                    id: {
-                        ticker: "AAPL",
-                        BBG: "AAPL US Equity",
-                        ISIN: "US0378331005"
-                    }
-                },
-                holding: 2000000
-            }
-        ],
-        "fdc3.portfolio": [
-            {
-                type: "fdc3.portfolio",
-                name: "My share portfolio",
-                id: { portfolioId: "7381" },
-                positions: [
-                    {
-                        type: "fdc3.position",
-                        instrument: {
-                            type: "fdc3.instrument",
-                            id: { ticker: "AAPL", BBG: "AAPL US Equity", ISIN: "US0378331005" }
-                        },
-                        holding: 2000000
-                    },
-                    {
-                        type: "fdc3.position",
-                        instrument: {
-                            type: "fdc3.instrument",
-                            id: { ticker: "MSFT", BBG: "MSFT US Equity", ISIN: "US5949181045" }
-                        },
-                        holding: 1500000
-                    },
-                    {
-                        type: "fdc3.position",
-                        instrument: {
-                            type: "fdc3.instrument",
-                            id: { ticker: "TSLA", BBG: "TSLA US Equity", ISIN: "US88160R1014" }
-                        },
-                        holding: 3000000
-                    }
-                ]
-            }
-        ],
-        "fdc3.contact": [
-            {
-                type: "fdc3.contact",
-                name: "Andy Young",
-                id: {
-                    email: "andy.young@example.com"
-                }
-            }
-        ],
-        "fdc3.contactList": [
-            {
-                type: "fdc3.contactList",
-                name: "My address book",
-                id: { customId: "5576" },
-                contacts: [
-                    {
-                        type: "fdc3.contact",
-                        name: "Andy Young",
-                        id: {
-                            email: "andy.young@example.com"
-                        }
-                    }
-                ]
-            }
-        ],
-        "fdc3.organization": [
-            {
-                type: "fdc3.organization",
-                name: "Cargill, Incorporated",
-                id: {
-                    LEI: "QXZYQNMR4JZ5RIRN4T31",
-                    FDS_ID: "00161G-E"
-                }
-            }
-        ],
-        "fdc3.country": [
-            {
-                type: "fdc3.country",
-                name: "Sweden",
-                id: {
-                    ISOALPHA3: "SWE"
-                }
-            }
-        ],
-        custom: [
-            {
-                type: "custom",
-                name: "Custom Context",
-                data: { custom: "object" }
-            }
-        ]
-    };
-}
-/**
- * Merge the context data with the default data.
- * @param newData The new data to merge.
- * @returns The combined data.
- */
-function mergeWithDefaultFDC3ContextData(newData) {
-    const fdc3ContextData = getDefaultFDC3ContextData();
-    if (newData !== undefined) {
-        const keys = Object.keys(newData);
-        for (const key of keys) {
-            if (fdc3ContextData[key] === undefined) {
-                fdc3ContextData[key] = newData[key];
-            }
-            else if (Array.isArray(newData[key])) {
-                fdc3ContextData[key].push(...newData[key]);
-            }
-        }
+function getJsonError(json) {
+    try {
+        JSON.parse(json);
+        return "";
     }
-    return fdc3ContextData;
-}
-/**
- * Get a default set of intents.
- * @returns The intent data.
- */
-function getDefaultFDC3IntentData() {
-    return {
-        StartCall: ["fdc3.contact", "fdc3.contactList"],
-        StartChat: ["fdc3.contact", "fdc3.contactList"],
-        ViewChart: ["fdc3.instrument", "fdc3.instrumentList", "fdc3.portfolio", "fdc3.position"],
-        ViewContact: ["fdc3.contact"],
-        ViewProfile: ["fdc3.contact", "fdc3.organization"],
-        ViewQuote: ["fdc3.instrument"],
-        ViewNews: [
-            "fdc3.country",
-            "fdc3.instrument",
-            "fdc3.instrumentList",
-            "fdc3.organization",
-            "fdc3.portfolio"
-        ],
-        ViewAnalysis: ["fdc3.instrument", "fdc3.organization", "fdc3.portfolio"],
-        ViewInstrument: ["fdc3.instrument"],
-        Custom: [
-            "fdc3.contact",
-            "fdc3.contactList",
-            "fdc3.country",
-            "fdc3.instrument",
-            "fdc3.instrumentList",
-            "fdc3.organization",
-            "fdc3.portfolio",
-            "fdc3.position",
-            "custom"
-        ]
-    };
-}
-/**
- * Merge the intent data with the default data.
- * @param newData The new data to merge.
- * @returns The combined data.
- */
-function mergeWithDefaultFDC3IntentData(newData) {
-    const fdc3IntentData = getDefaultFDC3IntentData();
-    if (newData !== undefined) {
-        const keys = Object.keys(newData);
-        for (const key of keys) {
-            if (fdc3IntentData[key] === undefined) {
-                fdc3IntentData[key] = newData[key];
-            }
-            else if (Array.isArray(newData[key])) {
-                for (const context of newData[key]) {
-                    if (!fdc3IntentData[key].includes(context)) {
-                        fdc3IntentData[key].push(context);
-                    }
-                }
-            }
-        }
-    }
-    return fdc3IntentData;
-}
-/**
- * Fire the intent.
- * @param intent The intent to fire.
- * @param context The context.
- * @param app The app to target.
- */
-async function fireIntent(intent, context, app) {
-    if (window.fin !== undefined) {
-        console.log(`Firing intent ${intent} with context`, context);
-        const intentRequest = {
-            name: intent,
-            context,
-            metadata: {
-                target: app
-            }
-        };
-        const intentResolver = await fin.me.interop.fireIntent(intentRequest);
-        if (intentResolver !== undefined) {
-            console.log("Intent resolver received: ", intentResolver);
-        }
+    catch (error) {
+        return error instanceof Error ? error.message : "Invalid JSON";
     }
 }
 /**
- * Fire the intent for context.
- * @param context The context.
- * @param app The app to target.
+ * Validates the form and updates the submit button and error display.
  */
-async function fireIntentForContext(context, app) {
-    if (window.fin !== undefined) {
-        if (app === undefined) {
-            console.log(`Firing intent for context ${context.type}:`, context);
-        }
-        else {
-            console.log(`Firing intent for context ${context.type} and targeting app: ${app}. Context: `, context);
-        }
-        context.metadata = {
-            target: app
-        };
-        const intentResolver = await fin.me.interop.fireIntentForContext(context);
-        if (intentResolver !== undefined) {
-            console.log("Intent resolver received: ", intentResolver);
-        }
+function validateForm() {
+    const contextBodyEl = document.querySelector("#contextBody");
+    const contextErrorEl = document.querySelector("#contextError");
+    const raiseIntentBtn = document.querySelector("#raiseIntent");
+    if (contextBodyEl === null || contextErrorEl === null || raiseIntentBtn === null) {
+        return;
+    }
+    const errorMessage = getJsonError(contextBodyEl.value);
+    if (errorMessage) {
+        contextErrorEl.textContent = errorMessage;
+        contextErrorEl.style.display = "block";
+        raiseIntentBtn.disabled = true;
+    }
+    else {
+        contextErrorEl.textContent = "";
+        contextErrorEl.style.display = "none";
+        raiseIntentBtn.disabled = contextBodyEl.value.trim().length === 0;
     }
 }
 /**
- * Add intent listeners for a list of intents.
- * @param intentList The list of intents to listen for.
+ * Populates the intent select dropdown with the available options.
  */
-async function addIntentListeners(intentList) {
-    if (window.fin !== undefined && intentList.length > 0) {
-        console.log("View Manifest/Defaults specified following intents: ", intentList);
+function populateIntentOptions() {
+    const intentNameEl = document.querySelector("#intentName");
+    if (intentNameEl === null) {
+        return;
+    }
+    for (const option of INTENT_OPTIONS) {
+        const optionEl = document.createElement("option");
+        optionEl.value = option.value;
+        optionEl.textContent = option.label;
+        intentNameEl.append(optionEl);
+    }
+}
+/**
+ * Applies the defaults for the currently selected intent option.
+ */
+function applyIntentDefaults() {
+    const intentNameEl = document.querySelector("#intentName");
+    const contextTypeEl = document.querySelector("#contextType");
+    const contextBodyEl = document.querySelector("#contextBody");
+    if (intentNameEl === null || contextTypeEl === null || contextBodyEl === null) {
+        return;
+    }
+    const selected = INTENT_OPTIONS.find((opt) => opt.value === intentNameEl.value);
+    if (selected) {
+        contextTypeEl.value = selected.defaultContextType;
+        contextTypeEl.placeholder = selected.defaultContextType;
+        contextBodyEl.value = selected.defaultContextBody;
+    }
+    validateForm();
+}
+/**
+ * Raises an intent using the FDC3 API with the current form values.
+ */
+async function raiseIntent() {
+    const intentNameEl = document.querySelector("#intentName");
+    const contextBodyEl = document.querySelector("#contextBody");
+    if (intentNameEl === null || contextBodyEl === null) {
+        return;
+    }
+    const intent = intentNameEl.value;
+    const context = JSON.parse(contextBodyEl.value);
+    if (window.fdc3 !== undefined) {
         try {
-            for (const intent of intentList) {
-                await fin.me.interop.registerIntentHandler((passedIntent) => {
-                    console.log(`Received Context For Intent: ${passedIntent.name}`, passedIntent.context);
-                    updateDOMElements(passedIntent.context);
-                }, intent);
-            }
+            const intentResolver = await window.fdc3.raiseIntent(intent, context);
+            console.log("Intent resolver received:", intentResolver);
         }
         catch (error) {
-            console.error("Error while trying to register an intent handler. It may be this platform does not have a custom broker implementation with Intent support.", error);
+            console.error("Error raising intent:", error);
         }
+    }
+    else {
+        console.warn("FDC3 is not available.");
     }
 }
 /**
- * Updates the DOM elements with the provided context.
- * @param context The context to update the DOM elements with.
+ * Initialize the DOM elements and event listeners.
  */
-function updateDOMElements(context) {
-    const contextTypeSpan = document.querySelector("#contextType");
-    const contextNameSpan = document.querySelector("#contextName");
-    const contextBodyPre = document.querySelector("#contextBody");
-    if (contextTypeSpan !== null && contextNameSpan !== null && contextBodyPre !== null) {
-        contextTypeSpan.textContent = context.type;
-        contextNameSpan.textContent = context.name ?? "No name provided.";
-        contextBodyPre.textContent = JSON.stringify(context, null, 2);
-    }
-}
-/**
- * Bind the FDC3 context.
- * @param value The value to bind.
- */
-function bindFDC3Context(value) {
-    const specifiedContext = document.querySelector("#context");
-    if (specifiedContext) {
-        specifiedContext.value = JSON.stringify(value, null, 3);
-    }
-}
-/**
- * Bind the FDC3 values.
- * @param values The values to bind.
- */
-function bindFDC3Values(values) {
-    const fdc3Value = document.querySelector("#fdc3Value");
-    if (fdc3Value) {
-        fdc3Value.length = 0;
-        let count = 0;
-        for (const value of values) {
-            const option = document.createElement("option");
-            let name = `Sample (${count + 1})`;
-            if (value.name !== undefined) {
-                name = value.name;
-            }
-            option.text = name;
-            option.value = count.toString();
-            count++;
-            fdc3Value.add(option);
-        }
-        const context = values[0];
-        bindFDC3Context(context);
-    }
-}
-/**
- * Bind the FDC3 types.
- * @param types The types to bind.
- */
-function bindFDC3Types(types) {
-    const fdc3Type = document.querySelector("#fdc3Type");
-    if (fdc3Type) {
-        fdc3Type.length = 0;
-        for (const type of types) {
-            const option = document.createElement("option");
-            option.text = type;
-            option.value = type;
-            fdc3Type.add(option);
-        }
-        bindFDC3Values(contextData[types[0]]);
-    }
-}
-/**
- * Bind the FDC3 intents.
- * @param intents The intents to bind.
- */
-async function bindFDC3Intents(intents) {
-    const fdc3Intent = document.querySelector("#fdc3Intents");
-    if (fdc3Intent) {
-        fdc3Intent.length = 0;
-        for (const intent of intents) {
-            const option = document.createElement("option");
-            option.text = intent;
-            option.value = intent;
-            fdc3Intent.add(option);
-        }
-        try {
-            const apps = await buildAppList();
-            bindApps(apps);
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }
-}
-/**
- * Bind the applications.
- * @param apps The applications to bind.
- */
-function bindApps(apps) {
-    const fdc3Apps = document.querySelector("#fdc3Apps");
-    if (fdc3Apps) {
-        fdc3Apps.length = 0;
-        apps.unshift({ appId: "none", title: "No Preference" }, { appId: "wrong-app", title: "Non Existent App" });
-        for (const app of apps) {
-            const option = document.createElement("option");
-            option.text = app.title ?? "";
-            option.value = app.appId;
-            fdc3Apps.add(option);
-        }
-    }
-}
-/**
- * Get the combined app list for the intents.
- * @param intents The intents to get the apps for.
- * @returns The list of apps for the intents.
- */
-function getCombinedAppList(intents) {
-    const combinedAppList = [];
-    const combinedListOfAppIds = [];
-    for (const intent of intents) {
-        for (const app of intent.apps) {
-            if (!combinedListOfAppIds.includes(app.appId)) {
-                combinedAppList.push(app);
-                combinedListOfAppIds.push(app.appId);
-            }
-        }
-    }
-    return combinedAppList;
-}
-/**
- * Are we firing by context.
- * @returns True if firing by context.
- */
-function isRaiseByContext() {
-    return getIntentRaiseType() === "fireIntentForContext";
-}
-/**
- * Build the list of applications.
- * @returns List of applications.
- */
-async function buildAppList() {
-    let intents = [];
-    const findByContext = isRaiseByContext();
-    try {
-        if (findByContext) {
-            intents = await fin.me.interop.getInfoForIntentsByContext(getContextToSend());
-        }
-        else {
-            const intentToRaise = getIntentToRaise();
-            if (intentToRaise === "") {
-                return [];
-            }
-            const intent = await fin.me.interop.getInfoForIntent({
-                name: getIntentToRaise()
-            });
-            intents.push(intent);
-        }
-    }
-    catch (error) {
-        console.error("Unable to build a supporting app list.", error);
-        return [];
-    }
-    return getCombinedAppList(intents);
-}
-/**
- * Bind the FDC3 on change handlers.
- */
-function bindFDC3OnChange() {
-    const fdc3RaiseBy = document.querySelector("#intentType");
-    const fdc3Intent = document.querySelector("#fdc3Intents");
-    const fdc3Type = document.querySelector("#fdc3Type");
-    const fdc3Value = document.querySelector("#fdc3Value");
-    const fdc3Apps = document.querySelector("#fdc3Apps");
-    const btnFireIntent = document.querySelector("#btnFireIntent");
-    const btnFireIntentForContext = document.querySelector("#btnFireIntentForContext");
-    const customIntentContainer = document.querySelector("#customIntentContainer");
-    const customIntent = document.querySelector("#customIntent");
-    if (fdc3RaiseBy) {
-        fdc3RaiseBy.addEventListener("change", async () => {
-            if (btnFireIntent && btnFireIntentForContext) {
-                const apps = await buildAppList();
-                bindApps(apps);
-                if (isRaiseByContext()) {
-                    btnFireIntent.style.display = "none";
-                    btnFireIntentForContext.style.display = "unset";
-                }
-                else {
-                    btnFireIntent.style.display = "unset";
-                    btnFireIntentForContext.style.display = "none";
-                }
-            }
+function initializeDOM() {
+    populateIntentOptions();
+    applyIntentDefaults();
+    const intentNameEl = document.querySelector("#intentName");
+    const contextBodyEl = document.querySelector("#contextBody");
+    const raiseIntentBtn = document.querySelector("#raiseIntent");
+    if (intentNameEl !== null) {
+        intentNameEl.addEventListener("change", () => {
+            applyIntentDefaults();
         });
     }
-    if (fdc3Intent) {
-        fdc3Intent.addEventListener("change", async () => {
-            if (customIntentContainer) {
-                bindFDC3Types(getFDC3Types());
-                const apps = await buildAppList();
-                bindApps(apps);
-                const intent = fdc3Intent.value;
-                if (intent === "Custom") {
-                    customIntentContainer.style.display = "flex";
-                }
-                else {
-                    customIntentContainer.style.display = "none";
-                }
-            }
+    if (contextBodyEl !== null) {
+        contextBodyEl.addEventListener("input", () => {
+            validateForm();
         });
     }
-    if (fdc3Type) {
-        fdc3Type.addEventListener("change", async () => {
-            bindFDC3Values(contextData[fdc3Type.value]);
-            const apps = await buildAppList();
-            bindApps(apps);
+    if (raiseIntentBtn !== null) {
+        raiseIntentBtn.addEventListener("click", async () => {
+            await raiseIntent();
         });
     }
-    if (fdc3Value) {
-        fdc3Value.addEventListener("change", () => {
-            if (fdc3Type && fdc3Value) {
-                const context = contextData[fdc3Type.value][Number.parseInt(fdc3Value.value, 10)];
-                bindFDC3Context(context);
-            }
-        });
-    }
-    if (fdc3Apps) {
-        fdc3Apps.addEventListener("change", () => {
-            console.log("App selection changed:", fdc3Apps.value);
-        });
-    }
-    if (customIntent) {
-        customIntent.addEventListener("change", () => {
-            console.log("Custom intent changed:", customIntent.value);
-        });
-    }
-}
-/**
- * Get the context to send.
- * @returns The context to send.
- */
-function getContextToSend() {
-    const contextInput = document.querySelector("#context");
-    const context = contextInput?.value;
-    return context ? JSON.parse(context) : {};
-}
-/**
- * Get the intent to raise.
- * @returns The intent to raise.
- */
-function getIntentToRaise() {
-    const selectedIntent = document.querySelector("#fdc3Intents");
-    let intent = selectedIntent?.value;
-    if (intent === "Custom") {
-        const customIntent = document.querySelector("#customIntent");
-        intent = customIntent?.value;
-    }
-    return intent ?? "";
-}
-/**
- * Get the intent raise type.
- * @returns The intent raise type.
- */
-function getIntentRaiseType() {
-    const intent = document.querySelector("#intentType");
-    return intent?.value ?? "";
-}
-/**
- * Get the app selection.
- * @returns The app selection.
- */
-function getAppSelection() {
-    const intent = document.querySelector("#fdc3Apps");
-    return intent?.value ?? "";
-}
-/**
- * Get the FDC3 types for the currently selected intent.
- * @returns The FDC3 types.
- */
-function getFDC3Types() {
-    let types = intentData[getIntentToRaise()];
-    if (types === undefined) {
-        types = intentData.Custom;
-    }
-    return types;
-}
-/**
- * Fire an intent.
- */
-async function requestFireIntent() {
-    const ctx = getContextToSend();
-    const intent = getIntentToRaise();
-    try {
-        let app = getAppSelection();
-        if (app === "none" || app === "") {
-            app = undefined;
-        }
-        await fireIntent(intent, ctx, app);
-    }
-    catch (error) {
-        console.error(`Unable to fire intent ${intent}`, error);
-    }
-}
-/**
- * Fire an intent for context.
- */
-async function requestFireIntentForContext() {
-    try {
-        const ctx = getContextToSend();
-        let app = getAppSelection();
-        if (app === "none" || app === "") {
-            app = undefined;
-        }
-        await fireIntentForContext(ctx, app);
-    }
-    catch (error) {
-        console.error("Unable to fire intent for context", error);
-    }
-}
-/**
- * Apply the settings.
- */
-async function applySettings() {
-    const finApi = window.fin;
-    if (finApi?.me?.getOptions !== undefined) {
-        try {
-            const options = await finApi.me.getOptions();
-            const optionsData = options?.customData;
-            if (optionsData?.contextData !== undefined && optionsData?.contextData !== null) {
-                if (optionsData.mergeContextData) {
-                    contextData = mergeWithDefaultFDC3ContextData(optionsData.contextData);
-                }
-                else {
-                    contextData = optionsData.contextData;
-                }
-            }
-            if (optionsData?.intentData !== undefined && optionsData?.intentData !== null) {
-                if (optionsData.mergeIntentData) {
-                    intentData = mergeWithDefaultFDC3IntentData(optionsData.intentData);
-                }
-                else {
-                    intentData = optionsData.intentData;
-                }
-            }
-        }
-        catch (error) {
-            console.error("Unable to apply settings", error);
-        }
-    }
-}
-/**
- * Initialize the DOM elements.
- */
-async function initializeDOM() {
-    const btnFireIntent = document.querySelector("#btnFireIntent");
-    if (btnFireIntent) {
-        btnFireIntent.addEventListener("click", async () => {
-            await requestFireIntent();
-        });
-    }
-    const btnFireIntentForContext = document.querySelector("#btnFireIntentForContext");
-    if (btnFireIntentForContext) {
-        btnFireIntentForContext.addEventListener("click", async () => {
-            await requestFireIntentForContext();
-        });
-    }
-    contextData = getDefaultFDC3ContextData();
-    intentData = getDefaultFDC3IntentData();
-    await applySettings();
-    const intentTypes = Object.keys(intentData);
-    await bindFDC3Intents(intentTypes);
-    bindFDC3Types(getFDC3Types());
-    bindFDC3OnChange();
-    await addIntentListeners(intentTypes);
 }
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=interop-intent-view-v2.bundle.js.map
+//# sourceMappingURL=intents.bundle.js.map

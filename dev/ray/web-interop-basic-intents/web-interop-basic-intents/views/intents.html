@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Interop View</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/intents.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="col gap10">
+			<h1>Raise Intent</h1>
+			<h1 class="tag">Select an intent and send a context payload.</h1>
+		</header>
+
+		<div class="col gap10">
+			<label class="col gap10" for="intentName">
+				<span>Intent</span>
+				<select id="intentName" class="field"></select>
+			</label>
+
+			<label class="col gap10" for="contextType">
+				<span>Context Type</span>
+				<input id="contextType" type="text" class="field" />
+			</label>
+
+			<label class="col gap10" for="contextBody">
+				<span>Context</span>
+				<textarea id="contextBody" rows="12" spellcheck="false" class="field field-textarea"></textarea>
+			</label>
+
+			<div id="contextError" style="color: var(--brand-error); display: none"></div>
+
+			<div>
+				<button id="raiseIntent" type="button" disabled class="button-primary">Raise Intent</button>
+			</div>
+		</div>
+	</body>
+</html>

@@ -7638,6 +7638,25 @@ module.exports = stubFalse;
 
 /***/ },
 
+/***/ "./client/src/config.ts"
+/*!******************************!*\
+  !*** ./client/src/config.ts ***!
+  \******************************/
+(__unused_webpack_module, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.APPS_URL = exports.LAYOUT_URL = exports.BROKER_URL = exports.SHARED_WORKER_URL = exports.PROVIDER_ID = void 0;
+exports.PROVIDER_ID = "web-layout-basic";
+exports.SHARED_WORKER_URL = `${window.location.origin}/js/shared-worker.bundle.js`;
+exports.BROKER_URL = `${window.location.origin}/platform/iframe-broker.html`;
+exports.LAYOUT_URL = `${window.location.origin}/layouts/default.layout.fin.json`;
+exports.APPS_URL = `${window.location.origin}/common/apps.json`;
+
+
+/***/ },
+
 /***/ "./client/src/content/api.ts"
 /*!***********************************!*\
   !*** ./client/src/content/api.ts ***!
@@ -7648,8 +7667,9 @@ module.exports = stubFalse;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.init = init;
+exports.waitForFdc3Ready = waitForFdc3Ready;
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "./node_modules/@openfin/core-web/out/api-client.cjs.js");
-const settings_1 = __webpack_require__(/*! ../platform/settings/settings */ "./client/src/platform/settings/settings.ts");
+const config_1 = __webpack_require__(/*! ../config */ "./client/src/config.ts");
 /**
  * Initializes the OpenFin Web Broker connection.
  * @param inherit Should we inherit settings from the host (available in the OpenFin layout system) or use settings? Default is true.
@@ -7659,16 +7679,11 @@ async function init(inherit = true) {
     let options;
     if (window.fin === undefined) {
         if (!inherit) {
-            const settings = await (0, settings_1.getSettings)();
-            if (settings === undefined) {
-                console.error("Unable to run the sample as we have been unable to load the web manifest and it's settings from the currently running html page. Please ensure that the web manifest is being served and that it contains the custom_settings section.");
-                return;
-            }
             options = {
-                brokerUrl: settings.platform.interop.brokerUrl,
+                brokerUrl: config_1.BROKER_URL,
                 interopConfig: {
-                    providerId: settings.platform.interop.providerId,
-                    currentContextGroup: settings.platform.interop.defaultContextGroup
+                    providerId: "web-interop-basic-intents",
+                    currentContextGroup: "green"
                 }
             };
         }
@@ -7696,119 +7711,17 @@ async function init(inherit = true) {
         window.dispatchEvent(event);
     }
 }
-
-
-/***/ },
-
-/***/ "./client/src/platform/settings/settings.ts"
-/*!**************************************************!*\
-  !*** ./client/src/platform/settings/settings.ts ***!
-  \**************************************************/
-(__unused_webpack_module, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSettings = getSettings;
-exports.getDefaultLayout = getDefaultLayout;
-exports.clearSettings = clearSettings;
-exports.saveSettings = saveSettings;
 /**
- * Fetches the settings for the application.
- * @returns The settings for the application.
+ * Waits for the fdc3 API to become available on the window.
+ * @returns A promise that resolves when fdc3 is ready.
  */
-async function getSettings() {
-    const savedSettings = await getSavedSettings();
-    if (savedSettings) {
-        return savedSettings;
-    }
-    const settings = await getManifestSettings();
-    if (!Array.isArray(settings?.endpointProvider?.endpoints)) {
-        console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+async function waitForFdc3Ready() {
+    if (window.fdc3) {
         return;
     }
-    const settingsEndpoint = settings.endpointProvider.endpoints.find((endpoint) => endpoint.id === "platform-settings");
-    if (settingsEndpoint === undefined ||
-        settingsEndpoint.type !== "fetch" ||
-        settingsEndpoint.options.method !== "GET" ||
-        settingsEndpoint.options.url === undefined) {
-        console.error("Unable to run the example as settings are required and we fetch them from the endpoint defined with the id: 'platform-settings' in the manifest. It needs to be of type fetch, performing a GET and it must have a url defined.");
-        return;
-    }
-    const platformSettings = await fetch(settingsEndpoint?.options.url);
-    const settingsJson = (await platformSettings.json());
-    return settingsJson;
-}
-/**
- * Returns a default layout from the settings if provided.
- * @returns The default layout from the settings.
- */
-async function getDefaultLayout() {
-    const settings = await getSettings();
-    if (settings?.platform?.layout?.defaultLayout === undefined) {
-        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
-        return;
-    }
-    if (typeof settings.platform.layout.defaultLayout === "string") {
-        const layoutResponse = await fetch(settings.platform.layout.defaultLayout);
-        const layoutJson = (await layoutResponse.json());
-        return layoutJson;
-    }
-    return settings.platform.layout.defaultLayout;
-}
-/**
- * Returns the settings from the manifest file.
- * @returns customSettings for this example
- */
-async function getManifestSettings() {
-    // Get the manifest link
-    const link = document.querySelector('link[rel="manifest"]');
-    if (link !== null) {
-        const manifestResponse = await fetch(link.href);
-        const manifestJson = (await manifestResponse.json());
-        return manifestJson.custom_settings;
-    }
-}
-/**
- * Clears any saved settings.
- * @returns The saved settings.
- */
-async function clearSettings() {
-    const settingsId = getSavedSettingsId();
-    localStorage.removeItem(settingsId);
-}
-/**
- * Saves the settings.
- * @param settings The settings to save.
- */
-async function saveSettings(settings) {
-    const settingsId = getSavedSettingsId();
-    localStorage.setItem(settingsId, JSON.stringify(settings));
-}
-/**
- * Retrieves saved settings from local storage.
- * @returns The saved settings.
- */
-async function getSavedSettings() {
-    const settingsId = getSavedSettingsId();
-    const settings = localStorage.getItem(settingsId);
-    if (settings !== null) {
-        const resolvedSettings = JSON.parse(settings);
-        if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
-            resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
-        }
-        return resolvedSettings;
-    }
-}
-/**
- * Get the Id used for saving and fetching settings from storage.
- * @returns The settings id.
- */
-function getSavedSettingsId() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const env = urlParams.get("env");
-    const settingsKey = env ? `${env}-settings` : "settings";
-    return settingsKey;
+    return new Promise((resolve) => {
+        window.addEventListener("fdc3Ready", () => resolve(), { once: true });
+    });
 }
 
 
@@ -8802,433 +8715,49 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!******************************************************!*\
-  !*** ./client/src/content/interop-broadcast-view.ts ***!
-  \******************************************************/
+/*!********************************************!*\
+  !*** ./client/src/content/view-contact.ts ***!
+  \********************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDefaultFDC3ContextData = getDefaultFDC3ContextData;
-exports.mergeWithDefaultFDC3ContextData = mergeWithDefaultFDC3ContextData;
-exports.systemSetContext = systemSetContext;
-exports.sessionSetContext = sessionSetContext;
-exports.listenToSystemContext = listenToSystemContext;
-exports.listenToSessionContext = listenToSessionContext;
 const api_1 = __webpack_require__(/*! ./api */ "./client/src/content/api.ts");
-let contextData = {};
-const customChannel = "custom-app-channel";
-const SYSTEM_CONTEXT_GROUP = "systemContextGroup";
-const SESSION_CONTEXT_GROUP = "sessionContextGroup";
 window.addEventListener("DOMContentLoaded", async () => {
     await (0, api_1.init)(true);
     await initializeDOM();
 });
 /**
- * Get the default data.
- * @returns The data set keyed by FDC3 type.
+ * Adds an fdc3 intent listener to the window.
  */
-function getDefaultFDC3ContextData() {
-    return {
-        "fdc3.instrument": [
-            {
-                type: "fdc3.instrument",
-                name: "Tesla Inc",
-                id: { ticker: "TSLA", BBG: "TSLA US Equity", ISIN: "US88160R1014" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "Apple Inc.",
-                id: { ticker: "AAPL", BBG: "AAPL US Equity", ISIN: "US0378331005" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "Microsoft Corporation",
-                id: { ticker: "MSFT", BBG: "MSFT US Equity", ISIN: "US5949181045" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "BAE Systems plc",
-                id: { ticker: "BA", BBG: "BA/ LN Equity", ISIN: "GB0002634946" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "Admiral Group plc",
-                id: { ticker: "ADM", BBG: "ADM LN Equity", ISIN: "GB00B02J6398" }
-            },
-            {
-                type: "fdc3.instrument",
-                name: "HSBC Holdings Plc",
-                id: { ticker: "HSBA", BBG: "HSBA LN Equity", ISIN: "GB0005405286" }
-            }
-        ],
-        "fdc3.instrumentList": [
-            {
-                type: "fdc3.instrumentList",
-                name: "Interesting instruments...",
-                id: { customId: "5464" },
-                instruments: [
-                    {
-                        type: "fdc3.instrument",
-                        id: {
-                            ticker: "AAPL",
-                            BBG: "AAPL US Equity",
-                            ISIN: "US0378331005"
-                        }
-                    },
-                    {
-                        type: "fdc3.instrument",
-                        id: {
-                            ticker: "MSFT",
-                            BBG: "MSFT US Equity",
-                            ISIN: "US5949181045"
-                        }
-                    }
-                ]
-            }
-        ],
-        "fdc3.position": [
-            {
-                type: "fdc3.position",
-                name: "My Apple shares",
-                id: { positionId: "6475" },
-                instrument: {
-                    type: "fdc3.instrument",
-                    id: {
-                        ticker: "AAPL",
-                        BBG: "AAPL US Equity",
-                        ISIN: "US0378331005"
-                    }
-                },
-                holding: 2000000
-            }
-        ],
-        "fdc3.portfolio": [
-            {
-                type: "fdc3.portfolio",
-                name: "My share portfolio",
-                id: { portfolioId: "7381" },
-                positions: [
-                    {
-                        type: "fdc3.position",
-                        instrument: {
-                            type: "fdc3.instrument",
-                            id: { ticker: "AAPL", BBG: "AAPL US Equity", ISIN: "US0378331005" }
-                        },
-                        holding: 2000000
-                    },
-                    {
-                        type: "fdc3.position",
-                        instrument: {
-                            type: "fdc3.instrument",
-                            id: { ticker: "MSFT", BBG: "MSFT US Equity", ISIN: "US5949181045" }
-                        },
-                        holding: 1500000
-                    },
-                    {
-                        type: "fdc3.position",
-                        instrument: {
-                            type: "fdc3.instrument",
-                            id: { ticker: "TSLA", BBG: "TSLA US Equity", ISIN: "US88160R1014" }
-                        },
-                        holding: 3000000
-                    }
-                ]
-            }
-        ],
-        "fdc3.organization": [
-            {
-                type: "fdc3.organization",
-                name: "Cargill, Incorporated",
-                id: {
-                    LEI: "QXZYQNMR4JZ5RIRN4T31",
-                    FDS_ID: "00161G-E"
-                }
-            }
-        ],
-        "fdc3.country": [
-            {
-                type: "fdc3.country",
-                name: "Sweden",
-                id: {
-                    ISOALPHA3: "SWE"
-                }
-            }
-        ],
-        custom: [
-            {
-                type: "custom",
-                name: "Custom Context",
-                data: { custom: "object" }
-            }
-        ]
-    };
-}
-/**
- * Merge the context data with the default data.
- * @param newData The new data to merge.
- * @returns The combined data.
- */
-function mergeWithDefaultFDC3ContextData(newData) {
-    const fdc3ContextData = getDefaultFDC3ContextData();
-    if (newData !== undefined) {
-        const keys = Object.keys(newData);
-        for (const key of keys) {
-            if (fdc3ContextData[key] === undefined) {
-                fdc3ContextData[key] = newData[key];
-            }
-            else if (Array.isArray(newData[key])) {
-                fdc3ContextData[key].push(...newData[key]);
-            }
-        }
-    }
-    return fdc3ContextData;
-}
-/**
- * Perform a system context set.
- * @param context The context to set.
- */
-async function systemSetContext(context) {
-    if (window.fin !== undefined) {
-        try {
-            console.log("set context being called on system channel:", context);
-            await window.fin.me.interop.setContext(context);
-        }
-        catch (error) {
-            console.log("You are not bound to a system channel and are unable to set context:", error);
-        }
-    }
-}
-/**
- * Perform a session context set.
- * @param appSessionContextGroupName The session context group name.
- * @param context The context to set.
- */
-async function sessionSetContext(appSessionContextGroupName, context) {
-    if (window.fin !== undefined && appSessionContextGroupName !== undefined) {
-        const appSessionContextGroup = await window.fin.me.interop.joinSessionContextGroup(appSessionContextGroupName);
-        console.log(`Setting context on session context group ${appSessionContextGroupName}`, context);
-        await appSessionContextGroup.setContext(context);
-    }
-}
-/**
- * Listen for system context.
- * @param onContextReceived The handler for the context received.
- */
-async function listenToSystemContext(onContextReceived) {
-    if (window.fin !== undefined) {
-        try {
-            console.log("Listening for system context.");
-            await window.fin.me.interop.addContextHandler((ctx) => {
-                console.log("System Context Received:", ctx);
-                onContextReceived(ctx);
-            });
-        }
-        catch (error) {
-            console.log("Error listening for system context");
-            console.error(error);
-        }
-    }
-}
-/**
- * Listen for session context.
- * @param appSessionContextGroupName The app session context group name.
- * @param onContextReceived The handler for the context received.
- */
-async function listenToSessionContext(appSessionContextGroupName, onContextReceived) {
-    if (window.fin !== undefined && appSessionContextGroupName !== undefined) {
-        try {
-            const appSessionContextGroup = await window.fin.me.interop.joinSessionContextGroup(appSessionContextGroupName);
-            console.log(`Listening for app session context group: ${appSessionContextGroupName} context.`);
-            await appSessionContextGroup.addContextHandler((ctx) => {
-                console.log("App Session Context Received:", ctx);
-                onContextReceived(ctx);
-            });
-        }
-        catch (error) {
-            console.log(`Error listening for app session context group: ${appSessionContextGroupName} context.`);
-            console.error("Error listening for app session context", error);
-        }
-    }
-}
-/**
- * Apply the settings.
- */
-async function applySettings() {
-    const finApi = window.fin;
-    if (finApi?.me?.getOptions !== undefined) {
-        try {
-            const options = await finApi.me.getOptions();
-            const optionsData = options?.customData;
-            if (optionsData?.contextData !== undefined && optionsData?.contextData !== null) {
-                if (optionsData.mergeContextData) {
-                    contextData = mergeWithDefaultFDC3ContextData(optionsData.contextData);
-                }
-                else {
-                    contextData = optionsData.contextData;
-                }
-            }
-        }
-        catch (error) {
-            console.error("Error getting options", error);
-        }
-    }
-}
-/**
- * Bind the FDC3 context.
- * @param value The value to bind.
- */
-function bindFDC3Context(value) {
-    const specifiedContext = document.querySelector("#context");
-    if (specifiedContext) {
-        specifiedContext.value = JSON.stringify(value, null, 3);
-    }
-}
-/**
- * Bind the FDC3 values.
- * @param values The values to bind.
- */
-function bindFDC3Values(values) {
-    const fdc3Value = document.querySelector("#fdc3Value");
-    if (fdc3Value) {
-        fdc3Value.length = 0;
-        let count = 0;
-        for (const value of values) {
-            const option = document.createElement("option");
-            let name = `Sample (${count + 1})`;
-            if (value.name !== undefined) {
-                name = value.name;
-            }
-            option.text = name;
-            option.value = count.toString();
-            count++;
-            fdc3Value.add(option);
-        }
-        const context = values[0];
-        bindFDC3Context(context);
-    }
-}
-/**
- * Bind the FDC3 types.
- * @param types The types to bind.
- */
-function bindFDC3Types(types) {
-    const fdc3Type = document.querySelector("#fdc3Type");
-    if (fdc3Type) {
-        fdc3Type.length = 0;
-        for (const type of types) {
-            const option = document.createElement("option");
-            option.text = type;
-            option.value = type;
-            fdc3Type.add(option);
-        }
-        bindFDC3Values(contextData[types[0]]);
-    }
-}
-/**
- * Bind the change event for channel type.
- */
-function bindFDC3OnChange() {
-    const fdc3Type = document.querySelector("#fdc3Type");
-    if (fdc3Type) {
-        fdc3Type.addEventListener("change", () => {
-            bindFDC3Values(contextData[fdc3Type.value]);
-        });
-    }
-    const fdc3Value = document.querySelector("#fdc3Value");
-    if (fdc3Value) {
-        fdc3Value.addEventListener("change", () => {
-            if (fdc3Type && fdc3Value) {
-                const context = contextData[fdc3Type.value][Number.parseInt(fdc3Value.value, 10)];
-                bindFDC3Context(context);
-            }
+async function addIntentListener() {
+    const intent = "ViewContact";
+    await (0, api_1.waitForFdc3Ready)();
+    if (window.fdc3) {
+        await window.fdc3.addIntentListener(intent, (ctx, metadata) => {
+            console.log(`Received Context For Intent: ${intent}`, ctx);
+            console.log(`Received Metadata With Intent: ${intent}`, metadata);
+            updateDOMElements(ctx);
         });
     }
 }
 /**
- * Update the DOM elements with the received context.
- * @param context The context received.
+ * Updates the DOM elements with the provided context.
+ * @param context The context to update the DOM elements with.
  */
 function updateDOMElements(context) {
-    const contextBody = document.querySelector("#contextBody");
-    if (contextBody !== null) {
-        contextBody.textContent = JSON.stringify(context, null, 2);
-    }
-}
-/**
- * Get the context to send.
- * @returns The context to send.
- */
-function getContextToSend() {
-    const contextInput = document.querySelector("#context");
-    const context = contextInput?.value;
-    return context ? JSON.parse(context) : {};
-}
-/**
- * Get the context group type.
- * @returns The context group type.
- */
-function getContextGroupType() {
-    const contextGroupType = document.querySelector("#contextGroupType");
-    return contextGroupType?.value ?? "";
-}
-/**
- * Log the environment details.
- */
-async function logEnvironment() {
-    if (window.fin !== undefined) {
-        try {
-            const contextGroups = await window.fin.me.interop.getContextGroups();
-            if (Array.isArray(contextGroups)) {
-                console.log("-- Available System Context Groups -- ");
-                for (const group of contextGroups) {
-                    console.log(`- ${group.id}`);
-                }
-                console.log("-- Available System Context Groups -- ");
-            }
-        }
-        catch (error) {
-            console.log("-- System Context Groups Not Available -- ");
-            console.error("Error getting context groups.", error);
-        }
+    const receivedContext = document.querySelector("#receivedContext");
+    if (receivedContext) {
+        receivedContext.value = JSON.stringify(context, null, 2);
     }
 }
 /**
  * Initialize the DOM elements.
  */
 async function initializeDOM() {
-    window.addEventListener("finReady", () => {
-        console.log("Fin Ready Event Fired");
-    });
-    const btnSetContext = document.querySelector("#btnSetContext");
-    if (btnSetContext) {
-        btnSetContext.addEventListener("click", async () => {
-            try {
-                const ctx = getContextToSend();
-                const contextGroupType = getContextGroupType();
-                if (contextGroupType === SYSTEM_CONTEXT_GROUP) {
-                    await systemSetContext(ctx);
-                }
-                else if (contextGroupType === SESSION_CONTEXT_GROUP) {
-                    await sessionSetContext(customChannel, ctx);
-                }
-            }
-            catch (error) {
-                console.error("Unable to set context", error);
-                console.log("Unable to call setContext for the current context. Likely a JSON parsing error:", error);
-            }
-        });
-    }
-    await applySettings();
-    contextData = getDefaultFDC3ContextData();
-    await logEnvironment();
-    const dataTypes = Object.keys(contextData);
-    bindFDC3Types(dataTypes);
-    bindFDC3OnChange();
-    await listenToSystemContext((ctx) => updateDOMElements(ctx));
-    await listenToSessionContext(customChannel, (ctx) => updateDOMElements(ctx));
+    await addIntentListener();
 }
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=interop-broadcast-view.bundle.js.map
+//# sourceMappingURL=view-contact.bundle.js.map

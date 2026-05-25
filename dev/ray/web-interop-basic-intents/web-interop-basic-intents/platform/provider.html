@@ -10,41 +10,20 @@
 		<link rel="stylesheet" href="../style/core-web-styles.css" />
 		<link rel="stylesheet" href="../common/style/app.css" />
 		<script defer="defer" src="../js/provider.bundle.js"></script>
-		<script type="module" src="../common/lib/wc-fin/wc-fin.esm.js"></script>
 		<link rel="manifest" href="../manifest.json" />
 	</head>
 	<body class="col gap20">
 		<header class="row spread middle header">
 			<div class="col">
-				<h1 id="title">HERE - Support Context & Intents</h1>
-				<h1 id="subTitle" class="tag">
-					Demonstrate how HERE's FDC3 Context and Intents support can be utilized and combined with HERE's
-					Layout support.
-				</h1>
+				<h1>FDC3 Intents Basic Example</h1>
+				<div class="tag">Demonstrate the basic raise intent flow</div>
 			</div>
 			<div class="row middle gap20">
-				<fin-context-group-picker
-					bind-self="false"
-					bind-views="true"
-					is-monitoring-enabled="true"
-					show-list-on-click="true"
-				></fin-context-group-picker>
-				<label for="layout-selector">Layout</label>
-				<select id="layout-selector"></select>
-				<button type="button" id="add-layout" class="small" title="Add Layout">
-					<img src="../images/plus.svg" alt="Add Layout" height="20px" />
-				</button>
-				<button type="button" id="delete-layout" class="small" title="Delete Layout">
-					<img src="../images/trash.svg" alt="Delete Layout" height="20px" />
-				</button>
-				<button type="button" id="settings" class="small" title="Settings">
-					<img src="../images/gear.svg" alt="Update Settings" height="20px" />
-				</button>
-				<img id="logo" src="../common/images/icon.png" alt="HERE" height="40px" />
+				<image src="../common/images/icon.png" alt="HERE" height="40px"></image>
 			</div>
 		</header>
 		<main id="main-page">
-			<div id="layout_container"></div>
+			<div id="layout_container" class="layout-container"></div>
 		</main>
 	</body>
 </html>
