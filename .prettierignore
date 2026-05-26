@@ -1,10 +1,11 @@
+.claude/
 package-lock.json
 *.bundle.js
 settings.schema.json
-reports
+**/reports
 *.exe
 *.zip
 **/wc-fin/*.js
 eslint.config.mjs
-public/style/core-web-styles.css
-.playwright-mcp
+**/public/style/core-web-styles.css
+**/.playwright-mcp

@@ -42,9 +42,7 @@ async function run() {
 					console.log('Copying', src);
 					console.log('  To', dest);
 
-					try {
-						await fs.mkdir(path.dirname(dest), { recursive: true });
-					} catch {}
+					await fs.mkdir(path.dirname(dest), { recursive: true });
 
 					await fs.copyFile(src, dest);
 				}
