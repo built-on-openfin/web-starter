@@ -7648,7 +7648,7 @@ module.exports = stubFalse;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.APPS_URL = exports.LAYOUT_URL = exports.BROKER_URL = exports.SHARED_WORKER_URL = exports.PROVIDER_ID = void 0;
-exports.PROVIDER_ID = "web-layout-basic";
+exports.PROVIDER_ID = "web-interop-basic-intents";
 exports.SHARED_WORKER_URL = `${window.location.origin}/js/shared-worker.bundle.js`;
 exports.BROKER_URL = `${window.location.origin}/platform/iframe-broker.html`;
 exports.LAYOUT_URL = `${window.location.origin}/layouts/default.layout.fin.json`;
@@ -7682,7 +7682,7 @@ async function init(inherit = true) {
             options = {
                 brokerUrl: config_1.BROKER_URL,
                 interopConfig: {
-                    providerId: "web-interop-basic-intents",
+                    providerId: config_1.PROVIDER_ID,
                     currentContextGroup: "green"
                 }
             };
