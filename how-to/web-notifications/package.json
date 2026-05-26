@@ -9,11 +9,7 @@
 		"build-client": "npm run copy-core-web && webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 6060 -c-1",
-		"setup": "npm install && npm run build",
-		"prettier": "prettier --config .prettierrc --write .",
-		"prettier-check": "prettier --config .prettierrc --check .",
-		"eslint": "eslint .",
-		"validate": "npm run prettier && npm run eslint"
+		"setup": "npm install && npm run build"
 	},
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
@@ -24,12 +20,9 @@
 	},
 	"devDependencies": {
 		"@openfin/core": "43.101.4",
-		"prettier": "3.2.5",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.2",
 		"webpack": "^5.90.3",
-		"webpack-cli": "^5.1.4",
-		"@openfin-web-starter/eslint-config": "^1.0.0",
-		"eslint": "^9.9.0"
+		"webpack-cli": "^5.1.4"
 	}
 }
