@@ -19,7 +19,6 @@
 	},
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
-		"@finos/fdc3": "2.0.3",
 		"@openfin/core-web": "0.44.110",
 		"@openfin/notifications": "2.14.0-alpha-4623",
 		"@openfin/web-notifications": "2.14.0-alpha-4623"

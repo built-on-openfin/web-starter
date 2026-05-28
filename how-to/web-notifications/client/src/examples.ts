@@ -1,13 +1,11 @@
 import {
 	IndicatorColor,
 	cancelReminder,
+	create,
 	setReminder,
 	update,
 	type UpdatableNotificationOptions
 } from "@openfin/notifications";
-
-import { getNotificationsClient } from "../platform/api";
-import { randomUUID } from "../utils";
 
 const ICON_URL = `${window.location.origin}/common/images/here.png`;
 const SOUND_URL = `${window.location.origin}/assets/notification.mp3`;
@@ -25,12 +23,12 @@ let cancelCountdownTimerId: number | undefined;
 
 /** Show a notification with Acknowledge and Cancel action buttons. */
 export async function showActionableNotification(): Promise<void> {
-	await getNotificationsClient().create({
+	await create({
 		title: "Actionable Notification",
 		body: "This is a notification that has an action",
 		toast: "transient",
 		template: "markdown",
-		id: randomUUID(),
+		id: crypto.randomUUID(),
 		buttons: [
 			{
 				title: "Acknowledged",
@@ -45,12 +43,12 @@ export async function showActionableNotification(): Promise<void> {
 
 /** Show a notification with a number form field and a Save/Cancel button pair. */
 export async function showFormNotification(): Promise<void> {
-	await getNotificationsClient().create({
+	await create({
 		title: "Form Notification",
 		body: "This is a notification that has form data",
 		toast: "transient",
 		template: "markdown",
-		id: randomUUID(),
+		id: crypto.randomUUID(),
 		form: [
 			{
 				key: "amount",
@@ -73,12 +71,12 @@ export async function showFormNotification(): Promise<void> {
 
 /** Show a notification with a rich form containing text, time, date, dropdown, radio, checkbox, and number fields. */
 export async function showFormAdvancedNotification(): Promise<void> {
-	await getNotificationsClient().create({
+	await create({
 		title: "Form Advanced Notification",
 		body: "This is a notification that has form data",
 		toast: "transient",
 		template: "markdown",
-		id: randomUUID(),
+		id: crypto.randomUUID(),
 		form: [
 			{
 				type: "string",
@@ -187,7 +185,7 @@ export async function showFormAdvancedNotification(): Promise<void> {
 
 /** Show a notification whose body text updates every second until it is closed. */
 export async function showUpdatableNotification(): Promise<void> {
-	const id = randomUUID();
+	const id = crypto.randomUUID();
 	updatableMap[id] = 0;
 
 	if (Object.keys(updatableMap).length === 1) {
@@ -212,7 +210,7 @@ export async function showUpdatableNotification(): Promise<void> {
 		}, 1000);
 	}
 
-	await getNotificationsClient().create({
+	await create({
 		title: "Updatable Notification",
 		body: "This is an updatable notification",
 		toast: "transient",
@@ -223,11 +221,11 @@ export async function showUpdatableNotification(): Promise<void> {
 
 /** Show a notification built with a fully custom layout template. */
 export async function showCustomNotification(): Promise<void> {
-	await getNotificationsClient().create({
+	await create({
 		title: "Custom Notification",
 		toast: "transient",
 		template: "custom",
-		id: randomUUID(),
+		id: crypto.randomUUID(),
 		templateOptions: {
 			body: {
 				compositions: [
@@ -294,13 +292,13 @@ export async function showCustomNotification(): Promise<void> {
 
 /** Show a notification and attempt to play a sound file alongside it. */
 export async function showSoundNotification(): Promise<void> {
-	await getNotificationsClient().create({
+	await create({
 		title: "Sound Notification",
 		body: "This is a notification with sound 🔉",
 		toast: "transient",
 		template: "markdown",
 		soundOptions: { mode: "silent" },
-		id: randomUUID()
+		id: crypto.randomUUID()
 	});
 	try {
 		const audio = new Audio(SOUND_URL);
@@ -312,12 +310,12 @@ export async function showSoundNotification(): Promise<void> {
 
 /** Show a notification with a red indicator bar aligned to the left. */
 export async function showIndicatorNotification(): Promise<void> {
-	await getNotificationsClient().create({
+	await create({
 		title: "Indicator Notification",
 		toast: "transient",
 		indicator: { text: "Limit" },
 		template: "custom",
-		id: randomUUID(),
+		id: crypto.randomUUID(),
 		templateOptions: {
 			body: {
 				compositions: [
@@ -339,11 +337,11 @@ export async function showIndicatorNotification(): Promise<void> {
 
 /** Show a notification with a right-aligned orange ALERT indicator. */
 export async function showCustomIndicatorNotification(): Promise<void> {
-	await getNotificationsClient().create({
+	await create({
 		title: "Custom Indicator Notification",
 		toast: "transient",
 		template: "custom",
-		id: randomUUID(),
+		id: crypto.randomUUID(),
 		templateOptions: {
 			body: {
 				compositions: [
@@ -377,7 +375,7 @@ async function createReminderNotification(
 	countdownSeconds: number,
 	onReminderSet?: (id: string) => void
 ): Promise<void> {
-	const id = randomUUID();
+	const id = crypto.randomUUID();
 	countdownMap[id] = { secondsRemaining: countdownSeconds, reminderDate };
 
 	if (countdownTimerId === undefined) {
@@ -424,7 +422,7 @@ async function createReminderNotification(
 		}, 1000);
 	}
 
-	await getNotificationsClient().create({
+	await create({
 		title,
 		body: `Setting reminder in ${countdownSeconds} second${countdownSeconds !== 1 ? "s" : ""}...`,
 		toast: "transient",

@@ -1,5 +1,16 @@
-import type { ButtonOptions, NotificationOptions, TemplateMarkdown } from "@openfin/notifications";
-import { getNotificationsClient, init, type NotificationEventMap } from "../platform/api";
+import { connect } from "@openfin/core-web";
+import {
+	addEventListener,
+	clearAll,
+	create,
+	getAll,
+	getNotificationsCount,
+	register,
+	toggleNotificationCenter,
+	type ButtonOptions,
+	type NotificationOptions,
+	type TemplateMarkdown
+} from "@openfin/notifications";
 import {
 	showActionableNotification,
 	showCustomIndicatorNotification,
@@ -12,6 +23,7 @@ import {
 	showSoundNotification,
 	showUpdatableNotification
 } from "./examples";
+import { getSettings } from "./settings";
 
 const MAX_LOG_ENTRIES = 50;
 
@@ -196,24 +208,6 @@ function runAsyncTask(task: () => Promise<void>): void {
 }
 
 /**
- * Subscribes to a notification event and reports non-fatal subscription failures.
- * @param client Notifications client singleton.
- * @param type Event type to subscribe to.
- * @param handler Event handler.
- */
-async function subscribeToNotificationEvent<K extends keyof NotificationEventMap>(
-	client: ReturnType<typeof getNotificationsClient>,
-	type: K,
-	handler: (event: NotificationEventMap[K]) => void
-): Promise<void> {
-	try {
-		await client.on(type, handler);
-	} catch (error) {
-		console.error(`Unable to subscribe to ${type}.`, error);
-	}
-}
-
-/**
  * Creates a notification from the current form values.
  */
 async function handleCreateClick(): Promise<void> {
@@ -224,7 +218,7 @@ async function handleCreateClick(): Promise<void> {
 
 	try {
 		const payload = buildNotification(values);
-		await getNotificationsClient().create(payload);
+		await create(payload);
 		setStatus(`Created ${values.toast} notification "${values.title}".`, "success");
 	} catch (error) {
 		setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
@@ -236,7 +230,7 @@ async function handleCreateClick(): Promise<void> {
  */
 async function handleClearAllClick(): Promise<void> {
 	try {
-		const count = await getNotificationsClient().clearAll();
+		const count = await clearAll();
 		setStatus(`Cleared ${count} notification(s) from this client.`, "success");
 		logEvent("info", `clearAll() removed ${count} notification(s).`);
 	} catch (error) {
@@ -249,7 +243,7 @@ async function handleClearAllClick(): Promise<void> {
  */
 async function handleGetAllClick(): Promise<void> {
 	try {
-		const notifications = await getNotificationsClient().getAll();
+		const notifications = await getAll();
 		const titles = notifications.map((notification) => notification.title).join(", ");
 		const summary = notifications.length === 0 ? "(none)" : titles;
 		setStatus(`getAll() returned ${notifications.length} notification(s).`, "info");
@@ -264,7 +258,7 @@ async function handleGetAllClick(): Promise<void> {
  */
 async function handleToggleCenterClick(): Promise<void> {
 	try {
-		await getNotificationsClient().toggleCenter();
+		await toggleNotificationCenter();
 		setStatus("Toggled Notification Center.", "info");
 	} catch (error) {
 		setStatus(error instanceof Error ? error.message : "Unable to toggle Notification Center.", "error");
@@ -276,36 +270,58 @@ async function handleToggleCenterClick(): Promise<void> {
  * Failures during subscription are non-fatal — the rest of the demo still works.
  */
 async function bindEventLog(): Promise<void> {
-	const client = getNotificationsClient();
+	try {
+		await addEventListener("notification-created", (event) => {
+			logEvent("create", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+		});
+	} catch (error) {
+		console.error("Unable to subscribe to notification-created.", error);
+	}
 
-	await subscribeToNotificationEvent(client, "notification-created", (event) => {
-		logEvent("create", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
-	});
+	try {
+		await addEventListener("notification-action", (event) => {
+			const buttonTitle =
+				event.control && event.control.type === "button" ? event.control.title : "(non-button)";
+			const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
+			logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
+		});
+	} catch (error) {
+		console.error("Unable to subscribe to notification-action.", error);
+	}
 
-	await subscribeToNotificationEvent(client, "notification-action", (event) => {
-		const buttonTitle =
-			event.control && event.control.type === "button" ? event.control.title : "(non-button)";
-		const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
-		logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
-	});
+	try {
+		await addEventListener("notification-closed", (event) => {
+			logEvent("closed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+		});
+	} catch (error) {
+		console.error("Unable to subscribe to notification-closed.", error);
+	}
 
-	await subscribeToNotificationEvent(client, "notification-closed", (event) => {
-		logEvent("closed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
-	});
+	try {
+		await addEventListener("notification-toast-dismissed", (event) => {
+			logEvent("toast-dismissed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+		});
+	} catch (error) {
+		console.error("Unable to subscribe to notification-toast-dismissed.", error);
+	}
 
-	await subscribeToNotificationEvent(client, "notification-toast-dismissed", (event) => {
-		logEvent("toast-dismissed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
-	});
+	try {
+		await addEventListener("notifications-count-changed", (event) => {
+			setCount(event.count);
+			logEvent("count", `Notification center holds ${event.count} item(s).`);
+		});
+	} catch (error) {
+		console.error("Unable to subscribe to notifications-count-changed.", error);
+	}
 
-	await subscribeToNotificationEvent(client, "notifications-count-changed", (event) => {
-		setCount(event.count);
-		logEvent("count", `Notification center holds ${event.count} item(s).`);
-	});
-
-	await subscribeToNotificationEvent(client, "notification-form-submitted", (event) => {
-		const data = event.form ? JSON.stringify(event.form) : "(none)";
-		logEvent("action", `Form submitted (id=${event.notification.id.slice(0, 8)}…) → ${data}`);
-	});
+	try {
+		await addEventListener("notification-form-submitted", (event) => {
+			const data = event.form ? JSON.stringify(event.form) : "(none)";
+			logEvent("action", `Form submitted (id=${event.notification.id.slice(0, 8)}…) → ${data}`);
+		});
+	} catch (error) {
+		console.error("Unable to subscribe to notification-form-submitted.", error);
+	}
 }
 
 /** Wires up the Notification Center toggle button, tracking open/closed state locally. */
@@ -379,6 +395,39 @@ function bindControls(): void {
 	bindExamples();
 }
 
+/**
+ * Initializes the OpenFin Web Broker connection and registers as a notification producer.
+ */
+async function init(): Promise<void> {
+	const settings = await getSettings();
+	if (settings === undefined) {
+		console.error("Unable to initialize because the web manifest custom_settings could not be loaded.");
+		return;
+	}
+
+	if (window.fin === undefined) {
+		window.fin = await connect({
+			options: {
+				brokerUrl: settings.platform.interop.brokerUrl,
+				interopConfig: {
+					providerId: settings.platform.interop.providerId,
+					currentContextGroup: settings.platform.interop.defaultContextGroup
+				}
+			}
+		});
+	}
+
+	await register({
+		externalProviderConfig: {
+			finContext: window.fin,
+			serviceId: settings.platform.notificationServiceId,
+			id: "web-notifications-main",
+			title: "Web Notifications",
+			icon: "./common/images/here.png"
+		}
+	});
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
 	try {
 		await init();
@@ -391,7 +440,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 	bindControls();
 
 	try {
-		const initialCount = await getNotificationsClient().getCount();
+		const initialCount = await getNotificationsCount();
 		setCount(initialCount);
 	} catch (error) {
 		console.warn("Unable to read initial notification count.", error);

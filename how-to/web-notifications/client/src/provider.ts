@@ -1,6 +1,6 @@
 import { connect } from "@openfin/core-web";
 import { addVisibilityListener, initNotificationCenter, setTheme, show } from "@openfin/web-notifications";
-import { getDefaultLayout, getSettings } from "./platform/settings";
+import { getDefaultLayout, getSettings } from "./settings";
 
 /**
  * Applies notification center color scheme.

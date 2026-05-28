@@ -24,7 +24,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/platform/iframe-broker.ts',
+		entry: './client/src/iframe-broker.ts',
 		devtool: 'source-map',
 		module: {
 			rules
@@ -38,7 +38,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/content/notifications.ts',
+		entry: './client/src/notifications.ts',
 		devtool: 'source-map',
 		module: {
 			rules
