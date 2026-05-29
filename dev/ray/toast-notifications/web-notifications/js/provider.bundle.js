@@ -10341,10 +10341,10 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/he v1.2.0 by @mathias | MI
 
 /***/ },
 
-/***/ "./client/src/platform/settings.ts"
-/*!*****************************************!*\
-  !*** ./client/src/platform/settings.ts ***!
-  \*****************************************/
+/***/ "./client/src/settings.ts"
+/*!********************************!*\
+  !*** ./client/src/settings.ts ***!
+  \********************************/
 (__unused_webpack_module, exports) {
 
 "use strict";
@@ -10352,17 +10352,19 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/he v1.2.0 by @mathias | MI
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getSettings = getSettings;
 exports.getDefaultLayout = getDefaultLayout;
-exports.getSecondLayout = getSecondLayout;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
  */
 async function getSettings() {
-    const settings = await getManifestSettings();
-    if (settings === undefined) {
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link === null) {
         console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+        return;
     }
-    return settings;
+    const response = await fetch(link.href);
+    const manifest = (await response.json());
+    return manifest.custom_settings;
 }
 /**
  * Returns a default layout from the settings if provided.
@@ -10380,36 +10382,6 @@ async function getDefaultLayout() {
         return layoutJson;
     }
     return settings.platform.layout.defaultLayout;
-}
-/**
- * Returns a default layout from the settings if provided.
- * @returns The default layout from the settings.
- */
-async function getSecondLayout() {
-    const settings = await getSettings();
-    if (settings?.platform?.layout?.secondLayout === undefined) {
-        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
-        return;
-    }
-    if (typeof settings.platform.layout.secondLayout === "string") {
-        const layoutResponse = await fetch(settings.platform.layout.secondLayout);
-        const layoutJson = (await layoutResponse.json());
-        return layoutJson;
-    }
-    return settings.platform.layout.secondLayout;
-}
-/**
- * Returns the settings from the manifest file.
- * @returns customSettings for this example
- */
-async function getManifestSettings() {
-    // Get the manifest link
-    const link = document.querySelector('link[rel="manifest"]');
-    if (link !== null) {
-        const manifestResponse = await fetch(link.href);
-        const manifestJson = (await manifestResponse.json());
-        return manifestJson.custom_settings;
-    }
 }
 
 
@@ -11405,14 +11377,14 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!********************************!*\
-  !*** ./client/src/provider.ts ***!
-  \********************************/
+/*!*****************************************!*\
+  !*** ./client/src/platform/provider.ts ***!
+  \*****************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "./node_modules/@openfin/core-web/out/api-client.cjs.js");
 const web_notifications_1 = __webpack_require__(/*! @openfin/web-notifications */ "../../node_modules/@openfin/web-notifications/dist/web/index.js");
-const settings_1 = __webpack_require__(/*! ./platform/settings */ "./client/src/platform/settings.ts");
+const settings_1 = __webpack_require__(/*! ../settings */ "./client/src/settings.ts");
 /**
  * Applies notification center color scheme.
  * @param isDark Whether dark mode is active.
@@ -11492,10 +11464,27 @@ async function init() {
             duration: 5000
         }
     });
+    const toggleButton = document.querySelector("#btnToggleCenter");
+    const toggleLabel = document.querySelector("#toggleCenterLabel");
+    const countBadge = document.querySelector("#notificationCount");
     (0, web_notifications_1.addVisibilityListener)((visible) => {
+        console.log("Notification Visibility changed to", visible);
+        centerVisible = visible;
         notificationSidebar.dataset.open = visible ? "true" : "false";
+        if (toggleButton !== null && toggleLabel !== null) {
+            toggleButton.setAttribute("aria-pressed", String(visible));
+        }
     });
-    await (0, web_notifications_1.show)().catch(reportAsyncFailure);
+    (0, web_notifications_1.addNotificationCountListener)((count) => {
+        if (countBadge !== null) {
+            countBadge.textContent = String(count);
+        }
+    });
+    let centerVisible = false;
+    toggleButton?.addEventListener("click", () => {
+        const action = centerVisible ? (0, web_notifications_1.hide)() : (0, web_notifications_1.show)();
+        action.catch(reportAsyncFailure);
+    });
     bindThemeSync();
 }
 init().catch((error) => {

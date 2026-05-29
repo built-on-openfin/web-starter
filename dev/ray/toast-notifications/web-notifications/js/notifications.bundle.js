@@ -6831,17 +6831,15 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/he v1.2.0 by @mathias | MI
 
 /***/ },
 
-/***/ "./client/src/content/examples.ts"
-/*!****************************************!*\
-  !*** ./client/src/content/examples.ts ***!
-  \****************************************/
+/***/ "./client/src/app/examples.ts"
+/*!************************************!*\
+  !*** ./client/src/app/examples.ts ***!
+  \************************************/
 (__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.showBodyDismissNotification = showBodyDismissNotification;
-exports.showBodyDismissActionNotification = showBodyDismissActionNotification;
 exports.showActionableNotification = showActionableNotification;
 exports.showFormNotification = showFormNotification;
 exports.showFormAdvancedNotification = showFormAdvancedNotification;
@@ -6853,8 +6851,6 @@ exports.showCustomIndicatorNotification = showCustomIndicatorNotification;
 exports.showReminderNotification = showReminderNotification;
 exports.showReminderCancelNotification = showReminderCancelNotification;
 const notifications_1 = __webpack_require__(/*! @openfin/notifications */ "./node_modules/@openfin/notifications/dist/client/index.js");
-const api_1 = __webpack_require__(/*! ../platform/api */ "./client/src/platform/api.ts");
-const utils_1 = __webpack_require__(/*! ../utils */ "./client/src/utils.ts");
 const ICON_URL = `${window.location.origin}/common/images/here.png`;
 const SOUND_URL = `${window.location.origin}/assets/notification.mp3`;
 // --- Updatable notification state ---
@@ -6865,37 +6861,14 @@ const countdownMap = {};
 let countdownTimerId;
 const cancelCountdownMap = {};
 let cancelCountdownTimerId;
-/** Show a notification where clicking the body dismisses it and fires a notification-action event. */
-async function showBodyDismissNotification() {
-    await (0, api_1.getNotificationsClient)().create({
-        title: "Simple Notification",
-        body: "This is a simple notification that can be dismissed by clicking the body",
-        toast: "transient",
-        template: "markdown",
-        id: (0, utils_1.randomUUID)(),
-        onSelect: { BODY_CLICK: notifications_1.ActionBodyClickType.DISMISS_EVENT }
-    });
-}
-/** Show a notification where clicking the body dismisses it and carries custom action data. */
-async function showBodyDismissActionNotification() {
-    await (0, api_1.getNotificationsClient)().create({
-        title: "Simple Notification",
-        body: "Click the body to dismiss and trigger a custom action",
-        toast: "transient",
-        template: "markdown",
-        id: (0, utils_1.randomUUID)(),
-        onSelect: { BODY_CLICK: notifications_1.ActionBodyClickType.DISMISS_EVENT },
-        customData: { action: "custom-action", data: { message: "Body click custom action" } }
-    });
-}
 /** Show a notification with Acknowledge and Cancel action buttons. */
 async function showActionableNotification() {
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Actionable Notification",
         body: "This is a notification that has an action",
         toast: "transient",
         template: "markdown",
-        id: (0, utils_1.randomUUID)(),
+        id: crypto.randomUUID(),
         buttons: [
             {
                 title: "Acknowledged",
@@ -6909,12 +6882,12 @@ async function showActionableNotification() {
 }
 /** Show a notification with a number form field and a Save/Cancel button pair. */
 async function showFormNotification() {
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Form Notification",
         body: "This is a notification that has form data",
         toast: "transient",
         template: "markdown",
-        id: (0, utils_1.randomUUID)(),
+        id: crypto.randomUUID(),
         form: [
             {
                 key: "amount",
@@ -6936,12 +6909,12 @@ async function showFormNotification() {
 }
 /** Show a notification with a rich form containing text, time, date, dropdown, radio, checkbox, and number fields. */
 async function showFormAdvancedNotification() {
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Form Advanced Notification",
         body: "This is a notification that has form data",
         toast: "transient",
         template: "markdown",
-        id: (0, utils_1.randomUUID)(),
+        id: crypto.randomUUID(),
         form: [
             {
                 type: "string",
@@ -7049,7 +7022,7 @@ async function showFormAdvancedNotification() {
 }
 /** Show a notification whose body text updates every second until it is closed. */
 async function showUpdatableNotification() {
-    const id = (0, utils_1.randomUUID)();
+    const id = crypto.randomUUID();
     updatableMap[id] = 0;
     if (Object.keys(updatableMap).length === 1) {
         updatableTimerId = window.setInterval(async () => {
@@ -7073,7 +7046,7 @@ async function showUpdatableNotification() {
             }
         }, 1000);
     }
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Updatable Notification",
         body: "This is an updatable notification",
         toast: "transient",
@@ -7083,11 +7056,11 @@ async function showUpdatableNotification() {
 }
 /** Show a notification built with a fully custom layout template. */
 async function showCustomNotification() {
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Custom Notification",
         toast: "transient",
         template: "custom",
-        id: (0, utils_1.randomUUID)(),
+        id: crypto.randomUUID(),
         templateOptions: {
             body: {
                 compositions: [
@@ -7153,13 +7126,13 @@ async function showCustomNotification() {
 }
 /** Show a notification and attempt to play a sound file alongside it. */
 async function showSoundNotification() {
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Sound Notification",
         body: "This is a notification with sound 🔉",
         toast: "transient",
         template: "markdown",
         soundOptions: { mode: "silent" },
-        id: (0, utils_1.randomUUID)()
+        id: crypto.randomUUID()
     });
     try {
         const audio = new Audio(SOUND_URL);
@@ -7171,12 +7144,12 @@ async function showSoundNotification() {
 }
 /** Show a notification with a red indicator bar aligned to the left. */
 async function showIndicatorNotification() {
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Indicator Notification",
         toast: "transient",
         indicator: { text: "Limit" },
         template: "custom",
-        id: (0, utils_1.randomUUID)(),
+        id: crypto.randomUUID(),
         templateOptions: {
             body: {
                 compositions: [
@@ -7197,11 +7170,11 @@ async function showIndicatorNotification() {
 }
 /** Show a notification with a right-aligned orange ALERT indicator. */
 async function showCustomIndicatorNotification() {
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title: "Custom Indicator Notification",
         toast: "transient",
         template: "custom",
-        id: (0, utils_1.randomUUID)(),
+        id: crypto.randomUUID(),
         templateOptions: {
             body: {
                 compositions: [
@@ -7229,7 +7202,7 @@ async function showCustomIndicatorNotification() {
  * @param onReminderSet Optional callback invoked with the notification id once the reminder is set.
  */
 async function createReminderNotification(title, reminderDate, countdownSeconds, onReminderSet) {
-    const id = (0, utils_1.randomUUID)();
+    const id = crypto.randomUUID();
     countdownMap[id] = { secondsRemaining: countdownSeconds, reminderDate };
     if (countdownTimerId === undefined) {
         countdownTimerId = window.setInterval(async () => {
@@ -7277,7 +7250,7 @@ async function createReminderNotification(title, reminderDate, countdownSeconds,
             }
         }, 1000);
     }
-    await (0, api_1.getNotificationsClient)().create({
+    await (0, notifications_1.create)({
         title,
         body: `Setting reminder in ${countdownSeconds} second${countdownSeconds !== 1 ? "s" : ""}...`,
         toast: "transient",
@@ -7346,197 +7319,10 @@ async function showReminderCancelNotification() {
 
 /***/ },
 
-/***/ "./client/src/platform/api.ts"
-/*!************************************!*\
-  !*** ./client/src/platform/api.ts ***!
-  \************************************/
-(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.init = init;
-exports.getNotificationsClient = getNotificationsClient;
-const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "./node_modules/@openfin/core-web/out/api-client.cjs.js");
-const notifications_1 = __webpack_require__(/*! @openfin/notifications */ "./node_modules/@openfin/notifications/dist/client/index.js");
-const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
-const CLIENT_ID = "web-notifications-main";
-const CLIENT_TITLE = "Web Notifications";
-/**
- * Singleton wrapper around @openfin/notifications.
- */
-class NotificationsClient {
-    constructor() {
-        this._connected = false;
-        this._connecting = false;
-    }
-    /**
-     * Returns the shared notifications client instance.
-     * @returns NotificationsClient singleton.
-     */
-    static getInstance() {
-        NotificationsClient._instance ??= new NotificationsClient();
-        return NotificationsClient._instance;
-    }
-    /**
-     * Connect this page as a notifications producer.
-     * @param finContext OpenFin context.
-     * @param serviceId Notification center service identifier.
-     */
-    async connect(finContext, serviceId) {
-        if (this._connected || this._connecting) {
-            return;
-        }
-        this._connecting = true;
-        try {
-            await (0, notifications_1.register)({
-                externalProviderConfig: {
-                    finContext,
-                    serviceId,
-                    id: CLIENT_ID,
-                    title: CLIENT_TITLE,
-                    icon: "./common/images/here.png"
-                }
-            });
-            this._connected = true;
-        }
-        catch (error) {
-            console.error("Unable to connect notification client.", error);
-        }
-        finally {
-            this._connecting = false;
-        }
-    }
-    /**
-     * Creates a notification.
-     * @param options Notification payload.
-     * @returns The created notification record.
-     */
-    async create(options) {
-        this.requireConnected();
-        return (0, notifications_1.create)(options);
-    }
-    /**
-     * Returns every notification this client has created that is still in the Notification Center.
-     * @returns Array of notifications.
-     */
-    async getAll() {
-        this.requireConnected();
-        return (0, notifications_1.getAll)();
-    }
-    /**
-     * Removes a single notification by id.
-     * @param id Notification id.
-     * @returns True if the notification was removed.
-     */
-    async clear(id) {
-        this.requireConnected();
-        return (0, notifications_1.clear)(id);
-    }
-    /**
-     * Removes every notification this client has created.
-     * @returns Count of notifications removed.
-     */
-    async clearAll() {
-        this.requireConnected();
-        return (0, notifications_1.clearAll)();
-    }
-    /**
-     * Number of notifications currently in the Notification Center (across all sources).
-     * @returns Notification count.
-     */
-    async getCount() {
-        this.requireConnected();
-        return (0, notifications_1.getNotificationsCount)();
-    }
-    /**
-     * Toggle Notification Center visibility through the SDK's RPC channel. The provider
-     * is expected to subscribe to addVisibilityListener and update its host chrome from
-     * there, so this is fire-and-forget from the producer's perspective.
-     */
-    async toggleCenter() {
-        this.requireConnected();
-        await (0, notifications_1.toggleNotificationCenter)();
-    }
-    /**
-     * Subscribe to a notification lifecycle event.
-     * @param type Event name.
-     * @param listener Listener that receives the typed event payload.
-     */
-    async on(type, listener) {
-        this.requireConnected();
-        // The SDK exposes a discriminated-union overload set; cast through unknown so we
-        // can dispatch any of the supported event names from one wrapper.
-        await notifications_1.addEventListener(type, listener);
-    }
-    /**
-     * Throws if the client hasn't connected yet. Producer-side calls all require a live broker channel.
-     * @throws {Error} Thrown when the notifications client is not connected.
-     */
-    requireConnected() {
-        if (!this._connected) {
-            throw new Error("Notifications client is not connected.");
-        }
-    }
-}
-NotificationsClient._instance = null;
-/**
- * Initializes the OpenFin Web Broker connection.
- * @param inherit Should we inherit settings from the host (available in the OpenFin layout system) or use settings? Default is true.
- */
-async function init(inherit = false) {
-    let options;
-    let settings = await (0, settings_1.getSettings)();
-    if (settings === undefined) {
-        console.error("Unable to initialize API because the web manifest custom_settings could not be loaded.");
-        return;
-    }
-    if (window.fin === undefined) {
-        if (!inherit) {
-            options = {
-                brokerUrl: settings.platform.interop.brokerUrl,
-                interopConfig: {
-                    providerId: settings.platform.interop.providerId,
-                    currentContextGroup: settings.platform.interop.defaultContextGroup
-                }
-            };
-        }
-        if (options) {
-            window.fin = await (0, core_web_1.connect)({
-                options
-            });
-        }
-        else {
-            window.fin = await (0, core_web_1.connect)({
-                connectionInheritance: "enabled"
-            });
-        }
-    }
-    if (window.fdc3 === undefined && window?.fin?.me.interop?.getFDC3Sync !== undefined) {
-        window.fdc3 = fin.me.interop.getFDC3Sync("2.0");
-    }
-    settings = settings ?? (await (0, settings_1.getSettings)());
-    if (settings === undefined || window.fin === undefined) {
-        return;
-    }
-    const notificationsClient = NotificationsClient.getInstance();
-    await notificationsClient.connect(window.fin, settings.platform.notificationServiceId);
-}
-/**
- * Returns the connected notifications client.
- * @returns NotificationsClient singleton.
- */
-function getNotificationsClient() {
-    return NotificationsClient.getInstance();
-}
-
-
-/***/ },
-
-/***/ "./client/src/platform/settings.ts"
-/*!*****************************************!*\
-  !*** ./client/src/platform/settings.ts ***!
-  \*****************************************/
+/***/ "./client/src/settings.ts"
+/*!********************************!*\
+  !*** ./client/src/settings.ts ***!
+  \********************************/
 (__unused_webpack_module, exports) {
 
 "use strict";
@@ -7544,17 +7330,19 @@ function getNotificationsClient() {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getSettings = getSettings;
 exports.getDefaultLayout = getDefaultLayout;
-exports.getSecondLayout = getSecondLayout;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
  */
 async function getSettings() {
-    const settings = await getManifestSettings();
-    if (settings === undefined) {
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link === null) {
         console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+        return;
     }
-    return settings;
+    const response = await fetch(link.href);
+    const manifest = (await response.json());
+    return manifest.custom_settings;
 }
 /**
  * Returns a default layout from the settings if provided.
@@ -7572,76 +7360,6 @@ async function getDefaultLayout() {
         return layoutJson;
     }
     return settings.platform.layout.defaultLayout;
-}
-/**
- * Returns a default layout from the settings if provided.
- * @returns The default layout from the settings.
- */
-async function getSecondLayout() {
-    const settings = await getSettings();
-    if (settings?.platform?.layout?.secondLayout === undefined) {
-        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
-        return;
-    }
-    if (typeof settings.platform.layout.secondLayout === "string") {
-        const layoutResponse = await fetch(settings.platform.layout.secondLayout);
-        const layoutJson = (await layoutResponse.json());
-        return layoutJson;
-    }
-    return settings.platform.layout.secondLayout;
-}
-/**
- * Returns the settings from the manifest file.
- * @returns customSettings for this example
- */
-async function getManifestSettings() {
-    // Get the manifest link
-    const link = document.querySelector('link[rel="manifest"]');
-    if (link !== null) {
-        const manifestResponse = await fetch(link.href);
-        const manifestJson = (await manifestResponse.json());
-        return manifestJson.custom_settings;
-    }
-}
-
-
-/***/ },
-
-/***/ "./client/src/utils.ts"
-/*!*****************************!*\
-  !*** ./client/src/utils.ts ***!
-  \*****************************/
-(__unused_webpack_module, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.randomUUID = randomUUID;
-/**
- * Polyfills randomUUID if running in a non-secure context.
- * @returns The random UUID.
- */
-function randomUUID() {
-    if ("randomUUID" in globalThis.crypto) {
-        // eslint-disable-next-line no-restricted-syntax
-        return globalThis.crypto.randomUUID();
-    }
-    // Polyfill the window.crypto.randomUUID if we are running in a non secure context that doesn't have it
-    // we are still using window.crypto.getRandomValues which is always available
-    // https://stackoverflow.com/a/2117523/2800218
-    /**
-     * Get random hex value.
-     * @param c The number to base the random value on.
-     * @returns The random value.
-     */
-    function getRandomHex(c) {
-        // eslint-disable-next-line no-bitwise
-        const rnd = globalThis.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4));
-        return (
-        // eslint-disable-next-line no-bitwise
-        (Number(c) ^ rnd).toString(16));
-    }
-    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, getRandomHex);
 }
 
 
@@ -8647,38 +8365,16 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 var exports = __webpack_exports__;
-/*!*********************************************!*\
-  !*** ./client/src/content/notifications.ts ***!
-  \*********************************************/
+/*!*****************************************!*\
+  !*** ./client/src/app/notifications.ts ***!
+  \*****************************************/
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const api_1 = __webpack_require__(/*! ../platform/api */ "./client/src/platform/api.ts");
-const examples_1 = __webpack_require__(/*! ./examples */ "./client/src/content/examples.ts");
+const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "./node_modules/@openfin/core-web/out/api-client.cjs.js");
+const notifications_1 = __webpack_require__(/*! @openfin/notifications */ "./node_modules/@openfin/notifications/dist/client/index.js");
+const settings_1 = __webpack_require__(/*! ../settings */ "./client/src/settings.ts");
+const examples_1 = __webpack_require__(/*! ./examples */ "./client/src/app/examples.ts");
 const MAX_LOG_ENTRIES = 50;
-/**
- * Sets status text for user feedback.
- * @param message Status message.
- * @param kind Status kind.
- */
-function setStatus(message, kind = "info") {
-    const statusElement = document.querySelector("#status");
-    if (statusElement === null) {
-        return;
-    }
-    statusElement.textContent = message;
-    statusElement.classList.remove("status-info", "status-error", "status-success");
-    statusElement.classList.add(`status-${kind}`);
-}
-/**
- * Renders the running notification count badge.
- * @param count Current count.
- */
-function setCount(count) {
-    const countElement = document.querySelector("#notificationCount");
-    if (countElement !== null) {
-        countElement.textContent = String(count);
-    }
-}
 /**
  * Appends an entry to the event log, trimming history past MAX_LOG_ENTRIES.
  * @param kind Log category, drives the row colour.
@@ -8726,7 +8422,7 @@ function readForm() {
     const title = titleInput.value.trim();
     const body = bodyInput.value.trim();
     if (title === "" || body === "") {
-        setStatus("Title and body are required.", "error");
+        logEvent("error", "Title and body are required.");
         return null;
     }
     return {
@@ -8776,22 +8472,8 @@ function buildNotification(values) {
 function runAsyncTask(task) {
     task().catch((error) => {
         console.error("Unexpected async handler failure.", error);
-        setStatus(error instanceof Error ? error.message : "An error occurred.", "error");
+        logEvent("error", error instanceof Error ? error.message : "An error occurred.");
     });
-}
-/**
- * Subscribes to a notification event and reports non-fatal subscription failures.
- * @param client Notifications client singleton.
- * @param type Event type to subscribe to.
- * @param handler Event handler.
- */
-async function subscribeToNotificationEvent(client, type, handler) {
-    try {
-        await client.on(type, handler);
-    }
-    catch (error) {
-        console.error(`Unable to subscribe to ${type}.`, error);
-    }
 }
 /**
  * Creates a notification from the current form values.
@@ -8803,11 +8485,11 @@ async function handleCreateClick() {
     }
     try {
         const payload = buildNotification(values);
-        await (0, api_1.getNotificationsClient)().create(payload);
-        setStatus(`Created ${values.toast} notification "${values.title}".`, "success");
+        await (0, notifications_1.create)(payload);
+        logEvent("info", `Created ${values.toast} notification "${values.title}".`);
     }
     catch (error) {
-        setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
+        logEvent("error", error instanceof Error ? error.message : "Unable to create notification.");
     }
 }
 /**
@@ -8815,12 +8497,11 @@ async function handleCreateClick() {
  */
 async function handleClearAllClick() {
     try {
-        const count = await (0, api_1.getNotificationsClient)().clearAll();
-        setStatus(`Cleared ${count} notification(s) from this client.`, "success");
+        const count = await (0, notifications_1.clearAll)();
         logEvent("info", `clearAll() removed ${count} notification(s).`);
     }
     catch (error) {
-        setStatus(error instanceof Error ? error.message : "Unable to clear notifications.", "error");
+        logEvent("error", error instanceof Error ? error.message : "Unable to clear notifications.");
     }
 }
 /**
@@ -8828,26 +8509,13 @@ async function handleClearAllClick() {
  */
 async function handleGetAllClick() {
     try {
-        const notifications = await (0, api_1.getNotificationsClient)().getAll();
+        const notifications = await (0, notifications_1.getAll)();
         const titles = notifications.map((notification) => notification.title).join(", ");
         const summary = notifications.length === 0 ? "(none)" : titles;
-        setStatus(`getAll() returned ${notifications.length} notification(s).`, "info");
-        logEvent("info", `getAll(): ${summary}`);
+        logEvent("info", `getAll() returned ${notifications.length}: ${summary}`);
     }
     catch (error) {
-        setStatus(error instanceof Error ? error.message : "Unable to list notifications.", "error");
-    }
-}
-/**
- * Toggles the Notification Center.
- */
-async function handleToggleCenterClick() {
-    try {
-        await (0, api_1.getNotificationsClient)().toggleCenter();
-        setStatus("Toggled Notification Center.", "info");
-    }
-    catch (error) {
-        setStatus(error instanceof Error ? error.message : "Unable to toggle Notification Center.", "error");
+        logEvent("error", error instanceof Error ? error.message : "Unable to list notifications.");
     }
 }
 /**
@@ -8855,51 +8523,64 @@ async function handleToggleCenterClick() {
  * Failures during subscription are non-fatal — the rest of the demo still works.
  */
 async function bindEventLog() {
-    const client = (0, api_1.getNotificationsClient)();
-    await subscribeToNotificationEvent(client, "notification-created", (event) => {
-        logEvent("create", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
-    });
-    await subscribeToNotificationEvent(client, "notification-action", (event) => {
-        const buttonTitle = event.control && event.control.type === "button" ? event.control.title : "(non-button)";
-        const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
-        logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
-    });
-    await subscribeToNotificationEvent(client, "notification-closed", (event) => {
-        logEvent("closed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
-    });
-    await subscribeToNotificationEvent(client, "notification-toast-dismissed", (event) => {
-        logEvent("toast-dismissed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
-    });
-    await subscribeToNotificationEvent(client, "notifications-count-changed", (event) => {
-        setCount(event.count);
-        logEvent("count", `Notification center holds ${event.count} item(s).`);
-    });
-    await subscribeToNotificationEvent(client, "notification-form-submitted", (event) => {
-        const data = event.form ? JSON.stringify(event.form) : "(none)";
-        logEvent("action", `Form submitted (id=${event.notification.id.slice(0, 8)}…) → ${data}`);
-    });
-}
-/** Wires up the Notification Center toggle button, tracking open/closed state locally. */
-function bindToggleButton() {
-    const toggleButton = document.querySelector("#btnToggleCenter");
-    if (toggleButton === null) {
-        return;
+    try {
+        await (0, notifications_1.addEventListener)("notification-created", (event) => {
+            logEvent("create", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+        });
     }
-    toggleButton.addEventListener("click", () => {
-        runAsyncTask(handleToggleCenterClick);
-        const next = toggleButton.getAttribute("aria-pressed") !== "true";
-        toggleButton.setAttribute("aria-pressed", String(next));
-        toggleButton.textContent = next ? "Hide Notification Center" : "Show Notification Center";
-    });
+    catch (error) {
+        console.error("Unable to subscribe to notification-created.", error);
+    }
+    try {
+        await (0, notifications_1.addEventListener)("notification-action", (event) => {
+            const buttonTitle = event.control && event.control.type === "button" ? event.control.title : "(non-button)";
+            const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
+            logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
+        });
+    }
+    catch (error) {
+        console.error("Unable to subscribe to notification-action.", error);
+    }
+    try {
+        await (0, notifications_1.addEventListener)("notification-closed", (event) => {
+            logEvent("closed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+        });
+    }
+    catch (error) {
+        console.error("Unable to subscribe to notification-closed.", error);
+    }
+    try {
+        await (0, notifications_1.addEventListener)("notification-toast-dismissed", (event) => {
+            logEvent("toast-dismissed", `${event.notification.title} (id=${event.notification.id.slice(0, 8)}…)`);
+        });
+    }
+    catch (error) {
+        console.error("Unable to subscribe to notification-toast-dismissed.", error);
+    }
+    try {
+        await (0, notifications_1.addEventListener)("notifications-count-changed", (event) => {
+            logEvent("count", `Notification center holds ${event.count} item(s).`);
+        });
+    }
+    catch (error) {
+        console.error("Unable to subscribe to notifications-count-changed.", error);
+    }
+    try {
+        await (0, notifications_1.addEventListener)("notification-form-submitted", (event) => {
+            const data = event.form ? JSON.stringify(event.form) : "(none)";
+            logEvent("action", `Form submitted (id=${event.notification.id.slice(0, 8)}…) → ${data}`);
+        });
+    }
+    catch (error) {
+        console.error("Unable to subscribe to notification-form-submitted.", error);
+    }
 }
 /**
  * Wires up every form button and the log controls. Pure DOM glue — all async work
- * funnels through the singleton client and surfaces success/failure on #status.
+ * funnels through the singleton client and surfaces success/failure on the event log.
  */
 function bindExamples() {
     const exampleButtons = [
-        ["#btnExBodyDismiss", examples_1.showBodyDismissNotification],
-        ["#btnExBodyDismissAction", examples_1.showBodyDismissActionNotification],
         ["#btnExActionable", examples_1.showActionableNotification],
         ["#btnExForm", examples_1.showFormNotification],
         ["#btnExFormAdvanced", examples_1.showFormAdvancedNotification],
@@ -8940,26 +8621,48 @@ function bindControls() {
             logElement.textContent = "";
         }
     });
-    bindToggleButton();
     bindExamples();
+}
+/**
+ * Initializes the OpenFin Web Broker connection and registers as a notification producer.
+ */
+async function init() {
+    const settings = await (0, settings_1.getSettings)();
+    if (settings === undefined) {
+        console.error("Unable to initialize because the web manifest custom_settings could not be loaded.");
+        return;
+    }
+    if (window.fin === undefined) {
+        window.fin = await (0, core_web_1.connect)({
+            options: {
+                brokerUrl: settings.platform.interop.brokerUrl,
+                interopConfig: {
+                    providerId: settings.platform.interop.providerId,
+                    currentContextGroup: settings.platform.interop.defaultContextGroup
+                }
+            }
+        });
+    }
+    await (0, notifications_1.register)({
+        externalProviderConfig: {
+            finContext: window.fin,
+            serviceId: settings.platform.notificationServiceId,
+            id: "web-notifications-main",
+            title: "Web Notifications",
+            icon: "./common/images/here.png"
+        }
+    });
 }
 window.addEventListener("DOMContentLoaded", async () => {
     try {
-        await (0, api_1.init)();
-        setStatus("Connected to notifications client. Notification Center is visible by default.", "success");
+        await init();
+        logEvent("info", "Connected to notifications client");
     }
     catch (error) {
-        setStatus(error instanceof Error ? error.message : "Unable to initialize notifications client.", "error");
+        logEvent("error", error instanceof Error ? error.message : "Unable to initialize notifications client.");
         return;
     }
     bindControls();
-    try {
-        const initialCount = await (0, api_1.getNotificationsClient)().getCount();
-        setCount(initialCount);
-    }
-    catch (error) {
-        console.warn("Unable to read initial notification count.", error);
-    }
     await bindEventLog();
 });
 
