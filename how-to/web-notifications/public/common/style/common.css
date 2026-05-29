@@ -17,6 +17,7 @@
 	--brand-success: var(--theme-status-success, #35c759);
 
 	accent-color: var(--brand-primary);
+	--body-padding: 20px;
 }
 
 .theme-light {

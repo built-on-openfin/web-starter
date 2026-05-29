@@ -1,4 +1,4 @@
-@import url('./common.css');
+@import url('../common/style/common.css');
 
 :root {
 	--Grid-3: 4px;
@@ -21,8 +21,6 @@
 
 #main-page {
 	min-height: 0;
-	position: relative;
-	transition: margin-right 160ms ease-in-out;
 }
 
 #notification_sidebar {

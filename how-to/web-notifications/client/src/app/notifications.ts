@@ -371,7 +371,7 @@ async function init(): Promise<void> {
 window.addEventListener("DOMContentLoaded", async () => {
 	try {
 		await init();
-		logEvent("info", "Connected to notifications client. Notification Center is visible by default.");
+		logEvent("info", "Connected to notifications client");
 	} catch (error) {
 		logEvent("error", error instanceof Error ? error.message : "Unable to initialize notifications client.");
 		return;

@@ -1,4 +1,4 @@
-/* --- Notifications view --- */
+@import url('../common/style/common.css');
 
 .notifications-view {
 	padding: var(--body-padding);
