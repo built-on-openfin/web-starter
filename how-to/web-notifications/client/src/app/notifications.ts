@@ -11,6 +11,8 @@ import {
 	type NotificationOptions,
 	type TemplateMarkdown
 } from "@openfin/notifications";
+import { addVisibilityListener } from "@openfin/web-notifications";
+import { getSettings } from "../settings";
 import {
 	showActionableNotification,
 	showCustomIndicatorNotification,
@@ -23,7 +25,6 @@ import {
 	showSoundNotification,
 	showUpdatableNotification
 } from "./examples";
-import { getSettings } from "./settings";
 
 const MAX_LOG_ENTRIES = 50;
 
@@ -436,6 +437,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 		setStatus(error instanceof Error ? error.message : "Unable to initialize notifications client.", "error");
 		return;
 	}
+
+	addVisibilityListener((visible) => {
+		console.log("N4444444", visible);
+	});
 
 	bindControls();
 

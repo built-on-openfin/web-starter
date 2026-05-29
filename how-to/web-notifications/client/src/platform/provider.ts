@@ -1,6 +1,6 @@
 import { connect } from "@openfin/core-web";
 import { addVisibilityListener, initNotificationCenter, setTheme, show } from "@openfin/web-notifications";
-import { getDefaultLayout, getSettings } from "./settings";
+import { getDefaultLayout, getSettings } from "../settings";
 
 /**
  * Applies notification center color scheme.
@@ -93,6 +93,7 @@ async function init(): Promise<void> {
 	});
 
 	addVisibilityListener((visible) => {
+		console.log("Notification Visibility changed to", visible);
 		notificationSidebar.dataset.open = visible ? "true" : "false";
 	});
 

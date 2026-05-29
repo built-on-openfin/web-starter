@@ -1,5 +1,5 @@
 import { init as initBrokerConnection } from "@openfin/core-web/iframe-broker";
-import { getSettings } from "./settings";
+import { getSettings } from "../settings";
 
 /**
  * Initializes the OpenFin Web Broker connection.

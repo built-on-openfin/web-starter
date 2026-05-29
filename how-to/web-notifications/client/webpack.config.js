@@ -10,7 +10,7 @@ const rules = [
 
 module.exports = [
 	{
-		entry: './client/src/provider.ts',
+		entry: './client/src/platform/provider.ts',
 		devtool: 'source-map',
 		module: {
 			rules
@@ -24,7 +24,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/iframe-broker.ts',
+		entry: './client/src/platform/iframe-broker.ts',
 		devtool: 'source-map',
 		module: {
 			rules
@@ -38,7 +38,7 @@ module.exports = [
 		}
 	},
 	{
-		entry: './client/src/notifications.ts',
+		entry: './client/src/app/notifications.ts',
 		devtool: 'source-map',
 		module: {
 			rules

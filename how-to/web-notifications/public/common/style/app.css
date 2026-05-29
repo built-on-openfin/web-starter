@@ -55,6 +55,7 @@
 #main-page {
 	min-height: 0;
 	position: relative;
+	transition: margin-right 160ms ease-in-out;
 }
 
 #openfin-layout-shadow-container-default {
