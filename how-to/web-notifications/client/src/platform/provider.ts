@@ -1,5 +1,12 @@
 import { connect } from "@openfin/core-web";
-import { addVisibilityListener, initNotificationCenter, setTheme, show } from "@openfin/web-notifications";
+import {
+	addNotificationCountListener,
+	addVisibilityListener,
+	hide,
+	initNotificationCenter,
+	setTheme,
+	show
+} from "@openfin/web-notifications";
 import { getDefaultLayout, getSettings } from "../settings";
 
 /**
@@ -92,12 +99,31 @@ async function init(): Promise<void> {
 		}
 	});
 
+	const toggleButton = document.querySelector<HTMLButtonElement>("#btnToggleCenter");
+	const toggleLabel = document.querySelector<HTMLElement>("#toggleCenterLabel");
+	const countBadge = document.querySelector<HTMLElement>("#notificationCount");
+
 	addVisibilityListener((visible) => {
 		console.log("Notification Visibility changed to", visible);
+		centerVisible = visible;
 		notificationSidebar.dataset.open = visible ? "true" : "false";
+		if (toggleButton !== null && toggleLabel !== null) {
+			toggleButton.setAttribute("aria-pressed", String(visible));
+		}
 	});
 
-	await show().catch(reportAsyncFailure);
+	addNotificationCountListener((count) => {
+		if (countBadge !== null) {
+			countBadge.textContent = String(count);
+		}
+	});
+
+	let centerVisible = false;
+
+	toggleButton?.addEventListener("click", () => {
+		const action = centerVisible ? hide() : show();
+		action.catch(reportAsyncFailure);
+	});
 
 	bindThemeSync();
 }

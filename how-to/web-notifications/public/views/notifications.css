@@ -1,24 +1,3 @@
-.status {
-	border-radius: 5px;
-	padding: 10px;
-	font-size: 12px;
-}
-
-.status-info {
-	background: var(--brand-input-background);
-	color: var(--brand-text-secondary);
-}
-
-.status-success {
-	background: rgb(53 199 89 / 20%);
-	color: var(--brand-success);
-}
-
-.status-error {
-	background: rgb(190 29 31 / 20%);
-	color: var(--brand-error);
-}
-
 /* --- Notifications view --- */
 
 .notifications-view {
@@ -159,65 +138,8 @@
 	background: var(--brand-input-background);
 }
 
-.count-pill {
-	display: inline-flex;
-	align-items: center;
-	gap: 10px;
-	padding: 0;
-	border: none;
-	background: transparent;
-	min-width: 0;
-}
-
-.status-card-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 12px;
-	margin-bottom: 10px;
-}
-
-.status-card-header .count-pill {
-	flex-shrink: 0;
-}
-
-.count-pill-label {
-	font-size: 11px;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
-	color: var(--brand-text-secondary);
-}
-
-.count-pill-value {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	min-width: 28px;
-	height: 28px;
-	padding: 0 8px;
-	border-radius: 999px;
-	background: #d92d20;
-	box-shadow: 0 4px 10px rgb(217 45 32 / 22%);
-	font-size: 13px;
-	font-weight: 700;
-	color: #ffffff;
-	font-variant-numeric: tabular-nums;
-	line-height: 1;
-}
-
 .log-card {
 	min-height: 280px;
-}
-
-#btnToggleCenter[aria-pressed="false"] {
-	background-color: var(--brand-input-background);
-	color: var(--brand-text);
-	border-color: var(--brand-input-border);
-}
-
-#btnToggleCenter[aria-pressed="false"]:not(:disabled):hover {
-	background-color: var(--brand-input-background);
 }
 
 .event-log {
@@ -322,18 +244,6 @@
 
 .log-error .log-kind {
 	color: var(--brand-error);
-}
-
-.status-card h3 {
-	margin: 0;
-	font-size: 12px;
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
-	color: var(--brand-text-secondary);
-}
-
-.notifications-view .status {
-	margin: 0;
 }
 
 @media (max-width: 900px) {

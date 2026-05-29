@@ -6,3 +6,4 @@ reports
 *.zip
 **/wc-fin/*.js
 public/style/core-web-styles.css
+.playwright-mcp

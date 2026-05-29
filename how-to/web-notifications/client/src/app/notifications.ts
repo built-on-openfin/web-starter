@@ -4,14 +4,11 @@ import {
 	clearAll,
 	create,
 	getAll,
-	getNotificationsCount,
 	register,
-	toggleNotificationCenter,
 	type ButtonOptions,
 	type NotificationOptions,
 	type TemplateMarkdown
 } from "@openfin/notifications";
-import { addVisibilityListener } from "@openfin/web-notifications";
 import { getSettings } from "../settings";
 import {
 	showActionableNotification,
@@ -61,33 +58,6 @@ interface NotificationFormValues {
 	 * Whether to include the demo action buttons in the payload.
 	 */
 	includeButtons: boolean;
-}
-
-/**
- * Sets status text for user feedback.
- * @param message Status message.
- * @param kind Status kind.
- */
-function setStatus(message: string, kind: "info" | "error" | "success" = "info"): void {
-	const statusElement = document.querySelector<HTMLElement>("#status");
-	if (statusElement === null) {
-		return;
-	}
-
-	statusElement.textContent = message;
-	statusElement.classList.remove("status-info", "status-error", "status-success");
-	statusElement.classList.add(`status-${kind}`);
-}
-
-/**
- * Renders the running notification count badge.
- * @param count Current count.
- */
-function setCount(count: number): void {
-	const countElement = document.querySelector<HTMLElement>("#notificationCount");
-	if (countElement !== null) {
-		countElement.textContent = String(count);
-	}
 }
 
 /**
@@ -148,7 +118,7 @@ function readForm(): NotificationFormValues | null {
 	const title = titleInput.value.trim();
 	const body = bodyInput.value.trim();
 	if (title === "" || body === "") {
-		setStatus("Title and body are required.", "error");
+		logEvent("error", "Title and body are required.");
 		return null;
 	}
 
@@ -204,7 +174,7 @@ function buildNotification(values: NotificationFormValues): NotificationOptions 
 function runAsyncTask(task: () => Promise<void>): void {
 	task().catch((error) => {
 		console.error("Unexpected async handler failure.", error);
-		setStatus(error instanceof Error ? error.message : "An error occurred.", "error");
+		logEvent("error", error instanceof Error ? error.message : "An error occurred.");
 	});
 }
 
@@ -220,9 +190,9 @@ async function handleCreateClick(): Promise<void> {
 	try {
 		const payload = buildNotification(values);
 		await create(payload);
-		setStatus(`Created ${values.toast} notification "${values.title}".`, "success");
+		logEvent("info", `Created ${values.toast} notification "${values.title}".`);
 	} catch (error) {
-		setStatus(error instanceof Error ? error.message : "Unable to create notification.", "error");
+		logEvent("error", error instanceof Error ? error.message : "Unable to create notification.");
 	}
 }
 
@@ -232,10 +202,9 @@ async function handleCreateClick(): Promise<void> {
 async function handleClearAllClick(): Promise<void> {
 	try {
 		const count = await clearAll();
-		setStatus(`Cleared ${count} notification(s) from this client.`, "success");
 		logEvent("info", `clearAll() removed ${count} notification(s).`);
 	} catch (error) {
-		setStatus(error instanceof Error ? error.message : "Unable to clear notifications.", "error");
+		logEvent("error", error instanceof Error ? error.message : "Unable to clear notifications.");
 	}
 }
 
@@ -247,22 +216,9 @@ async function handleGetAllClick(): Promise<void> {
 		const notifications = await getAll();
 		const titles = notifications.map((notification) => notification.title).join(", ");
 		const summary = notifications.length === 0 ? "(none)" : titles;
-		setStatus(`getAll() returned ${notifications.length} notification(s).`, "info");
-		logEvent("info", `getAll(): ${summary}`);
+		logEvent("info", `getAll() returned ${notifications.length}: ${summary}`);
 	} catch (error) {
-		setStatus(error instanceof Error ? error.message : "Unable to list notifications.", "error");
-	}
-}
-
-/**
- * Toggles the Notification Center.
- */
-async function handleToggleCenterClick(): Promise<void> {
-	try {
-		await toggleNotificationCenter();
-		setStatus("Toggled Notification Center.", "info");
-	} catch (error) {
-		setStatus(error instanceof Error ? error.message : "Unable to toggle Notification Center.", "error");
+		logEvent("error", error instanceof Error ? error.message : "Unable to list notifications.");
 	}
 }
 
@@ -308,7 +264,6 @@ async function bindEventLog(): Promise<void> {
 
 	try {
 		await addEventListener("notifications-count-changed", (event) => {
-			setCount(event.count);
 			logEvent("count", `Notification center holds ${event.count} item(s).`);
 		});
 	} catch (error) {
@@ -325,24 +280,9 @@ async function bindEventLog(): Promise<void> {
 	}
 }
 
-/** Wires up the Notification Center toggle button, tracking open/closed state locally. */
-function bindToggleButton(): void {
-	const toggleButton = document.querySelector<HTMLButtonElement>("#btnToggleCenter");
-	if (toggleButton === null) {
-		return;
-	}
-
-	toggleButton.addEventListener("click", () => {
-		runAsyncTask(handleToggleCenterClick);
-		const next = toggleButton.getAttribute("aria-pressed") !== "true";
-		toggleButton.setAttribute("aria-pressed", String(next));
-		toggleButton.textContent = next ? "Hide Notification Center" : "Show Notification Center";
-	});
-}
-
 /**
  * Wires up every form button and the log controls. Pure DOM glue — all async work
- * funnels through the singleton client and surfaces success/failure on #status.
+ * funnels through the singleton client and surfaces success/failure on the event log.
  */
 function bindExamples(): void {
 	const exampleButtons: [string, () => Promise<void>][] = [
@@ -392,7 +332,6 @@ function bindControls(): void {
 		}
 	});
 
-	bindToggleButton();
 	bindExamples();
 }
 
@@ -432,24 +371,12 @@ async function init(): Promise<void> {
 window.addEventListener("DOMContentLoaded", async () => {
 	try {
 		await init();
-		setStatus("Connected to notifications client. Notification Center is visible by default.", "success");
+		logEvent("info", "Connected to notifications client. Notification Center is visible by default.");
 	} catch (error) {
-		setStatus(error instanceof Error ? error.message : "Unable to initialize notifications client.", "error");
+		logEvent("error", error instanceof Error ? error.message : "Unable to initialize notifications client.");
 		return;
 	}
 
-	addVisibilityListener((visible) => {
-		console.log("N4444444", visible);
-	});
-
 	bindControls();
-
-	try {
-		const initialCount = await getNotificationsCount();
-		setCount(initialCount);
-	} catch (error) {
-		console.warn("Unable to read initial notification count.", error);
-	}
-
 	await bindEventLog();
 });
