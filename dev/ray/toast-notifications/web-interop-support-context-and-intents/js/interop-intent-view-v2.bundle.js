@@ -9076,7 +9076,7 @@ async function fireIntent(intent, context, app) {
         };
         const intentResolver = await fin.me.interop.fireIntent(intentRequest);
         if (intentResolver !== undefined) {
-            console.log("Intent resolver received: ", intentResolver);
+            console.log("Intent resolver received", intentResolver);
         }
     }
 }
@@ -9091,14 +9091,14 @@ async function fireIntentForContext(context, app) {
             console.log(`Firing intent for context ${context.type}:`, context);
         }
         else {
-            console.log(`Firing intent for context ${context.type} and targeting app: ${app}. Context: `, context);
+            console.log(`Firing intent for context ${context.type} and targeting app: ${app}. Context:`, context);
         }
         context.metadata = {
             target: app
         };
         const intentResolver = await fin.me.interop.fireIntentForContext(context);
         if (intentResolver !== undefined) {
-            console.log("Intent resolver received: ", intentResolver);
+            console.log("Intent resolver received", intentResolver);
         }
     }
 }
@@ -9108,7 +9108,7 @@ async function fireIntentForContext(context, app) {
  */
 async function addIntentListeners(intentList) {
     if (window.fin !== undefined && intentList.length > 0) {
-        console.log("View Manifest/Defaults specified following intents: ", intentList);
+        console.log("View Manifest/Defaults specified following intents", intentList);
         try {
             for (const intent of intentList) {
                 await fin.me.interop.registerIntentHandler((passedIntent) => {
