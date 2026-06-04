@@ -29,11 +29,11 @@ import path from 'path';
 
 // ---------- Defaults (edit these before running if needed) ----------
 const DEFAULT_VERSIONS = {
-  major: '23.0.0',
-  'github-url': '23.0.0',
-  core: '43.101.4',
-  'core-web': '0.43.115',
-  'cloud-interop': '0.43.115'
+  major: '24.0.0',
+  'github-url': '24.0.0',
+  core: '44.101.4',
+  'core-web': '0.44.112',
+  'cloud-interop': '0.44.111'
 };
 
 

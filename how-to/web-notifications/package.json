@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-notifications",
-	"version": "23.0.0",
+	"version": "24.0.0",
 	"description": "OpenFin Web Starter -- Web Notifications",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
@@ -19,12 +19,12 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.43.115",
+		"@openfin/core-web": "0.44.112",
 		"@openfin/notifications": "^2.13.1",
 		"@openfin/web-notifications": "^2.13.1"
 	},
 	"devDependencies": {
-		"@openfin/core": "43.101.4",
+		"@openfin/core": "44.101.4",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
 		"eslint-config-airbnb-typescript": "18.0.0",
