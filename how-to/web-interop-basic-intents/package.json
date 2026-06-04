@@ -1,13 +1,14 @@
 {
-	"name": "openfin-web--web-layout",
+	"name": "openfin-web--web-interop-basic-intents",
 	"version": "23.0.0",
-	"description": "OpenFin Web Starter -- Web Layout",
+	"description": "OpenFin Web Starter -- Web Interop - Support Context and Intents",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
 		"client": "node ./scripts/launch.mjs",
 		"copy-core-web": "node ./scripts/copy-core-web.js",
 		"build-client": "npm run copy-core-web && webpack build --config ./client/webpack.config.js --mode=development",
 		"build": "npm run build-client",
+		"prestart": "npm run build-client",
 		"start": "npx --yes http-server ./public -p 6060 -c-1",
 		"setup": "npm install && npm run build",
 		"prettier": "prettier --config .prettierrc --write .",
@@ -16,7 +17,7 @@
 		"markdownlint": "markdownlint **/*.md --ignore **/node_modules/**",
 		"validate": "npm run prettier && npm run eslint && npm run markdownlint"
 	},
-	"author": "joe.ransegnola@here.io",
+	"author": "john.mandia@here.io",
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
