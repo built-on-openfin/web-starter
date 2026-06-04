@@ -2,7 +2,7 @@
 
 ESLint config: `packages/eslint-config/eslint.config.js`
 
-Base: `typescript-eslint` `recommendedTypeChecked` with type-aware parsing via `tsconfig.eslint.json` per workspace.
+Base: `typescript-eslint` `recommendedTypeChecked` with type-aware parsing via the root `tsconfig.eslint.json`.
 
 ## Notable overrides (explicitly configured)
 

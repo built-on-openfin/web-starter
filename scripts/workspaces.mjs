@@ -4,9 +4,9 @@
  * but it fails fast when there is an error.
  */
 import { spawn } from 'child_process';
-import { glob } from 'tinyglobby';
 import fs from 'fs/promises';
 import path from 'path';
+import { glob } from 'tinyglobby';
 
 /**
  * Execute the process.

@@ -24,9 +24,9 @@
  */
 
 import { spawn } from 'child_process';
-import { glob } from 'tinyglobby';
 import fs from 'fs/promises';
 import path from 'path';
+import { glob } from 'tinyglobby';
 
 // ---------- Defaults (edit these before running if needed) ----------
 const DEFAULT_VERSIONS = {
@@ -336,7 +336,7 @@ function printHelp() {
 			`  --core-web <ver>         Set @openfin/core-web (default ${DEFAULT_VERSIONS['core-web']})\n` +
 			`  --notifications <ver>    Set @openfin/notifications (default ${DEFAULT_VERSIONS['notifications']})\n` +
 			`  --web-notifications <ver> Set @openfin/web-notifications (default ${DEFAULT_VERSIONS['web-notifications']})\n` +
-			`  --pkg-version <ver>      Set top-level package.json \"version\" (default ${DEFAULT_VERSIONS.major})\n\n` +
+			`  --pkg-version <ver>      Set top-level package.json "version" (default ${DEFAULT_VERSIONS.major})\n\n` +
 			`Find/replace versioned URLs in files (${VERSIONED_URL_EXTENSIONS.join(', ')}):\n` +
 			`  --to <string>            Target version (default v${DEFAULT_VERSIONS['github-url']})\n` +
 			`  URLs matching built-on-openfin.github.io/.../vX.X.X/ are automatically updated\n\n` +

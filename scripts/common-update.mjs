@@ -3,9 +3,9 @@
  * shared across all the examples. The source of all the files is the workspace-platform-starter
  * example project.
  */
-import { glob } from 'tinyglobby';
 import fs from 'fs/promises';
 import path from 'path';
+import { glob } from 'tinyglobby';
 
 /**
  * Execute the process.

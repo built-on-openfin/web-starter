@@ -1,5 +1,10 @@
 import type { AppIdentifier, AppMetadata, ImplementationMetadata, IntentResolution } from "@finos/fdc3";
 import type { OpenFin } from "@openfin/core";
+import { AppIdHelper } from "./app-id-helper";
+import { AppIntentHelper } from "./app-intent-helper";
+import { mapToAppMetaData } from "./app-meta-data-helper";
+import { ClientRegistrationHelper } from "./client-registration-helper";
+import { RESOLVE_ERROR as ResolveError } from "./fdc3-errors";
 import type { PlatformApp, PlatformAppIdentifier } from "../../shapes/app-shapes";
 import type {
 	IntentRegistrationPayload,
@@ -7,11 +12,6 @@ import type {
 } from "../../shapes/interopbroker-shapes";
 import { getApp, getApps, launch } from "../apps/apps";
 import { isEmpty } from "../helpers/utils";
-import { AppIdHelper } from "./app-id-helper";
-import { AppIntentHelper } from "./app-intent-helper";
-import { mapToAppMetaData } from "./app-meta-data-helper";
-import { ClientRegistrationHelper } from "./client-registration-helper";
-import { RESOLVE_ERROR as ResolveError } from "./fdc3-errors";
 
 /**
  * Get the override constructor for the interop broker.

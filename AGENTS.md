@@ -3,8 +3,9 @@
 npm-workspaces monorepo of HERE (OpenFin) core-web how-to samples and shared packages.
 
 - Node 22+, package manager: npm
-- Workspaces: `how-to/*` (samples), `packages/*` (shared config)
+- Workspaces: listed in root `package.json` (`how-to/*` samples + `packages/*`). `how-to/cloud-interop*` are not workspaces: install/build them from their own folder; `how-to/hints-and-tips` is docs only
 - No test runner — focus on build + lint + format
+- ESLint/Prettier are configured once at the root; how-tos have no lint scripts or configs of their own
 
 ## Essential commands
 
@@ -15,7 +16,7 @@ npm run eslint            # lint all
 npm run prettier-check    # format check (read-only)
 ```
 
-Single workspace: `npm -w how-to/<name> run <script>` (build, start, eslint, prettier-check).
+Single workspace: `npm -w how-to/<name> run <script>` (build, start).
 
 ## Detail docs
 
@@ -26,4 +27,4 @@ Single workspace: `npm -w how-to/<name> run <script>` (build, start, eslint, pre
 ## When editing
 
 - Preserve existing patterns in the specific how-to you're working in.
-- If you add new scripts, add them both per-workspace and to root runner usage when appropriate.
+- Keep dependencies hoisted at the root where shared; add per-how-to deps only if that sample needs them.

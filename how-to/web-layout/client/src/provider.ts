@@ -135,6 +135,8 @@ async function hideTab(tabName: string): Promise<void> {
 async function removeTab(tabName: string): Promise<void> {
 	console.log(`Removing Tab & Layout ${tabName}`);
 	const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+	// The cast is required by tsc but flagged as unnecessary by the linter.
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	await lm?.removeLayout({ layoutName: tabName } as OpenFin.LayoutIdentity);
 	const tabToRemove = document.querySelector<HTMLDivElement>(`#tab-${tabName}`);
 	tabToRemove?.remove();

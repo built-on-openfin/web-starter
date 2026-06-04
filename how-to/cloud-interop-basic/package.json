@@ -20,7 +20,6 @@
 	},
 	"devDependencies": {
 		"@openfin/core": "45.101.1",
-		"copy-webpack-plugin": "^14.0.0",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.2",
 		"webpack": "^5.90.3",

@@ -21,4 +21,4 @@ Formatting and import rules enforced by Prettier + ESLint. Config sources:
 
 ## Restricted APIs
 
-Do not use `crypto.randomUUID` / `window.crypto.randomUUID` — lint forbids it because it's unavailable in non-secure contexts. Use `randomUUID` from the `uuid` module instead.
+Do not use `crypto.randomUUID` / `window.crypto.randomUUID` — lint forbids it because it's unavailable in non-secure contexts. Use `v4` from the `uuid` module instead.

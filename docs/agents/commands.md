@@ -24,12 +24,10 @@ Packaging:
 
 ## Single-workspace commands
 
-Use npm workspaces to target one how-to. Example workspace: `how-to/web-interop-basic`
+Use npm workspaces to target one how-to (lint/format run from the root only). Example workspace: `how-to/web-interop-basic`
 
 - `npm -w how-to/web-interop-basic run build`
 - `npm -w how-to/web-interop-basic run start` (dev server, serves `public/`)
-- `npm -w how-to/web-interop-basic run eslint`
-- `npm -w how-to/web-interop-basic run prettier-check`
 
 ## CI pipeline
 
