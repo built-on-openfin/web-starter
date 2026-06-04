@@ -1,0 +1,39 @@
+{
+	"layouts": {
+		"default": {
+			"settings": {
+				"showMaximiseIcon": true
+			},
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "column",
+							"width": 50,
+							"content": [
+								{
+									"type": "stack",
+									"width": 50,
+									"height": 50,
+									"content": [
+										{
+											"type": "component",
+											"componentName": "view",
+											"componentState": {
+												"url": "https://built-on-openfin.github.io/web-starter/dev/ray/layout-examples/web-interop-basic-intents/views/intents.html",
+												"name": "intent-view/29bd91fd-6766-448a-bf4f-8c218ebd4daf",
+												"titlePriority": "options"
+											},
+											"title": "FDC3 Intents"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+}
