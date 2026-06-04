@@ -76,11 +76,11 @@ public/
 
 The app directory ([apps.json](./public/common/apps.json)) defines three apps:
 
-| App | Intent | Context Type | Description |
-|-----|--------|-------------|-------------|
-| `intents` | _(raises intents)_ | -- | UI for selecting and raising intents |
-| `contact` | `ViewContact` | `fdc3.contact` | Displays contact details from intent context |
-| `quote` | `ViewQuote` | `fdc3.instrument` | Displays instrument quote from intent context |
+| App       | Intent             | Context Type      | Description                                   |
+| --------- | ------------------ | ----------------- | --------------------------------------------- |
+| `intents` | _(raises intents)_ | --                | UI for selecting and raising intents          |
+| `contact` | `ViewContact`      | `fdc3.contact`    | Displays contact details from intent context  |
+| `quote`   | `ViewQuote`        | `fdc3.instrument` | Displays instrument quote from intent context |
 
 Intent support is declared in each app's `interop.intents.listensFor` field, following the [FDC3 2.0 App Directory schema](https://fdc3.finos.org/docs/app-directory/spec).
 

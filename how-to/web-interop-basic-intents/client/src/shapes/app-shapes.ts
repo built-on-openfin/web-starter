@@ -328,4 +328,3 @@ export type AppDefinitionType = "web";
  * An identifier for an application on a platform.
  */
 export type PlatformAppIdentifier = AppIdentifier & OpenFin.Identity;
-

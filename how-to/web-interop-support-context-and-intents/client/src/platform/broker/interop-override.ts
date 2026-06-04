@@ -6,6 +6,12 @@ import type {
 	IntentResolution
 } from "@finos/fdc3";
 import type { OpenFin } from "@openfin/core";
+import { AppIdHelper } from "./app-id-helper";
+import { AppIntentHelper } from "./app-intent-helper";
+import { getAppsMetaData, mapToAppMetaData } from "./app-meta-data-helper";
+import { ClientRegistrationHelper } from "./client-registration-helper";
+import { RESOLVE_ERROR as ResolveError, OPEN_ERROR as OpenError } from "./fdc3-errors";
+import { IntentResolverHelper } from "./intent-resolver-helper";
 import type {
 	AppsForIntent,
 	PlatformApp,
@@ -22,12 +28,6 @@ import type {
 } from "../../shapes/interopbroker-shapes";
 import { formatError, isEmpty, isString, isStringValue, randomUUID } from "../../utils";
 import { bringAppToFront, getApp, getApps, launch } from "../apps/apps";
-import { AppIdHelper } from "./app-id-helper";
-import { AppIntentHelper } from "./app-intent-helper";
-import { getAppsMetaData, mapToAppMetaData } from "./app-meta-data-helper";
-import { ClientRegistrationHelper } from "./client-registration-helper";
-import { RESOLVE_ERROR as ResolveError, OPEN_ERROR as OpenError } from "./fdc3-errors";
-import { IntentResolverHelper } from "./intent-resolver-helper";
 
 /**
  * Get the override constructor for the interop broker (useful if you wish this implementation to be layered with other implementations and passed to the platform's initialization object as part of an array).

@@ -290,7 +290,7 @@ Experiment with the configuration to try different combinations and load differe
 With the platform settings defined and the content defined the example platform calls the init function from @openfin/workspace-mobile to initialize and bind the layout against the specified html element.
 
 ```javascript
- init(platformConfig, content, interopOptions);
+init(platformConfig, content, interopOptions);
 ```
 
 The interopOptions specify the web-broker url that should be loaded (this page is hosted on the same domain as the host platform and is the enabler for context sharing).
@@ -327,151 +327,151 @@ Below we have an example webpage that you can create and drop in the public fold
 
 ```html
 <html>
- <head>
-  <title>Test Context Aware Page</title>
-  <style>
-   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-     'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    color: white;
-    background-color: rgb(30, 31, 35);
-   }
-  </style>
- </head>
- <body>
-  <h1>Test Context Aware Page</h1>
-  <p>
-   Name of the context received using Interop:
-   <span id="interop-context-name">Not Set</span>
-  </p>
-  <p>
-   Name of the context received using FDC3:
-   <span id="fdc3-context-name">Not Set</span>
-  </p>
-  <p><button id="setContext">SetContext of Tesla Instrument using Interop</button></p>
-  <p><button id="broadcast">Broadcast Apple Instrument using FDC3 2.0</button></p>
-  <script type="module">
-   async function initApi(connectionOptions, target) {
-    try {
-     // We are using jsdelivr as an example.
-     // You can create your own esmodule that packages the web-interop library and it's dependencies.
-     const moduleUrl = 'https://cdn.jsdelivr.net/npm/@openfin/web-interop@0.37.17/+esm';
-     const workspaceMobile = await import(moduleUrl);
-     const connectedFin = await workspaceMobile.connect(connectionOptions);
-     if (connectedFin !== undefined) {
-      console.log('The fin api has been fetched and will be returned.');
-      if (target !== undefined) {
-       target.fin = connectedFin;
-       console.log('The fin api has been applied to the passed target');
+  <head>
+    <title>Test Context Aware Page</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+          'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        color: white;
+        background-color: rgb(30, 31, 35);
       }
-     }
+    </style>
+  </head>
+  <body>
+    <h1>Test Context Aware Page</h1>
+    <p>
+      Name of the context received using Interop:
+      <span id="interop-context-name">Not Set</span>
+    </p>
+    <p>
+      Name of the context received using FDC3:
+      <span id="fdc3-context-name">Not Set</span>
+    </p>
+    <p><button id="setContext">SetContext of Tesla Instrument using Interop</button></p>
+    <p><button id="broadcast">Broadcast Apple Instrument using FDC3 2.0</button></p>
+    <script type="module">
+      async function initApi(connectionOptions, target) {
+        try {
+          // We are using jsdelivr as an example.
+          // You can create your own esmodule that packages the web-interop library and it's dependencies.
+          const moduleUrl = 'https://cdn.jsdelivr.net/npm/@openfin/web-interop@0.37.17/+esm';
+          const workspaceMobile = await import(moduleUrl);
+          const connectedFin = await workspaceMobile.connect(connectionOptions);
+          if (connectedFin !== undefined) {
+            console.log('The fin api has been fetched and will be returned.');
+            if (target !== undefined) {
+              target.fin = connectedFin;
+              console.log('The fin api has been applied to the passed target');
+            }
+          }
 
-     return connectedFin;
-    } catch (error) {
-     console.error('An error occurred while trying to fetch the fin API', error);
-    }
-   }
-
-   async function checkAndAssignFin() {
-    if (window.fin === undefined) {
-     // we are not loaded into a host that dynamically provides the OpenFin API. Fetch and initialize the OpenFin API
-     try {
-      const connectionOptions = {
-       connectionInheritance: 'enabled'
-      };
-      const connectedFin = await initApi(connectionOptions, window);
-      if (connectedFin !== undefined) {
-       console.log(
-        'The fin api has been fetched. We could assign it here but window was passed as a target so this is just a confirmation that the API was fetched. Fin exists on the window: ' +
-         window.fin !==
-         undefined
-       );
-      } else {
-       console.error('The fin api was not returned.');
+          return connectedFin;
+        } catch (error) {
+          console.error('An error occurred while trying to fetch the fin API', error);
+        }
       }
-     } catch (error) {
-      console.error('An error occurred while trying to fetch the fin API', error);
-     }
-    }
-   }
 
-   async function init() {
-    await checkAndAssignFin();
-    if (window.fin !== undefined) {
-     // start of example of how to use the interop API and FDC3 API
-     const fdc3 = await fin.me.interop.getFDC3('2.0');
-     const interopContextName = document.getElementById('interop-context-name');
-     const fdc3ContextName = document.getElementById('fdc3-context-name');
-     const broadcast = document.getElementById('broadcast');
-     const setContext = document.getElementById('setContext');
-     fin.me.interop.addContextHandler((ctx) => {
-      console.log('Interop Context received: ', ctx);
-      if (interopContextName !== null) {
-       interopContextName.innerText = ctx.name;
+      async function checkAndAssignFin() {
+        if (window.fin === undefined) {
+          // we are not loaded into a host that dynamically provides the OpenFin API. Fetch and initialize the OpenFin API
+          try {
+            const connectionOptions = {
+              connectionInheritance: 'enabled'
+            };
+            const connectedFin = await initApi(connectionOptions, window);
+            if (connectedFin !== undefined) {
+              console.log(
+                'The fin api has been fetched. We could assign it here but window was passed as a target so this is just a confirmation that the API was fetched. Fin exists on the window: ' +
+                  window.fin !==
+                  undefined
+              );
+            } else {
+              console.error('The fin api was not returned.');
+            }
+          } catch (error) {
+            console.error('An error occurred while trying to fetch the fin API', error);
+          }
+        }
       }
-     });
-     fdc3.addContextListener('fdc3.instrument', (ctx) => {
-      console.log('User Context Received', ctx);
-      if (fdc3ContextName !== null) {
-       fdc3ContextName.innerText = ctx.name;
+
+      async function init() {
+        await checkAndAssignFin();
+        if (window.fin !== undefined) {
+          // start of example of how to use the interop API and FDC3 API
+          const fdc3 = await fin.me.interop.getFDC3('2.0');
+          const interopContextName = document.getElementById('interop-context-name');
+          const fdc3ContextName = document.getElementById('fdc3-context-name');
+          const broadcast = document.getElementById('broadcast');
+          const setContext = document.getElementById('setContext');
+          fin.me.interop.addContextHandler((ctx) => {
+            console.log('Interop Context received: ', ctx);
+            if (interopContextName !== null) {
+              interopContextName.innerText = ctx.name;
+            }
+          });
+          fdc3.addContextListener('fdc3.instrument', (ctx) => {
+            console.log('User Context Received', ctx);
+            if (fdc3ContextName !== null) {
+              fdc3ContextName.innerText = ctx.name;
+            }
+          });
+
+          console.log('Listening for context changes');
+          setContext.addEventListener('click', () => {
+            const context = {
+              type: 'fdc3.instrument',
+              name: 'Tesla Inc',
+              id: {
+                ticker: 'TSLA',
+                BBG: 'TSLA US Equity',
+                ISIN: 'US88160R1014'
+              }
+            };
+
+            try {
+              console.log('setting context on system contextual group through interop', context);
+              fin.me.interop.setContext(context);
+            } catch (error) {
+              console.warn(
+                'You are not bound to a system context group and are unable to set context',
+                error
+              );
+            }
+          });
+
+          broadcast.addEventListener('click', () => {
+            const context = {
+              type: 'fdc3.instrument',
+              name: 'Apple Inc.',
+              id: {
+                ticker: 'AAPL',
+                BBG: 'AAPL US Equity',
+                ISIN: 'US0378331005'
+              }
+            };
+
+            try {
+              console.log('setting context on system contextual group through fdc3', context);
+              fdc3.broadcast(context);
+            } catch (error) {
+              console.warn(
+                'You are not bound to a system context group and are unable to set context',
+                error
+              );
+            }
+          });
+          // end of example of how to use the interop API
+        } else {
+          console.log(
+            'The fin api is still not available even after the check and assignment have been performed.'
+          );
+        }
       }
-     });
 
-     console.log('Listening for context changes');
-     setContext.addEventListener('click', () => {
-      const context = {
-       type: 'fdc3.instrument',
-       name: 'Tesla Inc',
-       id: {
-        ticker: 'TSLA',
-        BBG: 'TSLA US Equity',
-        ISIN: 'US88160R1014'
-       }
-      };
-
-      try {
-       console.log('setting context on system contextual group through interop', context);
-       fin.me.interop.setContext(context);
-      } catch (error) {
-       console.warn(
-        'You are not bound to a system context group and are unable to set context',
-        error
-       );
-      }
-     });
-
-     broadcast.addEventListener('click', () => {
-      const context = {
-       type: 'fdc3.instrument',
-       name: 'Apple Inc.',
-       id: {
-        ticker: 'AAPL',
-        BBG: 'AAPL US Equity',
-        ISIN: 'US0378331005'
-       }
-      };
-
-      try {
-       console.log('setting context on system contextual group through fdc3', context);
-       fdc3.broadcast(context);
-      } catch (error) {
-       console.warn(
-        'You are not bound to a system context group and are unable to set context',
-        error
-       );
-      }
-     });
-     // end of example of how to use the interop API
-    } else {
-     console.log(
-      'The fin api is still not available even after the check and assignment have been performed.'
-     );
-    }
-   }
-
-   await init();
-  </script>
- </body>
+      await init();
+    </script>
+  </body>
 </html>
 ```
 
@@ -497,28 +497,28 @@ npm install @openfin/web-interop@0.37.17 --save
 You would then import the connect function at the top of your TypeScript file.
 
 ```javascript
-import { connect } from "@openfin/web-interop";
+import { connect } from '@openfin/web-interop';
 ```
 
 You could use this connect function in a initApi function similar to the one you saw above.
 
 ```javascript
 async function initApi(connectionOptions, target) {
-    try {
-     const connectedFin = await connect(connectionOptions);
-     if (connectedFin !== undefined) {
+  try {
+    const connectedFin = await connect(connectionOptions);
+    if (connectedFin !== undefined) {
       console.log('The fin api has been fetched and will be returned.');
       if (target !== undefined) {
         target.fin = connectedFin;
         console.log('The fin api has been applied to the passed target');
       }
-     }
-
-     return connectedFin;
-    } catch (error) {
-     console.error('An error occurred while trying to fetch the fin API', error);
     }
-   }
+
+    return connectedFin;
+  } catch (error) {
+    console.error('An error occurred while trying to fetch the fin API', error);
+  }
+}
 ```
 
 Everything would then be packaged inside of your bundle and would work in the Desktop Container Workspace or Desktop Browser Workspace without any dynamic loading.
@@ -530,42 +530,36 @@ If you add the logic shown above then your content will be able to share context
 ```javascript
 // --------------------------------
 // SetContext code
-// --------------------------------  
+// --------------------------------
 if (fin !== undefined) {
-   const context = {
-      "type": "fdc3.instrument",
-      "name": "Tesla Inc",
-      "id": {
-         "ticker": "TSLA",
-         "BBG": "TSLA US Equity",
-         "ISIN": "US88160R1014"
-      }
-   };
+  const context = {
+    type: 'fdc3.instrument',
+    name: 'Tesla Inc',
+    id: {
+      ticker: 'TSLA',
+      BBG: 'TSLA US Equity',
+      ISIN: 'US88160R1014'
+    }
+  };
 
-   try {
-       console.log("setting context on system contextual group", context);
+  try {
+    console.log('setting context on system contextual group', context);
 
-       fin.me.interop.setContext(context);
-     } catch(error) {
-      console.warn(
-         "You are not bound to a system context group and are unable to set context",
-         error
-      );
-   }
-
+    fin.me.interop.setContext(context);
+  } catch (error) {
+    console.warn('You are not bound to a system context group and are unable to set context', error);
+  }
 }
 
 // --------------------------------
 // Listening code
 // --------------------------------
 if (fin !== undefined) {
+  const systemHandler = (ctx) => {
+    console.log('System Context Received: ', ctx);
+  };
 
-   const systemHandler = (ctx) => {
-       console.log("System Context Received: ", ctx);
-   };
-
-   const systemListener = fin.me.interop.addContextHandler(systemHandler);
-
+  const systemListener = fin.me.interop.addContextHandler(systemHandler);
 }
 ```
 
@@ -577,7 +571,7 @@ If it doesn't exist then you can request it:
 
 ```javascript
 // request an fdc3 2.0 api. Alternatively specify 1.2
-const fdc3 = await fin.me.interop.getFDC3("2.0");
+const fdc3 = await fin.me.interop.getFDC3('2.0');
 ```
 
 Once you have the fdc3 api then you can use it as follows:
@@ -585,41 +579,39 @@ Once you have the fdc3 api then you can use it as follows:
 ```javascript
 // --------------------------------
 // Broadcast code
-// --------------------------------  
+// --------------------------------
 if (fdc3 !== undefined) {
-   const context = {
-        type: "fdc3.instrument",
-        name: "Apple Inc.",
-        id: { 
-            ticker: "AAPL", 
-            BBG: "AAPL US Equity", 
-            ISIN: "US0378331005" 
-            }
-        };
+  const context = {
+    type: 'fdc3.instrument',
+    name: 'Apple Inc.',
+    id: {
+      ticker: 'AAPL',
+      BBG: 'AAPL US Equity',
+      ISIN: 'US0378331005'
+    }
+  };
 
-   try {
-       console.log("setting context on system contextual group", context);
+  try {
+    console.log('setting context on system contextual group', context);
 
-       fdc3.broadcast(context);
-     } catch(error) {
-      console.warn(
-         "You are not bound to a system context group and are unable to set context using broadcast",
-         error
-      );
-   }
-
+    fdc3.broadcast(context);
+  } catch (error) {
+    console.warn(
+      'You are not bound to a system context group and are unable to set context using broadcast',
+      error
+    );
+  }
 }
 
 // --------------------------------
 // Listening code
 // --------------------------------
 if (fdc3 !== undefined) {
+  const contextHandler = (ctx) => {
+    console.log('FDC3 Context Received: ', ctx);
+  };
 
-   const contextHandler = (ctx) => {
-       console.log("FDC3 Context Received: ", ctx);
-   };
-
-   const contextListener = fdc3.addContextListener("fdc3.instrument", contextHandler);
+  const contextListener = fdc3.addContextListener('fdc3.instrument', contextHandler);
 }
 ```
 

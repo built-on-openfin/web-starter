@@ -6,6 +6,6 @@
 
 This section is where we will add small hints and tips that isn't specific to any one sample but may prove useful.
 
-| Topic                                                                                   | Description                                                                                                                                |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Topic                                                                           | Description                                                                                                                             |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | [How To Use Create Workspace Mobile App](./docs/create-workspace-mobile-app.md) | A guide on how to use the @openfin/create-workspace-mobile-app to generate a PWA application that works in a desktop or mobile browser. |
