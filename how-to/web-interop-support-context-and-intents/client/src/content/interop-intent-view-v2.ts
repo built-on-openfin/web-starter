@@ -181,7 +181,9 @@ function getDefaultFDC3ContextData(): { [type: string]: Context[] } {
  * @param newData The new data to merge.
  * @returns The combined data.
  */
-function mergeWithDefaultFDC3ContextData(newData: { [type: string]: Context[] }): { [type: string]: Context[] } {
+function mergeWithDefaultFDC3ContextData(newData: { [type: string]: Context[] }): {
+	[type: string]: Context[];
+} {
 	const fdc3ContextData = getDefaultFDC3ContextData();
 	if (newData !== undefined) {
 		const keys = Object.keys(newData);

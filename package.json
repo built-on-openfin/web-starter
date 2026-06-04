@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web-starter",
-	"version": "23.0.0",
+	"version": "24.0.0",
 	"description": "OpenFin Web Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",
@@ -25,7 +25,8 @@
 	],
 	"packageExclude": [
 		"how-to/hints-and-tips",
-		"how-to/cloud-interop-basic"
+		"how-to/cloud-interop-basic",
+		"how-to/cloud-interop"
 	],
 	"packageCustomFolder": "",
 	"contributors": [
@@ -37,6 +38,5 @@
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",
 		"yargs": "17.7.2"
-	},
-	"overrides": {}
+	}
 }
