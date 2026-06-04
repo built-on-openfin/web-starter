@@ -1,0 +1,67 @@
+{
+	"applications": [
+		{
+			"appId": "intents",
+			"name": "intents",
+			"title": "Intents",
+			"description": "Intents dev tool",
+			"categories": [],
+			"version": "2.0.0",
+			"tooltip": "Intents",
+			"lang": "en-US",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/web-starter/dev/ray/simplify-deps/web-interop-basic-intents/views/intents.html"
+			},
+			"interop": {}
+		},
+		{
+			"appId": "contact",
+			"name": "contact",
+			"title": "Contact",
+			"description": "View contact details",
+			"categories": [],
+			"version": "2.0.0",
+			"tooltip": "Contact",
+			"lang": "en-US",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/web-starter/dev/ray/simplify-deps/web-interop-basic-intents/views/view-contact.html"
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewContact": {
+							"displayName": "View Contact",
+							"contexts": ["fdc3.contact"]
+						}
+					}
+				}
+			}
+		},
+		{
+			"appId": "quote",
+			"name": "quote",
+			"title": "Quote",
+			"description": "View quote details",
+			"categories": [],
+			"version": "2.0.0",
+			"tooltip": "Quote",
+			"lang": "en-US",
+			"type": "web",
+			"details": {
+				"url": "https://built-on-openfin.github.io/web-starter/dev/ray/simplify-deps/web-interop-basic-intents/views/view-quote.html"
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewQuote": {
+							"displayName": "View Quote",
+							"contexts": ["fdc3.instrument"]
+						}
+					}
+				}
+			}
+		}
+	]
+}
