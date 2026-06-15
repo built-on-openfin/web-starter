@@ -38,7 +38,16 @@
 		"john.mandia@here.io"
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
+	"overrides": {
+		"@openfin/cloud-interop": {
+			"@openfin/core": "44.101.4"
+		},
+		"@openfin/notifications": {
+			"@openfin/core": "44.101.4"
+		}
+	},
 	"devDependencies": {
+		"ajv": "^8.12.0",
 		"fast-glob": "3.3.2",
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",
