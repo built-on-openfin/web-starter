@@ -11713,7 +11713,7 @@ async function raiseIntent(intent, context, app) {
         console.log(`Raising intent ${intent} with context`, context);
         const intentResolver = await window.fdc3.raiseIntent(intent, context, app);
         if (intentResolver !== undefined) {
-            console.log("Intent resolver received: ", intentResolver);
+            console.log("Intent resolver received:", intentResolver);
         }
     }
 }
@@ -11728,11 +11728,11 @@ async function raiseIntentByContext(context, app) {
             console.log(`Raising intent by context ${context.type}:`, context);
         }
         else {
-            console.log(`Raising intent by context ${context.type} and targeting app: ${JSON.stringify(app)}. Context: `, context);
+            console.log(`Raising intent by context ${context.type} and targeting app: ${JSON.stringify(app)}. Context:`, context);
         }
         const intentResolver = await window.fdc3.raiseIntentForContext(context, app);
         if (intentResolver !== undefined) {
-            console.log("Intent resolver received: ", intentResolver);
+            console.log("Intent resolver received:", intentResolver);
         }
     }
 }
@@ -11743,7 +11743,7 @@ async function raiseIntentByContext(context, app) {
 async function addIntentListeners(intentList) {
     if (window.fdc3 !== undefined) {
         if (intentList.length > 0) {
-            console.log("View Manifest/Defaults specified following intents: ", intentList);
+            console.log("View Manifest/Defaults specified following intents:", intentList);
         }
         try {
             for (const intent of intentList) {
