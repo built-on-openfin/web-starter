@@ -14896,7 +14896,6 @@ async function init() {
     await fin.Interop.init(settings.platform.interop.providerId);
     await fin.Platform.Layout.init({ container: layoutContainer });
     await (0, web_notifications_1.initNotificationCenter)({
-        // @ts-expect-error In this npm workspace different versions of @openfin/core can be hoisted to the root causing typescript conflicts. You should not need this comment in your client project.
         finContext: fin,
         serviceId: settings.platform.notificationServiceId,
         container: notificationCenterContainer,
