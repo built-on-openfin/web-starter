@@ -21,12 +21,17 @@
 		"upgrade-versions": "node scripts/upgrade-versions.mjs"
 	},
 	"workspaces": [
-		"how-to/*"
+		"how-to/web-client-api",
+		"how-to/web-interop",
+		"how-to/web-interop-basic",
+		"how-to/web-interop-basic-intents",
+		"how-to/web-interop-support-context-and-intents",
+		"how-to/web-layout",
+		"how-to/web-layout-basic",
+		"how-to/web-notifications"
 	],
 	"packageExclude": [
-		"how-to/hints-and-tips",
-		"how-to/cloud-interop-basic",
-		"how-to/cloud-interop"
+		"how-to/hints-and-tips"
 	],
 	"packageCustomFolder": "",
 	"contributors": [

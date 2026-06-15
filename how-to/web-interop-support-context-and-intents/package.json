@@ -42,5 +42,8 @@
 		"typescript": "^5.4.2",
 		"webpack": "^5.90.3",
 		"webpack-cli": "^5.1.4"
+	},
+	"overrides": {
+		"@openfin/core": "44.101.4"
 	}
 }
