@@ -3,7 +3,6 @@
  *
  * What it does per project (root + each workspace):
  *  - Update @openfin/core-web version in package.json (if present)
- *  - Update @openfin/cloud-interop version in package.json (if present)
  *  - Update @openfin/core version in package.json (if present)
  *  - Update top-level "version" in package.json
  *  - Replace versioned URLs in files (.html, .json, .ts, .tsx, .js, .jsx, .md)
@@ -29,11 +28,10 @@ import path from 'path';
 
 // ---------- Defaults (edit these before running if needed) ----------
 const DEFAULT_VERSIONS = {
-  major: '23.0.0',
-  'github-url': '23.0.0',
-  core: '43.101.4',
-  'core-web': '0.43.115',
-  'cloud-interop': '0.43.115'
+  major: '24.0.0',
+  'github-url': '24.0.0',
+  core: '44.101.4',
+  'core-web': '0.44.112'
 };
 
 
@@ -65,7 +63,6 @@ async function run() {
   console.log(`Platform: ${process.platform}`);
   console.log('Options:', JSON.stringify({
     core: args.core,
-    cloudInterop: args.cloudInterop,
     coreWeb: args.coreWeb,
     pkgVersion: args.pkgVersion,
     targetVersion: args.wsTo,
@@ -127,7 +124,6 @@ async function run() {
 
       const changes = updatePackageVersions(pkgJson, {
         core: args.core,
-        cloudInterop: args.cloudInterop,
         coreWeb: args.coreWeb,
         pkgVersion: args.pkgVersion
       });
@@ -229,7 +225,6 @@ function parseArgs(argv) {
     const set = (k, v = true) => map.set(k, v);
     switch (a) {
       case '--core': set('core', next); i += 1; break;
-      case '--cloud-interop': set('cloudInterop', next); i += 1; break;
       case '--core-web': set('coreWeb', next); i += 1; break;
       case '--pkg-version': set('pkgVersion', next); i += 1; break;
       case '--to': set('wsTo', next); i += 1; break;
@@ -255,7 +250,6 @@ function parseArgs(argv) {
 
   const core = map.get('core') || DEFAULT_VERSIONS.core;
   const coreWeb = map.get('coreWeb') || DEFAULT_VERSIONS['core-web'];
-  const cloudInterop = map.get('cloudInterop') || DEFAULT_VERSIONS['cloud-interop'];
   const pkgVersion = map.get('pkgVersion') || DEFAULT_VERSIONS.major;
 
   // wsTo defaults to github-url version; wsFrom is optional (regex handles any version)
@@ -264,7 +258,6 @@ function parseArgs(argv) {
   return {
     core,
     coreWeb,
-    cloudInterop,
     pkgVersion,
     wsTo,
     caseInsensitive: !!map.get('caseInsensitive'),
@@ -282,7 +275,6 @@ function printHelp() {
   console.log(`Usage: node scripts/upgrade-versions.mjs [options]\n\n` +
     `Version overrides (defaults reflect current repo):\n` +
     `  --core <ver>             Set @openfin/core (default ${DEFAULT_VERSIONS.core})\n` +
-    `  --cloud-interop <ver>    Set @openfin/cloud-interop (default ${DEFAULT_VERSIONS['cloud-interop']})\n` +
     `  --core-web <ver>         Set @openfin/core-web (default ${DEFAULT_VERSIONS['core-web']})\n` +
     `  --pkg-version <ver>      Set top-level package.json \"version\" (default ${DEFAULT_VERSIONS.major})\n\n` +
     `Find/replace versioned URLs in files (${VERSIONED_URL_EXTENSIONS.join(', ')}):\n` +
@@ -314,7 +306,6 @@ function updatePackageVersions(pkgJson, versions) {
 
   for (const sec of sections) {
     setIfPresent(sec, '@openfin/core', versions.core);
-    setIfPresent(sec, '@openfin/cloud-interop', versions.cloudInterop);
     setIfPresent(sec, '@openfin/core-web', versions.coreWeb);
   }
 

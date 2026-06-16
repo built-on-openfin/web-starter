@@ -181,7 +181,9 @@ function getDefaultFDC3ContextData(): { [type: string]: Context[] } {
  * @param newData The new data to merge.
  * @returns The combined data.
  */
-function mergeWithDefaultFDC3ContextData(newData: { [type: string]: Context[] }): { [type: string]: Context[] } {
+function mergeWithDefaultFDC3ContextData(newData: { [type: string]: Context[] }): {
+	[type: string]: Context[];
+} {
 	const fdc3ContextData = getDefaultFDC3ContextData();
 	if (newData !== undefined) {
 		const keys = Object.keys(newData);
@@ -288,7 +290,7 @@ async function raiseIntent(
 		console.log(`Raising intent ${intent} with context`, context);
 		const intentResolver = await window.fdc3.raiseIntent(intent, context, app as AppIdentifier);
 		if (intentResolver !== undefined) {
-			console.log("Intent resolver received: ", intentResolver);
+			console.log("Intent resolver received:", intentResolver);
 		}
 	}
 }
@@ -307,13 +309,13 @@ async function raiseIntentByContext(
 			console.log(`Raising intent by context ${context.type}:`, context);
 		} else {
 			console.log(
-				`Raising intent by context ${context.type} and targeting app: ${JSON.stringify(app)}. Context: `,
+				`Raising intent by context ${context.type} and targeting app: ${JSON.stringify(app)}. Context:`,
 				context
 			);
 		}
 		const intentResolver = await window.fdc3.raiseIntentForContext(context, app as AppIdentifier);
 		if (intentResolver !== undefined) {
-			console.log("Intent resolver received: ", intentResolver);
+			console.log("Intent resolver received:", intentResolver);
 		}
 	}
 }
@@ -325,7 +327,7 @@ async function raiseIntentByContext(
 async function addIntentListeners(intentList: string[]): Promise<void> {
 	if (window.fdc3 !== undefined) {
 		if (intentList.length > 0) {
-			console.log("View Manifest/Defaults specified following intents: ", intentList);
+			console.log("View Manifest/Defaults specified following intents:", intentList);
 		}
 		try {
 			for (const intent of intentList) {

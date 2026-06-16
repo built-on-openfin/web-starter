@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web-starter",
-	"version": "23.0.0",
+	"version": "24.0.0",
 	"description": "OpenFin Web Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",
@@ -21,22 +21,36 @@
 		"upgrade-versions": "node scripts/upgrade-versions.mjs"
 	},
 	"workspaces": [
-		"how-to/*"
+		"how-to/web-client-api",
+		"how-to/web-interop",
+		"how-to/web-interop-basic",
+		"how-to/web-interop-basic-intents",
+		"how-to/web-interop-support-context-and-intents",
+		"how-to/web-layout",
+		"how-to/web-layout-basic",
+		"how-to/web-notifications"
 	],
 	"packageExclude": [
-		"how-to/hints-and-tips",
-		"how-to/cloud-interop-basic"
+		"how-to/hints-and-tips"
 	],
 	"packageCustomFolder": "",
 	"contributors": [
 		"john.mandia@here.io"
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
+	"overrides": {
+		"@openfin/cloud-interop": {
+			"@openfin/core": "44.101.4"
+		},
+		"@openfin/notifications": {
+			"@openfin/core": "44.101.4"
+		}
+	},
 	"devDependencies": {
+		"ajv": "^8.12.0",
 		"fast-glob": "3.3.2",
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",
 		"yargs": "17.7.2"
-	},
-	"overrides": {}
+	}
 }

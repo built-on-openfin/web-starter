@@ -15,7 +15,7 @@ This page has a very simple layout which is made up of four iframes that inherit
 
 It also has a left panel which is outside of the HERE Layout and represents a platform specific panel which simply uses fdc3 and logs what it receives. This iframe does not inherit interop settings (as it is not part of the OpenFin layout) and uses platform specific settings to connect.
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v23.0.0/web-interop/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v24.0.0/web-interop/platform/provider.html)
 
 ![HERE Web Interop Example](./docs/web-interop.png)
 
@@ -57,7 +57,7 @@ There are a few things to note before trying to use @openfin/core-web:
 
 Due to Chrome's Local Network Access (LNA) restrictions, if you have a page served from localhost that embeds content via an iframe from an external HTTPS URL (or vice versa), this setup is now subject to LNA restrictions.
 
-Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter) 
+Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter)
 
 https://developer.chrome.com/release-notes/142#local_network_access_restrictions
 
