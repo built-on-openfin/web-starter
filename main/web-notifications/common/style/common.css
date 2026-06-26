@@ -17,8 +17,6 @@
 	--brand-success: var(--theme-status-success, #35c759);
 
 	accent-color: var(--brand-primary);
-
-	--header-height: 60px;
 	--body-padding: 20px;
 }
 
@@ -37,25 +35,6 @@
 	--brand-table-row-odd: var(--theme-background4, #c9cbd2);
 	--brand-error: var(--theme-status-critical, #be1d1f);
 	--brand-success: var(--theme-status-success, #35c759);
-}
-
-#layout_container {
-	height: 100%;
-}
-
-/* Define the position and size of the web notification center */
-#notification_center_container {
-	position: fixed;
-	width: 345px;
-	height: 100dvh;
-	right: 0;
-	top: 0;
-	align-self: center;
-	z-index: 100;
-}
-
-.header {
-	height: var(--header-height);
 }
 
 .primary {
@@ -294,7 +273,8 @@ button.center {
 	margin-right: 10px;
 }
 
-pre {
+pre,
+code {
 	margin: 0;
 	padding: 5px;
 	border-radius: 5px;
@@ -303,8 +283,6 @@ pre {
 	white-space: pre-wrap;
 	border: 1px solid var(--brand-input-border);
 	background-color: var(--brand-input-background);
-	width: 100%;
-	min-height: 20px;
 }
 
 header {
@@ -655,7 +633,6 @@ input[type='color']::-webkit-color-swatch {
 	border: none;
 }
 
-/* This disables the auto zoom on iDevices */
 @supports (-webkit-touch-callout: none) {
 	select,
 	input[type='text'],

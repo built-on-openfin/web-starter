@@ -13,27 +13,29 @@ const e=(e,t)=>{try{return e.origin===t.origin}catch(e){return!1}},t="web-broker
 
 /***/ },
 
-/***/ "./client/src/platform/settings.ts"
-/*!*****************************************!*\
-  !*** ./client/src/platform/settings.ts ***!
-  \*****************************************/
+/***/ "./client/src/settings.ts"
+/*!********************************!*\
+  !*** ./client/src/settings.ts ***!
+  \********************************/
 (__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getSettings = getSettings;
 exports.getDefaultLayout = getDefaultLayout;
-exports.getSecondLayout = getSecondLayout;
 /**
  * Fetches the settings for the application.
  * @returns The settings for the application.
  */
 async function getSettings() {
-    const settings = await getManifestSettings();
-    if (settings === undefined) {
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link === null) {
         console.error("Unable to run the example as settings are required and we fetch them from the link web manifest from the html page that is being served. It should exist in the customSettings section of the web manifest.");
+        return;
     }
-    return settings;
+    const response = await fetch(link.href);
+    const manifest = (await response.json());
+    return manifest.custom_settings;
 }
 /**
  * Returns a default layout from the settings if provided.
@@ -51,36 +53,6 @@ async function getDefaultLayout() {
         return layoutJson;
     }
     return settings.platform.layout.defaultLayout;
-}
-/**
- * Returns a default layout from the settings if provided.
- * @returns The default layout from the settings.
- */
-async function getSecondLayout() {
-    const settings = await getSettings();
-    if (settings?.platform?.layout?.secondLayout === undefined) {
-        console.error("Unable to run the example as without a layout being defined. Please ensure that settings have been provided in the web manifest.");
-        return;
-    }
-    if (typeof settings.platform.layout.secondLayout === "string") {
-        const layoutResponse = await fetch(settings.platform.layout.secondLayout);
-        const layoutJson = (await layoutResponse.json());
-        return layoutJson;
-    }
-    return settings.platform.layout.secondLayout;
-}
-/**
- * Returns the settings from the manifest file.
- * @returns customSettings for this example
- */
-async function getManifestSettings() {
-    // Get the manifest link
-    const link = document.querySelector('link[rel="manifest"]');
-    if (link !== null) {
-        const manifestResponse = await fetch(link.href);
-        const manifestJson = (await manifestResponse.json());
-        return manifestJson.custom_settings;
-    }
 }
 
 
@@ -129,7 +101,7 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const iframe_broker_1 = __webpack_require__(/*! @openfin/core-web/iframe-broker */ "../../node_modules/@openfin/core-web/out/iframe-broker.cjs.js");
-const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings.ts");
+const settings_1 = __webpack_require__(/*! ../settings */ "./client/src/settings.ts");
 /**
  * Initializes the OpenFin Web Broker connection.
  * @returns A promise that resolves when the connection is established.
