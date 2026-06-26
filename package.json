@@ -35,16 +35,13 @@
 	],
 	"packageCustomFolder": "",
 	"contributors": [
-		"john.mandia@here.io"
+		"john.mandia@here.io",
+		"ray.cashmore@here.io"
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"overrides": {
-		"@openfin/cloud-interop": {
-			"@openfin/core": "44.101.4"
-		},
-		"@openfin/notifications": {
-			"@openfin/core": "44.101.4"
-		}
+		"@openfin/core": "44.101.4",
+		"uuid": "11.1.1"
 	},
 	"devDependencies": {
 		"ajv": "^8.12.0",
