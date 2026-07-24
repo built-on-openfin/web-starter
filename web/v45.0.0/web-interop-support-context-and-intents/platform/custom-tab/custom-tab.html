@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Custom Tab</title>
+		<link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+		<link rel="stylesheet" href="../../common/style/app.css" />
+		<script defer="defer" src="./custom-tab.js"></script>
+		<style>
+			.query-container {
+				padding-top: 125px;
+			}
+			.preview {
+				height: 100%;
+				padding: 0px;
+			}
+		</style>
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>Custom Tab</h1>
+			</div>
+		</header>
+		<main class="form fill col gap20 middle scroll-vertical">
+			<div id="preview" class="width-full row preview" style="display: none">
+				<iframe id="preview-iframe" class="width-full preview" src="about:blank"></iframe>
+			</div>
+			<div id="url-container" class="width-full row pad20 query-container">
+				<input id="url" type="text" class="large center full" placeholder="http://www.example.com" />
+			</div>
+			<div class="width-full row pad20 center">
+				<button type="submit" id="previewBtn" disabled="true">Preview</button>
+				<button type="submit" id="cancelBtn" style="display: none; margin-right: 10px">Cancel</button>
+				<button type="submit" id="actionBtn" style="display: none">Navigate</button>
+			</div>
+		</main>
+	</body>
+</html>
