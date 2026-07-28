@@ -28,6 +28,7 @@
 		"how-to/web-interop-support-context-and-intents",
 		"how-to/web-layout",
 		"how-to/web-layout-basic",
+		"how-to/web-layout-prevent-reload",
 		"how-to/web-notifications"
 	],
 	"packageExclude": [
