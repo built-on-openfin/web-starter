@@ -1002,7 +1002,6 @@ body.stateful-view {
 /* --- web-layout-prevent-reload: host page --- */
 
 #main-page {
-	position: relative;
 	display: flex;
 	flex: 1;
 	min-height: 0;
