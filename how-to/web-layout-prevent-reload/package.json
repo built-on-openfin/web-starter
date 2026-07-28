@@ -1,7 +1,7 @@
 {
-	"name": "openfin-web--web-layout-basic",
+	"name": "openfin-web--web-layout-prevent-reload",
 	"version": "24.0.0",
-	"description": "OpenFin Web Starter -- Web Layout Basic",
+	"description": "OpenFin Web Starter -- Web Layout Prevent Reload",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
 		"client": "node ./scripts/launch.mjs",

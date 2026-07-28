@@ -20,8 +20,8 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.44.112",
-		"@openfin/cloud-interop": "0.44.111"
+		"@openfin/cloud-interop": "0.44.111",
+		"@openfin/core-web": "0.44.112"
 	},
 	"devDependencies": {
 		"@openfin/core": "44.101.4",
@@ -36,7 +36,7 @@
 		"eslint-plugin-simple-import-sort": "12.0.0",
 		"eslint-plugin-unicorn": "51.0.1",
 		"eslint-plugin-unused-imports": "3.1.0",
-		"markdownlint-cli": "0.49.0",
+		"markdownlint-cli": "^0.49.1",
 		"prettier": "3.2.5",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.2",
