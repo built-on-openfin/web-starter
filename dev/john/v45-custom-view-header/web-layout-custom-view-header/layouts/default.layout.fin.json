@@ -1,0 +1,48 @@
+{
+	"layouts": {
+		"default": {
+			"settings": {
+				"tabOverflowBehavior": "scroll",
+				"showFavicons": true,
+				"defaultFaviconUrl": "https://built-on-openfin.github.io/web-starter/dev/john/v45-custom-view-header/web-layout-custom-view-header/images/default-tab.svg"
+			},
+			"content": [
+				{
+					"type": "stack",
+					"content": [
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"name": "branded-view",
+								"url": "https://built-on-openfin.github.io/web-starter/dev/john/v45-custom-view-header/web-layout-custom-view-header/views/sample-view.html?name=Explicit%20icon",
+								"icon": "https://built-on-openfin.github.io/web-starter/dev/john/v45-custom-view-header/web-layout-custom-view-header/images/branded-tab.svg"
+							},
+							"title": "Explicit icon"
+						},
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"name": "no-icon-view",
+								"url": "https://built-on-openfin.github.io/web-starter/dev/john/v45-custom-view-header/web-layout-custom-view-header/views/sample-view.html?name=Hidden%20icon",
+								"icon": "hide"
+							},
+							"title": "Hidden icon"
+						},
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"name": "inherited-icon-view",
+								"url": "https://built-on-openfin.github.io/web-starter/dev/john/v45-custom-view-header/web-layout-custom-view-header/views/sample-view.html?name=Inherited%20icon",
+								"icon": "unset"
+							},
+							"title": "Inherited icon"
+						}
+					]
+				}
+			]
+		}
+	}
+}
