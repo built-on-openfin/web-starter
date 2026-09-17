@@ -1,9 +1,9 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-var __webpack_exports__ = {};
+let __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it uses a non-standard name for the exports (exports).
 (() => {
-var exports = __webpack_exports__;
+let exports = __webpack_exports__;
 /*!***********************************************!*\
   !*** ./client/src/content/settings-dialog.ts ***!
   \***********************************************/
