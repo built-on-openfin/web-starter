@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web-starter",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "OpenFin Web Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",
@@ -40,7 +40,7 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"overrides": {
-		"@openfin/core": "44.101.4",
+		"@openfin/core": "45.101.1",
 		"uuid": "11.1.1"
 	},
 	"devDependencies": {

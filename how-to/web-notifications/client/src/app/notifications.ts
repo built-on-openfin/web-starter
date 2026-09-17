@@ -14,6 +14,7 @@ import {
 	showActionableNotification,
 	showCustomIndicatorNotification,
 	showCustomNotification,
+	showDoNotDismissNotification,
 	showFormAdvancedNotification,
 	showFormNotification,
 	showIndicatorNotification,
@@ -295,7 +296,8 @@ function bindExamples(): void {
 		["#btnExIndicator", showIndicatorNotification],
 		["#btnExCustomIndicator", showCustomIndicatorNotification],
 		["#btnExReminder", showReminderNotification],
-		["#btnExReminderCancel", showReminderCancelNotification]
+		["#btnExReminderCancel", showReminderCancelNotification],
+		["#btnDoNotDismiss", showDoNotDismissNotification]
 	];
 	for (const [id, handler] of exampleButtons) {
 		document.querySelector<HTMLButtonElement>(id)?.addEventListener("click", () => {
