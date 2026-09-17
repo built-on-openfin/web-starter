@@ -38,7 +38,7 @@ To keep complexity low and focus on the core intent flow:
 
 ## Project Structure
 
-```
+```text
 client/src/
   config.ts                        -- Static configuration (broker URL, provider ID, app directory URL)
   provider.ts                      -- Platform provider: initializes the broker, layout, and interop

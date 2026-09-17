@@ -35,7 +35,7 @@ To show content in a multi-layout UI we implemented a layoutManagerOverride so t
 
 We bring in a number of apps from our workspace platform starter and dev tools. We also include 4 basic apps that support context and intents (using the fdc3 and Interop API).
 
-[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v24.0.0/web-interop-support-context-and-intents/platform/provider.html)
+[Live Launch Example](https://built-on-openfin.github.io/web-starter/web/v45.0.0/web-interop-support-context-and-intents/platform/provider.html)
 
 ## Getting Started
 
@@ -77,7 +77,7 @@ Due to Chrome's Local Network Access (LNA) restrictions, if you have a page serv
 
 Examples pointing to hosted urls should be run from the Live Launch links listed in the [GitHub page](https://github.com/built-on-openfin/web-starter)
 
-https://developer.chrome.com/release-notes/142#local_network_access_restrictions
+<https://developer.chrome.com/release-notes/142#local_network_access_restrictions>
 
 ## Settings
 

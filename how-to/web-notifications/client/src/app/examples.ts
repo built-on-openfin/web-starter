@@ -487,3 +487,24 @@ export async function showReminderCancelNotification(): Promise<void> {
 		}
 	});
 }
+
+/** Show a notification with a Dismiss button and a Do Not Dismiss button that stays open when clicked. */
+export async function showDoNotDismissNotification(): Promise<void> {
+	await create({
+		title: "Do Not Dismiss Notification",
+		body: "Dismiss closes this notification. Do Not Dismiss fires the action and keeps it open.",
+		toast: "transient",
+		template: "markdown",
+		id: crypto.randomUUID(),
+		buttons: [
+			{ title: "Dismiss", type: "button" },
+			{
+				title: "Do Not Dismiss",
+				type: "button",
+				cta: true,
+				persistOnClick: true,
+				onClick: { task: "do-not-dismiss-task", message: "Do Not Dismiss button was clicked" }
+			}
+		]
+	});
+}
