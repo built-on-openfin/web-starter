@@ -1,0 +1,48 @@
+{
+	"layouts": {
+		"default": {
+			"settings": {
+				"tabOverflowBehavior": "scroll",
+				"showFavicons": true,
+				"defaultFaviconUrl": "http://localhost:6060/images/default-tab.svg"
+			},
+			"content": [
+				{
+					"type": "stack",
+					"content": [
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"name": "branded-view",
+								"url": "http://localhost:6060/views/sample-view.html?name=Explicit%20icon",
+								"icon": "http://localhost:6060/images/branded-tab.svg"
+							},
+							"title": "Explicit icon"
+						},
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"name": "no-icon-view",
+								"url": "http://localhost:6060/views/sample-view.html?name=Hidden%20icon",
+								"icon": "hide"
+							},
+							"title": "Hidden icon"
+						},
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"name": "inherited-icon-view",
+								"url": "http://localhost:6060/views/sample-view.html?name=Inherited%20icon",
+								"icon": "unset"
+							},
+							"title": "Inherited icon"
+						}
+					]
+				}
+			]
+		}
+	}
+}
