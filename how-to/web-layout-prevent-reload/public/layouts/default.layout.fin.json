@@ -1,0 +1,59 @@
+{
+	"layouts": {
+		"left": {
+			"content": [
+				{
+					"type": "row",
+					"content": [
+						{
+							"type": "stack",
+							"content": [
+								{
+									"type": "component",
+									"componentName": "view",
+									"componentState": {
+										"url": "http://localhost:6060/views/stateful-view.html?view=alpha",
+										"name": "alpha"
+									},
+									"title": "alpha"
+								}
+							]
+						},
+						{
+							"type": "stack",
+							"content": [
+								{
+									"type": "component",
+									"componentName": "view",
+									"componentState": {
+										"url": "http://localhost:6060/views/stateful-view.html?view=beta",
+										"name": "beta"
+									},
+									"title": "beta"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		"right": {
+			"content": [
+				{
+					"type": "stack",
+					"content": [
+						{
+							"type": "component",
+							"componentName": "view",
+							"componentState": {
+								"url": "http://localhost:6060/views/stateful-view.html?view=gamma",
+								"name": "gamma"
+							},
+							"title": "gamma"
+						}
+					]
+				}
+			]
+		}
+	}
+}
