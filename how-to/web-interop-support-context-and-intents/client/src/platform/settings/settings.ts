@@ -1,5 +1,5 @@
 import type { OpenFin } from "@openfin/core";
-import type { ManifestSettings, Settings } from "../../shapes/setting-shapes";
+import type { ExperimentalPanelSettings, ManifestSettings, Settings } from "../../shapes/setting-shapes";
 
 /**
  * Fetches the settings for the application.
@@ -22,8 +22,7 @@ export async function getSettings(): Promise<Settings | undefined> {
 	);
 
 	if (
-		settingsEndpoint === undefined ||
-		settingsEndpoint.type !== "fetch" ||
+		settingsEndpoint?.type !== "fetch" ||
 		settingsEndpoint.options.method !== "GET" ||
 		settingsEndpoint.options.url === undefined
 	) {
@@ -55,6 +54,19 @@ export async function getDefaultLayout(): Promise<OpenFin.LayoutSnapshot | undef
 		return layoutJson;
 	}
 	return settings.platform.layout.defaultLayout;
+}
+
+/**
+ * Returns the experimental panel settings, using the saved override if there is one, otherwise the manifest value.
+ * @returns The experimental panel settings.
+ */
+export async function getExperimentalPanelSettings(): Promise<ExperimentalPanelSettings | undefined> {
+	const savedSettings = await getSavedSettings();
+	if (savedSettings?.platform?.ui?.experimentalPanel) {
+		return savedSettings.platform.ui.experimentalPanel;
+	}
+	const settings = await getManifestSettings();
+	return settings?.experimentalPanel;
 }
 
 /**
@@ -98,9 +110,7 @@ async function getSavedSettings(): Promise<Settings | undefined> {
 	const settings = localStorage.getItem(settingsId);
 	if (settings !== null) {
 		const resolvedSettings: Settings = JSON.parse(settings);
-		if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
-			resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
-		}
+		resolvedSettings.platform.cloudInterop.connectParams.authenticationType ??= "basic";
 		return resolvedSettings;
 	}
 }

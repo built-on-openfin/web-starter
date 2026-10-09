@@ -43,6 +43,37 @@ export interface ManifestSettings {
 	 * The settings for the application.
 	 */
 	endpointProvider: EndpointProvider;
+
+	/**
+	 * Optional experimental panel shown to the right of the layout.
+	 */
+	experimentalPanel?: ExperimentalPanelSettings;
+}
+
+/**
+ * The settings for the experimental panel that hosts an of-view web component.
+ */
+export interface ExperimentalPanelSettings {
+	/**
+	 * Should the panel be shown.
+	 */
+	enabled: boolean;
+
+	/**
+	 * The id of the app (from the app directory) to show. Its url is used as the of-view src and the
+	 * of-name is generated as appId/uuid. The broker url, provider id and uuid come from the platform.
+	 */
+	appId: string;
+
+	/**
+	 * The context group to join (of-context-group). Defaults to the platform's defaultContextGroup.
+	 */
+	contextGroup?: string;
+
+	/**
+	 * The title of the of-view. Defaults to the title of the app in the app directory.
+	 */
+	title?: string;
 }
 
 /**
@@ -110,6 +141,10 @@ export interface Settings {
 			title: string;
 			subTitle: string;
 			settingsResolver: SettingsResolverOptions;
+			/**
+			 * Saved override for the experimental panel which takes precedence over the manifest value.
+			 */
+			experimentalPanel?: ExperimentalPanelSettings;
 		};
 		app: {
 			directory: string;

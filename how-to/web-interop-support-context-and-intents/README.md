@@ -31,6 +31,68 @@ To show content in a multi-layout UI we implemented a layoutManagerOverride so t
 - Finding the identity of a layout that contains a specific piece of content.
 - Get the current snapshot of all the layouts and the currently focused layout.
 
+### Fast layout switching
+
+Inactive layouts are hidden with `visibility: hidden` rather than `display: none`. `display: none` collapses a layout to 0x0, so every view in it is resized to nothing when hidden and back again when shown. Apps that react to resizes, such as grids and blotters, then redo their layout and repaint on every switch, and this gets worse as you add views. A layout hidden with `visibility` keeps its size, so switching is a repaint with no resize.
+
+The show/hide logic is in [layout-override.ts](./client/src/platform/layout/layout-override.ts) and the styles are in [app.css](./public/common/style/app.css):
+
+```css
+.layout-area {
+  min-height: 0;
+}
+
+.layout-host {
+  display: grid;
+  overflow: hidden;
+}
+
+.layout-container {
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.layout-container-hidden {
+  visibility: hidden;
+}
+```
+
+- Every layout is stacked in the same grid cell (`grid-area: 1 / 1`), so hidden layouts don't take up space.
+- The layout is sized by normal flex and grid sizing rather than a `calc()` based on the header and padding, so it fills the space left by the optional experimental panel.
+- `min-height: 0`, `min-width: 0` and `overflow: hidden` let the layout shrink as well as grow with the window.
+- Keep the layout containers and their ancestors unpositioned (`position: static`). core-web places views using viewport coordinates, so a positioned ancestor would offset them.
+
+See the [web-layout README](../web-layout/README.md#required-css-styles) for a fuller explanation of these rules.
+
+### Experimental panel
+
+> **Note:** The HERE `<of-view>` web component used by this panel should be considered experimental. Its attributes and behavior may change in future releases of `@openfin/core-web`.
+
+The web manifest ([public/manifest.json](./public/manifest.json)) has an `experimentalPanel` entry in `custom_settings`. When `enabled` is `true`, the provider creates an `<of-view>` web component (provided by `@openfin/core-web`) in a panel to the right of the layout once the layout has been initialized.
+
+```json
+"experimentalPanel": {
+  "enabled": true,
+  "appId": "local-fdc3-intent-view",
+  "contextGroup": "green",
+  "title": "FDC3 Intents"
+}
+```
+
+Only `appId` is required. The `<of-view>` attributes are worked out as follows:
+
+- `src`: the url of the app with that `appId` in the app directory.
+- `of-name`: `<appId>/<random uuid>`, the same format used for apps launched into the layout.
+- `of-broker` and `of-provider-id`: `brokerUrl` and `providerId` from the platform settings ([public/settings.json](./public/settings.json)).
+- `of-uuid`: the platform's uuid (`fin.me.uuid`), so the panel matches the views in the layout.
+- `of-context-group`: `contextGroup` if specified, otherwise `defaultContextGroup` from the platform settings.
+- `title`: `title` if specified, otherwise the title of the app in the app directory.
+
+The settings dialog (the gear icon) has a **Side Panel** section where users can toggle the panel, pick the app from a dropdown of the apps in the app directory and override the title. These are saved with the other setting overrides and take precedence over the manifest. **Reset and Restart** clears them and goes back to the manifest values.
+
+Set `enabled` to `false` to give the layout the full width. The panel width can be changed with the `--right-panel-width` CSS variable in [public/common/style/app.css](./public/common/style/app.css).
+
 ## Apps
 
 We bring in a number of apps from our workspace platform starter and dev tools. We also include 4 basic apps that support context and intents (using the fdc3 and Interop API).

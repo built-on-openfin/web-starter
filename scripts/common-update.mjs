@@ -3,7 +3,7 @@
  * shared across all the examples. The source of all the files is the workspace-platform-starter
  * example project.
  */
-import FastGlob from 'fast-glob';
+import { glob } from 'tinyglobby';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -30,7 +30,7 @@ async function run() {
 				let expandedFiles = [];
 				if (fileSpec.includes('*')) {
 					const specFolder = path.join(fileGroup.srcFolder, fileSpec).replace(/\\/g, '/');
-					const specFiles = await FastGlob(specFolder);
+					const specFiles = await glob(specFolder, { expandDirectories: false });
 					expandedFiles = specFiles.map((f) => path.relative(fileGroup.srcFolder, f));
 				} else {
 					expandedFiles = [fileSpec];

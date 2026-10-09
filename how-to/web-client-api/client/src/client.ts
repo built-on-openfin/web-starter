@@ -45,7 +45,7 @@ async function requestConnectOptions(options: RequestConnectOptions): Promise<Co
 		async function messageHandler(event: MessageEvent<ConnectOptionsRequestContext>): Promise<void> {
 			if (Array.isArray(options.receivingOrigin) && !options.receivingOrigin.includes(event.origin)) {
 				reject(new Error(`Received message from unexpected origin: ${event.origin}`));
-			} else if (event.data && event.data.type === "openfin.coreWeb.connectConfig") {
+			} else if (event.data?.type === "openfin.coreWeb.connectConfig") {
 				window.removeEventListener("message", messageHandler);
 				const connectConfig = event.data.connectConfig;
 				if (connectConfig === undefined) {
@@ -77,12 +77,8 @@ export async function getAPI<FDC3 = DefaultFDC3Type>(
 	let finInitialized = false;
 	let fdc3Initialized = false;
 
-	if (options.api === undefined) {
-		options.api = DEFAULT_OPTIONS;
-	}
-	if (options.logger === undefined) {
-		options.logger = DEFAULT_LOGGER;
-	}
+	options.api ??= DEFAULT_OPTIONS;
+	options.logger ??= DEFAULT_LOGGER;
 	if (options.api.fin) {
 		if (
 			typeof window !== "undefined" &&
@@ -104,17 +100,14 @@ export async function getAPI<FDC3 = DefaultFDC3Type>(
 				);
 				if (options.connectOptions !== undefined) {
 					options.logger.info("Creating Fin API instance using the connect options provided.");
-					newFin = (await connect(options.connectOptions)) as unknown as DefaultFinType;
-				} else if (
-					options.requestConnectOptions !== undefined &&
-					options.requestConnectOptions.strategy === "request"
-				) {
+					newFin = await connect(options.connectOptions);
+				} else if (options.requestConnectOptions?.strategy === "request") {
 					const connectConfig = await requestConnectOptions(options.requestConnectOptions);
 					options.logger.info("Creating Fin API instance using the request connect options provided.");
-					newFin = (await connect(connectConfig)) as unknown as DefaultFinType;
+					newFin = await connect(connectConfig);
 				} else {
 					options.logger.info("Creating Fin API instance using the default connect options.");
-					newFin = (await connect(DEFAULT_CONNECT_OPTIONS)) as unknown as DefaultFinType;
+					newFin = await connect(DEFAULT_CONNECT_OPTIONS);
 				}
 				options.logger.info(`Fin API instance created successfully: ${newFin !== undefined}`);
 			} catch (err) {
@@ -128,7 +121,7 @@ export async function getAPI<FDC3 = DefaultFDC3Type>(
 						options.logger.info(
 							"As the broker url was not specified nor provided by a platform provider and request-on-failure was specified as the requestConnectOptions strategy we will try to connect again using this strategy to see if it is supported by the platform."
 						);
-						newFin = (await connect(requestedConnectConfig)) as unknown as DefaultFinType;
+						newFin = await connect(requestedConnectConfig);
 					} catch (requestError) {
 						options.logger.error(
 							`Error creating Fin API instance through @openfin/core-web connect using the following using the request-on-failure strategy and the following options: 
