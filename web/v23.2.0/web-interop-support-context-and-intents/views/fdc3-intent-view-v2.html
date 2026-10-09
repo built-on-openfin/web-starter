@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Intents using FDC3 (v2.0)</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/fdc3-intent-view-v2.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+
+	<body class="col fill gap20">
+		<header class="row spread middle">
+			<div class="col">
+				<h1>
+					Intents using FDC3
+					<span id="fdc3Version"></span>
+				</h1>
+				<h1 class="tag">Raise and Listen To Intents - Basic view (see <a href="https://github.com/built-on-openfin/web-starter" target="_blank">live launch</a> version for more options)</h1>
+			</div>
+		</header>
+		<main class="fill row gap20">
+			<div class="col fill scroll-vertical gap10">
+				<fieldset>
+					<label
+						for="intentType"
+						title="Choose whether to raise a specific intent or raise by context (letting the platform resolve the intent)."
+					>
+						Raise Type
+					</label>
+					<select name="intentType" id="intentType">
+						<option value="raiseIntent">Raise Intent</option>
+						<option value="raiseByContext">Raise By Context</option>
+					</select>
+				</fieldset>
+				<fieldset>
+					<label
+						for="fdc3Intents"
+						title="Select the intent to raise. Choose 'Custom' to enter your own intent name."
+					>
+						Intent
+					</label>
+					<select name="fdc3Intents" id="fdc3Intents"></select>
+				</fieldset>
+				<div id="customIntentContainer" style="display: none" class="col gap10">
+					<fieldset>
+						<label for="customIntent" title="Enter the name of the custom intent to raise.">
+							Custom Intent Name
+						</label>
+						<input type="text" id="customIntent" placeholder="Enter intent name" />
+					</fieldset>
+				</div>
+				<fieldset>
+					<label
+						for="fdc3Type"
+						title="What type of context objects are you looking to send. We provide a list of the supported FDC3 types for the selected intent."
+					>
+						Context Type
+					</label>
+					<select name="fdc3Type" id="fdc3Type"></select>
+				</fieldset>
+				<fieldset>
+					<label
+						for="fdc3Value"
+						title="We provide at least one example based on the context type selected. You can use this to see the default structure of these context types."
+					>
+						Sample Data
+					</label>
+					<select name="fdc3Value" id="fdc3Value"></select>
+				</fieldset>
+				<fieldset>
+					<label
+						for="fdc3Apps"
+						title="Optionally target a specific application to handle the intent. 'No Preference' lets the platform decide."
+					>
+						Target App
+					</label>
+					<select name="fdc3Apps" id="fdc3Apps"></select>
+				</fieldset>
+				<div id="fdc3AppInstanceSelector" style="display: none" class="col gap10">
+					<fieldset>
+						<label
+							for="fdc3AppInstances"
+							title="Optionally target a specific running instance of the selected application."
+						>
+							Target Instance
+						</label>
+						<select name="fdc3AppInstances" id="fdc3AppInstances"></select>
+					</fieldset>
+				</div>
+				<fieldset>
+					<label
+						for="context"
+						title="We populate this text area with the value selected from the dropdown above but you can also customize it to raise your own context types."
+					>
+						Context To Send
+					</label>
+					<textarea id="context" rows="10" style="width: 100%"></textarea>
+				</fieldset>
+			</div>
+			<div class="col fill gap10">
+				<fieldset class="fill">
+					<label>Received Intent</label>
+					<div class="col fill gap10" style="width: 100%">
+						<div class="row gap10">
+							<span class="label">Type:</span>
+							<span id="contextType">-</span>
+						</div>
+						<div class="row gap10">
+							<span class="label">Name:</span>
+							<span id="contextName">-</span>
+						</div>
+						<pre id="contextBody" class="fill scroll-vertical"></pre>
+					</div>
+				</fieldset>
+			</div>
+		</main>
+		<footer>
+			<button id="btnRaiseIntent">Raise Intent</button>
+			<button id="btnRaiseIntentByContext" style="display: none">Raise Intent By Context</button>
+		</footer>
+	</body>
+</html>
