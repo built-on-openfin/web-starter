@@ -112,25 +112,21 @@ async function selectTab(tabName: string, removedTabName?: string): Promise<void
 }
 
 /**
- * Makes a layout and tab hidden.
+ * Makes a layout visible.
  */
 async function showTab(tabName: string): Promise<void> {
 	console.log(`Tab ${tabName} showing...`);
 	const currentTab = document.querySelector<HTMLDivElement>(`#${tabName}`);
-	if (currentTab) {
-		currentTab.style.display = "block";
-	}
+	currentTab?.classList.remove("layout-container-hidden");
 }
 
 /**
- * Makes a layout and tab hidden.
+ * Makes a layout hidden. The layout keeps its size so its views are not resized while hidden.
  */
 async function hideTab(tabName: string): Promise<void> {
 	console.log(`Tab ${tabName} hiding...`);
 	const currentTab = document.querySelector<HTMLDivElement>(`#${tabName}`);
-	if (currentTab) {
-		currentTab.style.display = "none";
-	}
+	currentTab?.classList.add("layout-container-hidden");
 }
 
 /**
@@ -181,8 +177,8 @@ async function createLayout(
 	// Create a new div container for the layout.
 	const container = document.createElement("div");
 	container.id = layoutName;
-	container.className = "col openfin-layout";
-	container.style.display = order === 0 ? "block" : "none";
+	container.className = "layout-container";
+	container.classList.toggle("layout-container-hidden", order !== 0);
 	PARENT_CONTAINER?.append(container);
 
 	// Normally you can use state here, but just tracking the order of layouts in localStorage.

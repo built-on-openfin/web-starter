@@ -125,7 +125,7 @@ async function init(): Promise<void> {
 	});
 
 	saveButton.addEventListener("click", async () => {
-		console.log(`And appliedSettings is.... ${appliedSettings}`);
+		console.log(`And appliedSettings is.... ${JSON.stringify(appliedSettings)}`);
 		if (appliedSettings === undefined) {
 			console.error("Unable to save settings as they are not defined.");
 			return;

@@ -106,7 +106,7 @@ async function constructorOverride(
 				sentContext.context = {
 					...sentContext.context,
 					[this._metadataKey]: contextMetadata
-				} as unknown as OpenFin.Context;
+				};
 				super.setContext(sentContext, clientIdentity);
 			}
 

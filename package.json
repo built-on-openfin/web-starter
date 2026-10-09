@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web-starter",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "OpenFin Web Starter",
 	"scripts": {
 		"build": "node ./scripts/workspaces.mjs build",
@@ -28,6 +28,7 @@
 		"how-to/web-interop-support-context-and-intents",
 		"how-to/web-layout",
 		"how-to/web-layout-basic",
+		"how-to/web-layout-custom-view-header",
 		"how-to/web-layout-prevent-reload",
 		"how-to/web-notifications"
 	],
@@ -41,14 +42,19 @@
 	],
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"overrides": {
-		"@openfin/core": "44.101.4",
-		"uuid": "11.1.1"
+		"@openfin/core": "45.101.1",
+		"uuid": "11.1.1",
+		"js-yaml@^4": "^4.3.2",
+		"js-yaml@^5": "^5.4.3",
+		"katex": "^0.19.0",
+		"markdown-it@^14": "^14.3.2",
+		"smol-toml": "^1.9.0"
 	},
 	"devDependencies": {
 		"ajv": "^8.12.0",
-		"fast-glob": "3.3.2",
 		"fs-extra": "11.2.0",
 		"replace-in-file": "7.1.0",
+		"tinyglobby": "0.2.17",
 		"yargs": "17.7.2"
 	}
 }

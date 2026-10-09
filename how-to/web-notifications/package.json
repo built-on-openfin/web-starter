@@ -1,6 +1,6 @@
 {
 	"name": "openfin-web--web-notifications",
-	"version": "24.0.0",
+	"version": "45.0.0",
 	"description": "OpenFin Web Starter -- Web Toast Notifications",
 	"main": "public/platform/provider.bundle.js",
 	"scripts": {
@@ -20,15 +20,14 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
-		"@openfin/core-web": "0.44.112",
-		"@openfin/notifications": "2.14.3",
-		"@openfin/web-notifications": "2.14.3"
+		"@openfin/core-web": "0.45.113",
+		"@openfin/notifications": "45.2.0-alpha-5087",
+		"@openfin/web-notifications": "45.2.0-alpha-5087"
 	},
 	"devDependencies": {
-		"@openfin/core": "44.101.4",
+		"@openfin/core": "45.101.1",
 		"eslint": "8.57.0",
 		"eslint-config-airbnb": "19.0.4",
-		"eslint-config-airbnb-typescript": "18.0.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-import": "2.26.0",
 		"eslint-plugin-jsdoc": "48.2.1",
@@ -36,12 +35,12 @@
 		"eslint-plugin-promise": "6.1.1",
 		"eslint-plugin-simple-import-sort": "12.0.0",
 		"eslint-plugin-unicorn": "51.0.1",
-		"eslint-plugin-unused-imports": "3.1.0",
+		"eslint-plugin-unused-imports": "4.4.1",
 		"markdownlint-cli": "^0.49.1",
 		"prettier": "3.2.5",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.2",
-		"typescript-eslint": "^8.33.0",
+		"typescript-eslint": "^8.71.1",
 		"webpack": "^5.90.3",
 		"webpack-cli": "^5.1.4"
 	}
