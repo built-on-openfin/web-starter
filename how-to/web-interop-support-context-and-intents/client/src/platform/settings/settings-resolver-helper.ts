@@ -108,11 +108,16 @@ export class SettingsResolverHelper {
 			if (settings?.platform?.ui) {
 				settings.platform.ui.experimentalPanel = await getExperimentalPanelSettings();
 			}
-			const allApps = await getApps();
-			const apps = allApps
-				.filter((app) => Boolean(app.details?.url))
-				.map((app) => ({ appId: app.appId, title: app.title ?? app.appId }))
-				.sort((a, b) => a.title.localeCompare(b.title));
+let apps: { appId: string; title: string }[] = [];
+			try {
+				const allApps = await getApps();
+				apps = allApps
+					.filter((app) => Boolean(app.details?.url))
+					.map((app) => ({ appId: app.appId, title: app.title ?? app.appId }))
+					.sort((a, b) => a.title.localeCompare(b.title));
+			} catch (error) {
+				this._logger.warn("Unable to load apps for the side-panel settings.", error);
+			}
 			await this._dialogClient.dispatch("apply-settings", {
 				customData: {
 					settings,
