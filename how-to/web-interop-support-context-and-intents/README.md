@@ -31,6 +31,10 @@ To show content in a multi-layout UI we implemented a layoutManagerOverride so t
 - Finding the identity of a layout that contains a specific piece of content.
 - Get the current snapshot of all the layouts and the currently focused layout.
 
+### Experimental panel
+
+The web manifest ([public/manifest.json](./public/manifest.json)) has an `experimentalPanel` entry in `custom_settings`. When `enabled` is `true`, the provider creates an `<of-view>` web component (provided by `@openfin/core-web`) in a panel to the right of the layout once the layout has been initialized. Each key in `attributes` (e.g. `of-broker`, `of-name`, `src`, `of-context-group`, `of-provider-id`, `title`) is applied to the `<of-view>` element. `of-uuid` is set from the platform's uuid (`fin.me.uuid`) so it matches the views in the layout, unless you specify one in `attributes`. Set `enabled` to `false` to give the layout the full width. The panel width can be changed with the `--right-panel-width` CSS variable in [public/common/style/app.css](./public/common/style/app.css).
+
 ## Apps
 
 We bring in a number of apps from our workspace platform starter and dev tools. We also include 4 basic apps that support context and intents (using the fdc3 and Interop API).

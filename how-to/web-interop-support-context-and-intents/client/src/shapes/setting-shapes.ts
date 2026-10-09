@@ -43,6 +43,27 @@ export interface ManifestSettings {
 	 * The settings for the application.
 	 */
 	endpointProvider: EndpointProvider;
+
+	/**
+	 * Optional experimental panel shown to the right of the layout.
+	 */
+	experimentalPanel?: ExperimentalPanelSettings;
+}
+
+/**
+ * The settings for the experimental panel that hosts an of-view web component.
+ */
+export interface ExperimentalPanelSettings {
+	/**
+	 * Should the panel be shown.
+	 */
+	enabled: boolean;
+
+	/**
+	 * The attributes to apply to the of-view element (e.g. of-broker, of-name, src).
+	 * of-uuid defaults to the platform's uuid (matching the views in the layout) when it isn't specified.
+	 */
+	attributes: { [key: string]: string };
 }
 
 /**

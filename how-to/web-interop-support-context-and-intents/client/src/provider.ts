@@ -4,7 +4,7 @@ import { connect, type WebLayoutSnapshot } from "@openfin/core-web";
 import { AppResolverHelper } from "./platform/apps/app-resolver-helper";
 import { getConstructorOverride } from "./platform/broker/interop-override";
 import { makeOverride } from "./platform/layout/layout-override";
-import { getDefaultLayout, getSettings } from "./platform/settings/settings";
+import { getDefaultLayout, getExperimentalPanelSettings, getSettings } from "./platform/settings/settings";
 import { SettingsResolverHelper } from "./platform/settings/settings-resolver-helper";
 import type { Settings } from "./shapes/setting-shapes";
 import { sanitizeString } from "./utils";
@@ -137,6 +137,40 @@ function listenForConfigRequests(settings: Settings): void {
 }
 
 /**
+ * Sets up the experimental right hand panel (an of-view web component) if enabled in the manifest.
+ * @param platformUuid The uuid of the platform, used as the of-uuid unless one is specified in the manifest.
+ */
+async function setupExperimentalPanel(platformUuid: string): Promise<void> {
+	const panelSettings = await getExperimentalPanelSettings();
+	if (!panelSettings?.enabled) {
+		console.log("The experimental panel is not enabled.");
+		return;
+	}
+	const mainPage = document.querySelector<HTMLElement>("#main-page");
+	const panelContainer = document.querySelector<HTMLElement>("#right-panel-container");
+	if (mainPage === null || panelContainer === null) {
+		console.error(
+			"Please ensure the document has an element with the id #main-page containing an element with the id #right-panel-container so that the experimental panel can be added."
+		);
+		return;
+	}
+	// the of-view validates its attributes when connected so they must be set before it is appended
+	const attributes: { [key: string]: string } = {
+		"of-uuid": platformUuid,
+		...panelSettings.attributes
+	};
+	const ofView = document.createElement("of-view");
+	for (const [name, value] of Object.entries(attributes)) {
+		ofView.setAttribute(name, value);
+	}
+	ofView.classList.add("fill");
+	panelContainer.append(ofView);
+	panelContainer.classList.remove("hidden");
+	mainPage.classList.add("has-right-panel");
+	console.log(`The experimental panel has been setup with the url ${panelSettings.attributes?.src}`);
+}
+
+/**
  * Delete the current layout.
  */
 async function deleteCurrentLayout(): Promise<void> {
@@ -213,6 +247,7 @@ async function init(): Promise<void> {
 			layoutManagerOverride,
 			containerId: settings.platform.layout.layoutContainerId
 		});
+		await setupExperimentalPanel(fin.me.uuid);
 		// now that everything has been setup notify others of globals
 		const finReadyEvent = new CustomEvent("finReady");
 		window.dispatchEvent(finReadyEvent);
