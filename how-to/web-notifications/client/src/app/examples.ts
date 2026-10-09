@@ -378,16 +378,28 @@ async function createReminderNotification(
 	const id = crypto.randomUUID();
 	countdownMap[id] = { secondsRemaining: countdownSeconds, reminderDate };
 
-	if (countdownTimerId === undefined) {
-		countdownTimerId = window.setInterval(async () => {
-			for (const notificationId of Object.keys(countdownMap)) {
-				const entry = countdownMap[notificationId];
-				entry.secondsRemaining--;
+	countdownTimerId ??= window.setInterval(async () => {
+		for (const notificationId of Object.keys(countdownMap)) {
+			const entry = countdownMap[notificationId];
+			entry.secondsRemaining--;
 
-				if (entry.secondsRemaining > 0) {
+			if (entry.secondsRemaining > 0) {
+				const payload: UpdatableNotificationOptions = {
+					template: "markdown",
+					body: `Setting reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+					id: notificationId
+				};
+				try {
+					await update(payload);
+				} catch {
+					/* notification closed */
+				}
+			} else {
+				try {
+					await setReminder(notificationId, entry.reminderDate);
 					const payload: UpdatableNotificationOptions = {
 						template: "markdown",
-						body: `Setting reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+						body: `Reminder set for ${entry.reminderDate.toLocaleString()}`,
 						id: notificationId
 					};
 					try {
@@ -395,32 +407,18 @@ async function createReminderNotification(
 					} catch {
 						/* notification closed */
 					}
-				} else {
-					try {
-						await setReminder(notificationId, entry.reminderDate);
-						const payload: UpdatableNotificationOptions = {
-							template: "markdown",
-							body: `Reminder set for ${entry.reminderDate.toLocaleString()}`,
-							id: notificationId
-						};
-						try {
-							await update(payload);
-						} catch {
-							/* notification closed */
-						}
-						onReminderSet?.(notificationId);
-					} catch {
-						/* setReminder not supported or failed */
-					}
-					delete countdownMap[notificationId];
+					onReminderSet?.(notificationId);
+				} catch {
+					/* setReminder not supported or failed */
 				}
+				delete countdownMap[notificationId];
 			}
-			if (Object.keys(countdownMap).length === 0) {
-				window.clearInterval(countdownTimerId);
-				countdownTimerId = undefined;
-			}
-		}, 1000);
-	}
+		}
+		if (Object.keys(countdownMap).length === 0) {
+			window.clearInterval(countdownTimerId);
+			countdownTimerId = undefined;
+		}
+	}, 1000);
 
 	await create({
 		title,
@@ -443,16 +441,28 @@ export async function showReminderCancelNotification(): Promise<void> {
 	await createReminderNotification("Reminder Cancel Notification", reminderDate, 5, (id) => {
 		cancelCountdownMap[id] = { secondsRemaining: 10 };
 
-		if (cancelCountdownTimerId === undefined) {
-			cancelCountdownTimerId = window.setInterval(async () => {
-				for (const notificationId of Object.keys(cancelCountdownMap)) {
-					const entry = cancelCountdownMap[notificationId];
-					entry.secondsRemaining--;
+		cancelCountdownTimerId ??= window.setInterval(async () => {
+			for (const notificationId of Object.keys(cancelCountdownMap)) {
+				const entry = cancelCountdownMap[notificationId];
+				entry.secondsRemaining--;
 
-					if (entry.secondsRemaining > 0) {
+				if (entry.secondsRemaining > 0) {
+					const payload: UpdatableNotificationOptions = {
+						template: "markdown",
+						body: `Canceling reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+						id: notificationId
+					};
+					try {
+						await update(payload);
+					} catch {
+						/* notification closed */
+					}
+				} else {
+					try {
+						await cancelReminder(notificationId);
 						const payload: UpdatableNotificationOptions = {
 							template: "markdown",
-							body: `Canceling reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+							body: "Reminder cancelled",
 							id: notificationId
 						};
 						try {
@@ -460,31 +470,17 @@ export async function showReminderCancelNotification(): Promise<void> {
 						} catch {
 							/* notification closed */
 						}
-					} else {
-						try {
-							await cancelReminder(notificationId);
-							const payload: UpdatableNotificationOptions = {
-								template: "markdown",
-								body: "Reminder cancelled",
-								id: notificationId
-							};
-							try {
-								await update(payload);
-							} catch {
-								/* notification closed */
-							}
-						} catch {
-							/* cancelReminder not supported or failed */
-						}
-						delete cancelCountdownMap[notificationId];
+					} catch {
+						/* cancelReminder not supported or failed */
 					}
+					delete cancelCountdownMap[notificationId];
 				}
-				if (Object.keys(cancelCountdownMap).length === 0) {
-					window.clearInterval(cancelCountdownTimerId);
-					cancelCountdownTimerId = undefined;
-				}
-			}, 1000);
-		}
+			}
+			if (Object.keys(cancelCountdownMap).length === 0) {
+				window.clearInterval(cancelCountdownTimerId);
+				cancelCountdownTimerId = undefined;
+			}
+		}, 1000);
 	});
 }
 

@@ -623,11 +623,7 @@ function getAppSelection(): string {
  * @returns The FDC3 types.
  */
 function getFDC3Types(): string[] {
-	let types = intentData[getIntentToRaise()];
-	if (types === undefined) {
-		types = intentData.Custom;
-	}
-	return types;
+	return intentData[getIntentToRaise()] ?? intentData.Custom;
 }
 
 /**

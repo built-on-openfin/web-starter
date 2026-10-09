@@ -24,7 +24,7 @@
  */
 
 import { spawn } from 'child_process';
-import FastGlob from 'fast-glob';
+import { glob } from 'tinyglobby';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -85,7 +85,9 @@ async function run() {
   const rootPackage = await loadJson(path.join(rootDir, 'package.json'));
 
   // Discover workspaces via root workspaces field
-  const workspaces = await FastGlob(rootPackage.workspaces || [], { onlyDirectories: true });
+  const workspaces = (
+    await glob(rootPackage.workspaces || [], { onlyDirectories: true, expandDirectories: false })
+  ).map((dir) => dir.replace(/\/$/, ''));
 
   // Respect optional packageExclude array if present
   const excluded = new Set(rootPackage.packageExclude || []);
@@ -344,7 +346,7 @@ async function replaceVersionedUrls(projectPath, args) {
   const excludePatterns = EXCLUDED_DIRECTORIES.map((e) => `!**/${e}/**`);
   const includePatterns = VERSIONED_URL_EXTENSIONS.map((ext) => `**/*${ext}`);
 
-  const files = await FastGlob([...includePatterns, '!package.json', ...excludePatterns], {
+  const files = await glob([...includePatterns, '!package.json', ...excludePatterns], {
     cwd: projectPath,
     dot: true
   });

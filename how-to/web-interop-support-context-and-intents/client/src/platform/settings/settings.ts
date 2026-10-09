@@ -22,8 +22,7 @@ export async function getSettings(): Promise<Settings | undefined> {
 	);
 
 	if (
-		settingsEndpoint === undefined ||
-		settingsEndpoint.type !== "fetch" ||
+		settingsEndpoint?.type !== "fetch" ||
 		settingsEndpoint.options.method !== "GET" ||
 		settingsEndpoint.options.url === undefined
 	) {
@@ -98,9 +97,7 @@ async function getSavedSettings(): Promise<Settings | undefined> {
 	const settings = localStorage.getItem(settingsId);
 	if (settings !== null) {
 		const resolvedSettings: Settings = JSON.parse(settings);
-		if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
-			resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
-		}
+		resolvedSettings.platform.cloudInterop.connectParams.authenticationType ??= "basic";
 		return resolvedSettings;
 	}
 }

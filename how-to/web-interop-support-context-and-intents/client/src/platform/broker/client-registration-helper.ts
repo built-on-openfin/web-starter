@@ -318,7 +318,7 @@ export class ClientRegistrationHelper {
 			const timerId = setTimeout(() => {
 				if (!isEmpty(this._clientReadyRequests[key])) {
 					delete this._clientReadyRequests[key];
-					reject(ResolveError.TargetInstanceUnavailable);
+					reject(new Error(ResolveError.TargetInstanceUnavailable));
 				}
 			}, timeout);
 			this._clientReadyRequests[key] = (instanceId: string): void => {
@@ -363,7 +363,7 @@ export class ClientRegistrationHelper {
 			const timerId = setTimeout(() => {
 				if (!isEmpty(this._clientReadyRequests[key])) {
 					delete this._clientReadyRequests[key];
-					reject(ResolveError.IntentDeliveryFailed);
+					reject(new Error(ResolveError.IntentDeliveryFailed));
 				}
 			}, timeout);
 			this._clientReadyRequests[key] = (instanceId: string): void => {
@@ -429,7 +429,7 @@ export class ClientRegistrationHelper {
 				if (hasContextRequest || hasGlobalRequest) {
 					delete this._clientReadyRequests[contextKey];
 					delete this._clientReadyRequests[globalKey];
-					reject(OpenError.AppTimeout);
+					reject(new Error(OpenError.AppTimeout));
 				}
 			}, timeout);
 			let isResolved = false;
