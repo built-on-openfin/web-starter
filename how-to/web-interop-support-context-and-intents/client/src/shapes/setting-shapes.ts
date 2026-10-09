@@ -141,6 +141,10 @@ export interface Settings {
 			title: string;
 			subTitle: string;
 			settingsResolver: SettingsResolverOptions;
+			/**
+			 * Saved override for the experimental panel which takes precedence over the manifest value.
+			 */
+			experimentalPanel?: ExperimentalPanelSettings;
 		};
 		app: {
 			directory: string;

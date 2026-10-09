@@ -55,6 +55,8 @@ Only `appId` is required. The `<of-view>` attributes are worked out as follows:
 - `of-context-group`: `contextGroup` if specified, otherwise `defaultContextGroup` from the platform settings.
 - `title`: `title` if specified, otherwise the title of the app in the app directory.
 
+The settings dialog (the gear icon) has a **Side Panel** section where users can toggle the panel, pick the app from a dropdown of the apps in the app directory and override the title. These are saved with the other setting overrides and take precedence over the manifest. **Reset and Restart** clears them and goes back to the manifest values.
+
 Set `enabled` to `false` to give the layout the full width. The panel width can be changed with the `--right-panel-width` CSS variable in [public/common/style/app.css](./public/common/style/app.css).
 
 ## Apps

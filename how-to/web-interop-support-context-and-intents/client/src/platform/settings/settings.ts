@@ -58,10 +58,14 @@ export async function getDefaultLayout(): Promise<OpenFin.LayoutSnapshot | undef
 }
 
 /**
- * Returns the experimental panel settings from the manifest file if defined.
+ * Returns the experimental panel settings, using the saved override if there is one, otherwise the manifest value.
  * @returns The experimental panel settings.
  */
 export async function getExperimentalPanelSettings(): Promise<ExperimentalPanelSettings | undefined> {
+	const savedSettings = await getSavedSettings();
+	if (savedSettings?.platform?.ui?.experimentalPanel) {
+		return savedSettings.platform.ui.experimentalPanel;
+	}
 	const settings = await getManifestSettings();
 	return settings?.experimentalPanel;
 }
