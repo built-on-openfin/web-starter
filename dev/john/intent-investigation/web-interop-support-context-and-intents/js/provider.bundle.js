@@ -17542,7 +17542,12 @@ async function init() {
             layoutManagerOverride,
             containerId: settings.platform.layout.layoutContainerId
         });
-        await setupExperimentalPanel(fin.me.uuid, settings);
+        try {
+            await setupExperimentalPanel(fin.me.uuid, settings);
+        }
+        catch (error) {
+            console.error("Unable to set up the optional experimental panel.", error);
+        }
         // now that everything has been setup notify others of globals
         const finReadyEvent = new CustomEvent("finReady");
         window.dispatchEvent(finReadyEvent);
