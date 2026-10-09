@@ -10412,8 +10412,7 @@ async function getSettings() {
         return;
     }
     const settingsEndpoint = settings.endpointProvider.endpoints.find((endpoint) => endpoint.id === "platform-settings");
-    if (settingsEndpoint === undefined ||
-        settingsEndpoint.type !== "fetch" ||
+    if (settingsEndpoint?.type !== "fetch" ||
         settingsEndpoint.options.method !== "GET" ||
         settingsEndpoint.options.url === undefined) {
         console.error("Unable to run the example as settings are required and we fetch them from the endpoint defined with the id: 'platform-settings' in the manifest. It needs to be of type fetch, performing a GET and it must have a url defined.");
@@ -10478,9 +10477,7 @@ async function getSavedSettings() {
     const settings = localStorage.getItem(settingsId);
     if (settings !== null) {
         const resolvedSettings = JSON.parse(settings);
-        if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
-            resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
-        }
+        resolvedSettings.platform.cloudInterop.connectParams.authenticationType ??= "basic";
         return resolvedSettings;
     }
 }
@@ -12018,11 +12015,7 @@ function getAppSelection() {
  * @returns The FDC3 types.
  */
 function getFDC3Types() {
-    let types = intentData[getIntentToRaise()];
-    if (types === undefined) {
-        types = intentData.Custom;
-    }
-    return types;
+    return intentData[getIntentToRaise()] ?? intentData.Custom;
 }
 /**
  * Fire an intent.

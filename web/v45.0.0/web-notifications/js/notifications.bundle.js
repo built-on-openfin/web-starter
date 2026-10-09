@@ -10706,15 +10706,29 @@ async function showCustomIndicatorNotification() {
 async function createReminderNotification(title, reminderDate, countdownSeconds, onReminderSet) {
     const id = crypto.randomUUID();
     countdownMap[id] = { secondsRemaining: countdownSeconds, reminderDate };
-    if (countdownTimerId === undefined) {
-        countdownTimerId = window.setInterval(async () => {
-            for (const notificationId of Object.keys(countdownMap)) {
-                const entry = countdownMap[notificationId];
-                entry.secondsRemaining--;
-                if (entry.secondsRemaining > 0) {
+    countdownTimerId ??= window.setInterval(async () => {
+        for (const notificationId of Object.keys(countdownMap)) {
+            const entry = countdownMap[notificationId];
+            entry.secondsRemaining--;
+            if (entry.secondsRemaining > 0) {
+                const payload = {
+                    template: "markdown",
+                    body: `Setting reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+                    id: notificationId
+                };
+                try {
+                    await (0, notifications_1.update)(payload);
+                }
+                catch {
+                    /* notification closed */
+                }
+            }
+            else {
+                try {
+                    await (0, notifications_1.setReminder)(notificationId, entry.reminderDate);
                     const payload = {
                         template: "markdown",
-                        body: `Setting reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+                        body: `Reminder set for ${entry.reminderDate.toLocaleString()}`,
                         id: notificationId
                     };
                     try {
@@ -10723,35 +10737,19 @@ async function createReminderNotification(title, reminderDate, countdownSeconds,
                     catch {
                         /* notification closed */
                     }
+                    onReminderSet?.(notificationId);
                 }
-                else {
-                    try {
-                        await (0, notifications_1.setReminder)(notificationId, entry.reminderDate);
-                        const payload = {
-                            template: "markdown",
-                            body: `Reminder set for ${entry.reminderDate.toLocaleString()}`,
-                            id: notificationId
-                        };
-                        try {
-                            await (0, notifications_1.update)(payload);
-                        }
-                        catch {
-                            /* notification closed */
-                        }
-                        onReminderSet?.(notificationId);
-                    }
-                    catch {
-                        /* setReminder not supported or failed */
-                    }
-                    delete countdownMap[notificationId];
+                catch {
+                    /* setReminder not supported or failed */
                 }
+                delete countdownMap[notificationId];
             }
-            if (Object.keys(countdownMap).length === 0) {
-                window.clearInterval(countdownTimerId);
-                countdownTimerId = undefined;
-            }
-        }, 1000);
-    }
+        }
+        if (Object.keys(countdownMap).length === 0) {
+            window.clearInterval(countdownTimerId);
+            countdownTimerId = undefined;
+        }
+    }, 1000);
     await (0, notifications_1.create)({
         title,
         body: `Setting reminder in ${countdownSeconds} second${countdownSeconds !== 1 ? "s" : ""}...`,
@@ -10770,15 +10768,29 @@ async function showReminderCancelNotification() {
     const reminderDate = new Date(Date.now() + 120_000);
     await createReminderNotification("Reminder Cancel Notification", reminderDate, 5, (id) => {
         cancelCountdownMap[id] = { secondsRemaining: 10 };
-        if (cancelCountdownTimerId === undefined) {
-            cancelCountdownTimerId = window.setInterval(async () => {
-                for (const notificationId of Object.keys(cancelCountdownMap)) {
-                    const entry = cancelCountdownMap[notificationId];
-                    entry.secondsRemaining--;
-                    if (entry.secondsRemaining > 0) {
+        cancelCountdownTimerId ??= window.setInterval(async () => {
+            for (const notificationId of Object.keys(cancelCountdownMap)) {
+                const entry = cancelCountdownMap[notificationId];
+                entry.secondsRemaining--;
+                if (entry.secondsRemaining > 0) {
+                    const payload = {
+                        template: "markdown",
+                        body: `Canceling reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+                        id: notificationId
+                    };
+                    try {
+                        await (0, notifications_1.update)(payload);
+                    }
+                    catch {
+                        /* notification closed */
+                    }
+                }
+                else {
+                    try {
+                        await (0, notifications_1.cancelReminder)(notificationId);
                         const payload = {
                             template: "markdown",
-                            body: `Canceling reminder in ${entry.secondsRemaining} second${entry.secondsRemaining !== 1 ? "s" : ""}...`,
+                            body: "Reminder cancelled",
                             id: notificationId
                         };
                         try {
@@ -10788,33 +10800,17 @@ async function showReminderCancelNotification() {
                             /* notification closed */
                         }
                     }
-                    else {
-                        try {
-                            await (0, notifications_1.cancelReminder)(notificationId);
-                            const payload = {
-                                template: "markdown",
-                                body: "Reminder cancelled",
-                                id: notificationId
-                            };
-                            try {
-                                await (0, notifications_1.update)(payload);
-                            }
-                            catch {
-                                /* notification closed */
-                            }
-                        }
-                        catch {
-                            /* cancelReminder not supported or failed */
-                        }
-                        delete cancelCountdownMap[notificationId];
+                    catch {
+                        /* cancelReminder not supported or failed */
                     }
+                    delete cancelCountdownMap[notificationId];
                 }
-                if (Object.keys(cancelCountdownMap).length === 0) {
-                    window.clearInterval(cancelCountdownTimerId);
-                    cancelCountdownTimerId = undefined;
-                }
-            }, 1000);
-        }
+            }
+            if (Object.keys(cancelCountdownMap).length === 0) {
+                window.clearInterval(cancelCountdownTimerId);
+                cancelCountdownTimerId = undefined;
+            }
+        }, 1000);
     });
 }
 /** Show a notification with a Dismiss button and a Do Not Dismiss button that stays open when clicked. */
@@ -11984,7 +11980,7 @@ async function bindEventLog() {
     }
     try {
         await (0, notifications_1.addEventListener)("notification-action", (event) => {
-            const buttonTitle = event.control && event.control.type === "button" ? event.control.title : "(non-button)";
+            const buttonTitle = event.control?.type === "button" ? event.control.title : "(non-button)";
             const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
             logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
         });

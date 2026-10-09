@@ -14566,7 +14566,7 @@ class ClientRegistrationHelper {
             const timerId = setTimeout(() => {
                 if (!(0, utils_1.isEmpty)(this._clientReadyRequests[key])) {
                     delete this._clientReadyRequests[key];
-                    reject(fdc3_errors_1.RESOLVE_ERROR.TargetInstanceUnavailable);
+                    reject(new Error(fdc3_errors_1.RESOLVE_ERROR.TargetInstanceUnavailable));
                 }
             }, timeout);
             this._clientReadyRequests[key] = (instanceId) => {
@@ -14604,7 +14604,7 @@ class ClientRegistrationHelper {
             const timerId = setTimeout(() => {
                 if (!(0, utils_1.isEmpty)(this._clientReadyRequests[key])) {
                     delete this._clientReadyRequests[key];
-                    reject(fdc3_errors_1.RESOLVE_ERROR.IntentDeliveryFailed);
+                    reject(new Error(fdc3_errors_1.RESOLVE_ERROR.IntentDeliveryFailed));
                 }
             }, timeout);
             this._clientReadyRequests[key] = (instanceId) => {
@@ -14657,7 +14657,7 @@ class ClientRegistrationHelper {
                 if (hasContextRequest || hasGlobalRequest) {
                     delete this._clientReadyRequests[contextKey];
                     delete this._clientReadyRequests[globalKey];
-                    reject(fdc3_errors_1.OPEN_ERROR.AppTimeout);
+                    reject(new Error(fdc3_errors_1.OPEN_ERROR.AppTimeout));
                 }
             }, timeout);
             let isResolved = false;
@@ -15981,8 +15981,7 @@ async function getSettings() {
         return;
     }
     const settingsEndpoint = settings.endpointProvider.endpoints.find((endpoint) => endpoint.id === "platform-settings");
-    if (settingsEndpoint === undefined ||
-        settingsEndpoint.type !== "fetch" ||
+    if (settingsEndpoint?.type !== "fetch" ||
         settingsEndpoint.options.method !== "GET" ||
         settingsEndpoint.options.url === undefined) {
         console.error("Unable to run the example as settings are required and we fetch them from the endpoint defined with the id: 'platform-settings' in the manifest. It needs to be of type fetch, performing a GET and it must have a url defined.");
@@ -16047,9 +16046,7 @@ async function getSavedSettings() {
     const settings = localStorage.getItem(settingsId);
     if (settings !== null) {
         const resolvedSettings = JSON.parse(settings);
-        if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
-            resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
-        }
+        resolvedSettings.platform.cloudInterop.connectParams.authenticationType ??= "basic";
         return resolvedSettings;
     }
 }
@@ -17456,7 +17453,7 @@ async function init() {
         const interopOverride = await (0, interop_override_1.getConstructorOverride)(settings.platform.interop.overrideOptions);
         const overrides = [interopOverride];
         if (settings?.platform?.cloudInterop?.connectParams?.url?.startsWith("http")) {
-            const cloudOverride = (await (0, cloud_interop_1.cloudInteropOverride)(settings.platform.cloudInterop.connectParams));
+            const cloudOverride = await (0, cloud_interop_1.cloudInteropOverride)(settings.platform.cloudInterop.connectParams);
             overrides.push(cloudOverride);
         }
         // You may now use the `fin` object to initialize the broker and the layout.
