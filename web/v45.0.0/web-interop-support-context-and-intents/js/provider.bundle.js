@@ -15718,7 +15718,8 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
                 }
             }
             /**
-             * Shows the layout specified by the layoutName.
+             * Shows the layout specified by the layoutName. The other layouts are hidden but keep their size so
+             * their views are not resized while hidden.
              * @param layoutName The name of the layout to show.
              * @param layoutName.layoutName The name of the layout to show.
              * @returns Promise<void>
@@ -15727,11 +15728,11 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
                 const layoutContainers = document.querySelectorAll("div.layout-container");
                 for (const layoutContainer of layoutContainers) {
                     if (layoutContainer.id === layoutName) {
-                        layoutContainer.classList.remove("hidden");
+                        layoutContainer.classList.remove("layout-container-hidden");
                         this._selectedLayout = layoutName;
                     }
                     else {
-                        layoutContainer.classList.add("hidden");
+                        layoutContainer.classList.add("layout-container-hidden");
                     }
                 }
             }
@@ -15814,7 +15815,7 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
                 // Create a new div container for the layout.
                 const container = document.createElement("div");
                 container.id = layoutName;
-                container.className = "col layout-container hidden";
+                container.className = "layout-container layout-container-hidden";
                 this._layoutContainer?.append(container);
                 await fin.Platform.Layout.create({ layoutName, layout, container });
                 if (entry === length) {
@@ -15863,6 +15864,7 @@ function makeOverride(fin, layoutContainerId, layoutSelectorId) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsResolverHelper = void 0;
 const utils_1 = __webpack_require__(/*! ../../utils */ "./client/src/utils.ts");
+const apps_1 = __webpack_require__(/*! ../apps/apps */ "./client/src/platform/apps/apps.ts");
 const settings_1 = __webpack_require__(/*! ./settings */ "./client/src/platform/settings/settings.ts");
 /**
  * An helper for updating and resolving settings.
@@ -15939,10 +15941,26 @@ class SettingsResolverHelper {
             });
         }
         if (this._dialogElement && this._dialogClient) {
-            const settings = await (0, settings_1.getSettings)();
+            const currentSettings = await (0, settings_1.getSettings)();
+            const settings = currentSettings ? (0, utils_1.objectClone)(currentSettings) : undefined;
+            if (settings?.platform?.ui) {
+                settings.platform.ui.experimentalPanel = await (0, settings_1.getExperimentalPanelSettings)();
+            }
+            let apps = [];
+            try {
+                const allApps = await (0, apps_1.getApps)();
+                apps = allApps
+                    .filter((app) => Boolean(app.details?.url))
+                    .map((app) => ({ appId: app.appId, title: app.title ?? app.appId }))
+                    .sort((a, b) => a.title.localeCompare(b.title));
+            }
+            catch (error) {
+                this._logger.warn("Unable to load apps for the side-panel settings.", error);
+            }
             await this._dialogClient.dispatch("apply-settings", {
                 customData: {
-                    settings
+                    settings,
+                    apps
                 }
             });
         }
@@ -15964,6 +15982,7 @@ exports.SettingsResolverHelper = SettingsResolverHelper;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getSettings = getSettings;
 exports.getDefaultLayout = getDefaultLayout;
+exports.getExperimentalPanelSettings = getExperimentalPanelSettings;
 exports.clearSettings = clearSettings;
 exports.saveSettings = saveSettings;
 /**
@@ -16007,6 +16026,18 @@ async function getDefaultLayout() {
         return layoutJson;
     }
     return settings.platform.layout.defaultLayout;
+}
+/**
+ * Returns the experimental panel settings, using the saved override if there is one, otherwise the manifest value.
+ * @returns The experimental panel settings.
+ */
+async function getExperimentalPanelSettings() {
+    const savedSettings = await getSavedSettings();
+    if (savedSettings?.platform?.ui?.experimentalPanel) {
+        return savedSettings.platform.ui.experimentalPanel;
+    }
+    const settings = await getManifestSettings();
+    return settings?.experimentalPanel;
 }
 /**
  * Returns the settings from the manifest file.
@@ -17294,6 +17325,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const cloud_interop_1 = __webpack_require__(/*! @openfin/cloud-interop */ "../../node_modules/@openfin/cloud-interop/out/index.js");
 const core_web_1 = __webpack_require__(/*! @openfin/core-web */ "../../node_modules/@openfin/core-web/out/api-client.cjs.js");
 const app_resolver_helper_1 = __webpack_require__(/*! ./platform/apps/app-resolver-helper */ "./client/src/platform/apps/app-resolver-helper.ts");
+const apps_1 = __webpack_require__(/*! ./platform/apps/apps */ "./client/src/platform/apps/apps.ts");
 const interop_override_1 = __webpack_require__(/*! ./platform/broker/interop-override */ "./client/src/platform/broker/interop-override.ts");
 const layout_override_1 = __webpack_require__(/*! ./platform/layout/layout-override */ "./client/src/platform/layout/layout-override.ts");
 const settings_1 = __webpack_require__(/*! ./platform/settings/settings */ "./client/src/platform/settings/settings.ts");
@@ -17405,6 +17437,58 @@ function listenForConfigRequests(settings) {
     }, false);
 }
 /**
+ * Sets up the experimental right hand panel (an of-view web component) if enabled in the manifest.
+ * @param platformUuid The uuid of the platform, used as the of-uuid so the panel matches the layout views.
+ * @param settings The platform settings used for the broker url, provider id and default context group.
+ */
+async function setupExperimentalPanel(platformUuid, settings) {
+    const panelSettings = await (0, settings_1.getExperimentalPanelSettings)();
+    if (!panelSettings?.enabled) {
+        console.log("The experimental panel is not enabled.");
+        return;
+    }
+    if (!panelSettings.appId) {
+        console.error("The experimental panel is enabled but no appId has been specified.");
+        return;
+    }
+    const app = await (0, apps_1.getApp)(panelSettings.appId);
+    if (!app?.details?.url) {
+        console.error(`The experimental panel app ${panelSettings.appId} could not be found in the app directory or has no url.`);
+        return;
+    }
+    const mainPage = document.querySelector("#main-page");
+    const panelContainer = document.querySelector("#right-panel-container");
+    if (mainPage === null || panelContainer === null) {
+        console.error("Please ensure the document has an element with the id #main-page containing an element with the id #right-panel-container so that the experimental panel can be added.");
+        return;
+    }
+    // the of-view validates its attributes when connected so they must be set before it is appended
+    const attributes = {
+        "of-broker": settings.platform.interop.brokerUrl,
+        "of-provider-id": settings.platform.interop.providerId,
+        "of-uuid": platformUuid,
+        "of-name": `${app.appId}/${(0, utils_1.randomUUID)()}`,
+        src: app.details.url
+    };
+    const contextGroup = panelSettings.contextGroup ?? settings.platform.interop.defaultContextGroup;
+    if (contextGroup) {
+        attributes["of-context-group"] = contextGroup;
+    }
+    const title = panelSettings.title ?? app.title;
+    if (title) {
+        attributes.title = title;
+    }
+    const ofView = document.createElement("of-view");
+    for (const [name, value] of Object.entries(attributes)) {
+        ofView.setAttribute(name, value);
+    }
+    ofView.classList.add("fill");
+    panelContainer.append(ofView);
+    panelContainer.classList.remove("hidden");
+    mainPage.classList.add("has-right-panel");
+    console.log(`The experimental panel has been setup with the app ${app.appId} and url ${app.details.url}`);
+}
+/**
  * Delete the current layout.
  */
 async function deleteCurrentLayout() {
@@ -17464,6 +17548,12 @@ async function init() {
             layoutManagerOverride,
             containerId: settings.platform.layout.layoutContainerId
         });
+        try {
+            await setupExperimentalPanel(fin.me.uuid, settings);
+        }
+        catch (error) {
+            console.error("Unable to set up the optional experimental panel.", error);
+        }
         // now that everything has been setup notify others of globals
         const finReadyEvent = new CustomEvent("finReady");
         window.dispatchEvent(finReadyEvent);

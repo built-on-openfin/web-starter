@@ -10352,6 +10352,7 @@ exports.showCustomIndicatorNotification = showCustomIndicatorNotification;
 exports.showReminderNotification = showReminderNotification;
 exports.showReminderCancelNotification = showReminderCancelNotification;
 exports.showDoNotDismissNotification = showDoNotDismissNotification;
+exports.showDoNotDismissNotification = showDoNotDismissNotification;
 const notifications_1 = __webpack_require__(/*! @openfin/notifications */ "../../node_modules/@openfin/notifications/dist/client/index.js");
 const ICON_URL = `${window.location.origin}/common/images/here.png`;
 const SOUND_URL = `${window.location.origin}/assets/notification.mp3`;
@@ -10811,6 +10812,26 @@ async function showReminderCancelNotification() {
                 cancelCountdownTimerId = undefined;
             }
         }, 1000);
+    });
+}
+/** Show a notification with a Dismiss button and a Do Not Dismiss button that stays open when clicked. */
+async function showDoNotDismissNotification() {
+    await (0, notifications_1.create)({
+        title: "Do Not Dismiss Notification",
+        body: "Dismiss closes this notification. Do Not Dismiss fires the action and keeps it open.",
+        toast: "transient",
+        template: "markdown",
+        id: crypto.randomUUID(),
+        buttons: [
+            { title: "Dismiss", type: "button" },
+            {
+                title: "Do Not Dismiss",
+                type: "button",
+                cta: true,
+                persistOnClick: true,
+                onClick: { task: "do-not-dismiss-task", message: "Do Not Dismiss button was clicked" }
+            }
+        ]
     });
 }
 /** Show a notification with a Dismiss button and a Do Not Dismiss button that stays open when clicked. */

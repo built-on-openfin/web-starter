@@ -20,6 +20,18 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 });
 /**
+ * Show the title of the selected side panel app as the default in the title placeholder.
+ * @param panelApp The app select element.
+ * @param panelTitle The title input element.
+ * @param apps The apps that can be selected.
+ */
+function updatePanelTitlePlaceholder(panelApp, panelTitle, apps) {
+    const selectedApp = apps.find((app) => app.appId === panelApp.value);
+    panelTitle.placeholder = selectedApp
+        ? `Defaults to the app title: ${selectedApp.title}`
+        : "Defaults to the app title";
+}
+/**
  * Initialize the settings.
  */
 async function init() {
@@ -27,6 +39,10 @@ async function init() {
     const title = document.querySelector("#title");
     const subTitle = document.querySelector("#subTitle");
     const logo = document.querySelector("#logo");
+    // side panel settings
+    const panelEnabled = document.querySelector("#panelEnabled");
+    const panelApp = document.querySelector("#panelApp");
+    const panelTitle = document.querySelector("#panelTitle");
     // cloud settings
     const username = document.querySelector("#username");
     const password = document.querySelector("#password");
@@ -40,6 +56,9 @@ async function init() {
     if (title === null ||
         subTitle === null ||
         logo === null ||
+        panelEnabled === null ||
+        panelApp === null ||
+        panelTitle === null ||
         username === null ||
         password === null ||
         platformId === null ||
@@ -56,12 +75,31 @@ async function init() {
     console.log("Settings dialog initialized", settingsResolverChannel);
     const settingsResolverService = await window.fin.InterApplicationBus.Channel.create(settingsResolverChannel);
     let appliedSettings;
+    let panelApps = [];
+    panelApp.addEventListener("change", () => updatePanelTitlePlaceholder(panelApp, panelTitle, panelApps));
     console.log("Registering apply-settings handler...");
     settingsResolverService.register("apply-settings", async (data) => {
-        const settings = data.customData.settings;
+        const { settings, apps } = data.customData;
         title.value = settings?.platform?.ui?.title;
         subTitle.value = settings?.platform?.ui?.subTitle;
         logo.value = settings?.platform?.ui?.logo;
+        const experimentalPanel = settings?.platform?.ui?.experimentalPanel;
+        panelApps = [...(apps ?? [])];
+        if (experimentalPanel?.appId && !panelApps.some((app) => app.appId === experimentalPanel.appId)) {
+            panelApps.unshift({ appId: experimentalPanel.appId, title: experimentalPanel.appId });
+        }
+        panelApp.replaceChildren(...panelApps.map((app) => {
+            const option = document.createElement("option");
+            option.value = app.appId;
+            option.textContent = `${app.title} (${app.appId})`;
+            return option;
+        }));
+        panelEnabled.checked = experimentalPanel?.enabled ?? false;
+        if (experimentalPanel?.appId) {
+            panelApp.value = experimentalPanel.appId;
+        }
+        panelTitle.value = experimentalPanel?.title ?? "";
+        updatePanelTitlePlaceholder(panelApp, panelTitle, panelApps);
         username.value =
             settings?.platform.cloudInterop?.connectParams?.basicAuthenticationParameters?.username ?? "";
         password.value =
@@ -80,6 +118,12 @@ async function init() {
         appliedSettings.platform.ui.title = title.value;
         appliedSettings.platform.ui.subTitle = subTitle.value;
         appliedSettings.platform.ui.logo = logo.value;
+        appliedSettings.platform.ui.experimentalPanel = {
+            ...appliedSettings.platform.ui.experimentalPanel,
+            enabled: panelEnabled.checked,
+            appId: panelApp.value,
+            title: panelTitle.value.trim() || undefined
+        };
         if (appliedSettings.platform?.cloudInterop?.connectParams?.basicAuthenticationParameters) {
             appliedSettings.platform.cloudInterop.connectParams.basicAuthenticationParameters.username =
                 username.value;
