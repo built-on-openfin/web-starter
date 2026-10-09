@@ -23,6 +23,7 @@ const e=(e,t)=>{try{return e.origin===t.origin}catch(e){return!1}},t="web-broker
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getSettings = getSettings;
 exports.getDefaultLayout = getDefaultLayout;
+exports.getExperimentalPanelSettings = getExperimentalPanelSettings;
 exports.clearSettings = clearSettings;
 exports.saveSettings = saveSettings;
 /**
@@ -66,6 +67,18 @@ async function getDefaultLayout() {
         return layoutJson;
     }
     return settings.platform.layout.defaultLayout;
+}
+/**
+ * Returns the experimental panel settings, using the saved override if there is one, otherwise the manifest value.
+ * @returns The experimental panel settings.
+ */
+async function getExperimentalPanelSettings() {
+    const savedSettings = await getSavedSettings();
+    if (savedSettings?.platform?.ui?.experimentalPanel) {
+        return savedSettings.platform.ui.experimentalPanel;
+    }
+    const settings = await getManifestSettings();
+    return settings?.experimentalPanel;
 }
 /**
  * Returns the settings from the manifest file.
