@@ -25,6 +25,12 @@
 					}
 				}
 			]
+		},
+		"experimentalPanel": {
+			"enabled": true,
+			"appId": "local-fdc3-intent-view",
+			"contextGroup": "green",
+			"title": "FDC3 Intents"
 		}
 	}
 }

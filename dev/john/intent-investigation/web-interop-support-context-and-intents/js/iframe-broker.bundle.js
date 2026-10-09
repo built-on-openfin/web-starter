@@ -23,6 +23,7 @@ const e=(e,t)=>{try{return e.origin===t.origin}catch(e){return!1}},t="web-broker
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getSettings = getSettings;
 exports.getDefaultLayout = getDefaultLayout;
+exports.getExperimentalPanelSettings = getExperimentalPanelSettings;
 exports.clearSettings = clearSettings;
 exports.saveSettings = saveSettings;
 /**
@@ -40,8 +41,7 @@ async function getSettings() {
         return;
     }
     const settingsEndpoint = settings.endpointProvider.endpoints.find((endpoint) => endpoint.id === "platform-settings");
-    if (settingsEndpoint === undefined ||
-        settingsEndpoint.type !== "fetch" ||
+    if (settingsEndpoint?.type !== "fetch" ||
         settingsEndpoint.options.method !== "GET" ||
         settingsEndpoint.options.url === undefined) {
         console.error("Unable to run the example as settings are required and we fetch them from the endpoint defined with the id: 'platform-settings' in the manifest. It needs to be of type fetch, performing a GET and it must have a url defined.");
@@ -67,6 +67,18 @@ async function getDefaultLayout() {
         return layoutJson;
     }
     return settings.platform.layout.defaultLayout;
+}
+/**
+ * Returns the experimental panel settings, using the saved override if there is one, otherwise the manifest value.
+ * @returns The experimental panel settings.
+ */
+async function getExperimentalPanelSettings() {
+    const savedSettings = await getSavedSettings();
+    if (savedSettings?.platform?.ui?.experimentalPanel) {
+        return savedSettings.platform.ui.experimentalPanel;
+    }
+    const settings = await getManifestSettings();
+    return settings?.experimentalPanel;
 }
 /**
  * Returns the settings from the manifest file.
@@ -106,9 +118,7 @@ async function getSavedSettings() {
     const settings = localStorage.getItem(settingsId);
     if (settings !== null) {
         const resolvedSettings = JSON.parse(settings);
-        if (!resolvedSettings?.platform?.cloudInterop?.connectParams?.authenticationType) {
-            resolvedSettings.platform.cloudInterop.connectParams.authenticationType = "basic";
-        }
+        resolvedSettings.platform.cloudInterop.connectParams.authenticationType ??= "basic";
         return resolvedSettings;
     }
 }
@@ -129,17 +139,17 @@ function getSavedSettingsId() {
 /******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
+/******/ 	const __webpack_module_cache__ = {};
 /******/ 	
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
 /******/ 		if (cachedModule !== undefined) {
 /******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 		const module = __webpack_module_cache__[moduleId] = {
 /******/ 			// no module.id needed
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
@@ -148,7 +158,7 @@ function getSavedSettingsId() {
 /******/ 		// Execute the module function
 /******/ 		if (!(moduleId in __webpack_modules__)) {
 /******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			const e = new Error("Cannot find module '" + moduleId + "'");
 /******/ 			e.code = 'MODULE_NOT_FOUND';
 /******/ 			throw e;
 /******/ 		}
@@ -159,10 +169,10 @@ function getSavedSettingsId() {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
+let __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-var exports = __webpack_exports__;
+let exports = __webpack_exports__;
 /*!**********************************************!*\
   !*** ./client/src/platform/iframe-broker.ts ***!
   \**********************************************/
