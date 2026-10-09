@@ -985,3 +985,10 @@ div.placeholder_image img {
 div[id^='openfin-layout-shadow-container'] {
     line-height: 0;
 }
+
+.lm_tab_icon {
+    height: 12px;
+    width: 12px;
+    vertical-align: baseline;
+    margin-right: 7px;
+}
