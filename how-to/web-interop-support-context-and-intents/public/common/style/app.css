@@ -73,6 +73,19 @@
 	border: none;
 }
 
+/* Outline the layout and the panel separately so they don't read as a single layout */
+#main-page.has-right-panel #layout_container,
+#main-page.has-right-panel .right-panel {
+	border: 1px solid var(--brand-input-border);
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+/* Fit the layouts inside the border rather than using the viewport based height */
+#main-page.has-right-panel .layout-container {
+	height: 100%;
+}
+
 .header {
 	height: var(--header-height);
 }
