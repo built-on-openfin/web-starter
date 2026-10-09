@@ -7,7 +7,8 @@ import type {
 	SettingsResolverResponse
 } from "../../shapes/setting-shapes";
 import { objectClone } from "../../utils";
-import { clearSettings, getSettings, saveSettings } from "./settings";
+import { getApps } from "../apps/apps";
+import { clearSettings, getExperimentalPanelSettings, getSettings, saveSettings } from "./settings";
 
 /**
  * An helper for updating and resolving settings.
@@ -102,10 +103,25 @@ export class SettingsResolverHelper {
 			});
 		}
 		if (this._dialogElement && this._dialogClient) {
-			const settings = await getSettings();
+			const currentSettings = await getSettings();
+			const settings = currentSettings ? objectClone<Settings>(currentSettings) : undefined;
+			if (settings?.platform?.ui) {
+				settings.platform.ui.experimentalPanel = await getExperimentalPanelSettings();
+			}
+let apps: { appId: string; title: string }[] = [];
+			try {
+				const allApps = await getApps();
+				apps = allApps
+					.filter((app) => Boolean(app.details?.url))
+					.map((app) => ({ appId: app.appId, title: app.title ?? app.appId }))
+					.sort((a, b) => a.title.localeCompare(b.title));
+			} catch (error) {
+				this._logger.warn("Unable to load apps for the side-panel settings.", error);
+			}
 			await this._dialogClient.dispatch("apply-settings", {
 				customData: {
-					settings
+					settings,
+					apps
 				}
 			});
 		}

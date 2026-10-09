@@ -1,5 +1,5 @@
 import type { OpenFin } from "@openfin/core";
-import type { ManifestSettings, Settings } from "../../shapes/setting-shapes";
+import type { ExperimentalPanelSettings, ManifestSettings, Settings } from "../../shapes/setting-shapes";
 
 /**
  * Fetches the settings for the application.
@@ -54,6 +54,19 @@ export async function getDefaultLayout(): Promise<OpenFin.LayoutSnapshot | undef
 		return layoutJson;
 	}
 	return settings.platform.layout.defaultLayout;
+}
+
+/**
+ * Returns the experimental panel settings, using the saved override if there is one, otherwise the manifest value.
+ * @returns The experimental panel settings.
+ */
+export async function getExperimentalPanelSettings(): Promise<ExperimentalPanelSettings | undefined> {
+	const savedSettings = await getSavedSettings();
+	if (savedSettings?.platform?.ui?.experimentalPanel) {
+		return savedSettings.platform.ui.experimentalPanel;
+	}
+	const settings = await getManifestSettings();
+	return settings?.experimentalPanel;
 }
 
 /**

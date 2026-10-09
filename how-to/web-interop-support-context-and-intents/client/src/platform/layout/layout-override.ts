@@ -109,7 +109,8 @@ export function makeOverride(
 			}
 
 			/**
-			 * Shows the layout specified by the layoutName.
+			 * Shows the layout specified by the layoutName. The other layouts are hidden but keep their size so
+			 * their views are not resized while hidden.
 			 * @param layoutName The name of the layout to show.
 			 * @param layoutName.layoutName The name of the layout to show.
 			 * @returns Promise<void>
@@ -118,10 +119,10 @@ export function makeOverride(
 				const layoutContainers = document.querySelectorAll<HTMLElement>("div.layout-container");
 				for (const layoutContainer of layoutContainers) {
 					if (layoutContainer.id === layoutName) {
-						layoutContainer.classList.remove("hidden");
+						layoutContainer.classList.remove("layout-container-hidden");
 						this._selectedLayout = layoutName;
 					} else {
-						layoutContainer.classList.add("hidden");
+						layoutContainer.classList.add("layout-container-hidden");
 					}
 				}
 			}
@@ -218,7 +219,7 @@ export function makeOverride(
 				// Create a new div container for the layout.
 				const container = document.createElement("div");
 				container.id = layoutName;
-				container.className = "col layout-container hidden";
+				container.className = "layout-container layout-container-hidden";
 				this._layoutContainer?.append(container);
 				await fin.Platform.Layout.create({ layoutName, layout, container });
 				if (entry === length) {
