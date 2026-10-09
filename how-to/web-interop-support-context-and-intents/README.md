@@ -33,7 +33,29 @@ To show content in a multi-layout UI we implemented a layoutManagerOverride so t
 
 ### Experimental panel
 
-The web manifest ([public/manifest.json](./public/manifest.json)) has an `experimentalPanel` entry in `custom_settings`. When `enabled` is `true`, the provider creates an `<of-view>` web component (provided by `@openfin/core-web`) in a panel to the right of the layout once the layout has been initialized. Each key in `attributes` (e.g. `of-broker`, `of-name`, `src`, `of-context-group`, `of-provider-id`, `title`) is applied to the `<of-view>` element. `of-uuid` is set from the platform's uuid (`fin.me.uuid`) so it matches the views in the layout, unless you specify one in `attributes`. Set `enabled` to `false` to give the layout the full width. The panel width can be changed with the `--right-panel-width` CSS variable in [public/common/style/app.css](./public/common/style/app.css).
+> **Note:** The HERE `<of-view>` web component used by this panel should be considered experimental. Its attributes and behavior may change in future releases of `@openfin/core-web`.
+
+The web manifest ([public/manifest.json](./public/manifest.json)) has an `experimentalPanel` entry in `custom_settings`. When `enabled` is `true`, the provider creates an `<of-view>` web component (provided by `@openfin/core-web`) in a panel to the right of the layout once the layout has been initialized.
+
+```json
+"experimentalPanel": {
+  "enabled": true,
+  "appId": "local-fdc3-intent-view",
+  "contextGroup": "green",
+  "title": "FDC3 Intents"
+}
+```
+
+Only `appId` is required. The `<of-view>` attributes are worked out as follows:
+
+- `src`: the url of the app with that `appId` in the app directory.
+- `of-name`: `<appId>/<random uuid>`, the same format used for apps launched into the layout.
+- `of-broker` and `of-provider-id`: `brokerUrl` and `providerId` from the platform settings ([public/settings.json](./public/settings.json)).
+- `of-uuid`: the platform's uuid (`fin.me.uuid`), so the panel matches the views in the layout.
+- `of-context-group`: `contextGroup` if specified, otherwise `defaultContextGroup` from the platform settings.
+- `title`: `title` if specified, otherwise the title of the app in the app directory.
+
+Set `enabled` to `false` to give the layout the full width. The panel width can be changed with the `--right-panel-width` CSS variable in [public/common/style/app.css](./public/common/style/app.css).
 
 ## Apps
 

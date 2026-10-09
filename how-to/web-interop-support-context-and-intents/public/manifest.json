@@ -28,14 +28,9 @@
 		},
 		"experimentalPanel": {
 			"enabled": true,
-			"attributes": {
-				"of-broker": "http://localhost:6060/platform/iframe-broker.html",
-				"of-name": "local-fdc3-intent-view",
-				"src": "http://localhost:6060/views/fdc3-intent-view.html",
-				"of-context-group": "green",
-				"of-provider-id": "support-context-and-intents",
-				"title": "FDC3 Intents"
-			}
+			"appId": "local-fdc3-intent-view",
+			"contextGroup": "green",
+			"title": "FDC3 Intents"
 		}
 	}
 }

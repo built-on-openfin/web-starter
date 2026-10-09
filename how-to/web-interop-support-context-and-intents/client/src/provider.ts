@@ -2,12 +2,13 @@ import { cloudInteropOverride } from "@openfin/cloud-interop";
 import type { OpenFin } from "@openfin/core";
 import { connect, type WebLayoutSnapshot } from "@openfin/core-web";
 import { AppResolverHelper } from "./platform/apps/app-resolver-helper";
+import { getApp } from "./platform/apps/apps";
 import { getConstructorOverride } from "./platform/broker/interop-override";
 import { makeOverride } from "./platform/layout/layout-override";
 import { getDefaultLayout, getExperimentalPanelSettings, getSettings } from "./platform/settings/settings";
 import { SettingsResolverHelper } from "./platform/settings/settings-resolver-helper";
 import type { Settings } from "./shapes/setting-shapes";
-import { sanitizeString } from "./utils";
+import { randomUUID, sanitizeString } from "./utils";
 
 /**
  * Attach listeners to elements.
@@ -138,12 +139,24 @@ function listenForConfigRequests(settings: Settings): void {
 
 /**
  * Sets up the experimental right hand panel (an of-view web component) if enabled in the manifest.
- * @param platformUuid The uuid of the platform, used as the of-uuid unless one is specified in the manifest.
+ * @param platformUuid The uuid of the platform, used as the of-uuid so the panel matches the layout views.
+ * @param settings The platform settings used for the broker url, provider id and default context group.
  */
-async function setupExperimentalPanel(platformUuid: string): Promise<void> {
+async function setupExperimentalPanel(platformUuid: string, settings: Settings): Promise<void> {
 	const panelSettings = await getExperimentalPanelSettings();
 	if (!panelSettings?.enabled) {
 		console.log("The experimental panel is not enabled.");
+		return;
+	}
+	if (!panelSettings.appId) {
+		console.error("The experimental panel is enabled but no appId has been specified.");
+		return;
+	}
+	const app = await getApp(panelSettings.appId);
+	if (!app?.details?.url) {
+		console.error(
+			`The experimental panel app ${panelSettings.appId} could not be found in the app directory or has no url.`
+		);
 		return;
 	}
 	const mainPage = document.querySelector<HTMLElement>("#main-page");
@@ -156,9 +169,20 @@ async function setupExperimentalPanel(platformUuid: string): Promise<void> {
 	}
 	// the of-view validates its attributes when connected so they must be set before it is appended
 	const attributes: { [key: string]: string } = {
+		"of-broker": settings.platform.interop.brokerUrl,
+		"of-provider-id": settings.platform.interop.providerId,
 		"of-uuid": platformUuid,
-		...panelSettings.attributes
+		"of-name": `${app.appId}/${randomUUID()}`,
+		src: app.details.url
 	};
+	const contextGroup = panelSettings.contextGroup ?? settings.platform.interop.defaultContextGroup;
+	if (contextGroup) {
+		attributes["of-context-group"] = contextGroup;
+	}
+	const title = panelSettings.title ?? app.title;
+	if (title) {
+		attributes.title = title;
+	}
 	const ofView = document.createElement("of-view");
 	for (const [name, value] of Object.entries(attributes)) {
 		ofView.setAttribute(name, value);
@@ -167,7 +191,7 @@ async function setupExperimentalPanel(platformUuid: string): Promise<void> {
 	panelContainer.append(ofView);
 	panelContainer.classList.remove("hidden");
 	mainPage.classList.add("has-right-panel");
-	console.log(`The experimental panel has been setup with the url ${panelSettings.attributes?.src}`);
+	console.log(`The experimental panel has been setup with the app ${app.appId} and url ${app.details.url}`);
 }
 
 /**
@@ -247,7 +271,7 @@ async function init(): Promise<void> {
 			layoutManagerOverride,
 			containerId: settings.platform.layout.layoutContainerId
 		});
-		await setupExperimentalPanel(fin.me.uuid);
+		await setupExperimentalPanel(fin.me.uuid, settings);
 		// now that everything has been setup notify others of globals
 		const finReadyEvent = new CustomEvent("finReady");
 		window.dispatchEvent(finReadyEvent);

@@ -60,10 +60,20 @@ export interface ExperimentalPanelSettings {
 	enabled: boolean;
 
 	/**
-	 * The attributes to apply to the of-view element (e.g. of-broker, of-name, src).
-	 * of-uuid defaults to the platform's uuid (matching the views in the layout) when it isn't specified.
+	 * The id of the app (from the app directory) to show. Its url is used as the of-view src and the
+	 * of-name is generated as appId/uuid. The broker url, provider id and uuid come from the platform.
 	 */
-	attributes: { [key: string]: string };
+	appId: string;
+
+	/**
+	 * The context group to join (of-context-group). Defaults to the platform's defaultContextGroup.
+	 */
+	contextGroup?: string;
+
+	/**
+	 * The title of the of-view. Defaults to the title of the app in the app directory.
+	 */
+	title?: string;
 }
 
 /**
