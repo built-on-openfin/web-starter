@@ -14,6 +14,7 @@ import {
 	showActionableNotification,
 	showCustomIndicatorNotification,
 	showCustomNotification,
+	showDoNotDismissNotification,
 	showFormAdvancedNotification,
 	showFormNotification,
 	showIndicatorNotification,
@@ -237,8 +238,7 @@ async function bindEventLog(): Promise<void> {
 
 	try {
 		await addEventListener("notification-action", (event) => {
-			const buttonTitle =
-				event.control && event.control.type === "button" ? event.control.title : "(non-button)";
+			const buttonTitle = event.control?.type === "button" ? event.control.title : "(non-button)";
 			const result = typeof event.result === "object" ? JSON.stringify(event.result) : String(event.result);
 			logEvent("action", `${event.trigger} on "${buttonTitle}" → ${result}`);
 		});
@@ -295,7 +295,8 @@ function bindExamples(): void {
 		["#btnExIndicator", showIndicatorNotification],
 		["#btnExCustomIndicator", showCustomIndicatorNotification],
 		["#btnExReminder", showReminderNotification],
-		["#btnExReminderCancel", showReminderCancelNotification]
+		["#btnExReminderCancel", showReminderCancelNotification],
+		["#btnDoNotDismiss", showDoNotDismissNotification]
 	];
 	for (const [id, handler] of exampleButtons) {
 		document.querySelector<HTMLButtonElement>(id)?.addEventListener("click", () => {

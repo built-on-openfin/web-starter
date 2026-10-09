@@ -4,7 +4,7 @@
  * but it fails fast when there is an error.
  */
 import { spawn } from 'child_process';
-import FastGlob from 'fast-glob';
+import { glob } from 'tinyglobby';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -26,7 +26,7 @@ async function run() {
 
 	const packageJson = await loadJson('package.json');
 
-	const workspaces = await FastGlob(packageJson.workspaces, { onlyDirectories: true });
+	const workspaces = await glob(packageJson.workspaces, { onlyDirectories: true, expandDirectories: false });
 
 	for (const workspace of workspaces) {
 		const workspacePackageJsonFilename = path.join(workspace, 'package.json');

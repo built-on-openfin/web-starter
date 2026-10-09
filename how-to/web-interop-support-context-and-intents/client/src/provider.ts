@@ -1,5 +1,4 @@
 import { cloudInteropOverride } from "@openfin/cloud-interop";
-import type { OpenFin } from "@openfin/core";
 import { connect, type WebLayoutSnapshot } from "@openfin/core-web";
 import { AppResolverHelper } from "./platform/apps/app-resolver-helper";
 import { getConstructorOverride } from "./platform/broker/interop-override";
@@ -200,9 +199,7 @@ async function init(): Promise<void> {
 		const overrides = [interopOverride];
 
 		if (settings?.platform?.cloudInterop?.connectParams?.url?.startsWith("http")) {
-			const cloudOverride = (await cloudInteropOverride(
-				settings.platform.cloudInterop.connectParams
-			)) as unknown as OpenFin.ConstructorOverride<OpenFin.InteropBroker>;
+			const cloudOverride = await cloudInteropOverride(settings.platform.cloudInterop.connectParams);
 			overrides.push(cloudOverride);
 		}
 		// You may now use the `fin` object to initialize the broker and the layout.
