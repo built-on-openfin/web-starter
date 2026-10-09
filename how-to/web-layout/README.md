@@ -100,10 +100,51 @@ function layoutManagerOverride(Base: LayoutManagerConstructor):
 
 ### Required CSS styles
 
-If the layout does not automatically resize to fill the viewport (both growing and shrinking), then the container does not have the correct css styles applied.
+Each layout needs a container that fills the space you give it, resizes with the window (growing and shrinking), and keeps its size while hidden. This example does it with the classes below, from [app.css](public/common/style/app.css). The markup is in [provider.html](public/platform/provider.html) and the show/hide logic is in [provider.ts](client/src/provider.ts). `row`, `col` and `fill` (`flex: 1`) are general-purpose utility classes from the same stylesheet.
 
-The parent of each layout must have defined dimensions - not proportional sizing such as flexbox or percentage values.
+```html
+<body class="col">
+  <header>...</header>
+  <main class="row fill layout-area">
+    <div class="col left-panel">...</div>
+    <div class="col fill">
+      <div class="tabs">...</div>
+      <div id="layout_container" class="fill layout-host">
+        <!-- one per layout, created by provider.ts -->
+        <div id="default" class="layout-container"></div>
+        <div id="secondary" class="layout-container layout-container-hidden"></div>
+      </div>
+    </div>
+  </main>
+</body>
+```
 
-In this example see the `.openfin-layout` class in [app.css](public/common/style/app.css) for how to achieve this.
+```css
+.layout-area {
+  min-height: 0;
+}
 
-![Required CSS](./docs/css-classes.png)
+.layout-host {
+  display: grid;
+  overflow: hidden;
+}
+
+.layout-container {
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.layout-container-hidden {
+  visibility: hidden;
+}
+```
+
+Four rules matter:
+
+1. **Hide inactive layouts with `visibility: hidden`, not `display: none`.** `display: none` collapses a layout to 0x0, so every view in it is resized to nothing when hidden and back again when shown. Apps that react to resizes, such as grids and blotters, then redo their layout and repaint on every switch, and this gets worse as you add views. A layout hidden with `visibility` keeps its size, so switching is a repaint with no resize. Hidden layouts also ignore clicks, so the visible one gets them even when it sits underneath.
+2. **Stack every layout in the same place.** `.layout-host` is a grid, and `grid-area: 1 / 1` puts every `.layout-container` in its single cell. Without it, each layout gets its own grid row, and hidden layouts still take up their share of the space: with two layouts, the visible one gets half the height.
+3. **Don't position the layout containers or their ancestors.** core-web places each view with `position: absolute` and viewport coordinates. Leave `.layout-host`, `.layout-container` and everything above them as `position: static` (the default). If an ancestor has `position: relative`, `absolute`, `fixed` or `sticky`, or creates a containing block another way (`transform`, `filter`, `contain`), views shift by that ancestor's offset and appear in the wrong place.
+4. **Let the layout shrink.** Flex and grid items default to `min-width: auto` and `min-height: auto`, so they never get smaller than their content. Once golden-layout has sized a layout, the layout would grow with the window but never shrink back. In this example, `min-height: 0` on `main` (a flex item in the column-direction body), and `min-width: 0` and `min-height: 0` on each layout container (grid items), are what allow it. `overflow: hidden` does the same job for `.layout-host`. If your page nests the layout in more flex or grid containers, a container that stops shrinking needs the same fix.
+
+The layout size comes from normal flex and grid sizing, so you don't need to calculate it from the header, panel and padding sizes. If you change the page structure, the layout still fits.
