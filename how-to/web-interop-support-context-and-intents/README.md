@@ -31,6 +31,40 @@ To show content in a multi-layout UI we implemented a layoutManagerOverride so t
 - Finding the identity of a layout that contains a specific piece of content.
 - Get the current snapshot of all the layouts and the currently focused layout.
 
+### Fast layout switching
+
+Inactive layouts are hidden with `visibility: hidden` rather than `display: none`. `display: none` collapses a layout to 0x0, so every view in it is resized to nothing when hidden and back again when shown. Apps that react to resizes, such as grids and blotters, then redo their layout and repaint on every switch, and this gets worse as you add views. A layout hidden with `visibility` keeps its size, so switching is a repaint with no resize.
+
+The show/hide logic is in [layout-override.ts](./client/src/platform/layout/layout-override.ts) and the styles are in [app.css](./public/common/style/app.css):
+
+```css
+.layout-area {
+  min-height: 0;
+}
+
+.layout-host {
+  display: grid;
+  overflow: hidden;
+}
+
+.layout-container {
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.layout-container-hidden {
+  visibility: hidden;
+}
+```
+
+- Every layout is stacked in the same grid cell (`grid-area: 1 / 1`), so hidden layouts don't take up space.
+- The layout is sized by normal flex and grid sizing rather than a `calc()` based on the header and padding, so it fills the space left by the optional experimental panel.
+- `min-height: 0`, `min-width: 0` and `overflow: hidden` let the layout shrink as well as grow with the window.
+- Keep the layout containers and their ancestors unpositioned (`position: static`). core-web places views using viewport coordinates, so a positioned ancestor would offset them.
+
+See the [web-layout README](../web-layout/README.md#required-css-styles) for a fuller explanation of these rules.
+
 ### Experimental panel
 
 > **Note:** The HERE `<of-view>` web component used by this panel should be considered experimental. Its attributes and behavior may change in future releases of `@openfin/core-web`.

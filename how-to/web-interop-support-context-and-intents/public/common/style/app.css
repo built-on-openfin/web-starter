@@ -40,25 +40,49 @@
 	--brand-success: var(--theme-status-success, #35c759);
 }
 
-.layout-container {
-	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2));
-}
-
 #main-page {
 	width: 100%;
 }
 
-/* The layout needs defined dimensions so it takes the space left over by the optional right panel */
-#layout_container {
-	flex: 1;
+/*
+ * The body is a flex column, so main would otherwise refuse to shrink below its content's height
+ * and the layout would grow with the window but never shrink back.
+ */
+.layout-area {
+	min-height: 0;
+}
+
+/*
+ * The host takes the space left over by the optional right panel and stacks every layout in a single
+ * grid cell. It must stay unpositioned (position: static): core-web places each view with viewport
+ * coordinates, so a positioned ancestor offsets every view. overflow: hidden also lets it shrink.
+ */
+.layout-host {
+	display: grid;
+	overflow: hidden;
+}
+
+/*
+ * Each layout always fills the cell, so a hidden layout keeps its real size. The zero minimums let the
+ * cell shrink below the size golden-layout last gave the layout.
+ */
+.layout-container {
+	grid-area: 1 / 1;
 	min-width: 0;
-	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2));
+	min-height: 0;
+}
+
+/*
+ * Hide inactive layouts with visibility rather than display: none. display: none collapses the layout
+ * to 0x0, so every view is resized to nothing and back again on each switch.
+ */
+.layout-container-hidden {
+	visibility: hidden;
 }
 
 .right-panel {
 	width: var(--right-panel-width);
 	flex-shrink: 0;
-	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2));
 }
 
 .right-panel of-view {
@@ -79,11 +103,6 @@
 	border: 1px solid var(--brand-input-border);
 	border-radius: 4px;
 	overflow: hidden;
-}
-
-/* Fit the layouts inside the border rather than using the viewport based height */
-#main-page.has-right-panel .layout-container {
-	height: 100%;
 }
 
 .header {
