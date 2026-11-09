@@ -2,7 +2,7 @@
 
 npm-workspaces monorepo of HERE (OpenFin) core-web how-to samples and shared packages.
 
-- Node 22+, package manager: npm
+- Node 22.13+, package manager: npm
 - Workspaces: listed in root `package.json` (`how-to/*` samples + `packages/*`). `how-to/cloud-interop*` are not workspaces: install/build them from their own folder; `how-to/hints-and-tips` is docs only
 - No test runner — focus on build + lint + format
 - ESLint/Prettier are configured once at the root; how-tos have no lint scripts or configs of their own

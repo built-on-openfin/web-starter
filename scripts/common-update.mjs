@@ -27,7 +27,7 @@ async function run() {
 
 		for (const fileGroup of commonFileGroup.fileGroups) {
 			for (const fileSpec of fileGroup.files) {
-				let expandedFiles = [];
+				let expandedFiles;
 				if (fileSpec.includes('*')) {
 					const specFolder = path.join(fileGroup.srcFolder, fileSpec).replace(/\\/g, '/');
 					const specFiles = await glob(specFolder, { expandDirectories: false });

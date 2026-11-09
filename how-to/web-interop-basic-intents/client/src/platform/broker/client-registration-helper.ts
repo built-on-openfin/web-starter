@@ -1,5 +1,4 @@
 import type OpenFin from "@openfin/core";
-import { RESOLVE_ERROR as ResolveError } from "./fdc3-errors";
 import type {
 	BrokerClientConnection,
 	IntentRegistrationEntry,
@@ -7,6 +6,7 @@ import type {
 } from "../../shapes/interopbroker-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
 import { isEmpty } from "../helpers/utils";
+import { RESOLVE_ERROR as ResolveError } from "./fdc3-errors";
 
 /**
  * Tracks clients that connect to the broker and register intent listeners.

@@ -1,7 +1,7 @@
 import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import jsdoc from 'eslint-plugin-jsdoc';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import promise from 'eslint-plugin-promise';
 import globals from 'globals';
 
@@ -68,12 +68,14 @@ export default [
 		},
 		rules: {
 			// Keep import checks compatible with the monorepo layout.
-			'import/no-unresolved': 'off',
-			'import/named': 'off',
-			'import/no-duplicates': 'error',
+			'import-x/no-unresolved': 'off',
+			'import-x/named': 'off',
+			// The OpenFin namespace is intentionally imported as a default.
+			'import-x/no-named-as-default': 'off',
+			'import-x/no-duplicates': 'error',
 
 			// Import ordering matches the legacy workspace configs.
-			'import/order': [
+			'import-x/order': [
 				'warn',
 				{
 					groups: [
@@ -86,6 +88,9 @@ export default [
 					}
 				}
 			],
+
+			// Client tsconfigs target ES2021, which lacks the Error `cause` option.
+			'preserve-caught-error': 'off',
 
 			// Allow common unused callback parameters.
 			'no-unused-vars': ['error', { args: 'none' }],
@@ -147,7 +152,9 @@ export default [
 			...jsdoc.configs['flat/recommended-typescript'].rules,
 			// Keep the rule enabled, but don't block lint runs on migration cleanup.
 			'jsdoc/require-jsdoc': 'warn',
-			'jsdoc/check-tag-names': 'off'
+			'jsdoc/check-tag-names': 'off',
+			'jsdoc/escape-inline-tags': 'off',
+			'jsdoc/require-throws-type': 'off'
 		}
 	}
 ];

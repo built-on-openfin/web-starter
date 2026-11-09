@@ -12,12 +12,12 @@ Formatting and import rules enforced by Prettier + ESLint. Config sources:
 - JS: single quotes. TS: double quotes (`singleQuote: false` override for `*.ts`)
 - Markdown: 2-space indentation, no tabs
 
-## Import ordering (ESLint `import/order`)
+## Import ordering (ESLint `import-x/order`)
 
 - Group 1: `external` + `builtin`
 - Group 2: `internal` + `index` + `sibling` + `parent`
 - Alphabetical within groups (case-insensitive)
-- No duplicate imports (`import/no-duplicates` is `error`)
+- No duplicate imports (`import-x/no-duplicates` is `error`)
 
 ## Restricted APIs
 
