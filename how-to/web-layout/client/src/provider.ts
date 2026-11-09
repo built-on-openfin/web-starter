@@ -135,6 +135,8 @@ async function hideTab(tabName: string): Promise<void> {
 async function removeTab(tabName: string): Promise<void> {
 	console.log(`Removing Tab & Layout ${tabName}`);
 	const lm = window.fin?.Platform.Layout.getCurrentLayoutManagerSync();
+	// The cast is required by tsc but flagged as unnecessary by the linter.
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	await lm?.removeLayout({ layoutName: tabName } as OpenFin.LayoutIdentity);
 	const tabToRemove = document.querySelector<HTMLDivElement>(`#tab-${tabName}`);
 	tabToRemove?.remove();
@@ -183,7 +185,7 @@ async function createLayout(
 
 	// Normally you can use state here, but just tracking the order of layouts in localStorage.
 	const currentOrder = window.localStorage.getItem("order");
-	let newOrder = "";
+	let newOrder: string;
 	if (!currentOrder || currentOrder === "") {
 		newOrder = layoutName;
 	} else {
@@ -297,11 +299,10 @@ export async function addLayout(): Promise<void> {
 export async function removeThisLayout(layoutName: string): Promise<void> {
 	// remove layout from state.
 	const layoutsBefore = readLayouts();
-	let layoutsRemoved: LayoutManagerItem[] = [];
 	const layoutNameElement = document.querySelector<HTMLElement>(`#${layoutName}`);
 	if (layoutsBefore.length > 0 && layoutNameElement !== null) {
 		const idx = layoutsBefore.findIndex((x) => x.layoutName === layoutName);
-		layoutsRemoved = layoutsBefore.splice(idx, 1);
+		const layoutsRemoved = layoutsBefore.splice(idx, 1);
 		console.log(`[Remove Layout] Removed this layout: ${JSON.stringify(layoutsRemoved)}`);
 		await saveLayout(layoutsBefore);
 		console.log(`[Remove Layout] Layouts After Removal: ${JSON.stringify(layoutsBefore)}`);

@@ -6,8 +6,8 @@ import type {
 	AppIntent
 } from "../../shapes/interopbroker-shapes";
 import type { Logger } from "../../shapes/logger-shapes";
-// import { formatError } from "../../utils";
 import { RESOLVE_ERROR as ResolveError } from "./fdc3-errors";
+// import { formatError } from "../../utils";
 
 /**
  * An Intent Resolver Used for resolving intent selection.

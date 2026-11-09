@@ -3,9 +3,9 @@
  * shared across all the examples. The source of all the files is the workspace-platform-starter
  * example project.
  */
-import { glob } from 'tinyglobby';
 import fs from 'fs/promises';
 import path from 'path';
+import { glob } from 'tinyglobby';
 
 /**
  * Execute the process.
@@ -27,7 +27,7 @@ async function run() {
 
 		for (const fileGroup of commonFileGroup.fileGroups) {
 			for (const fileSpec of fileGroup.files) {
-				let expandedFiles = [];
+				let expandedFiles;
 				if (fileSpec.includes('*')) {
 					const specFolder = path.join(fileGroup.srcFolder, fileSpec).replace(/\\/g, '/');
 					const specFiles = await glob(specFolder, { expandDirectories: false });
@@ -42,9 +42,7 @@ async function run() {
 					console.log('Copying', src);
 					console.log('  To', dest);
 
-					try {
-						await fs.mkdir(path.dirname(dest), { recursive: true });
-					} catch {}
+					await fs.mkdir(path.dirname(dest), { recursive: true });
 
 					await fs.copyFile(src, dest);
 				}

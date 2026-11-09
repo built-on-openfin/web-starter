@@ -108,7 +108,7 @@ export class SettingsResolverHelper {
 			if (settings?.platform?.ui) {
 				settings.platform.ui.experimentalPanel = await getExperimentalPanelSettings();
 			}
-let apps: { appId: string; title: string }[] = [];
+			let apps: { appId: string; title: string }[] = [];
 			try {
 				const allApps = await getApps();
 				apps = allApps

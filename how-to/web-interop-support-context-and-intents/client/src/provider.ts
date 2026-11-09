@@ -268,7 +268,7 @@ async function init(): Promise<void> {
 			layoutManagerOverride,
 			containerId: settings.platform.layout.layoutContainerId
 		});
-try {
+		try {
 			await setupExperimentalPanel(fin.me.uuid, settings);
 		} catch (error) {
 			console.error("Unable to set up the optional experimental panel.", error);

@@ -6,6 +6,7 @@ import {
 	update,
 	type UpdatableNotificationOptions
 } from "@openfin/notifications";
+import { v4 as uuid } from "uuid";
 
 const ICON_URL = `${window.location.origin}/common/images/here.png`;
 const SOUND_URL = `${window.location.origin}/assets/notification.mp3`;
@@ -28,7 +29,7 @@ export async function showActionableNotification(): Promise<void> {
 		body: "This is a notification that has an action",
 		toast: "transient",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: uuid(),
 		buttons: [
 			{
 				title: "Acknowledged",
@@ -48,7 +49,7 @@ export async function showFormNotification(): Promise<void> {
 		body: "This is a notification that has form data",
 		toast: "transient",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: uuid(),
 		form: [
 			{
 				key: "amount",
@@ -76,7 +77,7 @@ export async function showFormAdvancedNotification(): Promise<void> {
 		body: "This is a notification that has form data",
 		toast: "transient",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: uuid(),
 		form: [
 			{
 				type: "string",
@@ -185,7 +186,7 @@ export async function showFormAdvancedNotification(): Promise<void> {
 
 /** Show a notification whose body text updates every second until it is closed. */
 export async function showUpdatableNotification(): Promise<void> {
-	const id = crypto.randomUUID();
+	const id = uuid();
 	updatableMap[id] = 0;
 
 	if (Object.keys(updatableMap).length === 1) {
@@ -225,7 +226,7 @@ export async function showCustomNotification(): Promise<void> {
 		title: "Custom Notification",
 		toast: "transient",
 		template: "custom",
-		id: crypto.randomUUID(),
+		id: uuid(),
 		templateOptions: {
 			body: {
 				compositions: [
@@ -298,7 +299,7 @@ export async function showSoundNotification(): Promise<void> {
 		toast: "transient",
 		template: "markdown",
 		soundOptions: { mode: "silent" },
-		id: crypto.randomUUID()
+		id: uuid()
 	});
 	try {
 		const audio = new Audio(SOUND_URL);
@@ -315,7 +316,7 @@ export async function showIndicatorNotification(): Promise<void> {
 		toast: "transient",
 		indicator: { text: "Limit" },
 		template: "custom",
-		id: crypto.randomUUID(),
+		id: uuid(),
 		templateOptions: {
 			body: {
 				compositions: [
@@ -341,7 +342,7 @@ export async function showCustomIndicatorNotification(): Promise<void> {
 		title: "Custom Indicator Notification",
 		toast: "transient",
 		template: "custom",
-		id: crypto.randomUUID(),
+		id: uuid(),
 		templateOptions: {
 			body: {
 				compositions: [
@@ -375,7 +376,7 @@ async function createReminderNotification(
 	countdownSeconds: number,
 	onReminderSet?: (id: string) => void
 ): Promise<void> {
-	const id = crypto.randomUUID();
+	const id = uuid();
 	countdownMap[id] = { secondsRemaining: countdownSeconds, reminderDate };
 
 	countdownTimerId ??= window.setInterval(async () => {
@@ -491,7 +492,7 @@ export async function showDoNotDismissNotification(): Promise<void> {
 		body: "Dismiss closes this notification. Do Not Dismiss fires the action and keeps it open.",
 		toast: "transient",
 		template: "markdown",
-		id: crypto.randomUUID(),
+		id: uuid(),
 		buttons: [
 			{ title: "Dismiss", type: "button" },
 			{

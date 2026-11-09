@@ -9,13 +9,12 @@
 		"package-for-github": "node ./scripts/package.js --location github",
 		"package-for-aws": "node ./scripts/package.js --location aws",
 		"start": "echo You must be in a folder for a specific how-to to use npm run start e.g. ./how-to/x",
-		"prettier": "node ./scripts/workspaces.mjs prettier",
-		"prettier-check": "node ./scripts/workspaces.mjs prettier-check",
-		"eslint": "node ./scripts/workspaces.mjs eslint",
-		"markdownlint": "node ./scripts/workspaces.mjs markdownlint",
-		"validate": "node ./scripts/workspaces.mjs validate",
+		"prettier": "prettier --write .",
+		"prettier-check": "prettier --check .",
+		"eslint": "eslint .",
+		"validate": "npm run prettier && npm run eslint",
 		"list-update-packages": "npx --yes npm-check-updates --deep > updatable-packages.txt",
-		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x fkill*,node-emoji,@openfin/core,@openfin/cloud-interop,@openfin/core-web,eslint-plugin-import",
+		"update-packages": "npx --yes npm-check-updates --upgrade --deep -x fkill*,node-emoji,@openfin/core,@openfin/cloud-interop,@openfin/core-web,eslint-plugin-import-x",
 		"remove-packages": "npx --yes rimraf --glob **/node_modules && npx rimraf --glob **/package-lock.json",
 		"common-update": "node ./scripts/common-update.mjs",
 		"upgrade-versions": "node scripts/upgrade-versions.mjs"
@@ -30,7 +29,8 @@
 		"how-to/web-layout-basic",
 		"how-to/web-layout-custom-view-header",
 		"how-to/web-layout-prevent-reload",
-		"how-to/web-notifications"
+		"how-to/web-notifications",
+		"packages/*"
 	],
 	"packageExclude": [
 		"how-to/hints-and-tips"
@@ -48,11 +48,15 @@
 		"js-yaml@^5": "^5.4.3",
 		"katex": "^0.19.0",
 		"markdown-it@^14": "^14.3.2",
-		"smol-toml": "^1.9.0"
+		"smol-toml": "^1.9.0",
+		"minimatch@^10": "^11.0.1",
+		"zod": "^4.6.6"
 	},
 	"devDependencies": {
-		"ajv": "^8.12.0",
+		"@openfin-web-starter/eslint-config": "^1.0.0",
+		"eslint": "^10.14.0",
 		"fs-extra": "11.2.0",
+		"prettier": "3.2.5",
 		"replace-in-file": "7.1.0",
 		"tinyglobby": "0.2.17",
 		"yargs": "17.7.2"

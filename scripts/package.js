@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
-const { globSync } = require('tinyglobby');
 const fs = require('fs-extra');
 const replace = require('replace-in-file');
+const { globSync } = require('tinyglobby');
 const yargs = require('yargs');
 const packageJson = require('../package.json');
 
@@ -66,8 +66,8 @@ function packageItems(cliArgs) {
 	// for different locations.
 	fs.rmSync(publishDir, { recursive: true, force: true });
 
-	let workspaces = globSync(packageJson.workspaces, { onlyDirectories: true, expandDirectories: false }).map((dir) =>
-		dir.replace(/\/$/, '')
+	let workspaces = globSync(packageJson.workspaces, { onlyDirectories: true, expandDirectories: false }).map(
+		(dir) => dir.replace(/\/$/, '')
 	);
 	if (packageJson.packageExclude) {
 		workspaces = workspaces.filter((item) => !packageJson.packageExclude.includes(item));
