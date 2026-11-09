@@ -1,0 +1,32 @@
+{
+	"name": "HERE Web Theming",
+	"short_name": "WebTheming",
+	"start_url": "./platform/provider.html",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "An example showing how to theme a HERE Core Web platform, its layout, views and the Web Notification Center.",
+	"icons": [
+		{
+			"src": "common/images/here.png",
+			"sizes": "72x72",
+			"type": "image/png"
+		}
+	],
+	"related_applications": [],
+	"custom_settings": {
+		"platform": {
+			"platformIdentifier": "web-theming-platform",
+			"notificationServiceId": "web-theming-notification-service-channel",
+			"interop": {
+				"sharedWorkerUrl": "https://built-on-openfin.github.io/web-starter/feature/web-theming/web-theming/js/shared-worker.bundle.js",
+				"brokerUrl": "https://built-on-openfin.github.io/web-starter/feature/web-theming/web-theming/platform/iframe-broker.html",
+				"providerId": "web-interop",
+				"defaultContextGroup": "green"
+			},
+			"layout": {
+				"layoutContainerId": "layout_container",
+				"defaultLayout": "https://built-on-openfin.github.io/web-starter/feature/web-theming/web-theming/layouts/default.layout.fin.json"
+			}
+		}
+	}
+}

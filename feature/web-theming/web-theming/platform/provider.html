@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Web Theming Example</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../style/core-web-styles.css" />
+		<link rel="stylesheet" href="provider.css" />
+		<script defer="defer" src="../js/provider.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+	<body class="provider-shell">
+		<header class="row spread middle header">
+			<div class="col">
+				<h1>Web Theming Example</h1>
+				<h1 class="tag">One palette themes the layout, views and Notification Center</h1>
+			</div>
+			<div class="row middle gap20">
+				<label class="row middle gap10 theme-control">
+					Theme
+					<select id="themePreset" class="small"></select>
+				</label>
+				<fieldset class="row middle scheme-toggle" aria-label="Color scheme">
+					<input type="radio" id="schemeSystem" name="scheme" value="system" checked />
+					<label for="schemeSystem">System</label>
+					<input type="radio" id="schemeLight" name="scheme" value="light" />
+					<label for="schemeLight">Light</label>
+					<input type="radio" id="schemeDark" name="scheme" value="dark" />
+					<label for="schemeDark">Dark</label>
+				</fieldset>
+				<button
+					id="btnToggleCenter"
+					class="panel-toggle"
+					aria-label="Notification Center"
+					title="Notification Center"
+					aria-controls="notification_sidebar"
+					aria-pressed="false"
+				>
+					<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+						<path
+							d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					<span id="notificationCount" class="panel-toggle-badge" hidden>0</span>
+				</button>
+			</div>
+		</header>
+		<main id="main-page">
+			<div id="layout_container" class="fill"></div>
+		</main>
+		<aside
+			id="notification_sidebar"
+			class="enterprise-sidebar"
+			aria-label="Notification sidebar"
+			data-open="false"
+		>
+			<div id="notification_center_container" aria-label="Notification center"></div>
+		</aside>
+		<div id="notification_toast_container" aria-label="Notification toasts"></div>
+	</body>
+</html>

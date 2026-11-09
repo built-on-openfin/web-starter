@@ -1,0 +1,146 @@
+@import url('../common/style/common.css');
+
+:root {
+	--header-height: 60px;
+	--body-padding: 20px;
+}
+
+#layout_container {
+	height: 100%;
+	border: 1px solid var(--brand-input-border);
+}
+
+.provider-shell {
+	flex-direction: column;
+	gap: 12px;
+}
+
+#main-page {
+	min-height: 0;
+}
+
+#notification_sidebar {
+	position: absolute;
+	/* Start below the header so the toggle that opens it stays visible. */
+	top: calc(var(--body-padding) + var(--header-height));
+	right: 0;
+	bottom: 0;
+	display: none;
+	flex-direction: column;
+	border-left: 1px solid var(--brand-input-border);
+	overflow: visible;
+	background: var(--brand-table-header);
+	box-shadow: 0 10px 24px rgb(0 0 0 / 25%);
+	z-index: 5;
+}
+
+#notification_sidebar[data-open='true'] {
+	display: flex;
+}
+
+#notification_center_container {
+	width: 345px;
+	min-width: 345px;
+	height: 100%;
+	overflow: auto;
+}
+
+#notification_toast_container {
+	position: fixed;
+	pointer-events: none;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10000;
+}
+
+.header {
+	height: var(--header-height);
+}
+
+.theme-control select {
+	min-width: 110px;
+}
+
+fieldset.scheme-toggle {
+	gap: 1px;
+	background-color: var(--brand-input-border);
+	border: 1px solid var(--brand-input-border);
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.scheme-toggle input[type='radio'] {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.scheme-toggle label {
+	padding: 6px 12px;
+	cursor: pointer;
+	background-color: var(--brand-input-background);
+	color: var(--brand-text-secondary);
+}
+
+.scheme-toggle input[type='radio']:checked + label {
+	background-color: var(--brand-primary);
+	color: #ffffff;
+}
+
+.scheme-toggle input[type='radio']:focus-visible + label {
+	outline: 2px solid var(--brand-input-border-highlight);
+	outline-offset: -2px;
+}
+
+.panel-toggle {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	border: 1px solid var(--brand-input-border);
+	background-color: var(--brand-input-background);
+	color: var(--brand-text);
+}
+
+.panel-toggle[aria-pressed='true'] {
+	border-color: var(--brand-primary);
+	background-color: var(--brand-primary);
+	color: #ffffff;
+}
+
+.panel-toggle:focus-visible {
+	outline: 2px solid var(--brand-input-border-highlight);
+	outline-offset: 2px;
+}
+
+.panel-toggle-badge {
+	position: absolute;
+	top: -6px;
+	right: -6px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	border-radius: 999px;
+	background: var(--brand-error);
+	font-size: 10px;
+	font-weight: 700;
+	color: #ffffff;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+}
+
+.panel-toggle-badge[hidden] {
+	display: none;
+}
+
+/* core-web's tab close icon is white; darken it for light schemes as core-web does for its other icons. */
+:root.light-theme .lm_close_tab {
+	filter: invert(0.7);
+}

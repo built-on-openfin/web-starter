@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" class="theme-pending">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Theme</title>
+		<link rel="stylesheet" href="../common/style/common.css" />
+		<link rel="stylesheet" href="./theme.css" />
+		<script defer="defer" src="../js/theme-view.bundle.js"></script>
+		<link rel="manifest" href="../manifest.json" />
+	</head>
+
+	<body class="col fill gap20 scroll-vertical">
+		<header class="row spread middle">
+			<div class="col">
+				<h2>Theme received by this view</h2>
+				<p id="themeSummary">Waiting for the platform…</p>
+			</div>
+		</header>
+
+		<section class="col gap10" aria-labelledby="notificationsHeading">
+			<h3 id="notificationsHeading">Notification Center</h3>
+			<p>Raise a toast, then open the Notification Center from the header and switch scheme.</p>
+			<div class="row gap10 wrap">
+				<button id="btnButtons">Buttons</button>
+				<button id="btnForm">Form</button>
+				<button id="btnIndicator">Indicator</button>
+			</div>
+		</section>
+
+		<section class="col gap10" aria-labelledby="controlsHeading">
+			<h3 id="controlsHeading">View content</h3>
+			<p>
+				common.css reads the
+				<code>--theme-*</code>
+				variables, so standard controls follow the theme.
+			</p>
+			<div class="row gap10 wrap middle">
+				<button>Primary</button>
+				<button class="secondary">Secondary</button>
+				<input type="text" placeholder="Text input" aria-label="Text input" />
+				<select aria-label="Select">
+					<option>Option one</option>
+					<option>Option two</option>
+				</select>
+				<a href="#paletteHeading">Link</a>
+			</div>
+		</section>
+
+		<section class="col gap10" aria-labelledby="paletteHeading">
+			<h3 id="paletteHeading">Palette</h3>
+			<ul id="paletteList" class="palette-list"></ul>
+		</section>
+	</body>
+</html>
