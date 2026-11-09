@@ -1,6 +1,6 @@
 {
 	"name": "@openfin-web-starter/eslint-config",
-	"version": "1.0.0",
+	"version": "45.0.0",
 	"description": "Shared ESLint config for OpenFin Web Starter",
 	"type": "module",
 	"main": "./eslint.config.js",

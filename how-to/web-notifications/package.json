@@ -16,8 +16,8 @@
 	"dependencies": {
 		"@finos/fdc3": "2.0.3",
 		"@openfin/core-web": "0.45.113",
-		"@openfin/notifications": "45.2.0-alpha-5087",
-		"@openfin/web-notifications": "45.2.0-alpha-5087",
+		"@openfin/notifications": "45.2.6",
+		"@openfin/web-notifications": "45.2.6",
 		"uuid": "11.1.1"
 	},
 	"devDependencies": {

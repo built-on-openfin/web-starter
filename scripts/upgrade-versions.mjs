@@ -34,8 +34,8 @@ const DEFAULT_VERSIONS = {
 	'github-url': '45.0.0',
 	core: '45.101.1',
 	'core-web': '0.45.113',
-	notifications: '45.2.0-alpha-5087',
-	'web-notifications': '45.2.0-alpha-5087'
+	notifications: '45.2.6',
+	'web-notifications': '45.2.6'
 };
 
 // Directories to exclude from search/replace
