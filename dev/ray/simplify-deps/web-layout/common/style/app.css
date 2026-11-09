@@ -25,7 +25,6 @@
 
 	--header-height: 60px;
 	--left-panel-width: 300px;
-	--tab-height: 30px;
 	--body-padding: 20px;
 }
 
@@ -46,10 +45,40 @@
 	--brand-success: var(--theme-status-success, #35c759);
 }
 
-/* The parent of the lm_root class must have defined dimensions - not proportional sizing such as flexbox or percent values */
-.openfin-layout {
-	height: calc(100dvh - var(--header-height) - (var(--body-padding) * 2) - var(--tab-height));
-	width: calc(100dvw - var(--left-panel-width) - (var(--body-padding) * 2));
+/*
+ * The body is a flex column, so main would otherwise refuse to shrink below its content's height
+ * and the layout would grow with the window but never shrink back.
+ */
+.layout-area {
+	min-height: 0;
+}
+
+/*
+ * The host stacks every layout in a single grid cell. It must stay unpositioned (position: static):
+ * core-web places each view with viewport coordinates, so a positioned ancestor offsets every view.
+ * overflow: hidden also lets it shrink.
+ */
+.layout-host {
+	display: grid;
+	overflow: hidden;
+}
+
+/*
+ * Each layout always fills the cell, so a hidden layout keeps its real size. The zero minimums let the
+ * cell shrink below the size golden-layout last gave the layout.
+ */
+.layout-container {
+	grid-area: 1 / 1;
+	min-width: 0;
+	min-height: 0;
+}
+
+/*
+ * Hide inactive layouts with visibility rather than display: none. display: none collapses the layout
+ * to 0x0, so every view is resized to nothing and back again on each switch.
+ */
+.layout-container-hidden {
+	visibility: hidden;
 }
 
 .left-panel {

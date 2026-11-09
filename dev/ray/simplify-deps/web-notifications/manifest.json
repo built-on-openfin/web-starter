@@ -4,7 +4,7 @@
 	"start_url": "./platform/provider.html",
 	"display": "standalone",
 	"background_color": "#fff",
-	"description": "An example showing the minimum setup for using the HERE Web Notifications.",
+	"description": "An example showing how to use HERE Web notifications.",
 	"icons": [
 		{
 			"src": "common/images/here.png",

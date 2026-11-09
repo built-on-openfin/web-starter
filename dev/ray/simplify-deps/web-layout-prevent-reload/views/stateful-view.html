@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Stateful View</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../common/style/app.css" />
+		<script defer="defer" src="../js/stateful-view.bundle.js"></script>
+	</head>
+	<body class="stateful-view">
+		<main class="col gap20 stateful-view-body">
+			<h1 id="view-name">&nbsp;</h1>
+			<div class="col gap10">
+				<div class="stateful-metric">
+					<span class="stateful-label">Background</span>
+					<span id="view-colour">&nbsp;</span>
+				</div>
+				<div class="stateful-metric">
+					<span class="stateful-label">Alive for</span>
+					<span id="view-uptime">00:00</span>
+				</div>
+				<div class="stateful-metric">
+					<span class="stateful-label">Page loads</span>
+					<span id="view-loads">&nbsp;</span>
+				</div>
+			</div>
+			<label class="stateful-label" for="view-scratch">Type something — a reload wipes it</label>
+			<input id="view-scratch" type="text" class="full" autocomplete="off" />
+		</main>
+	</body>
+</html>
