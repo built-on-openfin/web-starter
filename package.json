@@ -30,7 +30,8 @@
 		"how-to/web-layout-basic",
 		"how-to/web-layout-custom-view-header",
 		"how-to/web-layout-prevent-reload",
-		"how-to/web-notifications"
+		"how-to/web-notifications",
+		"how-to/web-theming"
 	],
 	"packageExclude": [
 		"how-to/hints-and-tips"

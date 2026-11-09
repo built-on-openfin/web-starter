@@ -69,6 +69,14 @@ An area for examples focusing on web notifications.
 | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Web Notifications](./how-to/web-notifications) | This how-to focuses on the setting up a notifications center and a view that raises notifications.                                                               |          [Example](https://built-on-openfin.github.io/web-starter/web/v45.0.0/web-notifications/platform/provider.html)                                                                                                                                                                                                                                                                             |
 
+### Web Theming
+
+An area for examples focusing on theming.
+
+| Web Theming                                     | Description                                                                                                                                                                  | Live Launch |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [Web Theming](./how-to/web-theming)             | This how-to themes the provider, web layout, views and Web Notification Center from one palette per brand and scheme, with a theme picker and light/dark/system toggle.       |             |
+
 ## General
 
 | General                                                                      | Description                                                                                                                                                                                                         | Live Launch |

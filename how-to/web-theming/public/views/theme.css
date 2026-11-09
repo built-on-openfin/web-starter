@@ -1,0 +1,45 @@
+/* Hidden until the platform's theme arrives, so the default colors never flash. The transparent
+   background lets the themed layout show through the frame meanwhile. */
+.theme-pending body {
+	visibility: hidden;
+	background-color: transparent;
+}
+
+.theme-pending * {
+	transition: none !important;
+}
+
+.palette-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 8px;
+	padding: 0;
+	margin: 0;
+}
+
+.palette-list li {
+	display: grid;
+	grid-template-columns: 24px 1fr auto;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 8px;
+	border: 1px solid var(--brand-border);
+	border-radius: 5px;
+	font-size: 12px;
+}
+
+.palette-list li::before {
+	content: none;
+}
+
+.swatch {
+	width: 24px;
+	height: 24px;
+	border-radius: 4px;
+	border: 1px solid var(--brand-input-border);
+}
+
+.swatch-value {
+	color: var(--brand-text-secondary);
+	font-variant-numeric: tabular-nums;
+}

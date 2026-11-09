@@ -1,0 +1,9 @@
+package-lock.json
+*.bundle.js
+settings.schema.json
+reports
+*.exe
+*.zip
+**/wc-fin/*.js
+public/style/core-web-styles.css
+.playwright-mcp
